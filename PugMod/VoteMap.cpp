@@ -6,17 +6,13 @@ void CVoteMap::Load()
 {
 	this->m_Data.clear();
 	this->m_Vote.clear();
-
-	this->m_Delay = 0;
 }
 
-void CVoteMap::Init(int Delay, int AllowCurrentMap)
+void CVoteMap::Init()
 {
 	this->m_Vote.clear();
 
-	this->m_Delay = Delay;
-
-	this->m_Data = gUtil.LoadMapList(VOTE_MAP_FILE, AllowCurrentMap ? true : false);
+	this->m_Data = gUtil.LoadMapList(VOTE_MAP_FILE, gCvars.GetVoteMapSelf()->value ? true : false);
 	
 	CBasePlayer* Players[32] = { NULL };
 
@@ -35,7 +31,7 @@ void CVoteMap::Init(int Delay, int AllowCurrentMap)
 
 	gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, "Starting Vote Map."); 
 
-	gTask.Create(PUG_TASK_VOTE, this->m_Delay, false, this->Stop); 
+	gTask.Create(PUG_TASK_VOTE, gCvars.GetVoteDelay()->value, false, this->Stop); 
 
 	gTask.Create(PUG_TASK_LIST, 0.5f, true, this->List, this);
 }

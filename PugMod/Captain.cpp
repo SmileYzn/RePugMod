@@ -18,7 +18,7 @@ void CCaptain::Init()
 {
 	this->Clear();
 
-	if (gPlayer.GetNum() >= 6)
+	if (gPlayer.GetNum() >= (int)(gCvars.GetPlayersMin()->value / 2))
 	{
 		CBasePlayer* Players[32] = { NULL };
 
@@ -154,7 +154,9 @@ bool CCaptain::CheckPlayerCount()
 
 		if (NumSpectator)
 		{
-			if (NumTerrorist < 5 || NumCT < 5)
+			int PlayersMin = (int)(gCvars.GetPlayersMin()->value / 2);
+
+			if (NumTerrorist < PlayersMin || NumCT < PlayersMin)
 			{
 				return true;
 			}

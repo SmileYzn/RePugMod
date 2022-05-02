@@ -67,6 +67,9 @@
     <Filter Include="PugMod\VoteMenu">
       <UniqueIdentifier>{3f3fbea4-7cfb-45ba-bafe-7a20f5e446e7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="PugMod\Cvars">
+      <UniqueIdentifier>{12e2ecbd-3bd0-49b5-a618-dabd7b6bc316}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ReGameDLL.h">
@@ -126,6 +129,9 @@
     <ClInclude Include="VoteMenu.h">
       <Filter>PugMod\VoteMenu</Filter>
     </ClInclude>
+    <ClInclude Include="Cvars.h">
+      <Filter>PugMod\Cvars</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ReGameDLL.cpp">
@@ -184,6 +190,9 @@
     </ClCompile>
     <ClCompile Include="VoteMenu.cpp">
       <Filter>PugMod\VoteMenu</Filter>
+    </ClCompile>
+    <ClCompile Include="Cvars.cpp">
+      <Filter>PugMod\Cvars</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

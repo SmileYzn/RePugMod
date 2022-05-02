@@ -4,7 +4,7 @@ class CVoteTeam
 {
 public:
 	void Load();
-	void Init(int Delay);
+	void Init();
 
 	void AddVote(int ItemIndex, int Vote) { this->m_Vote[ItemIndex] += Vote; }
 
@@ -22,7 +22,6 @@ public:
 private:
 	std::vector<std::string> m_Data;
 	std::map<int, int>       m_Vote;
-	short					 m_Delay;
 };
 
 extern CVoteTeam gVoteTeam;

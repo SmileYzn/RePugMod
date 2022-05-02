@@ -158,22 +158,6 @@ void CUtil::SayText(edict_t* pEntity, int Sender, const char* Format, ...)
 	}
 }
 
-cvar_t* CUtil::RegisterCvar(char* Name, char* Value)
-{
-	cvar_t* Pointer = CVAR_GET_POINTER(Name);
-
-	if (Pointer == NULL)
-	{
-		cvar_t Register = { Name, Value, FCVAR_SERVER | FCVAR_SPONLY};
-
-		CVAR_REGISTER(&Register);
-
-		return CVAR_GET_POINTER(Name);
-	}
-
-	return Pointer;
-}
-
 char* CUtil::VarArgs(char *format, ...)
 {
 	va_list argptr;

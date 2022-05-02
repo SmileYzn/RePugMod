@@ -35,36 +35,39 @@ void CStats::RoundEnd(int winStatus, ScenarioEventEndRound event, float tmDelay)
 {
 	if (winStatus != WINSTATUS_NONE)
 	{
-		if (gPugMod.GetState() == PUG_STATE_FIRST_HALF || gPugMod.GetState() == PUG_STATE_SECOND_HALF || gPugMod.GetState() == PUG_STATE_OVERTIME)
+		if (gCvars.GetStatsRoundEnd()->value)
 		{
-			CBasePlayer* Players[32] = {NULL};
-
-			int Num = gPlayer.GetList(Players);
-
-			for (int i = 0; i < Num; i++)
+			if (gPugMod.GetState() == PUG_STATE_FIRST_HALF || gPugMod.GetState() == PUG_STATE_SECOND_HALF || gPugMod.GetState() == PUG_STATE_OVERTIME)
 			{
-				if(!Players[i]->IsBot())
-				{
-					int PlayerIndex = Players[i]->entindex();
-					
-					for (int j = 0; j < Num; j++)
-					{
-						int TargetIndex = Players[j]->entindex();
+				CBasePlayer* Players[32] = { NULL };
 
-						if (this->m_Stats[PlayerIndex][TargetIndex][PUG_STATS_HIT] || this->m_Stats[TargetIndex][PlayerIndex][PUG_STATS_HIT])
+				int Num = gPlayer.GetList(Players);
+
+				for (int i = 0; i < Num; i++)
+				{
+					if (!Players[i]->IsBot())
+					{
+						int PlayerIndex = Players[i]->entindex();
+
+						for (int j = 0; j < Num; j++)
 						{
-							gUtil.ClientPrint
-							(
-								Players[i]->edict(),
-								PRINT_CONSOLE,
-								"(%d dmg / %d hits) to (%d dmg / %d hits) from %s (%d HP)",
-								this->m_Stats[PlayerIndex][TargetIndex][PUG_STATS_DMG],
-								this->m_Stats[PlayerIndex][TargetIndex][PUG_STATS_HIT],
-								this->m_Stats[TargetIndex][PlayerIndex][PUG_STATS_DMG],
-								this->m_Stats[TargetIndex][PlayerIndex][PUG_STATS_HIT],
-								STRING(Players[j]->edict()->v.netname),
-								Players[j]->IsAlive() ? (int)Players[j]->edict()->v.health : 0
-							);
+							int TargetIndex = Players[j]->entindex();
+
+							if (this->m_Stats[PlayerIndex][TargetIndex][PUG_STATS_HIT] || this->m_Stats[TargetIndex][PlayerIndex][PUG_STATS_HIT])
+							{
+								gUtil.ClientPrint
+								(
+									Players[i]->edict(),
+									PRINT_CONSOLE,
+									"(%d dmg / %d hits) to (%d dmg / %d hits) from %s (%d HP)",
+									this->m_Stats[PlayerIndex][TargetIndex][PUG_STATS_DMG],
+									this->m_Stats[PlayerIndex][TargetIndex][PUG_STATS_HIT],
+									this->m_Stats[TargetIndex][PlayerIndex][PUG_STATS_DMG],
+									this->m_Stats[TargetIndex][PlayerIndex][PUG_STATS_HIT],
+									STRING(Players[j]->edict()->v.netname),
+									Players[j]->IsAlive() ? (int)Players[j]->edict()->v.health : 0
+								);
+							}
 						}
 					}
 				}

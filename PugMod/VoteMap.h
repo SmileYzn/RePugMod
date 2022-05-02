@@ -6,7 +6,7 @@ class CVoteMap
 {
 public:
 	void Load();
-	void Init(int Delay,int AllowCurrentMap);
+	void Init();
 
 	void AddVote(int ItemIndex,int Vote) { this->m_Vote[ItemIndex] += Vote; }
 
@@ -22,7 +22,6 @@ public:
 private:
 	std::vector<std::string> m_Data;
 	std::map<int, int>       m_Vote;
-	short					 m_Delay;
 };
 
 extern CVoteMap gVoteMap;

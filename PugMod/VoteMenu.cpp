@@ -12,6 +12,8 @@ bool CVoteMenu::CheckMenu(CBasePlayer* Player)
 		{
 			return true;
 		}
+
+		gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, "Unable to use this command now.");
 	}
 
 	return false;
@@ -36,10 +38,6 @@ void CVoteMenu::Menu(CBasePlayer* Player)
 
 		gMenu[EntityIndex].Show(EntityIndex);
 	}
-	else
-	{
-		gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, "Unable to use this command now.");
-	}
 }
 
 void CVoteMenu::MenuHandle(int EntityIndex, int ItemIndex, const char* Option)
@@ -48,9 +46,77 @@ void CVoteMenu::MenuHandle(int EntityIndex, int ItemIndex, const char* Option)
 
 	if (Player)
 	{
-		if (gVoteMenu.CheckMenu(Player))
+		switch (ItemIndex)
 		{
-
+			case 0:
+			{
+				gVoteMenu.VoteKick(Player);
+				break;
+			}
+			case 1:
+			{
+				gVoteMenu.VoteMap(Player);
+				break;
+			}
+			case 2:
+			{
+				gVoteMenu.VotePause(Player);
+				break;
+			}
+			case 3:
+			{
+				gVoteMenu.VoteStop(Player);
+				break;
+			}
 		}
 	}
+}
+
+void CVoteMenu::VoteKick(CBasePlayer * Player)
+{
+	if (this->CheckMenu(Player))
+	{
+		//
+	}
+}
+
+void CVoteMenu::VoteKickHandle(int EntityIndex, int ItemIndex, const char * Option)
+{
+}
+
+void CVoteMenu::VoteMap(CBasePlayer * Player)
+{
+	if (this->CheckMenu(Player))
+	{
+		//
+	}
+}
+
+void CVoteMenu::VoteMapHandle(int EntityIndex, int ItemIndex, const char * Option)
+{
+	//
+}
+
+void CVoteMenu::VotePause(CBasePlayer * Player)
+{
+	if (this->CheckMenu(Player))
+	{
+		//
+	}
+}
+
+void CVoteMenu::VotePauseHandle(int EntityIndex, int ItemIndex, const char * Option)
+{
+}
+
+void CVoteMenu::VoteStop(CBasePlayer * Player)
+{
+	if (this->CheckMenu(Player))
+	{
+		//
+	}
+}
+
+void CVoteMenu::VoteStopHandle(int EntityIndex, int ItemIndex, const char * Option)
+{
 }

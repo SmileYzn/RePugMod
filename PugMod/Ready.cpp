@@ -2,14 +2,8 @@
 
 CReady gReady;
 
-void CReady::Load(int PlayersMin, int ReadyType, float ReadyTime)
+void CReady::Load()
 {
-	this->m_PlayersMin = PlayersMin;
-
-	this->m_ReadyType = ReadyType;
-
-	this->m_ReadyTime = ReadyTime;
-
 	this->m_SystemTime = time(NULL);
 
 	memset(this->m_Ready, 0, sizeof(this->m_Ready));
@@ -18,7 +12,7 @@ void CReady::Load(int PlayersMin, int ReadyType, float ReadyTime)
 
 	gTask.Create(PUG_TASK_LIST, 0.5f, true, this->List, this);
 
-	if (this->m_ReadyType)
+	if (gCvars.GetReadyType()->value)
 	{
 		gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, "Say \4.ready\1 to continue."); 
 	}
@@ -43,7 +37,7 @@ void CReady::Toggle(CBasePlayer* Player)
 		{
 			gUtil.SayText(Player->edict(), Player->entindex(), "\3%s\1 enabled Ready System.",STRING(Player->edict()->v.netname));
 
-			this->Load(this->m_PlayersMin, this->m_ReadyType, this->m_ReadyTime);
+			this->Load();
 		}
 		else
 		{
@@ -60,7 +54,7 @@ void CReady::Toggle(CBasePlayer* Player)
 
 void CReady::List(CReady* Ready)
 {
-	if (Ready->m_ReadyType)
+	if (gCvars.GetReadyType()->value)
 	{
 		char PlayerList[2][512] = { 0 };
 
@@ -79,7 +73,7 @@ void CReady::List(CReady* Ready)
 			snprintf(PlayerList[State], sizeof(PlayerList[State]), "%s%s\n", PlayerList[State], STRING(Players[i]->edict()->v.netname));
 		}
 
-		if (PlayerCount[1] >= Ready->m_PlayersMin)
+		if (PlayerCount[1] >= (int)gCvars.GetPlayersMin()->value)
 		{
 			Ready->Unload();
 
@@ -89,9 +83,9 @@ void CReady::List(CReady* Ready)
 		}
 		else
 		{
-			gUtil.HudMessage(NULL, gUtil.HudParam(0, 255, 0, 0.23, 0.02, 0, 0.0, 0.53, 0.0, 0.0, 1), "Not Ready (%d of %d):", PlayerCount[0], Ready->m_PlayersMin);
+			gUtil.HudMessage(NULL, gUtil.HudParam(0, 255, 0, 0.23, 0.02, 0, 0.0, 0.53, 0.0, 0.0, 1), "Not Ready (%d of %d):", PlayerCount[0], (int)gCvars.GetPlayersMin()->value);
 
-			gUtil.HudMessage(NULL, gUtil.HudParam(0, 255, 0, 0.58, 0.02, 0, 0.0, 0.53, 0.0, 0.0, 2), "Ready (%d of %d):", PlayerCount[1], Ready->m_PlayersMin);
+			gUtil.HudMessage(NULL, gUtil.HudParam(0, 255, 0, 0.58, 0.02, 0, 0.0, 0.53, 0.0, 0.0, 2), "Ready (%d of %d):", PlayerCount[1], (int)gCvars.GetPlayersMin()->value);
 
 			gUtil.HudMessage(NULL, gUtil.HudParam(255, 255, 225, 0.23, 0.02, 0, 0.0, 0.53, 0.0, 0.0, 4), "\n%s", PlayerList[0]);
 
@@ -100,7 +94,7 @@ void CReady::List(CReady* Ready)
 	}
 	else
 	{
-		int Needed = (Ready->m_PlayersMin - gPlayer.GetNum());
+		int Needed = ((int)gCvars.GetPlayersMin()->value - gPlayer.GetNum());
 
 		if (Needed > 0)
 		{
@@ -110,7 +104,7 @@ void CReady::List(CReady* Ready)
 		}
 		else
 		{
-			time_t RemainTime = (Ready->m_ReadyTime - (time(NULL) - Ready->m_SystemTime)); 
+			time_t RemainTime = (gCvars.GetReadyTime()->value - (time(NULL) - Ready->m_SystemTime));
 
 			if (RemainTime > 0)
 			{

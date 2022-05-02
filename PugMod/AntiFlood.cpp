@@ -6,27 +6,32 @@ bool CAntiFlood::ClientCommand(CBasePlayer* Player, const char* pcmd, const char
 {
 	if (_stricmp(pcmd, "say") == 0 || _stricmp(pcmd, "say_team") == 0)
 	{
-		float NexTime = gpGlobals->time;
+		float MaxChat = gCvars.GetFloodTime()->value;
 
-		int EntityIndex = Player->entindex();
-
-		if (this->m_Flooding[EntityIndex] > NexTime)
+		if (MaxChat)
 		{
-			if (this->m_Flood[EntityIndex] >= MAX_FLOOD_REPEAT)
-			{
-				this->m_Flooding[EntityIndex] = (NexTime + MIN_FLOOD_TIME + MIN_FLOOD_NEXT_TIME);
+			float NexTime = gpGlobals->time;
 
-				return true;
+			int EntityIndex = Player->entindex();
+
+			if (this->m_Flooding[EntityIndex] > NexTime)
+			{
+				if (this->m_Flood[EntityIndex] >= MAX_FLOOD_REPEAT)
+				{
+					this->m_Flooding[EntityIndex] = (NexTime + MaxChat + MIN_FLOOD_NEXT_TIME);
+
+					return true;
+				}
+
+				this->m_Flood[EntityIndex]++;
+			}
+			else if (this->m_Flood[EntityIndex])
+			{
+				this->m_Flood[EntityIndex]--;
 			}
 
-			this->m_Flood[EntityIndex]++;
+			this->m_Flooding[EntityIndex] = NexTime + MaxChat;
 		}
-		else if (this->m_Flood[EntityIndex])
-		{
-			this->m_Flood[EntityIndex]--;
-		}
-
-		m_Flooding[EntityIndex] = NexTime + MIN_FLOOD_TIME;
 	}
 
 	return false;

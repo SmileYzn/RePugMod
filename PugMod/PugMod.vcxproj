@@ -147,6 +147,7 @@
     <ClInclude Include="Admin.h" />
     <ClInclude Include="AntiFlood.h" />
     <ClInclude Include="Captain.h" />
+    <ClInclude Include="Cvars.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="MetaDLL.h" />
     <ClInclude Include="MetaEngine.h" />
@@ -168,6 +169,7 @@
     <ClCompile Include="Admin.cpp" />
     <ClCompile Include="AntiFlood.cpp" />
     <ClCompile Include="Captain.cpp" />
+    <ClCompile Include="Cvars.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="MetaDLL.cpp" />
     <ClCompile Include="MetaEngine.cpp" />

@@ -82,22 +82,6 @@ private:
 
 	int m_Frags[33];
 	int m_Death[33];
-
-	cvar_t* m_Config[PUG_STATE_END + 1];
-	cvar_t* m_PlayersMin;
-	cvar_t* m_PlayersMax;
-	cvar_t* m_PlayRounds;
-	cvar_t* m_PlayRoundsOvertime;
-	cvar_t* m_PlayRoundsOvertimeType;
-	cvar_t* m_PlayCheckPlayers;
-	cvar_t* m_VoteDelay;
-	cvar_t* m_VoteMap;
-	cvar_t* m_VoteMapType;
-	cvar_t* m_VoteMapSelf;
-	cvar_t* m_VoteTeamType;
-	cvar_t* m_ReadyType;
-	cvar_t* m_ReadyTime;
-	cvar_t* m_ShowScoreType;
 };
 
 extern CPugMod gPugMod;

@@ -15,11 +15,9 @@ void CVoteTeam::Load()
 	this->m_Data.push_back("Knife Round");
 }
 
-void CVoteTeam::Init(int Delay)
+void CVoteTeam::Init()
 {
 	this->m_Vote.clear();
-
-	this->m_Delay = Delay;
 
 	CBasePlayer* Players[32] = { NULL };
 
@@ -38,7 +36,7 @@ void CVoteTeam::Init(int Delay)
 
 	gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, "Select teams started.");
 
-	gTask.Create(PUG_TASK_VOTE, this->m_Delay, false, this->Stop);
+	gTask.Create(PUG_TASK_VOTE, gCvars.GetVoteDelay()->value, false, this->Stop);
 
 	gTask.Create(PUG_TASK_LIST, 0.5f, true, this->List, this);
 }

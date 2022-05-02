@@ -32,8 +32,9 @@
 #include "ReGameDLL.h"
 
 // PugMod
-#include "AntiFlood.h"
 #include "Util.h"
+#include "Cvars.h"
+#include "AntiFlood.h"
 #include "Player.h"
 #include "Menu.h"
 #include "Task.h"

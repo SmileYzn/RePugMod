@@ -3,7 +3,7 @@
 class CReady
 {
 public:
-	void Load(int PlayersMin, int ReadyType, float ReadyTime);
+	void Load();
 	void Unload();
 	void Toggle(CBasePlayer* Player);
 	static void List(CReady* Ready);
@@ -12,10 +12,7 @@ public:
 
 private:
 	bool m_Running;
-	int m_PlayersMin;
 	int m_Ready[33];
-	int m_ReadyType;
-	time_t m_ReadyTime;
 	time_t m_SystemTime;
 };
 

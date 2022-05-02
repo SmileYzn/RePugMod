@@ -24,7 +24,6 @@ public:
 	void ServerCommand(const char* Format, ...);
 	void ClientPrint(edict_t* pEntity, int msg_dest, const char* Format, ...);
 	void SayText(edict_t* pEntity, int Sender, const char* Format, ...);
-	cvar_t* RegisterCvar(char* Name, char* Value);
 	char* VarArgs(char *format, ...);
 	hudtextparms_t HudParam(int red = 255, int green = 255, int blue = 255, float x = -1.0f, float y = 0.35f, int effects = 0, float fxtime = 6.0f, float holdtime = 12.0f, float fadeintime = 0.1f, float fadeouttime = 0.2f, int channel = 0);
 	void HudMessage(edict_t *pEntity, const hudtextparms_t &textparms, const char *Format, ...);
