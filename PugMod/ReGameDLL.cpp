@@ -147,6 +147,8 @@ bool ReGameDLL_CBasePlayer_GetIntoGame(IReGameHook_CBasePlayer_GetIntoGame* chai
 
 	gStats.ClientGetIntoGame(Player);
 
+	gVoteMenu.ClientGetIntoGame(Player);
+
 	return ret;
 }
 
