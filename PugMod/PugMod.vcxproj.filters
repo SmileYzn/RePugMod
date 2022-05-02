@@ -1,0 +1,194 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="MetaMod">
+      <UniqueIdentifier>{ee0fed06-fbb4-4062-9f7d-83fdf60e5afc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Precompiled">
+      <UniqueIdentifier>{06a30243-66a3-4d06-be18-04a9eec81a3b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MetaMod\MetaDLL">
+      <UniqueIdentifier>{c6f5e256-52ad-446d-a74d-31cc1c7bd8ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MetaMod\MetaEngine">
+      <UniqueIdentifier>{a6372053-2f5a-49ca-a5f0-2e766fd0236b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ReAPI">
+      <UniqueIdentifier>{d4532472-5070-46a8-b5ce-015d958c5545}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ReAPI\ReGameDLL">
+      <UniqueIdentifier>{0aa483e2-89f9-4009-98ee-6e9b629295b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ReAPI\ReAPI">
+      <UniqueIdentifier>{2bb41a67-8080-4258-9f0b-577d73b503af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MetaMod\MetaMod">
+      <UniqueIdentifier>{2200ddc4-32b4-4c17-872c-fc96ffdb3885}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PugMod">
+      <UniqueIdentifier>{94d608f2-882e-421e-a786-49b319b32fdf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PugMod\PugMod">
+      <UniqueIdentifier>{86a89c8b-2c51-4e19-842d-2c33f8ca306f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PugMod\Ready">
+      <UniqueIdentifier>{c2decec8-9594-42ae-b80c-4842fc61df3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PugMod\Admin">
+      <UniqueIdentifier>{a0eaf8f1-6e6b-4476-a141-3de1e21baae0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PugMod\Menu">
+      <UniqueIdentifier>{4a6ec5fd-126d-4a09-8ee7-a826a814b74c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PugMod\Util">
+      <UniqueIdentifier>{0a36a541-a863-467a-a700-06465ac258c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PugMod\VoteMap">
+      <UniqueIdentifier>{43c80a26-7b53-48c0-bb2a-825569f8bfb0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PugMod\Task">
+      <UniqueIdentifier>{28ec7102-2eb0-471f-bd69-1f87e8e0f867}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PugMod\VoteTeam">
+      <UniqueIdentifier>{1aa212a3-d4dd-4626-b268-e40bc1e8d94b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PugMod\Stats">
+      <UniqueIdentifier>{dec1ea54-d576-47c7-9aad-16b77bab4e54}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PugMod\Captain">
+      <UniqueIdentifier>{9fd2c9ec-0d16-48a2-a0d7-cd5325f6bdc0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PugMod\Player">
+      <UniqueIdentifier>{9a0f3906-41b1-4b29-8dca-5e75606beee0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PugMod\AntiFlood">
+      <UniqueIdentifier>{279db37e-5238-4709-9422-1b51a4367585}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PugMod\VoteMenu">
+      <UniqueIdentifier>{3f3fbea4-7cfb-45ba-bafe-7a20f5e446e7}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ReGameDLL.h">
+      <Filter>ReAPI\ReGameDLL</Filter>
+    </ClInclude>
+    <ClInclude Include="precompiled.h">
+      <Filter>Precompiled</Filter>
+    </ClInclude>
+    <ClInclude Include="MetaDLL.h">
+      <Filter>MetaMod\MetaDLL</Filter>
+    </ClInclude>
+    <ClInclude Include="MetaEngine.h">
+      <Filter>MetaMod\MetaEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="ReAPI.h">
+      <Filter>ReAPI\ReAPI</Filter>
+    </ClInclude>
+    <ClInclude Include="MetaMod.h">
+      <Filter>MetaMod\MetaMod</Filter>
+    </ClInclude>
+    <ClInclude Include="Util.h">
+      <Filter>PugMod\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="PugMod.h">
+      <Filter>PugMod\PugMod</Filter>
+    </ClInclude>
+    <ClInclude Include="Ready.h">
+      <Filter>PugMod\Ready</Filter>
+    </ClInclude>
+    <ClInclude Include="Admin.h">
+      <Filter>PugMod\Admin</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu.h">
+      <Filter>PugMod\Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="VoteMap.h">
+      <Filter>PugMod\VoteMap</Filter>
+    </ClInclude>
+    <ClInclude Include="Task.h">
+      <Filter>PugMod\Task</Filter>
+    </ClInclude>
+    <ClInclude Include="VoteTeam.h">
+      <Filter>PugMod\VoteTeam</Filter>
+    </ClInclude>
+    <ClInclude Include="Stats.h">
+      <Filter>PugMod\Stats</Filter>
+    </ClInclude>
+    <ClInclude Include="Captain.h">
+      <Filter>PugMod\Captain</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>PugMod\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="AntiFlood.h">
+      <Filter>PugMod\AntiFlood</Filter>
+    </ClInclude>
+    <ClInclude Include="VoteMenu.h">
+      <Filter>PugMod\VoteMenu</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="ReGameDLL.cpp">
+      <Filter>ReAPI\ReGameDLL</Filter>
+    </ClCompile>
+    <ClCompile Include="precompiled.cpp">
+      <Filter>Precompiled</Filter>
+    </ClCompile>
+    <ClCompile Include="MetaDLL.cpp">
+      <Filter>MetaMod\MetaDLL</Filter>
+    </ClCompile>
+    <ClCompile Include="MetaEngine.cpp">
+      <Filter>MetaMod\MetaEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="ReAPI.cpp">
+      <Filter>ReAPI\ReAPI</Filter>
+    </ClCompile>
+    <ClCompile Include="MetaMod.cpp">
+      <Filter>MetaMod\MetaMod</Filter>
+    </ClCompile>
+    <ClCompile Include="Util.cpp">
+      <Filter>PugMod\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="PugMod.cpp">
+      <Filter>PugMod\PugMod</Filter>
+    </ClCompile>
+    <ClCompile Include="Ready.cpp">
+      <Filter>PugMod\Ready</Filter>
+    </ClCompile>
+    <ClCompile Include="Admin.cpp">
+      <Filter>PugMod\Admin</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu.cpp">
+      <Filter>PugMod\Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="VoteMap.cpp">
+      <Filter>PugMod\VoteMap</Filter>
+    </ClCompile>
+    <ClCompile Include="Task.cpp">
+      <Filter>PugMod\Task</Filter>
+    </ClCompile>
+    <ClCompile Include="VoteTeam.cpp">
+      <Filter>PugMod\VoteTeam</Filter>
+    </ClCompile>
+    <ClCompile Include="Stats.cpp">
+      <Filter>PugMod\Stats</Filter>
+    </ClCompile>
+    <ClCompile Include="Captain.cpp">
+      <Filter>PugMod\Captain</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>PugMod\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="AntiFlood.cpp">
+      <Filter>PugMod\AntiFlood</Filter>
+    </ClCompile>
+    <ClCompile Include="VoteMenu.cpp">
+      <Filter>PugMod\VoteMenu</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="MetaMod.def">
+      <Filter>MetaMod</Filter>
+    </None>
+  </ItemGroup>
+</Project>
