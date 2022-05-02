@@ -10,6 +10,8 @@ void CMenu::Create(std::string Title, bool Exit, void* CallbackFunction)
 
 	this->m_Info.clear();
 
+	this->m_None.clear();
+
 	this->m_Page = -1;
 
 	this->m_Exit = Exit;
@@ -17,11 +19,13 @@ void CMenu::Create(std::string Title, bool Exit, void* CallbackFunction)
 	this->m_Func = CallbackFunction; 
 }
 
-void CMenu::AddItem(int Item, std::string Text)
+void CMenu::AddItem(int Item, std::string Text, bool Disabled)
 {
 	this->m_Data.push_back(Text);
 
 	this->m_Info.push_back(Item);
+
+	this->m_None.push_back(Disabled);
 }
 
 void CMenu::AddList(std::vector<std::string> List)
@@ -30,9 +34,11 @@ void CMenu::AddList(std::vector<std::string> List)
 
 	this->m_Info.clear();
 
+	this->m_None.clear();
+
 	for (size_t i = 0; i < List.size(); i++)
 	{
-		this->AddItem(i, List[i].c_str());
+		this->AddItem(i, List[i].c_str(), false);
 	}
 }
 
@@ -75,11 +81,18 @@ bool CMenu::Handle(int EntityIndex, int Key)
 
 					if (ItemIndex < this->m_Info.size())
 					{
-						this->Hide(EntityIndex);
-
-						if (this->m_Func)
+						if (this->m_None[ItemIndex] == false)
 						{
-							((void(*)(int, int, const char*))this->m_Func)(EntityIndex, this->m_Info[ItemIndex], this->m_Data[ItemIndex].c_str());
+							this->Hide(EntityIndex);
+
+							if (this->m_Func)
+							{
+								((void(*)(int, int, const char*))this->m_Func)(EntityIndex, this->m_Info[ItemIndex], this->m_Data[ItemIndex].c_str());
+							}
+						}
+						else
+						{
+							this->Display(EntityIndex,this->m_Page); 
 						}
 					}
 				}
@@ -142,7 +155,7 @@ void CMenu::Display(int EntityIndex,int Page)
 	{
 		Slots |= (1 << BitSum);
 
-		Len += sprintf(MenuText, "%s\\r%i.\\w %s\n", MenuText, ++BitSum, this->m_Data[b].c_str());
+		Len += sprintf(MenuText, this->m_None[b] ? "%s\\r%i.\\d %s\n" : "%s\\r%i.\\w %s\n", MenuText, ++BitSum, this->m_Data[b].c_str());
 	}
 
 	if (End != this->m_Data.size())

@@ -9,7 +9,7 @@ class CMenu
 public:
 	void Create(std::string Title, bool Exit, void* CallbackFunction);
 
-	void AddItem(int Item, std::string Text);
+	void AddItem(int Item, std::string Text, bool Disabled = false);
 	void AddList(std::vector<std::string> List);
 
 	void Show(int EntityIndex);
@@ -24,6 +24,7 @@ private:
 	std::string				  m_Text;
 	std::vector<std::string>  m_Data;
 	std::vector<int>		  m_Info;
+	std::vector<bool>         m_None;
 	int						  m_Page;
 	bool					  m_Exit;
 	void*					  m_Func;
