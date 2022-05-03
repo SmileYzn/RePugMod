@@ -230,4 +230,6 @@ void ReGameDLL_CSGameRules_RestartRound(IReGameHook_CSGameRules_RestartRound * c
 	chain->callNext();
 
 	gPugMod.RoundRestart();
+
+	gVoteMenu.RoundRestart();
 }
