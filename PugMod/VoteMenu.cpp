@@ -18,18 +18,22 @@ void CVoteMenu::Load()
 	this->m_MapList = gUtil.LoadMapList(VOTE_MENU_MAPS_FILE, gCvars.GetVoteMapSelf()->value ? true : false);
 }
 
-void CVoteMenu::ClientGetIntoGame(CBasePlayer* Player)
+void CVoteMenu::ClientDisconnected(edict_t * pEntity)
 {
-	int EntityIndex = Player->entindex();
-
-	for (int i = 1; i <= gpGlobals->maxClients; ++i)
+	if (pEntity)
 	{
-		this->m_VoteKick[i][EntityIndex] = false;
-	}
+		int EntityIndex = ENTINDEX(pEntity);
 
-	memset(this->m_VoteKick[EntityIndex], false, sizeof(this->m_VoteKick[EntityIndex]));
-	memset(this->m_VotedMap[EntityIndex], false, sizeof(this->m_VotedMap[EntityIndex]));
-	memset(this->m_VotedPause[EntityIndex], false, sizeof(this->m_VotedPause[EntityIndex]));
+		for (int i = 1; i <= gpGlobals->maxClients; ++i)
+		{
+			this->m_VoteKick[i][EntityIndex] = false;
+		}
+
+		memset(this->m_VoteKick[EntityIndex], false, sizeof(this->m_VoteKick[EntityIndex]));
+		memset(this->m_VotedMap[EntityIndex], false, sizeof(this->m_VotedMap[EntityIndex]));
+		memset(this->m_VotedPause[EntityIndex], false, sizeof(this->m_VotedPause[EntityIndex]));
+		memset(this->m_VotedStop[EntityIndex], false, sizeof(this->m_VotedStop[EntityIndex]));
+	}
 }
 
 bool CVoteMenu::CheckMenu(CBasePlayer* Player)
@@ -65,7 +69,7 @@ void CVoteMenu::Menu(CBasePlayer* Player)
 
 		bool Disabled = (gPugMod.GetState() != PUG_STATE_FIRST_HALF && gPugMod.GetState() != PUG_STATE_SECOND_HALF && gPugMod.GetState() != PUG_STATE_OVERTIME);
 
-		gMenu[EntityIndex].AddItem(2, "Vote Pause", Disabled);
+		gMenu[EntityIndex].AddItem(2, "Vote Pause", Disabled || !gCvars.GetVotePauseTime()->value);
 		gMenu[EntityIndex].AddItem(3, "Vote Stop", Disabled);
 
 		gMenu[EntityIndex].Show(EntityIndex);
@@ -283,48 +287,55 @@ void CVoteMenu::VotePause(CBasePlayer* Player)
 	{
 		if (gPugMod.GetState() == PUG_STATE_FIRST_HALF || gPugMod.GetState() == PUG_STATE_SECOND_HALF || gPugMod.GetState() == PUG_STATE_OVERTIME)
 		{
-			if (this->m_PausedTeam == UNASSIGNED)
+			if (gCvars.GetVotePauseTime()->value)
 			{
-				int PlayerIndex = Player->entindex();
-
-				if (!this->m_VotedPause[PlayerIndex][Player->m_iTeam])
+				if (this->m_PausedTeam == UNASSIGNED)
 				{
-					this->m_VotedPause[PlayerIndex][Player->m_iTeam] = true;
+					int PlayerIndex = Player->entindex();
 
-					int VoteCount = 0;
-
-					for (int i = 1; i <= gpGlobals->maxClients; ++i)
+					if (!this->m_VotedPause[PlayerIndex][Player->m_iTeam])
 					{
-						if (this->m_VotedPause[i][Player->m_iTeam])
+						this->m_VotedPause[PlayerIndex][Player->m_iTeam] = true;
+
+						int VoteCount = 0;
+
+						for (int i = 1; i <= gpGlobals->maxClients; ++i)
 						{
-							VoteCount++;
+							if (this->m_VotedPause[i][Player->m_iTeam])
+							{
+								VoteCount++;
+							}
 						}
-					}
 
-					int VotesNeed = (int)(gPlayer.GetNum(Player->m_iTeam) * gCvars.GetVotePercentage()->value);
-					int VotesLack = (VotesNeed - VoteCount);
+						int VotesNeed = (int)(gPlayer.GetNum(Player->m_iTeam) * gCvars.GetVotePercentage()->value);
+						int VotesLack = (VotesNeed - VoteCount);
 
-					if (VotesLack)
-					{
-						gUtil.SayText(NULL, PlayerIndex, "\3%s\1 from voted for a timeout: \4%d\1 of \4%d\1 vote(s) to run timeout.", STRING(Player->edict()->v.netname), VoteCount, VotesNeed);
-						gUtil.SayText(NULL, PlayerIndex, "say \3.vote\1 for a timeout.");
+						if (VotesLack)
+						{
+							gUtil.SayText(NULL, PlayerIndex, "\3%s\1 from voted for a timeout: \4%d\1 of \4%d\1 vote(s) to run timeout.", STRING(Player->edict()->v.netname), VoteCount, VotesNeed);
+							gUtil.SayText(NULL, PlayerIndex, "say \3.vote\1 for a timeout.");
+						}
+						else
+						{
+							this->m_PausedTeam = Player->m_iTeam;
+							this->m_PausedTime = (int)gCvars.GetVotePauseTime()->value;
+
+							gUtil.SayText(NULL, PlayerIndex, "Match will pause for \4%d\1 seconds on next round.", this->m_PausedTime);
+						}
 					}
 					else
 					{
-						this->m_PausedTeam = Player->m_iTeam;
-						this->m_PausedTime = (int)gCvars.GetVotePauseTime()->value;
-
-						gUtil.SayText(NULL, PlayerIndex, "Match will pause for \4%d\1 seconds on next round.", this->m_PausedTime);
+						gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, "You already voted for a timeout.");
 					}
 				}
 				else
 				{
-					gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, "You already voted for a timeout.");
+					gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, "The \3%s\1 team already paused the game.", PUG_MOD_TEAM_STR[this->m_PausedTeam]);
 				}
 			}
 			else
 			{
-				gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, "The \3%s\1 team already paused the game.", PUG_MOD_TEAM_STR[this->m_PausedTeam]);
+				gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, "Unable to vote to pause the match.");
 			}
 		}
 		else
@@ -373,6 +384,40 @@ void CVoteMenu::VoteStop(CBasePlayer* Player)
 {
 	if (this->CheckMenu(Player))
 	{
-		//
+		int PlayerIndex = Player->entindex();
+
+		if (!this->m_VotedStop[PlayerIndex][Player->m_iTeam])
+		{
+			this->m_VotedStop[PlayerIndex][Player->m_iTeam] = true;
+
+			int VoteCount = 0;
+
+			for (int i = 1; i <= gpGlobals->maxClients; ++i)
+			{
+				if (this->m_VotedStop[i][Player->m_iTeam])
+				{
+					VoteCount++;
+				}
+			}
+
+			int VotesNeed = (int)(gPlayer.GetNum(Player->m_iTeam) * gCvars.GetVotePercentage()->value);
+			int VotesLack = (VotesNeed - VoteCount);
+			
+			if (VotesLack)
+			{
+				gUtil.SayText(NULL, PlayerIndex, "\3%s\1 voted for surrender: \4%d\1 of \4%d\1 vote(s) to stop the match.", STRING(Player->edict()->v.netname), VoteCount, VotesNeed);
+				gUtil.SayText(NULL, PlayerIndex, "say \3.vote\1 to vote for stop the match.");
+			}
+			else
+			{
+				gUtil.SayText(NULL, PlayerIndex, "Game Over! The \3%s\1 Surrendered!", PUG_MOD_TEAM_STR[Player->m_iTeam]);
+
+				gPugMod.EndGame(Player->m_iTeam == TERRORIST ? CT : TERRORIST); 
+			}
+		}
+		else
+		{
+			gUtil.SayText(Player->edict(), PlayerIndex, "You already voted to stop the match.");
+		}
 	}
 }

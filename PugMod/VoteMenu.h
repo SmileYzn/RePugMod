@@ -7,7 +7,7 @@ class CVoteMenu
 public:
 	void Load(); 
 
-	void ClientGetIntoGame(CBasePlayer* Player);
+	void ClientDisconnected(edict_t* pEntity);
 
 	bool CheckMenu(CBasePlayer* Player);
 
@@ -30,7 +30,8 @@ public:
 private:
 	bool m_VoteKick[33][33];
 	bool m_VotedMap[33][33];
-	bool m_VotedPause[33][SPECTATOR+1];
+	bool m_VotedPause[33][SPECTATOR + 1];
+	bool m_VotedStop[33][SPECTATOR + 1];
 	
 	std::vector<std::string> m_MapList;
 	TeamName m_PausedTeam;
