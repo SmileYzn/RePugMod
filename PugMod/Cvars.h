@@ -20,6 +20,7 @@ public:
 	cvar_t* GetVoteMapSelf();
 	cvar_t* GetVoteTeamType();
 	cvar_t* GetVotePercentage();
+	cvar_t* GetVotePauseTime();
 	cvar_t* GetReadyType();
 	cvar_t* GetReadyTime();
 	cvar_t* GetShowScoreType();
@@ -40,6 +41,7 @@ private:
 	cvar_t* m_VoteMapSelf;
 	cvar_t* m_VoteTeamType;
 	cvar_t* m_VotePercentage;
+	cvar_t* m_VotePauseTime;
 	cvar_t* m_ReadyType;
 	cvar_t* m_ReadyTime;
 	cvar_t* m_ShowScoreType;

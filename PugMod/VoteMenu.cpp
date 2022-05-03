@@ -304,9 +304,6 @@ void CVoteMenu::VotePause(CBasePlayer* Player)
 					int VotesNeed = (int)(gPlayer.GetNum(Player->m_iTeam) * gCvars.GetVotePercentage()->value);
 					int VotesLack = (VotesNeed - VoteCount);
 
-					VoteCount = 10;
-					VotesLack = 0;
-
 					if (VotesLack)
 					{
 						gUtil.SayText(NULL, PlayerIndex, "\3%s\1 from voted for a timeout: \4%d\1 of \4%d\1 vote(s) to run timeout.", STRING(Player->edict()->v.netname), VoteCount, VotesNeed);
@@ -315,7 +312,7 @@ void CVoteMenu::VotePause(CBasePlayer* Player)
 					else
 					{
 						this->m_PausedTeam = Player->m_iTeam;
-						this->m_PausedTime = 60; // Add variable
+						this->m_PausedTime = (int)gCvars.GetVotePauseTime()->value;
 
 						gUtil.SayText(NULL, PlayerIndex, "Match will pause for \4%d\1 seconds on next round.", this->m_PausedTime);
 					}
@@ -379,8 +376,3 @@ void CVoteMenu::VoteStop(CBasePlayer* Player)
 		//
 	}
 }
-
-void CVoteMenu::VoteStopHandle(int EntityIndex, int ItemIndex, bool Disabled, const char * Option)
-{
-}
-

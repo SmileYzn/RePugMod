@@ -26,7 +26,6 @@ public:
 	void RoundRestart();
 
 	void VoteStop(CBasePlayer* Player);
-	static void VoteStopHandle(int EntityIndex, int ItemIndex, bool Disabled, const char* Option);
 
 private:
 	bool m_VoteKick[33][33];
