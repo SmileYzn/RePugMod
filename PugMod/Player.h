@@ -14,9 +14,6 @@ public:
 	int GetNum(bool CountBots);
 
 	CBasePlayer* GetRandom(TeamName Team);
-
-private:
-	int m_iMsgTeamInfo;
 };
 
 extern CPlayer gPlayer;

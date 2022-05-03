@@ -4,15 +4,15 @@ CPlayer gPlayer;
 
 void CPlayer::TeamInfo(edict_t *pEntity, int playerIndex, const char *pszTeamName)
 {
-	if (this->m_iMsgTeamInfo == NULL)
-	{
-		this->m_iMsgTeamInfo = GET_USER_MSG_ID(PLID, "TeamInfo", NULL);
-	}
+	static int iMsgTeamInfo;
 
-	MESSAGE_BEGIN(MSG_ONE, this->m_iMsgTeamInfo, nullptr, pEntity);
-	WRITE_BYTE(playerIndex);
-	WRITE_STRING(pszTeamName);
-	MESSAGE_END();
+	if (iMsgTeamInfo || (iMsgTeamInfo = GET_USER_MSG_ID(PLID, "TeamInfo", NULL)))
+	{
+		MESSAGE_BEGIN(MSG_ONE, iMsgTeamInfo, nullptr, pEntity);
+		WRITE_BYTE(playerIndex);
+		WRITE_STRING(pszTeamName);
+		MESSAGE_END();
+	}
 }
 
 int CPlayer::GetList(CBasePlayer* Players[32])
