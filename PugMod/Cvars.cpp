@@ -61,6 +61,9 @@ void CCvars::Load()
 	// The teams method for assign teams (-1 Vote, 0 Leaders, 1 Random, 2 None, 3 Skill Balanced, 4 Swap Teams, 5 Knife Round)
 	this->m_VoteTeamType = this->Register("pug_vote_team_type", "-1");
 
+	// Minimum percentage to take actions in vote systems
+	this->m_VotePercentage = this->Register("pug_vote_percentage", "0.70");
+
 	// Ready system type (1 Ready System, 0 Timer Counter)
 	this->m_ReadyType = this->Register("pug_ready_type", "1");
 
@@ -151,6 +154,11 @@ cvar_t* CCvars::GetVoteMapSelf()
 cvar_t* CCvars::GetVoteTeamType()
 {
 	return this->m_VoteTeamType;
+}
+
+cvar_t * CCvars::GetVotePercentage()
+{
+	return this->m_VotePercentage;
 }
 
 cvar_t* CCvars::GetReadyType()
