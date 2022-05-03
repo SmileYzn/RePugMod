@@ -81,6 +81,9 @@ void CCvars::Load()
 
 	// Display round stats at console when round end
 	this->m_StatsRoundEnd = this->Register("pug_stats_round_end", "1");
+
+	// Anti Reconnect time in seconds (0 Disable)
+	this->m_ReconnectDelay = this->Register("pug_reconnect_delay", "15.0");
 }
 
 cvar_t* CCvars::Register(char* Name, char* Value)
@@ -192,4 +195,9 @@ cvar_t* CCvars::GetFloodTime()
 cvar_t* CCvars::GetStatsRoundEnd()
 {
 	return this->m_StatsRoundEnd;
+}
+
+cvar_t * CCvars::GetReconnectDelay()
+{
+	return this->m_ReconnectDelay;
 }

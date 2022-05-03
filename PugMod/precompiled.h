@@ -35,6 +35,7 @@
 #include "Util.h"
 #include "Cvars.h"
 #include "AntiFlood.h"
+#include "AntiRetry.h"
 #include "Player.h"
 #include "Menu.h"
 #include "Task.h"

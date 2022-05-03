@@ -117,6 +117,8 @@ void ReAPI_ClientConnected(IRehldsHook_ClientConnected* chain, IGameClient* clie
 	chain->callNext(client);
 
 	gPugMod.ClientConnected(client->GetEdict());
+
+	gAntiRetry.ClientConnected(client->GetEdict());
 }
 
 void ReAPI_SV_DropClient(IRehldsHook_SV_DropClient* chain, IGameClient* client, bool crash, const char* Reason)
@@ -124,6 +126,8 @@ void ReAPI_SV_DropClient(IRehldsHook_SV_DropClient* chain, IGameClient* client, 
 	gCaptain.ClientDisconnected(client->GetEdict());
 
 	gVoteMenu.ClientDisconnected(client->GetEdict());
+
+	gAntiRetry.ClientDisconnected(client->GetEdict(), crash, Reason);
 
 	chain->callNext(client, crash, Reason);
 

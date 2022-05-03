@@ -26,6 +26,7 @@ public:
 	cvar_t* GetShowScoreType();
 	cvar_t* GetFloodTime();
 	cvar_t* GetStatsRoundEnd();
+	cvar_t* GetReconnectDelay();
 
 private:
 	cvar_t* m_Config[8];
@@ -47,6 +48,7 @@ private:
 	cvar_t* m_ShowScoreType;
 	cvar_t* m_FloodTime;
 	cvar_t* m_StatsRoundEnd;
+	cvar_t* m_ReconnectDelay;
 };
 
 extern CCvars gCvars;

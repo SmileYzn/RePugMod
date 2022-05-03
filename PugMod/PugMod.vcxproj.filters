@@ -70,6 +70,9 @@
     <Filter Include="PugMod\Cvars">
       <UniqueIdentifier>{12e2ecbd-3bd0-49b5-a618-dabd7b6bc316}</UniqueIdentifier>
     </Filter>
+    <Filter Include="PugMod\AntiRetry">
+      <UniqueIdentifier>{1ce56e3c-36e7-4a6b-a4d5-594a7368b386}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ReGameDLL.h">
@@ -132,6 +135,9 @@
     <ClInclude Include="Cvars.h">
       <Filter>PugMod\Cvars</Filter>
     </ClInclude>
+    <ClInclude Include="AntiRetry.h">
+      <Filter>PugMod\AntiRetry</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ReGameDLL.cpp">
@@ -193,6 +199,9 @@
     </ClCompile>
     <ClCompile Include="Cvars.cpp">
       <Filter>PugMod\Cvars</Filter>
+    </ClCompile>
+    <ClCompile Include="AntiRetry.cpp">
+      <Filter>PugMod\AntiRetry</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

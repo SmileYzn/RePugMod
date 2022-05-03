@@ -89,6 +89,7 @@
   <ItemGroup>
     <ClInclude Include="Admin.h" />
     <ClInclude Include="AntiFlood.h" />
+    <ClInclude Include="AntiRetry.h" />
     <ClInclude Include="Captain.h" />
     <ClInclude Include="Cvars.h" />
     <ClInclude Include="Menu.h" />
@@ -111,6 +112,7 @@
   <ItemGroup>
     <ClCompile Include="Admin.cpp" />
     <ClCompile Include="AntiFlood.cpp" />
+    <ClCompile Include="AntiRetry.cpp" />
     <ClCompile Include="Captain.cpp" />
     <ClCompile Include="Cvars.cpp" />
     <ClCompile Include="Menu.cpp" />
