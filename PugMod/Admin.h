@@ -9,7 +9,7 @@ public:
 	bool Check(edict_t* pEntity);
 
 	void Menu(CBasePlayer* Player);
-	static void MenuHandle(int EntityIndex, int ItemIndex, const char* Option);
+	static void MenuHandle(int EntityIndex, int ItemIndex, bool Disabled, const char* Option);
 
 	void Chat(CBasePlayer* Player, const char* Args);
 	void Rcon(CBasePlayer* Player, const char* Args);

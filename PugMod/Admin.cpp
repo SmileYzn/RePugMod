@@ -59,7 +59,7 @@ void CAdmin::Menu(CBasePlayer* Player)
 	}
 }
 
-void CAdmin::MenuHandle(int EntityIndex, int ItemIndex, const char* Option)
+void CAdmin::MenuHandle(int EntityIndex, int ItemIndex, bool Disabled, const char* Option)
 {
 	auto Player = UTIL_PlayerByIndexSafe(EntityIndex);
 
