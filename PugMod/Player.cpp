@@ -75,51 +75,48 @@ int CPlayer::GetNum(bool CountBots, int & InGame, int & NumTerrorist, int & NumC
 {
 	InGame, NumTerrorist = NumCT = NumSpectator = 0;
 
-	if (g_pGameRules)
+	for (int i = 1; i <= gpGlobals->maxClients; ++i)
 	{
-		for (int i = 1; i <= gpGlobals->maxClients; ++i)
+		auto Player = UTIL_PlayerByIndexSafe(i);
+
+		if (Player)
 		{
-			auto Player = UTIL_PlayerByIndexSafe(i);
-
-			if (Player)
+			if (!FNullEnt(Player->edict()))
 			{
-				if (!FNullEnt(Player->edict()))
+				if (!Player->IsDormant())
 				{
-					if (!Player->IsDormant())
+					if (CountBots == false)
 					{
-						if (CountBots == false)
+						if (Player->IsBot())
 						{
-							if (Player->IsBot())
-							{
-								continue;
-							}
+							continue;
 						}
+					}
 
-						switch (Player->m_iTeam)
+					switch (Player->m_iTeam)
+					{
+						case TERRORIST:
 						{
-							case TERRORIST:
-							{
-								NumTerrorist++;
-								break;
-							}
-							case CT:
-							{
-								NumCT++;
-								break;
-							}
-							case SPECTATOR:
-							{
-								NumSpectator++;
-								break;
-							}
+							NumTerrorist++;
+							break;
+						}
+						case CT:
+						{
+							NumCT++;
+							break;
+						}
+						case SPECTATOR:
+						{
+							NumSpectator++;
+							break;
 						}
 					}
 				}
 			}
 		}
-
-		InGame = (NumTerrorist + NumCT);
 	}
+
+	InGame = (NumTerrorist + NumCT);
 
 	return (NumTerrorist + NumCT + NumSpectator);
 }
