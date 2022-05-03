@@ -41,7 +41,7 @@ void CVoteTeam::Init()
 	gTask.Create(PUG_TASK_LIST, 0.5f, true, this->List, this);
 }
 
-void CVoteTeam::MenuHandle(int EntityIndex, int ItemIndex, const char* Option)
+void CVoteTeam::MenuHandle(int EntityIndex, int ItemIndex, bool Disabled, const char* Option)
 {
 	auto Player = UTIL_PlayerByIndexSafe(EntityIndex);
 

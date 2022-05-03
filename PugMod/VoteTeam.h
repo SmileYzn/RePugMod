@@ -8,7 +8,7 @@ public:
 
 	void AddVote(int ItemIndex, int Vote) { this->m_Vote[ItemIndex] += Vote; }
 
-	static void MenuHandle(int EntityIndex, int ItemIndex, const char* Option);
+	static void MenuHandle(int EntityIndex, int ItemIndex, bool Disabled, const char* Option);
 	static void Stop();
 	static void List(CVoteTeam* VoteTeam);
 

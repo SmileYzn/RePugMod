@@ -36,7 +36,7 @@ void CVoteMap::Init()
 	gTask.Create(PUG_TASK_LIST, 0.5f, true, this->List, this);
 }
 
-void CVoteMap::MenuHandle(int EntityIndex, int ItemIndex, const char* Option)
+void CVoteMap::MenuHandle(int EntityIndex, int ItemIndex, bool Disabled, const char* Option)
 {
 	auto Player = UTIL_PlayerByIndexSafe(EntityIndex);
 
