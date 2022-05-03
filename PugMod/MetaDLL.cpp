@@ -37,6 +37,8 @@ void DLL_POST_ServerActivate(edict_t* pEdictList, int edictCount, int clientMax)
 {
 	gTask.Clear();
 
+	gCvars.Load();
+
 	gAdmin.Load();
 
 	gVoteMap.Load();
@@ -45,7 +47,7 @@ void DLL_POST_ServerActivate(edict_t* pEdictList, int edictCount, int clientMax)
 
 	gCaptain.Clear();
 
-	gCvars.Load();
+	gVoteMenu.Load();
 
 	gPugMod.Load();
 
