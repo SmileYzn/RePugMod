@@ -213,7 +213,7 @@ void CCaptain::Menu(TeamName Team)
 	}
 }
 
-void CCaptain::MenuHandle(int EntityIndex, int ItemIndex, const char* Option)
+void CCaptain::MenuHandle(int EntityIndex, int ItemIndex, bool Disabled, const char* Option)
 {
 	auto Player = UTIL_PlayerByIndexSafe(EntityIndex);
 
