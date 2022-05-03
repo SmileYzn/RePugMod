@@ -72,86 +72,86 @@ void CUtil::ClientPrint(edict_t* pEntity, int msg_dest, const char* Format, ...)
 		Buffer[Length++] = '\n';
 		Buffer[Length]   = 0;
 	}
-	
-	if (!this->m_iMsgTextMsg)
-	{
-		this->m_iMsgTextMsg = GET_USER_MSG_ID(PLID, "TextMsg", NULL);
-	}
 
-	if (pEntity)
-	{
-		MESSAGE_BEGIN(MSG_ONE, m_iMsgTextMsg, NULL, pEntity);
-	}
-	else
-	{
-		MESSAGE_BEGIN(MSG_BROADCAST, m_iMsgTextMsg);
-	}
+	static int iMsgTextMsg;
 
-	WRITE_BYTE(msg_dest);
-	WRITE_STRING("%s");
-	WRITE_STRING(Buffer);
-	MESSAGE_END();
+	if (iMsgTextMsg || (iMsgTextMsg = GET_USER_MSG_ID(PLID, "TextMsg", NULL)))
+	{
+		if (pEntity)
+		{
+			MESSAGE_BEGIN(MSG_ONE, iMsgTextMsg, NULL, pEntity);
+		}
+		else
+		{
+			MESSAGE_BEGIN(MSG_BROADCAST, iMsgTextMsg);
+		}
+
+		WRITE_BYTE(msg_dest);
+		WRITE_STRING("%s");
+		WRITE_STRING(Buffer);
+		MESSAGE_END();
+	}
 }
 
 void CUtil::SayText(edict_t* pEntity, int Sender, const char* Format, ...)
 {
-	if (this->m_iMsgSayText == NULL)
+	static int iMsgSayText;
+
+	if (iMsgSayText || (iMsgSayText = GET_USER_MSG_ID(PLID, "SayText", NULL)))
 	{
-		this->m_iMsgSayText = GET_USER_MSG_ID(PLID, "SayText", NULL);
-	}
+		va_list argList = { 0 };
 
-	va_list argList = { 0 };
+		va_start(argList, Format);
 
-	va_start(argList, Format);
+		char Buffer[191] = { 0 };
 
-	char Buffer[191] = { 0 };
+		vsnprintf(Buffer, sizeof(Buffer), Format, argList);
 
-	vsnprintf(Buffer, sizeof(Buffer), Format, argList);
+		va_end(argList);
 
-	va_end(argList);
+		char SayText[191] = { 0 };
 
-	char SayText[191] = { 0 };
+		snprintf(SayText, sizeof(SayText), "\4[%s]\1 %s", Plugin_info.logtag, Buffer);
 
-	snprintf(SayText, sizeof(SayText), "\4[%s]\1 %s", Plugin_info.logtag, Buffer);
-
-	if (Sender < PRINT_TEAM_BLUE || Sender > gpGlobals->maxClients)
-	{
-		Sender = PRINT_TEAM_DEFAULT;
-	}
-	else if (Sender < PRINT_TEAM_DEFAULT)
-	{
-		Sender = abs(Sender) + 32;
-	}
-
-	if (pEntity)
-	{ 
-		if (GET_PRIVATE(pEntity))
+		if (Sender < PRINT_TEAM_BLUE || Sender > gpGlobals->maxClients)
 		{
-			if (!(pEntity->v.flags & FL_FAKECLIENT))
-			{
-				MESSAGE_BEGIN(MSG_ONE, m_iMsgSayText, NULL, pEntity);
-				WRITE_BYTE(Sender ? Sender : ENTINDEX(pEntity));
-				WRITE_STRING("%s");
-				WRITE_STRING(SayText);
-				MESSAGE_END();
-			}
+			Sender = PRINT_TEAM_DEFAULT;
 		}
-	}
-	else
-	{
-		for (int i = 1; i <= gpGlobals->maxClients; ++i)
+		else if (Sender < PRINT_TEAM_DEFAULT)
 		{
-			edict_t *pTempEntity = INDEXENT(i); 
+			Sender = abs(Sender) + 32;
+		}
 
-			if (GET_PRIVATE(pTempEntity))
+		if (pEntity)
+		{
+			if (GET_PRIVATE(pEntity))
 			{
-				if (!(pTempEntity->v.flags & FL_FAKECLIENT))
+				if (!(pEntity->v.flags & FL_FAKECLIENT))
 				{
-					MESSAGE_BEGIN(MSG_ONE, m_iMsgSayText, NULL, pTempEntity);
-					WRITE_BYTE(Sender ? Sender : i);
+					MESSAGE_BEGIN(MSG_ONE, iMsgSayText, NULL, pEntity);
+					WRITE_BYTE(Sender ? Sender : ENTINDEX(pEntity));
 					WRITE_STRING("%s");
 					WRITE_STRING(SayText);
 					MESSAGE_END();
+				}
+			}
+		}
+		else
+		{
+			for (int i = 1; i <= gpGlobals->maxClients; ++i)
+			{
+				edict_t *pTempEntity = INDEXENT(i);
+
+				if (GET_PRIVATE(pTempEntity))
+				{
+					if (!(pTempEntity->v.flags & FL_FAKECLIENT))
+					{
+						MESSAGE_BEGIN(MSG_ONE, iMsgSayText, NULL, pTempEntity);
+						WRITE_BYTE(Sender ? Sender : i);
+						WRITE_STRING("%s");
+						WRITE_STRING(SayText);
+						MESSAGE_END();
+					}
 				}
 			}
 		}
@@ -283,56 +283,56 @@ unsigned short CUtil::FixedUnsigned16(float value, float scale)
 
 void CUtil::ShowMotd(edict_t *pEntity, char *Motd, int MotdLength)
 {
-	if (!this->m_iMsgMotd)
+	static int iMsgMOTD;
+
+	if (iMsgMOTD || (iMsgMOTD = GET_USER_MSG_ID(PLID, "MOTD", NULL)))
 	{
-		this->m_iMsgMotd = GET_USER_MSG_ID(PLID, "MOTD", NULL);
-	}
-
-	if (MotdLength < 128)
-	{
-		int FileLength = 0;
-
-		char* FileContent = reinterpret_cast<char*>(LOAD_FILE_FOR_ME(Motd, &FileLength));
-
-		if (FileLength)
+		if (MotdLength < 128)
 		{
-			this->ShowMotd(pEntity, FileContent, FileLength);
+			int FileLength = 0;
 
-			FREE_FILE(FileContent);
+			char* FileContent = reinterpret_cast<char*>(LOAD_FILE_FOR_ME(Motd, &FileLength));
 
-			return;
-		}
-	}
+			if (FileLength)
+			{
+				this->ShowMotd(pEntity, FileContent, FileLength);
 
-	char *Buffer = Motd;
+				FREE_FILE(FileContent);
 
-	char Character = 0;
-
-	int Size = 0;
-
-	while (*Buffer)
-	{
-		Size = MotdLength;
-
-		if (Size > 175)
-		{
-			Size = 175;
+				return;
+			}
 		}
 
-		MotdLength -= Size;
+		char *Buffer = Motd;
 
-		Character = *(Buffer += Size);
+		char Character = 0;
 
-		*Buffer = 0;
+		int Size = 0;
 
-		MESSAGE_BEGIN(MSG_ONE, m_iMsgMotd, NULL, pEntity);
-		WRITE_BYTE(Character ? FALSE : TRUE);
-		WRITE_STRING(Motd);
-		MESSAGE_END();
+		while (*Buffer)
+		{
+			Size = MotdLength;
 
-		*Buffer = Character;
+			if (Size > 175)
+			{
+				Size = 175;
+			}
 
-		Motd = Buffer;
+			MotdLength -= Size;
+
+			Character = *(Buffer += Size);
+
+			*Buffer = 0;
+
+			MESSAGE_BEGIN(MSG_ONE, iMsgMOTD, NULL, pEntity);
+			WRITE_BYTE(Character ? FALSE : TRUE);
+			WRITE_STRING(Motd);
+			MESSAGE_END();
+
+			*Buffer = Character;
+
+			Motd = Buffer;
+		}
 	}
 }
 

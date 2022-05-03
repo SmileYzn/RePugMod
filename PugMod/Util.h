@@ -31,10 +31,6 @@ public:
 	unsigned short FixedUnsigned16(float value, float scale);
 	void ShowMotd(edict_t *pEntity, char *Motd, int MotdLength);
 	std::vector<std::string> LoadMapList(const char * Path, bool AllowCurrentMap);
-private:
-	int m_iMsgTextMsg;
-	int m_iMsgSayText;
-	int m_iMsgMotd;
 };
 
 extern CUtil gUtil;
