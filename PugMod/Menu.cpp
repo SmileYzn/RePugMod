@@ -2,15 +2,28 @@
 
 CMenu gMenu[33];
 
-void CMenu::Create(std::string Title, bool Exit, void* CallbackFunction)
+void CMenu::Clear()
 {
-	this->m_Text = Title;
+	this->m_Text.clear();
 
 	this->m_Data.clear();
 
 	this->m_Info.clear();
 
-	this->m_None.clear();
+	this->m_Skip.clear();
+
+	this->m_Page = -1;
+
+	this->m_Exit = false;
+
+	this->m_Func = nullptr;
+}
+
+void CMenu::Create(std::string Title, bool Exit, void* CallbackFunction)
+{
+	this->Clear();
+
+	this->m_Text = Title;
 
 	this->m_Page = -1;
 
@@ -25,7 +38,7 @@ void CMenu::AddItem(int Item, std::string Text, bool Disabled)
 
 	this->m_Info.push_back(Item);
 
-	this->m_None.push_back(Disabled);
+	this->m_Skip.push_back(Disabled);
 }
 
 void CMenu::AddList(std::vector<std::string> List)
@@ -34,7 +47,7 @@ void CMenu::AddList(std::vector<std::string> List)
 
 	this->m_Info.clear();
 
-	this->m_None.clear();
+	this->m_Skip.clear();
 
 	for (size_t i = 0; i < List.size(); i++)
 	{
@@ -81,18 +94,11 @@ bool CMenu::Handle(int EntityIndex, int Key)
 
 					if (ItemIndex < this->m_Info.size())
 					{
-						if (this->m_None[ItemIndex] == false)
-						{
-							this->Hide(EntityIndex);
+						this->Hide(EntityIndex);
 
-							if (this->m_Func)
-							{
-								((void(*)(int, int, const char*))this->m_Func)(EntityIndex, this->m_Info[ItemIndex], this->m_Data[ItemIndex].c_str());
-							}
-						}
-						else
+						if (this->m_Func)
 						{
-							this->Display(EntityIndex,this->m_Page); 
+							((void(*)(int, int, bool, const char*))this->m_Func)(EntityIndex, this->m_Info[ItemIndex], this->m_Skip[ItemIndex], this->m_Data[ItemIndex].c_str());
 						}
 					}
 				}
@@ -155,7 +161,14 @@ void CMenu::Display(int EntityIndex,int Page)
 	{
 		Slots |= (1 << BitSum);
 
-		Len += sprintf(MenuText, this->m_None[b] ? "%s\\r%i.\\d %s\n" : "%s\\r%i.\\w %s\n", MenuText, ++BitSum, this->m_Data[b].c_str());
+		if (this->m_Skip[b])
+		{
+			Len += sprintf(MenuText, "%s\\r%i.\\d %s\n", MenuText, ++BitSum, this->m_Data[b].c_str());
+		}
+		else
+		{
+			Len += sprintf(MenuText, "%s\\r%i.\\w %s\n", MenuText, ++BitSum, this->m_Data[b].c_str());
+		}
 	}
 
 	if (End != this->m_Data.size())
@@ -202,41 +215,40 @@ void CMenu::ShowMenu(int EntityIndex, int Slots, int Time, char *Text, int Lengt
 	{
 		if (!Player->IsDormant())
 		{
-			if (!this->m_iMsg)
+			static int iMsgShowMenu;
+
+			if (iMsgShowMenu || (iMsgShowMenu = GET_USER_MSG_ID(PLID, "ShowMenu", NULL)))
 			{
-				this->m_iMsg = GET_USER_MSG_ID(PLID, "ShowMenu", NULL);
-			}
+				Player->m_iMenu = Menu_OFF;
 
-			Player->m_iMenu = Menu_OFF;
+				char *n = Text;
+				char c = 0;
+				int a;
 
-			char *n = Text;
-			char c = 0;
-			int a;
-
-			do
-			{
-				a = Length;
-
-				if (a > MAX_BUFFER_MENU)
+				do
 				{
-					a = MAX_BUFFER_MENU;
-				}
+					a = Length;
 
-				Length -= a;
-				c = *(n += a);
-				*n = 0;
+					if (a > MAX_BUFFER_MENU)
+					{
+						a = MAX_BUFFER_MENU;
+					}
 
-				MESSAGE_BEGIN(MSG_ONE, this->m_iMsg, NULL, Player->edict());
-				WRITE_SHORT(Slots);
-				WRITE_CHAR(Time);
-				WRITE_BYTE(c ? 1 : 0);
-				WRITE_STRING(Text);
-				MESSAGE_END();
+					Length -= a;
+					c = *(n += a);
+					*n = 0;
 
-				*n = c;
-				Text = n;
+					MESSAGE_BEGIN(MSG_ONE, iMsgShowMenu, NULL, Player->edict());
+					WRITE_SHORT(Slots);
+					WRITE_CHAR(Time);
+					WRITE_BYTE(c ? 1 : 0);
+					WRITE_STRING(Text);
+					MESSAGE_END();
+
+					*n = c;
+					Text = n;
+				} while (*n);
 			}
-			while (*n);
 		}
 	}
 }
@@ -249,19 +261,19 @@ void CMenu::HideMenu(int EntityIndex)
 	{
 		if (!Player->IsDormant())
 		{
-			if (!this->m_iMsg)
+			static int iMsgShowMenu;
+
+			if (iMsgShowMenu || (iMsgShowMenu = GET_USER_MSG_ID(PLID, "ShowMenu", NULL)))
 			{
-				this->m_iMsg = GET_USER_MSG_ID(PLID, "ShowMenu", NULL);
+				Player->m_iMenu = Menu_OFF;
+
+				MESSAGE_BEGIN(MSG_ONE, iMsgShowMenu, nullptr, Player->edict());
+				WRITE_SHORT(0);
+				WRITE_CHAR(0);
+				WRITE_BYTE(0);
+				WRITE_STRING("");
+				MESSAGE_END();
 			}
-
-			Player->m_iMenu = Menu_OFF;
-
-			MESSAGE_BEGIN(MSG_ONE, this->m_iMsg, nullptr, Player->edict());
-			WRITE_SHORT(0);
-			WRITE_CHAR(0);
-			WRITE_BYTE(0);
-			WRITE_STRING("");
-			MESSAGE_END();
 		}
 	}
 }

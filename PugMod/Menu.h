@@ -7,6 +7,8 @@
 class CMenu
 {
 public:
+	void Clear();
+
 	void Create(std::string Title, bool Exit, void* CallbackFunction);
 
 	void AddItem(int Item, std::string Text, bool Disabled = false);
@@ -24,11 +26,10 @@ private:
 	std::string				  m_Text;
 	std::vector<std::string>  m_Data;
 	std::vector<int>		  m_Info;
-	std::vector<bool>         m_None;
+	std::vector<bool>         m_Skip;
 	int						  m_Page;
 	bool					  m_Exit;
 	void*					  m_Func;
-	int						  m_iMsg;
 };
 
 extern CMenu gMenu[33];
