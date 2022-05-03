@@ -2,6 +2,22 @@
 
 CVoteMenu gVoteMenu;
 
+void CVoteMenu::Load()
+{
+	memset(this->m_VoteKick, false, sizeof(this->m_VoteKick));
+
+	memset(this->m_VotedMap, false, sizeof(this->m_VotedMap));
+
+	memset(this->m_VotedPause, false, sizeof(this->m_VotedPause));
+	
+	this->m_PausedTeam = UNASSIGNED;
+	this->m_PausedTime = 0;
+
+	this->m_MapList.clear();
+
+	this->m_MapList = gUtil.LoadMapList(VOTE_MENU_MAPS_FILE, gCvars.GetVoteMapSelf()->value ? true : false);
+}
+
 void CVoteMenu::ClientGetIntoGame(CBasePlayer* Player)
 {
 	int EntityIndex = Player->entindex();
@@ -9,8 +25,11 @@ void CVoteMenu::ClientGetIntoGame(CBasePlayer* Player)
 	for (int i = 1; i <= gpGlobals->maxClients; ++i)
 	{
 		this->m_VoteKick[i][EntityIndex] = false;
-		this->m_VoteKick[EntityIndex][i] = false;
 	}
+
+	memset(this->m_VoteKick[EntityIndex], false, sizeof(this->m_VoteKick[EntityIndex]));
+	memset(this->m_VotedMap[EntityIndex], false, sizeof(this->m_VotedMap[EntityIndex]));
+	memset(this->m_VotedPause[EntityIndex], false, sizeof(this->m_VotedPause[EntityIndex]));
 }
 
 bool CVoteMenu::CheckMenu(CBasePlayer* Player)
@@ -21,7 +40,10 @@ bool CVoteMenu::CheckMenu(CBasePlayer* Player)
 
 		if (State != PUG_STATE_DEAD || State != PUG_STATE_START && State != PUG_STATE_END)
 		{
-			return true;
+			if (!gTask.Exists(PUG_TASK_EXEC))
+			{
+				return true;
+			}
 		}
 
 		gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, "Unable to use this command now.");
@@ -39,19 +61,18 @@ void CVoteMenu::Menu(CBasePlayer* Player)
 		gMenu[EntityIndex].Create("Vote Menu:", true, this->MenuHandle);
 
 		gMenu[EntityIndex].AddItem(0, "Vote Kick");
-		gMenu[EntityIndex].AddItem(1, "Vote Map");
+		gMenu[EntityIndex].AddItem(1, "Vote Map", !this->m_MapList.size());
 
-		if (gPugMod.GetState() >= PUG_STATE_FIRST_HALF && gPugMod.GetState() <= PUG_STATE_OVERTIME)
-		{
-			gMenu[EntityIndex].AddItem(2, "Vote Pause");
-			gMenu[EntityIndex].AddItem(3, "Vote Stop");
-		}
+		bool Disabled = (gPugMod.GetState() != PUG_STATE_FIRST_HALF && gPugMod.GetState() != PUG_STATE_SECOND_HALF && gPugMod.GetState() != PUG_STATE_OVERTIME);
+
+		gMenu[EntityIndex].AddItem(2, "Vote Pause", Disabled);
+		gMenu[EntityIndex].AddItem(3, "Vote Stop", Disabled);
 
 		gMenu[EntityIndex].Show(EntityIndex);
 	}
 }
 
-void CVoteMenu::MenuHandle(int EntityIndex, int ItemIndex, const char* Option)
+void CVoteMenu::MenuHandle(int EntityIndex, int ItemIndex, bool Disabled, const char* Option)
 {
 	auto Player = UTIL_PlayerByIndexSafe(EntityIndex);
 
@@ -93,64 +114,35 @@ void CVoteMenu::VoteKick(CBasePlayer* Player)
 
 		int NeedPlayers = (gCvars.GetPlayersMin()->value / 2);
 
-		int EntityIndex = Player->entindex();
+		int PlayerIndex = Player->entindex();
 
 		if (Num >= NeedPlayers)
 		{
-			gMenu[EntityIndex].Create("Vote Kick:", true, this->MenuHandle);
+			gMenu[PlayerIndex].Create("Vote Kick:", true, this->VoteKickHandle);
 
-			for (int i = 0;i < Num;i++)
+			for (int i = 0; i < Num; i++)
 			{
-				if (EntityIndex != Players[i]->entindex())
+				int TargetIndex = Players[i]->entindex();
+
+				if (PlayerIndex != TargetIndex)
 				{
-					if (!gAdmin.Check(Player->edict()))
+					if (!gAdmin.Check(Players[i]->edict())) 
 					{
-						gMenu[EntityIndex].AddItem(Players[i]->entindex(), STRING(Players[i]->edict()->v.netname));
+						gMenu[PlayerIndex].AddItem(TargetIndex, STRING(Players[i]->edict()->v.netname), this->m_VoteKick[PlayerIndex][TargetIndex]);
 					}
-				}
+				} 
 			}
 
-			gMenu[EntityIndex].Show(EntityIndex);
-
-			gUtil.SayText(Player->edict(), EntityIndex, "Choose a player to vote."); 
+			gMenu[PlayerIndex].Show(PlayerIndex);
 		}
 		else
 		{
-			gUtil.SayText(Player->edict(), EntityIndex, "Need \3%d\1 players to use vote kick.", NeedPlayers);
+			gUtil.SayText(Player->edict(), PlayerIndex, "Need \3%d\1 players to use vote kick.", NeedPlayers);
 		}
 	}
 }
 
-void CVoteMenu::VoteKick(CBasePlayer* Player, CBasePlayer* Target)
-{
-	this->m_VoteKick[Player->entindex()][Target->entindex()] = true;
-
-	int VoteCount = 0;
-
-	for (int i = 1; i <= gpGlobals->maxClients; ++i)
-	{
-		if (this->m_VoteKick[i][Target->entindex()])
-		{
-			VoteCount++;
-		}
-	}
-
-	int VotesNeed = (gPlayer.GetNum(Player->m_iTeam) - 1);
-	int VotesLack = (VotesNeed - VoteCount);
-
-	if (!VotesLack)
-	{
-		gUtil.ServerCommand("kick #%d \"Kicked by Vote Kick.\"", GETPLAYERUSERID(Target->edict()));
-
-		gUtil.SayText(NULL, Target->entindex(), "\3%s\1 Kicked: \4%d\1 votes reached.", STRING(Target->edict()->v.netname), VotesNeed);
-	}
-	else
-	{
-		gUtil.SayText(NULL, Player->entindex(), "\3%s\1 voted to kick %s: Need more \4%d\1 votes to kick.", STRING(Target->edict()->v.netname), VotesNeed);
-	}
-}
-
-void CVoteMenu::VoteKickHandle(int EntityIndex, int ItemIndex, const char * Option)
+void CVoteMenu::VoteKickHandle(int EntityIndex, int ItemIndex, bool Disabled, const char * Option)
 {
 	auto Player = UTIL_PlayerByIndexSafe(EntityIndex);
 
@@ -160,7 +152,56 @@ void CVoteMenu::VoteKickHandle(int EntityIndex, int ItemIndex, const char * Opti
 
 		if (Target)
 		{
-			gVoteMenu.VoteKick(Player, Target);
+			gVoteMenu.VoteKickPlayer(Player, Target, Disabled);
+		}
+	}
+}
+
+void CVoteMenu::VoteKickPlayer(CBasePlayer* Player, CBasePlayer* Target, bool Disabled)
+{
+	if (Player)
+	{
+		if (Target)
+		{
+			int TargetIndex = Target->entindex();
+
+			if (!Disabled)
+			{
+				int PlayerIndex = Player->entindex();
+
+				this->m_VoteKick[PlayerIndex][TargetIndex] = true;
+
+				int VoteCount = 0;
+
+				for (int i = 1; i <= gpGlobals->maxClients; ++i)
+				{
+					if (this->m_VoteKick[i][Target->entindex()])
+					{
+						VoteCount++;
+					}
+				}
+
+				int VotesNeed = (gPlayer.GetNum(Player->m_iTeam) - 1);
+				int VotesLack = (VotesNeed - VoteCount);
+
+				if (!VotesLack)
+				{
+					gUtil.ServerCommand("kick #%d \"Kicked by Vote Kick.\"", GETPLAYERUSERID(Target->edict())); 
+
+					gUtil.SayText(NULL, TargetIndex, "\3%s\1 Kicked: \4%d\1 votes reached.", STRING(Target->edict()->v.netname), VotesNeed);
+				}
+				else
+				{
+					gUtil.SayText(NULL, PlayerIndex, "\3%s\1 voted to kick \3%s\1: \4%d\1 of \4%d\1 votes to kick.", STRING(Player->edict()->v.netname), STRING(Target->edict()->v.netname), VoteCount, VotesNeed);
+					gUtil.SayText(NULL, PlayerIndex, "Say \3.vote\1 to open vote kick.");
+				}
+			}
+			else
+			{
+				gVoteMenu.VoteKick(Player);
+
+				gUtil.SayText(Player->edict(), TargetIndex, "Already voted to kick: \3%s\1...", STRING(Target->edict()->v.netname));
+			}
 		}
 	}
 }
@@ -169,25 +210,166 @@ void CVoteMenu::VoteMap(CBasePlayer* Player)
 {
 	if (this->CheckMenu(Player))
 	{
-		// TODO: Vote  Map Menu
+		if (this->m_MapList.size())
+		{
+			int PlayerIndex = Player->entindex();
+
+			gMenu[PlayerIndex].Create("Nominate Map:", true, this->VoteMapHandle);
+
+			for (std::size_t MapIndex = 0; MapIndex < this->m_MapList.size(); MapIndex++)
+			{
+				gMenu[PlayerIndex].AddItem(MapIndex, this->m_MapList[MapIndex], this->m_VotedMap[PlayerIndex][MapIndex]);
+			}
+
+			gMenu[PlayerIndex].Show(PlayerIndex);
+		}
 	}
 }
 
-void CVoteMenu::VoteMapHandle(int EntityIndex, int ItemIndex, const char * Option)
+void CVoteMenu::VoteMapHandle(int EntityIndex, int ItemIndex, bool Disabled, const char * Option)
 {
-	// TODO: Vote  Map Menu Handle
+	auto Player = UTIL_PlayerByIndexSafe(EntityIndex);
+
+	if (Player)
+	{
+		gVoteMenu.VoteMapPickup(Player, ItemIndex, Disabled);
+	}
+}
+
+void CVoteMenu::VoteMapPickup(CBasePlayer* Player, int MapIndex, bool Disabled)
+{
+	if (!Disabled)
+	{
+		int PlayerIndex = Player->entindex();
+
+		this->m_VotedMap[PlayerIndex][MapIndex] = true;
+
+		int VoteCount = 0;
+
+		for (int i = 1; i <= gpGlobals->maxClients; ++i)
+		{
+			if (this->m_VotedMap[i][MapIndex])
+			{
+				VoteCount++;
+			}
+		}
+
+		int VotesNeed = (int)(gCvars.GetPlayersMin()->value * gCvars.GetVotePercentage()->value);
+		int VotesLack = (VotesNeed - VoteCount);
+
+		if (VotesLack)
+		{
+			gUtil.SayText(NULL, PlayerIndex, "\3%s\1 nomitated \4%s\1: \4%d\1 of \4%d\1 votes to change map.", STRING(Player->edict()->v.netname), this->m_MapList[MapIndex].c_str(), VoteCount, VotesLack);
+			gUtil.SayText(NULL, PlayerIndex, "Say \3.vote\1 to nominate a map.");
+		}
+		else
+		{
+			gTask.Create(PUG_TASK_EXEC, 5.0f, false, SERVER_COMMAND, (void*)gUtil.VarArgs("changelevel %s\n", this->m_MapList[MapIndex].c_str()));
+
+			gUtil.SayText(NULL, PlayerIndex, "Changing map to \4%s\1...", this->m_MapList[MapIndex].c_str());
+		}
+	}
+	else
+	{
+		this->VoteMap(Player);
+
+		gUtil.SayText(Player->edict(), Player->entindex(), "Already nominated \3%s\1...", this->m_MapList[MapIndex].c_str());
+	}
 }
 
 void CVoteMenu::VotePause(CBasePlayer* Player)
 {
 	if (this->CheckMenu(Player))
 	{
-		//
+		if (gPugMod.GetState() == PUG_STATE_FIRST_HALF || gPugMod.GetState() == PUG_STATE_SECOND_HALF || gPugMod.GetState() == PUG_STATE_OVERTIME)
+		{
+			if (this->m_PausedTeam == UNASSIGNED)
+			{
+				int PlayerIndex = Player->entindex();
+
+				if (!this->m_VotedPause[PlayerIndex][Player->m_iTeam])
+				{
+					this->m_VotedPause[PlayerIndex][Player->m_iTeam] = true;
+
+					int VoteCount = 0;
+
+					for (int i = 1; i <= gpGlobals->maxClients; ++i)
+					{
+						if (this->m_VotedPause[i][Player->m_iTeam])
+						{
+							VoteCount++;
+						}
+					}
+
+					int VotesNeed = (int)(gPlayer.GetNum(Player->m_iTeam) * gCvars.GetVotePercentage()->value);
+					int VotesLack = (VotesNeed - VoteCount);
+
+					VoteCount = 10;
+					VotesLack = 0;
+
+					if (VotesLack)
+					{
+						gUtil.SayText(NULL, PlayerIndex, "\3%s\1 from voted for a timeout: \4%d\1 of \4%d\1 vote(s) to run timeout.", STRING(Player->edict()->v.netname), VoteCount, VotesNeed);
+						gUtil.SayText(NULL, PlayerIndex, "say \3.vote\1 for a timeout.");
+					}
+					else
+					{
+						this->m_PausedTeam = Player->m_iTeam;
+						this->m_PausedTime = 60; // Add variable
+
+						gUtil.SayText(NULL, PlayerIndex, "Match will pause for \4%d\1 seconds on next round.", this->m_PausedTime);
+					}
+				}
+				else
+				{
+					gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, "You already voted for a timeout.");
+				}
+			}
+			else
+			{
+				gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, "The \3%s\1 team already paused the game.", PUG_MOD_TEAM_STR[this->m_PausedTeam]);
+			}
+		}
+		else
+		{
+			gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, "Unable to use this command now.");
+		}
 	}
 }
 
-void CVoteMenu::VotePauseHandle(int EntityIndex, int ItemIndex, const char * Option)
+void CVoteMenu::RoundRestart()
 {
+	if (gPugMod.GetState() == PUG_STATE_FIRST_HALF || gPugMod.GetState() == PUG_STATE_SECOND_HALF || gPugMod.GetState() == PUG_STATE_OVERTIME)
+	{
+		if (this->m_PausedTime > 0)
+		{
+			if (this->m_PausedTeam != UNASSIGNED)
+			{
+				if (g_pGameRules)
+				{
+					if (!CSGameRules()->m_bCompleteReset)
+					{
+						CSGameRules()->m_bFreezePeriod   = true;
+						CSGameRules()->m_iIntroRoundTime += this->m_PausedTime;
+						CSGameRules()->m_iRoundTimeSecs  += this->m_PausedTime;
+						CSGameRules()->m_fRoundStartTime = gpGlobals->time;
+
+						static int iMsgRoundTime;
+
+						if (iMsgRoundTime || (iMsgRoundTime = GET_USER_MSG_ID(PLID, "RoundTime", NULL)))
+						{
+							MESSAGE_BEGIN(MSG_ALL, iMsgRoundTime);
+							WRITE_SHORT(CSGameRules()->GetRoundRemainingTimeReal());
+							MESSAGE_END();
+						}
+					}
+				}
+			}
+
+			this->m_PausedTeam = UNASSIGNED;
+			this->m_PausedTime = 0; 
+		}
+	}
 }
 
 void CVoteMenu::VoteStop(CBasePlayer* Player)
@@ -198,6 +380,7 @@ void CVoteMenu::VoteStop(CBasePlayer* Player)
 	}
 }
 
-void CVoteMenu::VoteStopHandle(int EntityIndex, int ItemIndex, const char * Option)
+void CVoteMenu::VoteStopHandle(int EntityIndex, int ItemIndex, bool Disabled, const char * Option)
 {
 }
+
