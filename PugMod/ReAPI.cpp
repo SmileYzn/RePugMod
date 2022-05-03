@@ -123,6 +123,8 @@ void ReAPI_SV_DropClient(IRehldsHook_SV_DropClient* chain, IGameClient* client, 
 {
 	gCaptain.ClientDisconnected(client->GetEdict());
 
+	gVoteMenu.ClientDisconnected(client->GetEdict());
+
 	chain->callNext(client, crash, Reason);
 
 	gPugMod.ClientDisconnected(client->GetEdict());
