@@ -50,6 +50,7 @@ public:
 	void StartMatch(CBasePlayer* Player);
 	void StopMatch(CBasePlayer* Player);
 	void RestarPeriod(CBasePlayer* Player);
+	void EndGame(TeamName Winner);
 
 	int GetRound();
 	int GetScores(int Team);

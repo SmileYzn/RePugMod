@@ -365,6 +365,28 @@ void CPugMod::RestarPeriod(CBasePlayer* Player)
 	}
 }
 
+void CPugMod::EndGame(TeamName Winner)
+{
+	if (Winner == TERRORIST || Winner == CT)
+	{
+		TeamName Losers = (Winner == TERRORIST) ? CT : TERRORIST;
+
+		if (this->GetScores(Winner) <= this->GetScores(Losers))
+		{
+			memset(this->m_Round, 0, sizeof(this->m_Round));
+			memset(this->m_Score, 0, sizeof(this->m_Score));
+
+			this->m_Round[PUG_STATE_FIRST_HALF] = (gCvars.GetPlayRounds()->value / 2);
+			this->m_Round[PUG_STATE_SECOND_HALF] = 1;
+
+			this->m_Score[PUG_STATE_FIRST_HALF][Winner] = this->m_Round[PUG_STATE_FIRST_HALF];
+			this->m_Score[PUG_STATE_SECOND_HALF][Winner] = this->m_Round[PUG_STATE_SECOND_HALF];
+		}
+
+		this->SetState(PUG_STATE_END);
+	}
+}
+
 int CPugMod::GetRound()
 {
 	int Round = 0; 
