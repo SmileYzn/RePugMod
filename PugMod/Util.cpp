@@ -350,7 +350,7 @@ std::vector<std::string> CUtil::LoadMapList(const char * Path, bool AllowCurrent
 		{
 			if (AllowCurrentMap == false)
 			{
-				if (FStrEq(STRING(gpGlobals->mapname), Map.c_str()))
+				if (_stricmp(STRING(gpGlobals->mapname), Map.c_str()) == 0)
 				{
 					continue;
 				}

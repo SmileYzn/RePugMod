@@ -423,11 +423,19 @@ int CPugMod::GetWinner()
 	return UNASSIGNED;
 }
 
-void CPugMod::Help(CBasePlayer * Player)
+void CPugMod::Help(CBasePlayer * Player,bool AdminHelp)
 {
-	char HtmlFile[] = "cstrike/addons/pugmod/users_help.htm";
-
-	gUtil.ShowMotd(Player->edict(), HtmlFile, sizeof(HtmlFile));
+	if (!AdminHelp)
+	{
+		gUtil.ShowMotd(Player->edict(), HELP_FILE_PLAYER, strlen(HELP_FILE_PLAYER));
+	}
+	else
+	{
+		if (gAdmin.Check(Player->edict()))
+		{
+			gUtil.ShowMotd(Player->edict(), HELP_FILE_ADMIN, strlen(HELP_FILE_ADMIN));
+		}
+	}
 }
 
 void CPugMod::Status(CBasePlayer* Player)
@@ -568,7 +576,7 @@ void CPugMod::ClientDisconnected(edict_t* pEntity)
 
 bool CPugMod::ClientCommand(CBasePlayer * Player, const char * pcmd, const char * parg1)
 {
-	if (FStrEq(pcmd, "say") || FStrEq(pcmd, "say_team"))
+	if (_stricmp(pcmd, "say") == 0 || _stricmp(pcmd, "say_team") == 0)
 	{
 		if (parg1[0] == '.' || parg1[0] == '!')
 		{
@@ -579,14 +587,14 @@ bool CPugMod::ClientCommand(CBasePlayer * Player, const char * pcmd, const char 
 			}
 		}
 	}
-	else if (FStrEq(pcmd, "jointeam"))
+	else if (_stricmp(pcmd, "jointeam") == 0)
 	{
 		if (this->ClientJoinTeam(Player, atoi(parg1)))
 		{
 			return true;
 		}
 	}
-	else if (FStrEq(pcmd, "menuselect"))
+	else if (_stricmp(pcmd, "menuselect") == 0)
 	{
 		int Key = atoi(parg1);
 
@@ -605,67 +613,72 @@ bool CPugMod::ClientCommand(CBasePlayer * Player, const char * pcmd, const char 
 			}
 		}
 	}
-	else if (FStrEq(pcmd, ".help"))
+	else if (_stricmp(pcmd, ".help") == 0)
 	{
-		this->Help(Player);
+		this->Help(Player,false);
 		return true;
 	}
-	else if (FStrEq(pcmd, ".status"))
+	else if (_stricmp(pcmd, "!help") == 0)
+	{
+		this->Help(Player, true);
+		return true;
+	}
+	else if (_stricmp(pcmd, ".status") == 0)
 	{
 		this->Status(Player);
 		return true;
 	}
-	else if (FStrEq(pcmd, ".score"))
+	else if (_stricmp(pcmd, ".score") == 0)
 	{
 		this->Scores(Player);
 		return true;
 	}
-	else if (FStrEq(pcmd, ".ready"))
+	else if (_stricmp(pcmd, ".ready") == 0)
 	{
 		gReady.Ready(Player);
 		return true;
 	}
-	else if (FStrEq(pcmd, ".notready"))
+	else if (_stricmp(pcmd, ".notready") == 0)
 	{
 		gReady.NotReady(Player);
 		return true;
 	}
-	else if (FStrEq(pcmd, ".vote"))
+	else if (_stricmp(pcmd, ".vote") == 0)
 	{
 		gVoteMenu.Menu(Player);
 		return true;
 	}
-	else if (FStrEq(pcmd, "!menu"))
+	else if (_stricmp(pcmd, "!menu") == 0)
 	{
 		gAdmin.Menu(Player);
 		return true;
 	}
-	else if (FStrEq(pcmd, "!msg"))
+	else if (_stricmp(pcmd, "!msg") == 0)
 	{
 		gAdmin.Chat(Player, CMD_ARGS());
 		return true;
 	}
-	else if (FStrEq(pcmd, "!rcon"))
+	else if (_stricmp(pcmd, "!rcon") == 0)
 	{
 		gAdmin.Rcon(Player, CMD_ARGS());
 		return true;
 	}
-	else if (FStrEq(pcmd, ".hp"))
+	else if (_stricmp(pcmd, ".hp") == 0)
 	{
 		gStats.HP(Player);
 		return true;
 	}
-	else if (FStrEq(pcmd, ".dmg"))
+	else if (_stricmp(pcmd, ".dmg") == 0)
 	{
 		gStats.Damage(Player);
 		return true;
 	}
-	else if (FStrEq(pcmd, ".rdmg"))
+	else if (_stricmp(pcmd, ".rdmg") == 0)
 	{
 		gStats.Received(Player);
 		return true;
 	}
-	else if (FStrEq(pcmd, ".sum"))
+	else if (_stricmp(pcmd, ".sum") == 0)
 	{
 		gStats.Summary(Player);
 		return true;

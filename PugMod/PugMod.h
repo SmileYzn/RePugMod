@@ -1,5 +1,8 @@
 #pragma once
 
+#define HELP_FILE_PLAYER "cstrike/addons/pugmod/help_player.htm"
+#define HELP_FILE_ADMIN "cstrike/addons/pugmod/help_admin.htm"
+
 enum PUG_MOD_STATES_NUM
 {
 	PUG_STATE_DEAD,
@@ -56,7 +59,7 @@ public:
 	int GetScores(int Team);
 	int GetWinner();
 
-	void Help(CBasePlayer* Player);
+	void Help(CBasePlayer* Player,bool AdminHelp);
 	void Status(CBasePlayer* Player);
 	void Scores(CBasePlayer* Player);
 	void ViewScores(CBasePlayer* Player);
