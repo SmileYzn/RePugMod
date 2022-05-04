@@ -97,7 +97,7 @@ void CPugMod::SetState(int State)
 				{
 					CBasePlayer* Players[32] = { NULL };
 
-					int Num = gPlayer.GetList(Players);
+					auto Num = gPlayer.GetList(Players);
 
 					for (int i = 0; i < Num; i++)
 					{
@@ -232,7 +232,7 @@ void CPugMod::RunState(CPugMod* PugMod)
 			{
 				Next = PUG_STATE_END;
 
-				if ((PugMod->m_Round[PUG_STATE_OVERTIME] % (int)gCvars.GetPlayRoundsOvertime()->value) == 0)
+				if ((PugMod->GetRound() % (int)gCvars.GetPlayRoundsOvertime()->value) == 0)
 				{
 					Next = PUG_STATE_HALFTIME;
 				}
@@ -781,63 +781,66 @@ void CPugMod::RoundEnd(int winStatus, ScenarioEventEndRound event, float tmDelay
 {
 	if (this->m_State == PUG_STATE_FIRST_HALF || this->m_State == PUG_STATE_SECOND_HALF || this->m_State == PUG_STATE_OVERTIME)
 	{
-		if (winStatus == WINSTATUS_TERRORISTS)
+		if (winStatus != WINSTATUS_NONE)
 		{
-			this->m_Round[this->m_State]++;
-
-			this->m_Score[this->m_State][TERRORIST]++;
-
-			gUtil.ClientPrint(NULL, PRINT_CONSOLE, "* Round %d won by: %s", this->GetRound(), PUG_MOD_TEAM_STR[TERRORIST]);
-		}
-		else if (winStatus == WINSTATUS_CTS)
-		{
-			this->m_Round[this->m_State]++;
-
-			this->m_Score[this->m_State][CT]++;
-
-			gUtil.ClientPrint(NULL, PRINT_CONSOLE, "* Round %d won by: %s", this->GetRound(), PUG_MOD_TEAM_STR[CT]);
-		}
-		else if (winStatus == WINSTATUS_DRAW)
-		{
-			gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, "Round %d draw: No clear winner.", this->GetRound());
-		}
-
-		if (this->m_State == PUG_STATE_FIRST_HALF)
-		{
-			if (this->GetRound() >= ((int)gCvars.GetPlayRounds()->value / 2))
+			if (winStatus == WINSTATUS_TERRORISTS)
 			{
-				this->NextState(tmDelay);
+				this->m_Round[this->m_State]++;
+
+				this->m_Score[this->m_State][TERRORIST]++;
+
+				gUtil.ClientPrint(NULL, PRINT_CONSOLE, "* Round %d won by: %s", this->GetRound(), PUG_MOD_TEAM_STR[TERRORIST]);
 			}
-		}
-		else if (this->m_State == PUG_STATE_SECOND_HALF)
-		{
-			int Half = (int)(gCvars.GetPlayRounds()->value / 2);
+			else if (winStatus == WINSTATUS_CTS)
+			{
+				this->m_Round[this->m_State]++;
 
-			if ((this->GetScores(TERRORIST) > Half) || (this->GetScores(CT) > Half))
-			{
-				this->NextState(tmDelay);
+				this->m_Score[this->m_State][CT]++;
+
+				gUtil.ClientPrint(NULL, PRINT_CONSOLE, "* Round %d won by: %s", this->GetRound(), PUG_MOD_TEAM_STR[CT]);
 			}
-			else if ((this->GetScores(TERRORIST) == Half) && (this->GetScores(CT) == Half))
+			else if (winStatus == WINSTATUS_DRAW)
 			{
-				if (gCvars.GetPlayRoundsOvertimeType()->value == 1)
+				gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, "Round %d draw: No clear winner.", this->GetRound());
+			}
+
+			if (this->m_State == PUG_STATE_FIRST_HALF)
+			{
+				if (this->GetRound() >= ((int)gCvars.GetPlayRounds()->value / 2))
 				{
 					this->NextState(tmDelay);
 				}
 			}
-		}
-		else if (this->m_State == PUG_STATE_OVERTIME)
-		{
-			if ((this->GetRound() % (int)gCvars.GetPlayRoundsOvertime()->value) == 0)
+			else if (this->m_State == PUG_STATE_SECOND_HALF)
 			{
-				this->NextState(tmDelay);
+				int Half = (int)(gCvars.GetPlayRounds()->value / 2);
+
+				if ((this->GetScores(TERRORIST) > Half) || (this->GetScores(CT) > Half))
+				{
+					this->NextState(tmDelay);
+				}
+				else if ((this->GetScores(TERRORIST) == Half) && (this->GetScores(CT) == Half))
+				{
+					if (gCvars.GetPlayRoundsOvertimeType()->value == 1)
+					{
+						this->NextState(tmDelay);
+					}
+				}
 			}
-			else if ((this->m_Score[this->m_State][TERRORIST] - this->m_Score[this->m_State][CT]) > gCvars.GetPlayRoundsOvertime()->value)
+			else if (this->m_State == PUG_STATE_OVERTIME)
 			{
-				this->NextState(tmDelay);
-			}
-			else if ((this->m_Score[this->m_State][CT] - this->m_Score[this->m_State][TERRORIST]) > gCvars.GetPlayRoundsOvertime()->value)
-			{
-				this->NextState(tmDelay);
+				if ((this->GetRound() % (int)gCvars.GetPlayRoundsOvertime()->value) == 0)
+				{
+					this->NextState(tmDelay);
+				}
+				else if ((this->m_Score[this->m_State][TERRORIST] - this->m_Score[this->m_State][CT]) > gCvars.GetPlayRoundsOvertime()->value)
+				{
+					this->NextState(tmDelay);
+				}
+				else if ((this->m_Score[this->m_State][CT] - this->m_Score[this->m_State][TERRORIST]) > gCvars.GetPlayRoundsOvertime()->value)
+				{
+					this->NextState(tmDelay);
+				}
 			}
 		}
 	}
@@ -862,7 +865,7 @@ void CPugMod::RoundRestart()
 					{
 						CBasePlayer* Players[32] = { NULL };
 
-						int Num = gPlayer.GetList(Players);
+						auto Num = gPlayer.GetList(Players);
 
 						for (int i = 0; i < Num; i++)
 						{
