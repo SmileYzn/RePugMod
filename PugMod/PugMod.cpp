@@ -101,8 +101,10 @@ void CPugMod::SetState(int State)
 
 					for (int i = 0; i < Num; i++)
 					{
-						this->m_Frags[i] = Players[i]->edict()->v.frags;
-						this->m_Death[i] = Players[i]->m_iDeaths;
+						auto EntityIndex = Players[i]->entindex();
+
+						this->m_Frags[EntityIndex] = Players[i]->edict()->v.frags;
+						this->m_Death[EntityIndex] = Players[i]->m_iDeaths;
 					}
 				}
 
@@ -849,27 +851,26 @@ void CPugMod::RoundRestart()
 		{
 			if (gCvars.GetShowScoreType()->value > 0)
 			{
-				if (!CSGameRules()->m_bCompleteReset)
+				CSGameRules()->m_iNumCTWins = this->GetScores(CT);
+				CSGameRules()->m_iNumTerroristWins = this->GetScores(TERRORIST);
+
+				CSGameRules()->UpdateTeamScores();
+
+				if (gCvars.GetShowScoreType()->value == 2)
 				{
-					CSGameRules()->m_iNumCTWins = this->GetScores(CT);
-					CSGameRules()->m_iNumTerroristWins = this->GetScores(TERRORIST);
+					CBasePlayer* Players[32] = { NULL };
 
-					CSGameRules()->UpdateTeamScores();
+					int Num = gPlayer.GetList(Players);
 
-					if (gCvars.GetShowScoreType()->value == 2)
+					for (int i = 0; i < Num; i++)
 					{
-						CBasePlayer* Players[32] = { NULL };
+						auto EntityIndex = Players[i]->entindex();
 
-						int Num = gPlayer.GetList(Players);
-
-						for (int i = 0; i < Num; i++)
+						if (this->m_Frags[EntityIndex] || this->m_Death[EntityIndex])
 						{
-							if (this->m_Frags[i] || this->m_Death[i])
-							{
-								Players[i]->m_iDeaths = this->m_Death[i];
+							Players[i]->m_iDeaths = this->m_Death[EntityIndex];
 
-								Players[i]->AddPoints(this->m_Frags[i], TRUE);
-							}
+							Players[i]->AddPoints(this->m_Frags[EntityIndex], TRUE);
 						}
 					}
 				}
