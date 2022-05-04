@@ -22,7 +22,7 @@ void CCaptain::Init()
 	{
 		CBasePlayer* Players[32] = { NULL };
 
-		int Num = gPlayer.GetList(Players);
+		auto Num = gPlayer.GetList(Players);
 
 		for (int i = 0; i < Num; i++)
 		{
@@ -199,7 +199,7 @@ void CCaptain::Menu(TeamName Team)
 
 			CBasePlayer* Players[32] = { NULL };
 
-			int Num = gPlayer.GetList(Players, SPECTATOR);
+			auto Num = gPlayer.GetList(Players, SPECTATOR);
 
 			for(int i = 0;i < Num;i++)
 			{

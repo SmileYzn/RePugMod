@@ -42,7 +42,7 @@ void CAdmin::Menu(CBasePlayer* Player)
 {
 	if (this->Check(Player->edict()))
 	{
-		int EntityIndex = Player->entindex();
+		auto EntityIndex = Player->entindex();
 
 		this->SetType(EntityIndex, 0);
 
@@ -75,7 +75,7 @@ void CAdmin::MenuHandle(int EntityIndex, int ItemIndex, bool Disabled, const cha
 
 				CBasePlayer* Players[32] = { NULL };
 
-				int Num = gPlayer.GetList(Players);
+				auto Num = gPlayer.GetList(Players);
 
 				for (int i = 0; i < Num; i++)
 				{
@@ -95,7 +95,7 @@ void CAdmin::MenuHandle(int EntityIndex, int ItemIndex, bool Disabled, const cha
 
 				CBasePlayer* Players[32] = { NULL };
 
-				int Num = gPlayer.GetList(Players);
+				auto Num = gPlayer.GetList(Players);
 
 				for (int i = 0; i < Num; i++)
 				{
@@ -178,7 +178,6 @@ void CAdmin::MenuHandle(int EntityIndex, int ItemIndex, bool Disabled, const cha
 				case 0: // Start Vote Map
 				{
 					gPugMod.StartVoteMap(Player);
-
 					break;
 				}
 				case 1: // Start Vote Teams

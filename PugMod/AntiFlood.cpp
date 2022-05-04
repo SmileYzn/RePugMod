@@ -12,7 +12,7 @@ bool CAntiFlood::ClientCommand(CBasePlayer* Player, const char* pcmd, const char
 		{
 			float NexTime = gpGlobals->time;
 
-			int EntityIndex = Player->entindex();
+			auto EntityIndex = Player->entindex();
 
 			if (this->m_Flooding[EntityIndex] > NexTime)
 			{

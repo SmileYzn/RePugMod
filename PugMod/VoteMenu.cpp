@@ -22,7 +22,7 @@ void CVoteMenu::ClientDisconnected(edict_t * pEntity)
 {
 	if (pEntity)
 	{
-		int EntityIndex = ENTINDEX(pEntity);
+		auto EntityIndex = ENTINDEX(pEntity);
 
 		for (int i = 1; i <= gpGlobals->maxClients; ++i)
 		{
@@ -60,7 +60,7 @@ void CVoteMenu::Menu(CBasePlayer* Player)
 {
 	if (this->CheckMenu(Player))
 	{
-		int EntityIndex = Player->entindex();
+		auto EntityIndex = Player->entindex();
 
 		gMenu[EntityIndex].Create("Vote Menu:", true, this->MenuHandle);
 
@@ -114,11 +114,11 @@ void CVoteMenu::VoteKick(CBasePlayer* Player)
 	{
 		CBasePlayer* Players[32] = { NULL };
 
-		int Num = gPlayer.GetList(Players,Player->m_iTeam);
+		auto Num = gPlayer.GetList(Players,Player->m_iTeam);
 
 		int NeedPlayers = (gCvars.GetPlayersMin()->value / 2);
 
-		int PlayerIndex = Player->entindex();
+		auto PlayerIndex = Player->entindex();
 
 		if (Num >= NeedPlayers)
 		{
@@ -126,7 +126,7 @@ void CVoteMenu::VoteKick(CBasePlayer* Player)
 
 			for (int i = 0; i < Num; i++)
 			{
-				int TargetIndex = Players[i]->entindex();
+				auto TargetIndex = Players[i]->entindex();
 
 				if (PlayerIndex != TargetIndex)
 				{
@@ -167,11 +167,11 @@ void CVoteMenu::VoteKickPlayer(CBasePlayer* Player, CBasePlayer* Target, bool Di
 	{
 		if (Target)
 		{
-			int TargetIndex = Target->entindex();
+			auto TargetIndex = Target->entindex();
 
 			if (!Disabled)
 			{
-				int PlayerIndex = Player->entindex();
+				auto PlayerIndex = Player->entindex();
 
 				this->m_VoteKick[PlayerIndex][TargetIndex] = true;
 
@@ -216,7 +216,7 @@ void CVoteMenu::VoteMap(CBasePlayer* Player)
 	{
 		if (this->m_MapList.size())
 		{
-			int PlayerIndex = Player->entindex();
+			auto PlayerIndex = Player->entindex();
 
 			gMenu[PlayerIndex].Create("Nominate Map:", true, this->VoteMapHandle);
 
@@ -244,7 +244,7 @@ void CVoteMenu::VoteMapPickup(CBasePlayer* Player, int MapIndex, bool Disabled)
 {
 	if (!Disabled)
 	{
-		int PlayerIndex = Player->entindex();
+		auto PlayerIndex = Player->entindex();
 
 		this->m_VotedMap[PlayerIndex][MapIndex] = true;
 
@@ -291,7 +291,7 @@ void CVoteMenu::VotePause(CBasePlayer* Player)
 			{
 				if (this->m_PausedTeam == UNASSIGNED)
 				{
-					int PlayerIndex = Player->entindex();
+					auto PlayerIndex = Player->entindex();
 
 					if (!this->m_VotedPause[PlayerIndex][Player->m_iTeam])
 					{
@@ -384,7 +384,7 @@ void CVoteMenu::VoteStop(CBasePlayer* Player)
 {
 	if (this->CheckMenu(Player))
 	{
-		int PlayerIndex = Player->entindex();
+		auto PlayerIndex = Player->entindex();
 
 		if (!this->m_VotedStop[PlayerIndex][Player->m_iTeam])
 		{

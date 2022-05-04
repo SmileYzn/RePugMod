@@ -6,7 +6,7 @@ void CStats::ClientGetIntoGame(CBasePlayer* Player)
 {
 	if (gPugMod.GetState() == PUG_STATE_FIRST_HALF || gPugMod.GetState() == PUG_STATE_SECOND_HALF || gPugMod.GetState() == PUG_STATE_OVERTIME)
 	{
-		int EntityIndex = Player->entindex();
+		auto EntityIndex = Player->entindex();
 
 		for (int i = 1; i <= gpGlobals->maxClients; ++i)
 		{
@@ -41,17 +41,17 @@ void CStats::RoundEnd(int winStatus, ScenarioEventEndRound event, float tmDelay)
 			{
 				CBasePlayer* Players[32] = { NULL };
 
-				int Num = gPlayer.GetList(Players);
+				auto Num = gPlayer.GetList(Players);
 
 				for (int i = 0; i < Num; i++)
 				{
 					if (!Players[i]->IsBot())
 					{
-						int PlayerIndex = Players[i]->entindex();
+						auto PlayerIndex = Players[i]->entindex();
 
 						for (int j = 0; j < Num; j++)
 						{
-							int TargetIndex = Players[j]->entindex();
+							auto TargetIndex = Players[j]->entindex();
 
 							if (this->m_Stats[PlayerIndex][TargetIndex][PUG_STATS_HIT] || this->m_Stats[TargetIndex][PlayerIndex][PUG_STATS_HIT])
 							{
@@ -122,11 +122,11 @@ bool CStats::HP(CBasePlayer* Player)
 			{	
 				if (Player->m_iTeam == TERRORIST || Player->m_iTeam == CT)
 				{
-					int StatsCount = 0;
+					auto StatsCount = 0;
 
 					CBasePlayer* Players[32] = { NULL };
 
-					int Num = gPlayer.GetList(Players);
+					auto Num = gPlayer.GetList(Players);
 
 					for (int i = 0; i < Num; i++)
 					{
@@ -175,17 +175,17 @@ bool CStats::Damage(CBasePlayer * Player)
 			{
 				if (Player->m_iTeam == TERRORIST || Player->m_iTeam == CT)
 				{
-					int StatsCount = 0;
+					auto StatsCount = 0;
 
-					int PlayerIndex = Player->entindex();
+					auto PlayerIndex = Player->entindex();
 
 					CBasePlayer* Players[32] = { NULL };
 
-					int Num = gPlayer.GetList(Players);
+					auto Num = gPlayer.GetList(Players);
 
 					for (int i = 0; i < Num; i++)
 					{
-						int TargetIndex = Players[i]->entindex();
+						auto TargetIndex = Players[i]->entindex();
 
 						if (this->m_Stats[PlayerIndex][TargetIndex][PUG_STATS_HIT])
 						{
@@ -229,17 +229,17 @@ bool CStats::Received(CBasePlayer * Player)
 			{
 				if (Player->m_iTeam == TERRORIST || Player->m_iTeam == CT)
 				{
-					int StatsCount = 0;
+					auto StatsCount = 0;
 
-					int PlayerIndex = Player->entindex();
+					auto PlayerIndex = Player->entindex();
 
 					CBasePlayer* Players[32] = { NULL };
 
-					int Num = gPlayer.GetList(Players);
+					auto Num = gPlayer.GetList(Players);
 
 					for (int i = 0; i < Num; i++)
 					{
-						int TargetIndex = Players[i]->entindex();
+						auto TargetIndex = Players[i]->entindex();
 
 						if (this->m_Stats[TargetIndex][PlayerIndex][PUG_STATS_HIT])
 						{
@@ -283,17 +283,17 @@ bool CStats::Summary(CBasePlayer* Player)
 			{
 				if (Player->m_iTeam == TERRORIST || Player->m_iTeam == CT)
 				{
-					int StatsCount = 0;
+					auto StatsCount = 0;
 
-					int PlayerIndex = Player->entindex();
+					auto PlayerIndex = Player->entindex();
 
 					CBasePlayer* Players[32] = { NULL };
 
-					int Num = gPlayer.GetList(Players);
+					auto Num = gPlayer.GetList(Players);
 
 					for (int i = 0; i < Num; i++)
 					{
-						int TargetIndex = Players[i]->entindex();
+						auto TargetIndex = Players[i]->entindex();
 
 						if (this->m_Stats[PlayerIndex][TargetIndex][PUG_STATS_HIT] || this->m_Stats[TargetIndex][PlayerIndex][PUG_STATS_HIT])
 						{

@@ -62,7 +62,7 @@ void CReady::List(CReady* Ready)
 
 		CBasePlayer* Players[32] = { NULL };
 
-		int Num = gPlayer.GetList(Players);
+		auto Num = gPlayer.GetList(Players);
 
 		for (int i = 0; i < Num; i++)
 		{
@@ -135,7 +135,7 @@ void CReady::Ready(CBasePlayer* Player)
 {
 	if (this->m_Running)
 	{
-		int EntityIndex = Player->entindex();
+		auto EntityIndex = Player->entindex();
 
 		if (!this->m_Ready[EntityIndex])
 		{
@@ -157,7 +157,7 @@ void CReady::NotReady(CBasePlayer* Player)
 {
 	if (this->m_Running)
 	{
-		int EntityIndex = Player->entindex();
+		auto EntityIndex = Player->entindex();
 
 		if (this->m_Ready[EntityIndex])
 		{

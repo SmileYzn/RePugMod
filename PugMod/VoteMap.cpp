@@ -16,11 +16,11 @@ void CVoteMap::Init()
 	
 	CBasePlayer* Players[32] = { NULL };
 
-	int Num = gPlayer.GetList(Players);
+	auto Num = gPlayer.GetList(Players);
 
 	for (int i = 0; i < Num; i++)
 	{
-		int EntityIndex = Players[i]->entindex();
+		auto EntityIndex = Players[i]->entindex();
 
 		gMenu[EntityIndex].Create("Vote Map:", false, this->MenuHandle);
 
