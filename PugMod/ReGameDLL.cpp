@@ -223,8 +223,6 @@ int ReGameDLL_CBasePlayer_TakeDamage(IReGameHook_CBasePlayer_TakeDamage *chain, 
 
 void ReGameDLL_CSGameRules_RestartRound(IReGameHook_CSGameRules_RestartRound * chain)
 {
-	gPugMod.RoundRestart();
-
 	chain->callNext();
 
 	gPugMod.RoundRestart();
