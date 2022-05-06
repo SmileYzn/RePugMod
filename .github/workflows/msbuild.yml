@@ -21,17 +21,18 @@ permissions:
 jobs:
   build:
     runs-on: windows-latest
-    
-    env:
-      buildPlatform: 'Win32'
 
     steps:
     - uses: actions/checkout@v3
+    
+    - name: Install Windows 8.1 SDK
+      run: |
+        Invoke-WebRequest -Method Get -Uri https://go.microsoft.com/fwlink/p/?LinkId=323507 -OutFile sdksetup.exe -UseBasicParsing
+        Start-Process -Wait sdksetup.exe -ArgumentList "/q", "/norestart", "/features", "OptionId.WindowsDesktopSoftwareDevelopmentKit", "OptionId.NetFxSoftwareDevelopmentKit"
+      shell: powershell
 
     - name: Add MSBuild to PATH
       uses: microsoft/setup-msbuild@v1.0.2
-      with:
-        vs-version: '16.8'
 
     - name: Restore NuGet packages
       working-directory: ${{env.GITHUB_WORKSPACE}}
