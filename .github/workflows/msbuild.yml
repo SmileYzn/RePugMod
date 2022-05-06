@@ -21,12 +21,17 @@ permissions:
 jobs:
   build:
     runs-on: windows-latest
+    
+    env:
+      buildPlatform: 'Win32'
 
     steps:
     - uses: actions/checkout@v3
 
     - name: Add MSBuild to PATH
       uses: microsoft/setup-msbuild@v1.0.2
+      with:
+        vs-version: '16.8'
 
     - name: Restore NuGet packages
       working-directory: ${{env.GITHUB_WORKSPACE}}
