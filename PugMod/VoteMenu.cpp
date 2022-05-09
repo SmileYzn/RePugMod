@@ -190,7 +190,7 @@ void CVoteMenu::VoteKickPlayer(CBasePlayer* Player, CBasePlayer* Target, bool Di
 
 				if (!VotesLack)
 				{
-					gUtil.ServerCommand("kick #%d \"Kicked by Vote Kick.\"", GETPLAYERUSERID(Target->edict())); 
+					gPlayer.DropClient(Target->entindex(), "Kicked by Vote Kick.");
 
 					gUtil.SayText(NULL, TargetIndex, "\3%s\1 Kicked: \4%d\1 votes reached.", STRING(Target->edict()->v.netname), VotesNeed);
 				}

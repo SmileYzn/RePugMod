@@ -147,7 +147,7 @@ void CAdmin::MenuHandle(int EntityIndex, int ItemIndex, bool Disabled, const cha
 
 			if (Target)
 			{
-				gUtil.ServerCommand("kick #%d \"Kicked by %s.\"", GETPLAYERUSERID(Target->edict()), STRING(Player->edict()->v.netname));
+				gPlayer.DropClient(Target->entindex(), "Kicked by %s.", STRING(Player->edict()->v.netname));
 
 				gUtil.SayText(NULL, EntityIndex, "\3%s\1 Kicked \3%s\1", STRING(Player->edict()->v.netname), STRING(Target->edict()->v.netname));
 			}

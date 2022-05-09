@@ -18,7 +18,7 @@ void CAntiRetry::ClientConnected(edict_t * pEntity)
 
 				if (Seconds > 0)
 				{
-					gUtil.ServerCommand("kick #%d \"Wait %d seconds before retry.\"", GETPLAYERUSERID(pEntity), Seconds);
+					gPlayer.DropClient(ENTINDEX(pEntity), "Wait %d seconds before retry.", Seconds);
 				}
 			}
 		}

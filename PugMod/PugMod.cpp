@@ -549,7 +549,7 @@ void CPugMod::ClientConnected(edict_t* pEntity)
 	{
 		if (!CVAR_GET_FLOAT("allow_spectators"))
 		{
-			gUtil.ServerCommand("kick #%d Server is full.", GETPLAYERUSERID(pEntity));
+			gPlayer.DropClient(ENTINDEX(pEntity), "Server is full and spectators are not allowed.");
 		}
 	}
 }
