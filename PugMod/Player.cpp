@@ -186,3 +186,27 @@ CBasePlayer* CPlayer::GetRandom(TeamName Team)
 
 	return NULL;
 }
+
+bool CPlayer::DropClient(int EntityIndex, const char* Format, ...)
+{
+	auto Gameclient = g_RehldsSvs->GetClient(EntityIndex - 1);
+
+	if (Gameclient)
+	{
+		va_list argptr;
+
+		static char Buffer[128] = { 0 };
+
+		va_start(argptr, Format);
+
+		vsprintf(Buffer, Format, argptr);
+
+		va_end(argptr);
+
+		g_RehldsFuncs->DropClient(Gameclient, false, Buffer);
+
+		return true;
+	}
+
+	return false;
+}

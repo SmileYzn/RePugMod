@@ -14,6 +14,8 @@ public:
 	int GetNum(bool CountBots);
 
 	CBasePlayer* GetRandom(TeamName Team);
+
+	bool DropClient(int EntityIndex, const char* Format, ...);
 };
 
 extern CPlayer gPlayer;
