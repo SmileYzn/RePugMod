@@ -28,6 +28,9 @@ void CCvars::Load()
 	// End
 	this->m_Config[PUG_STATE_END] = this->Register("pug_cfg_end", "end.cfg");
 
+	// Time before initialize Pug Mod after start map (0 to disable auto initialization)
+	this->m_AutoStartDelay = this->Register("pug_auto_start_delay", "6.0");
+
 	// Minimum of players to start a game
 	this->m_PlayersMin = this->Register("pug_players_min", "10");
 
@@ -105,6 +108,11 @@ cvar_t* CCvars::Register(char* Name, char* Value)
 cvar_t* CCvars::GetConfig(int State)
 {
 	return this->m_Config[State];
+}
+
+cvar_t* CCvars::GetAutoStartDelay()
+{
+	return this->m_AutoStartDelay;
 }
 
 cvar_t* CCvars::GetPlayersMin()
