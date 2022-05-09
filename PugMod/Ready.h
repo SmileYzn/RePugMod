@@ -11,9 +11,9 @@ public:
 	void NotReady(CBasePlayer* pPlayer);
 
 private:
-	bool m_Running;
-	int m_Ready[33];
-	time_t m_SystemTime;
+	bool m_Running = false;
+	int m_Ready[33] = { 0 };
+	time_t m_SystemTime = NULL;
 };
 
 extern CReady gReady;

@@ -28,14 +28,15 @@ public:
 	void VoteStop(CBasePlayer* Player);
 
 private:
-	bool m_VoteKick[33][33];
-	bool m_VotedMap[33][33];
-	bool m_VotedPause[33][SPECTATOR + 1];
-	bool m_VotedStop[33][SPECTATOR + 1];
-	
+	bool m_VoteKick[33][33] = { 0 };
+	bool m_VotedMap[33][33] = { 0 };
+	bool m_VotedPause[33][SPECTATOR + 1] = { 0 };
+	bool m_VotedStop[33][SPECTATOR + 1] = { 0 };
+
 	std::vector<std::string> m_MapList;
-	TeamName m_PausedTeam;
-	int m_PausedTime;
+
+	TeamName m_PausedTeam = UNASSIGNED;
+	int m_PausedTime = 0;
 };
 
 extern CVoteMenu gVoteMenu;

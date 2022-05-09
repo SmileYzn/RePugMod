@@ -5,14 +5,14 @@
 
 enum PUG_MOD_STATES_NUM
 {
-	PUG_STATE_DEAD,
-	PUG_STATE_WARMUP,
-	PUG_STATE_START,
-	PUG_STATE_FIRST_HALF,
-	PUG_STATE_HALFTIME,
-	PUG_STATE_SECOND_HALF,
-	PUG_STATE_OVERTIME,
-	PUG_STATE_END
+	PUG_STATE_DEAD			= 0,
+	PUG_STATE_WARMUP		= 1,
+	PUG_STATE_START			= 2,
+	PUG_STATE_FIRST_HALF	= 3,
+	PUG_STATE_HALFTIME		= 4,
+	PUG_STATE_SECOND_HALF	= 5,
+	PUG_STATE_OVERTIME		= 6,
+	PUG_STATE_END			= 7
 };
 
 const char PUG_MOD_STATES_STR[][32] =
@@ -84,8 +84,8 @@ private:
 	int m_Round[PUG_STATE_END + 1];
 	int m_Score[PUG_STATE_END + 1][SPECTATOR + 1];
 
-	int m_Frags[33];
-	int m_Death[33];
+	int m_Frags[33] = { 0 };
+	int m_Death[33] = { 0 };
 };
 
 extern CPugMod gPugMod;

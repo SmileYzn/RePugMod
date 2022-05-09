@@ -17,7 +17,7 @@ public:
 	bool Summary(CBasePlayer* Player);
 
 private:
-	int m_Stats[33][33][2];
+	int m_Stats[33][33][2] = { 0 };
 };
 
 extern CStats gStats;

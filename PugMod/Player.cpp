@@ -31,7 +31,7 @@ int CPlayer::GetList(CBasePlayer* Players[32])
 			{
 				if (!Player->IsDormant())
 				{
-					if (Player->m_iTeam == TeamName::TERRORIST || Player->m_iTeam == TeamName::CT)
+					if (Player->m_iTeam == TERRORIST || Player->m_iTeam == CT)
 					{
 						Players[Num++] = Player;
 					}

@@ -20,8 +20,8 @@ public:
 	static void GetRandomPlayer(int EntityIndex);
 	static void List();
 private:
-	int      m_Captain[SPECTATOR + 1];
-	TeamName m_Picking;
+	int      m_Captain[SPECTATOR + 1] = { 0 };
+	TeamName m_Picking = UNASSIGNED;
 };
 
 extern CCaptain gCaptain;

@@ -19,7 +19,7 @@ public:
 
 private:
 	std::map<std::string, std::string> m_Data;
-	short m_Type[33];
+	short m_Type[33] = { 0 };
 };
 
 extern CAdmin gAdmin;
