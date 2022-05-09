@@ -561,9 +561,6 @@ void CPugMod::ClientGetIntoGame(CBasePlayer* Player)
 {
 	this->m_Frags[Player->entindex()] = 0;
 	this->m_Death[Player->entindex()] = 0;
-
-	gUtil.SayText(Player->edict(), PRINT_TEAM_RED, "%s Build %s (\3%s\1)", Plugin_info.name, Plugin_info.date, Plugin_info.author);
-	gUtil.SayText(Player->edict(), PRINT_TEAM_RED, "Say \4.help\1 to view command list.");
 }
 
 void CPugMod::ClientDisconnected(edict_t* pEntity)
@@ -689,7 +686,7 @@ bool CPugMod::ClientCommand(CBasePlayer * Player, const char * pcmd, const char 
 	return false;
 }
 
-bool CPugMod::ClientAddAccount(CBasePlayer * Player, int amount, RewardType type, bool bTrackChange)
+bool CPugMod::ClientAddAccount(CBasePlayer* Player, int amount, RewardType type, bool bTrackChange)
 {
 	if (type == RT_PLAYER_BOUGHT_SOMETHING)
 	{
@@ -702,7 +699,7 @@ bool CPugMod::ClientAddAccount(CBasePlayer * Player, int amount, RewardType type
 	return false;
 }
 
-bool CPugMod::ClientHasRestrictItem(CBasePlayer * Player, ItemID item, ItemRestType type)
+bool CPugMod::ClientHasRestrictItem(CBasePlayer* Player, ItemID item, ItemRestType type)
 {
 	if (this->m_State == PUG_STATE_WARMUP || this->m_State == PUG_STATE_START || this->m_State == PUG_STATE_HALFTIME)
 	{
@@ -726,6 +723,9 @@ bool CPugMod::ClientJoinTeam(CBasePlayer* Player, int NewTeam)
 	{
 		gPlayer.TeamInfo(Player->edict(), 33 + 1, "TERRORIST");
 		gPlayer.TeamInfo(Player->edict(), 33 + 2, "CT");
+
+		gUtil.SayText(Player->edict(), PRINT_TEAM_RED, "%s Build %s (\3%s\1)", Plugin_info.name, Plugin_info.date, Plugin_info.author);
+		gUtil.SayText(Player->edict(), PRINT_TEAM_RED, "Say \4.help\1 to view command list.");
 	}
 
 	if (NewTeam == 5)
