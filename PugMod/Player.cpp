@@ -2,7 +2,7 @@
 
 CPlayer gPlayer;
 
-void CPlayer::TeamInfo(edict_t *pEntity, int playerIndex, const char *pszTeamName)
+void CPlayer::TeamInfo(edict_t* pEntity, int playerIndex, const char *pszTeamName)
 {
 	static int iMsgTeamInfo;
 

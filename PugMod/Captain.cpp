@@ -26,9 +26,14 @@ void CCaptain::Init()
 
 		for (int i = 0; i < Num; i++)
 		{
-			if (Players[i]->m_iTeam != UNASSIGNED)
+			auto Player = Players[i];
+
+			if (Player)
 			{
-				Players[i]->CSPlayer()->JoinTeam(SPECTATOR);
+				if (Player->m_iTeam != UNASSIGNED)
+				{
+					Player->CSPlayer()->JoinTeam(SPECTATOR);
+				}
 			}
 		}
 

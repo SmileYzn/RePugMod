@@ -45,28 +45,33 @@ void CStats::RoundEnd(int winStatus, ScenarioEventEndRound event, float tmDelay)
 
 				for (int i = 0; i < Num; i++)
 				{
-					if (!Players[i]->IsBot())
+					auto Player = Players[i];
+
+					if (Player)
 					{
-						auto PlayerIndex = Players[i]->entindex();
-
-						for (int j = 0; j < Num; j++)
+						if (!Player->IsBot())
 						{
-							auto TargetIndex = Players[j]->entindex();
+							auto PlayerIndex = Player->entindex();
 
-							if (this->m_Stats[PlayerIndex][TargetIndex][PUG_STATS_HIT] || this->m_Stats[TargetIndex][PlayerIndex][PUG_STATS_HIT])
+							for (int j = 0; j < Num; j++)
 							{
-								gUtil.ClientPrint
-								(
-									Players[i]->edict(),
-									PRINT_CONSOLE,
-									"(%d dmg / %d hits) to (%d dmg / %d hits) from %s (%d HP)",
-									this->m_Stats[PlayerIndex][TargetIndex][PUG_STATS_DMG],
-									this->m_Stats[PlayerIndex][TargetIndex][PUG_STATS_HIT],
-									this->m_Stats[TargetIndex][PlayerIndex][PUG_STATS_DMG],
-									this->m_Stats[TargetIndex][PlayerIndex][PUG_STATS_HIT],
-									STRING(Players[j]->edict()->v.netname),
-									Players[j]->IsAlive() ? (int)Players[j]->edict()->v.health : 0
-								);
+								auto TargetIndex = Players[j]->entindex();
+
+								if (this->m_Stats[PlayerIndex][TargetIndex][PUG_STATS_HIT] || this->m_Stats[TargetIndex][PlayerIndex][PUG_STATS_HIT])
+								{
+									gUtil.ClientPrint
+									(
+										Players[i]->edict(),
+										PRINT_CONSOLE,
+										"(%d dmg / %d hits) to (%d dmg / %d hits) from %s (%d HP)",
+										this->m_Stats[PlayerIndex][TargetIndex][PUG_STATS_DMG],
+										this->m_Stats[PlayerIndex][TargetIndex][PUG_STATS_HIT],
+										this->m_Stats[TargetIndex][PlayerIndex][PUG_STATS_DMG],
+										this->m_Stats[TargetIndex][PlayerIndex][PUG_STATS_HIT],
+										STRING(Players[j]->edict()->v.netname),
+										Players[j]->IsAlive() ? (int)Players[j]->edict()->v.health : 0
+									);
+								}
 							}
 						}
 					}
@@ -130,21 +135,26 @@ bool CStats::HP(CBasePlayer* Player)
 
 					for (int i = 0; i < Num; i++)
 					{
-						if (Player->m_iTeam != Players[i]->m_iTeam)
-						{
-							if (Players[i]->IsAlive())
-							{
-								StatsCount++;
+						auto Target = Players[i];
 
-								gUtil.SayText
-								(
-									Player->edict(), 
-									Players[i]->entindex(), 
-									"\3%s\1 with %d HP (%d AP)", 
-									STRING(Players[i]->edict()->v.netname),
-									(int)Players[i]->edict()->v.health,
-									(int)Players[i]->edict()->v.armorvalue
-								);
+						if (Target)
+						{
+							if (Player->m_iTeam != Target->m_iTeam)
+							{
+								if (Target->IsAlive())
+								{
+									StatsCount++;
+
+									gUtil.SayText
+									(
+										Player->edict(),
+										Target->entindex(),
+										"\3%s\1 with %d HP (%d AP)",
+										STRING(Target->edict()->v.netname),
+										(int)Target->edict()->v.health,
+										(int)Target->edict()->v.armorvalue
+									);
+								}
 							}
 						}
 					}
@@ -293,24 +303,29 @@ bool CStats::Summary(CBasePlayer* Player)
 
 					for (int i = 0; i < Num; i++)
 					{
-						auto TargetIndex = Players[i]->entindex();
+						auto Target = Players[i];
 
-						if (this->m_Stats[PlayerIndex][TargetIndex][PUG_STATS_HIT] || this->m_Stats[TargetIndex][PlayerIndex][PUG_STATS_HIT])
+						if (Target)
 						{
-							StatsCount++;
+							auto TargetIndex = Target->entindex();
 
-							gUtil.SayText
-							(
-								Player->edict(),
-								TargetIndex,
-								"(%d dmg / %d hits) to (%d dmg / %d hits) from \3%s\1 (%d HP)",
-								this->m_Stats[PlayerIndex][TargetIndex][PUG_STATS_DMG],
-								this->m_Stats[PlayerIndex][TargetIndex][PUG_STATS_HIT],
-								this->m_Stats[TargetIndex][PlayerIndex][PUG_STATS_DMG],
-								this->m_Stats[TargetIndex][PlayerIndex][PUG_STATS_HIT],
-								STRING(Players[i]->edict()->v.netname),
-								Players[i]->IsAlive() ? (int)Players[i]->edict()->v.health : 0
-							);
+							if (this->m_Stats[PlayerIndex][TargetIndex][PUG_STATS_HIT] || this->m_Stats[TargetIndex][PlayerIndex][PUG_STATS_HIT])
+							{
+								StatsCount++;
+
+								gUtil.SayText
+								(
+									Player->edict(),
+									TargetIndex,
+									"(%d dmg / %d hits) to (%d dmg / %d hits) from \3%s\1 (%d HP)",
+									this->m_Stats[PlayerIndex][TargetIndex][PUG_STATS_DMG],
+									this->m_Stats[PlayerIndex][TargetIndex][PUG_STATS_HIT],
+									this->m_Stats[TargetIndex][PlayerIndex][PUG_STATS_DMG],
+									this->m_Stats[TargetIndex][PlayerIndex][PUG_STATS_HIT],
+									STRING(Target->edict()->v.netname),
+									Target->IsAlive() ? (int)Target->edict()->v.health : 0
+								);
+							}
 						}
 					}
 

@@ -66,11 +66,16 @@ void CReady::List(CReady* Ready)
 
 		for (int i = 0; i < Num; i++)
 		{
-			int State = Ready->m_Ready[Players[i]->entindex()] ? 1 : 0;
+			auto Player = Players[i];
 
-			PlayerCount[State]++;
+			if (Player)
+			{
+				int State = Ready->m_Ready[Player->entindex()] ? 1 : 0;
 
-			snprintf(PlayerList[State], sizeof(PlayerList[State]), "%s%s\n", PlayerList[State], STRING(Players[i]->edict()->v.netname));
+				PlayerCount[State]++;
+
+				snprintf(PlayerList[State], sizeof(PlayerList[State]), "%s%s\n", PlayerList[State], STRING(Player->edict()->v.netname));
+			}
 		}
 
 		if (PlayerCount[1] >= (int)gCvars.GetPlayersMin()->value)

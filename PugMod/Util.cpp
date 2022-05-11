@@ -192,7 +192,7 @@ hudtextparms_t CUtil::HudParam(int red, int green, int blue, float x, float y, i
 	return hud;
 }
 
-void CUtil::HudMessage(edict_t *pEntity, const hudtextparms_t &textparms, const char *Format, ...)
+void CUtil::HudMessage(edict_t* pEntity, const hudtextparms_t &textparms, const char *Format, ...)
 {
 	va_list argList = { 0 };
 
@@ -281,7 +281,7 @@ unsigned short CUtil::FixedUnsigned16(float value, float scale)
 	return (unsigned short)output;
 }
 
-void CUtil::ShowMotd(edict_t *pEntity, char *Motd, int MotdLength)
+void CUtil::ShowMotd(edict_t* pEntity, char *Motd, int MotdLength)
 {
 	static int iMsgMOTD;
 

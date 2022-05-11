@@ -25,13 +25,18 @@ void CVoteTeam::Init()
 
 	for (int i = 0; i < Num; i++)
 	{
-		auto EntityIndex = Players[i]->entindex();
+		auto Player = Players[i];
 
-		gMenu[EntityIndex].Create("Game Mode:", false, this->MenuHandle);
+		if (Player)
+		{
+			auto EntityIndex = Player->entindex();
 
-		gMenu[EntityIndex].AddList(this->m_Data);
+			gMenu[EntityIndex].Create("Game Mode:", false, this->MenuHandle);
 
-		gMenu[EntityIndex].Show(EntityIndex);
+			gMenu[EntityIndex].AddList(this->m_Data);
+
+			gMenu[EntityIndex].Show(EntityIndex);
+		}
 	}
 
 	gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, "Select teams started.");
@@ -213,14 +218,21 @@ void CVoteTeam::TeamsRandomize()
 		// Get Random index from player count minus one (Like Num)
 		int Rand = RANDOM_LONG(0, (Num - 1));
 
-		// Set Team
-		Players[Rand]->CSPlayer()->JoinTeam(Team);
+		// Pointer
+		auto Player = Players[Rand];
 
-		// Remove this entity from players count number
-		Players[Rand] = Players[--Num];
+		// If is not null
+		if (Player)
+		{
+			// Set Team
+			Player->CSPlayer()->JoinTeam(Team);
 
-		// Set next team for next random player
-		Team = (Team == TERRORIST) ? CT : TERRORIST;
+			// Remove this entity from players count number
+			Players[Rand] = Players[--Num];
+
+			// Set next team for next random player
+			Team = (Team == TERRORIST) ? CT : TERRORIST;
+		}
 	}
 
 	// If has CSGameRules
@@ -251,14 +263,19 @@ void CVoteTeam::TeamsOptimize()
 	// Loop
 	for (int i = 0; i < Num; i++)
 	{
-		// Get Frags
-		int Frags = Players[i]->edict()->v.frags;
+		auto Player = Players[i];
 
-		// Get Deaths
-		int Death = Players[i]->m_iDeaths;
+		if (Player)
+		{
+			// Get Frags
+			int Frags = Player->edict()->v.frags;
 
-		// Store Efficiency
-		Sorted[i] = Skills[i] = (Frags ? (100.0f * float(Frags) / float(Frags + Death)) : 0);
+			// Get Deaths
+			int Death = Player->m_iDeaths;
+
+			// Store Efficiency
+			Sorted[i] = Skills[i] = (Frags ? (100.0f * float(Frags) / float(Frags + Death)) : 0);
+		}
 	}
 
 	// Sort skill percentage descending in array
@@ -273,14 +290,21 @@ void CVoteTeam::TeamsOptimize()
 		// Loop players
 		for (int j = 0; j < Num; j++)
 		{
-			// If player skill math with sorted array position
-			if (Skills[j] == Sorted[i])
-			{
-				// Set entity team
-				Players[j]->CSPlayer()->JoinTeam(Team);
+			// Pointer
+			auto Player = Players[j];
 
-				// Get the next team oposite from current team for next skilled player
-				Team = (Team == TERRORIST) ? CT : TERRORIST;
+			// If is not null
+			if (Player)
+			{
+				// If player skill math with sorted array position
+				if (Skills[j] == Sorted[i])
+				{
+					// Set entity team
+					Player->CSPlayer()->JoinTeam(Team);
+
+					// Get the next team oposite from current team for next skilled player
+					Team = (Team == TERRORIST) ? CT : TERRORIST;
+				}
 			}
 		}
 	}

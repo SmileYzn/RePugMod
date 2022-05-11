@@ -99,10 +99,13 @@ void CPugMod::SetState(int State)
 
 					for (int i = 0; i < Num; i++)
 					{
-						auto EntityIndex = Players[i]->entindex();
+						auto Player = Players[i];
 
-						this->m_Frags[EntityIndex] = Players[i]->edict()->v.frags;
-						this->m_Death[EntityIndex] = Players[i]->m_iDeaths;
+						if (Player)
+						{
+							this->m_Frags[Player->entindex()] = Player->edict()->v.frags;
+							this->m_Death[Player->entindex()] = Player->m_iDeaths;
+						}
 					}
 				}
 
@@ -429,7 +432,7 @@ void CPugMod::Help(CBasePlayer * Player,bool AdminHelp)
 	}
 	else
 	{
-		if (gAdmin.Check(Player->edict()))
+		if (gAdmin.Check(Player))
 		{
 			gUtil.ShowMotd(Player->edict(), HELP_FILE_ADMIN, strlen(HELP_FILE_ADMIN));
 		}
@@ -769,7 +772,7 @@ bool CPugMod::ClientJoinTeam(CBasePlayer* Player, int NewTeam)
 	{
 		if (!CVAR_GET_FLOAT("allow_spectators")) 
 		{
-			if (!gAdmin.Check(Player->edict()))
+			if (!gAdmin.Check(Player))
 			{
 				gUtil.SayText(Player->edict(), PRINT_TEAM_GREY, "\3Spectators\1 are not allowed.");
 				return true;
@@ -874,21 +877,26 @@ void CPugMod::RoundRestart()
 
 					if (gCvars.GetShowScoreType()->value == 2)
 					{
-						CBasePlayer* Players[32] = { NULL };
+						CBasePlayer* Players[32] = { nullptr };
 
 						auto Num = gPlayer.GetList(Players);
 
 						for (int i = 0; i < Num; i++)
 						{
-							auto EntityIndex = Players[i]->entindex();
+							auto Player = Players[i];
 
-							if (this->m_Frags[EntityIndex] || this->m_Death[EntityIndex])
+							if (Player)
 							{
-								Players[i]->m_iDeaths = this->m_Death[EntityIndex];
+								auto EntityIndex = Player->entindex();
 
-								Players[i]->edict()->v.frags = 0.0f;
+								if (this->m_Frags[EntityIndex] || this->m_Death[EntityIndex])
+								{
+									Player->m_iDeaths = this->m_Death[EntityIndex];
 
-								Players[i]->AddPoints(this->m_Frags[EntityIndex], TRUE);
+									Player->edict()->v.frags = 0.0f;
+
+									Player->AddPoints(this->m_Frags[EntityIndex], TRUE);
+								}
 							}
 						}
 					}

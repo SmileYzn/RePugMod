@@ -36,6 +36,11 @@ bool CAdmin::Check(edict_t* pEntity)
 	return false;
 }
 
+bool CAdmin::Check(CBasePlayer* Player)
+{
+	return this->Check(Player->edict());
+}
+
 void CAdmin::Menu(CBasePlayer* Player)
 {
 	if (this->Check(Player->edict()))
@@ -107,9 +112,14 @@ void CAdmin::MenuKick(int EntityIndex)
 
 	for (int i = 0; i < Num; i++)
 	{
-		if (!gAdmin.Check(Players[i]->edict()))
+		auto Player = Players[i];
+
+		if (Player)
 		{
-			gMenu[EntityIndex].AddItem(Players[i]->entindex(), STRING(Players[i]->edict()->v.netname));
+			if (!gAdmin.Check(Player))
+			{
+				gMenu[EntityIndex].AddItem(Player->entindex(), STRING(Player->edict()->v.netname));
+			}
 		}
 	}
 
@@ -143,9 +153,14 @@ void CAdmin::MenuSlap(int EntityIndex)
 
 	for (int i = 0; i < Num; i++)
 	{
-		if (!gAdmin.Check(Players[i]->edict()))
+		auto Player = Players[i];
+
+		if (Player)
 		{
-			gMenu[EntityIndex].AddItem(Players[i]->entindex(), STRING(Players[i]->edict()->v.netname));
+			if (!gAdmin.Check(Player))
+			{
+				gMenu[EntityIndex].AddItem(Player->entindex(), STRING(Player->edict()->v.netname));
+			}
 		}
 	}
 

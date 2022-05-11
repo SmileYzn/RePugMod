@@ -7,6 +7,7 @@ class CAdmin
 public:
 	void Load();
 	bool Check(edict_t* pEntity);
+	bool Check(CBasePlayer* Player);
 
 	void Menu(CBasePlayer* Player);
 	static void MenuHandle(int EntityIndex, int ItemIndex, bool Disabled, const char* Option);

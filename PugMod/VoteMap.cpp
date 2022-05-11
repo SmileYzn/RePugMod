@@ -20,13 +20,18 @@ void CVoteMap::Init()
 
 	for (int i = 0; i < Num; i++)
 	{
-		auto EntityIndex = Players[i]->entindex();
+		auto Player = Players[i];
 
-		gMenu[EntityIndex].Create("Vote Map:", false, this->MenuHandle);
+		if (Player)
+		{
+			auto EntityIndex = Player->entindex();
 
-		gMenu[EntityIndex].AddList(this->m_Data);
+			gMenu[EntityIndex].Create("Vote Map:", false, this->MenuHandle);
 
-		gMenu[EntityIndex].Show(EntityIndex);
+			gMenu[EntityIndex].AddList(this->m_Data);
+
+			gMenu[EntityIndex].Show(EntityIndex);
+		}
 	}
 
 	gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, "Starting Vote Map."); 
