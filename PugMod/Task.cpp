@@ -39,7 +39,7 @@ void CTask::Create(int Index, float Time, bool Loop, void* FunctionCallback, voi
 
 bool CTask::Exists(int Index)
 {
-	std::map<int, P_TASK_INFO>::iterator it = this->m_Data.find(Index);
+	auto it = this->m_Data.find(Index);
 
 	return (it != this->m_Data.end());
 }
@@ -51,7 +51,7 @@ void CTask::Remove(int Index)
 
 float CTask::Timeleft(int Index)
 {
-	std::map<int, P_TASK_INFO>::iterator it = this->m_Data.find(Index);
+	auto it = this->m_Data.find(Index);
 
 	if (it != this->m_Data.end())
 	{
@@ -63,19 +63,19 @@ float CTask::Timeleft(int Index)
 
 void CTask::Think()
 {
-	for (std::map<int, P_TASK_INFO>::iterator it = this->m_Data.begin(); it != this->m_Data.end(); it++)
+	for (auto & it : this->m_Data)
 	{
-		if (gpGlobals->time >= it->second.EndTime)
+		if (gpGlobals->time >= it.second.EndTime)
 		{
-			P_TASK_INFO Task = it->second;
-			
-			if (it->second.Loop)
+			P_TASK_INFO Task = it.second;
+
+			if (it.second.Loop)
 			{
-				it->second.EndTime += it->second.Time;
+				it.second.EndTime += it.second.Time;
 			}
 			else
 			{
-				this->Remove(it->first);
+				this->m_Data.erase(it.first);
 			}
 
 			if (Task.FunctionParameter)
