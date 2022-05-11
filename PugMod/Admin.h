@@ -11,15 +11,23 @@ public:
 	void Menu(CBasePlayer* Player);
 	static void MenuHandle(int EntityIndex, int ItemIndex, bool Disabled, const char* Option);
 
+	void MenuKick(int EntityIndex);
+	static void MenuKickHandle(int EntityIndex, int ItemIndex, bool Disabled, const char* Option);
+
+	void MenuSlap(int EntityIndex);
+	static void MenuSlapHandle(int EntityIndex, int ItemIndex, bool Disabled, const char* Option);
+
+	void MenuMap(int EntityIndex);
+	static void MenuMapHandle(int EntityIndex, int ItemIndex, bool Disabled, const char* Option);
+
+	void MenuControl(int EntityIndex);
+	static void MenuControlHandle(int EntityIndex, int ItemIndex, bool Disabled, const char* Option);
+
 	void Chat(CBasePlayer* Player, const char* Args);
 	void Rcon(CBasePlayer* Player, const char* Args);
 
-	short GetType(int EntityIndex) { return this->m_Type[EntityIndex]; }
-	short SetType(int EntityIndex, short Type) { this->m_Type[EntityIndex] = Type; return Type; }
-
 private:
 	std::map<std::string, std::string> m_Data;
-	short m_Type[33] = { 0 };
 };
 
 extern CAdmin gAdmin;

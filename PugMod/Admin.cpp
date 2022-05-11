@@ -6,8 +6,6 @@ void CAdmin::Load()
 {
 	this->m_Data.clear();
 
-	memset(this->m_Type, 0, sizeof(this->m_Type));
-
 	std::ifstream File(ADMIN_CONFIG_FILE, std::ifstream::in);
 
 	std::string Auth, Name;
@@ -30,7 +28,7 @@ bool CAdmin::Check(edict_t* pEntity)
 
 	if (Auth)
 	{
-		std::map<std::string, std::string>::iterator it = this->m_Data.find(Auth);
+		auto it = this->m_Data.find(Auth);
 
 		return (it != this->m_Data.end());
 	}
@@ -43,8 +41,6 @@ void CAdmin::Menu(CBasePlayer* Player)
 	if (this->Check(Player->edict()))
 	{
 		auto EntityIndex = Player->entindex();
-
-		this->SetType(EntityIndex, 0);
 
 		gMenu[EntityIndex].Create("PUG Mod Menu:", true, this->MenuHandle);
 
@@ -65,147 +61,187 @@ void CAdmin::MenuHandle(int EntityIndex, int ItemIndex, bool Disabled, const cha
 
 	if (Player)
 	{
-		if (gAdmin.GetType(EntityIndex) == 0)
+		switch (ItemIndex)
 		{
-			if (ItemIndex == 0)
+			case 0:
 			{
-				gAdmin.SetType(EntityIndex, 1);
-
-				gMenu[EntityIndex].Create("Kick Player:", true, gAdmin.MenuHandle);
-
-				CBasePlayer* Players[32] = { NULL };
-
-				auto Num = gPlayer.GetList(Players);
-
-				for (int i = 0; i < Num; i++)
-				{
-					if (!gAdmin.Check(Players[i]->edict()))
-					{
-						gMenu[EntityIndex].AddItem(Players[i]->entindex(), STRING(Players[i]->edict()->v.netname));
-					}
-				}
-
-				gMenu[EntityIndex].Show(EntityIndex);
+				gAdmin.MenuKick(EntityIndex);
+				break;
 			}
-			else if (ItemIndex == 1)
+			case 1:
 			{
-				gAdmin.SetType(EntityIndex, 2);
-
-				gMenu[EntityIndex].Create("Kill Player:", true, gAdmin.MenuHandle);
-
-				CBasePlayer* Players[32] = { NULL };
-
-				auto Num = gPlayer.GetList(Players);
-
-				for (int i = 0; i < Num; i++)
-				{
-					if (!gAdmin.Check(Players[i]->edict()))
-					{
-						gMenu[EntityIndex].AddItem(Players[i]->entindex(), STRING(Players[i]->edict()->v.netname));
-					}
-				}
-
-				gMenu[EntityIndex].Show(EntityIndex);
+				gAdmin.MenuSlap(EntityIndex);
+				break;
 			}
-			else if (ItemIndex == 2)
+			case 2:
 			{
-				gAdmin.SetType(EntityIndex, 3);
-
-				gMenu[EntityIndex].Create("Change Map:", true, gAdmin.MenuHandle);
-
-				gMenu[EntityIndex].AddList(gUtil.LoadMapList(VOTE_MAP_FILE, true));
-
-				gMenu[EntityIndex].Show(EntityIndex);
+				gAdmin.MenuMap(EntityIndex);
+				break;
 			}
-			else if (ItemIndex == 3)
+			case 3:
 			{
-				gAdmin.SetType(EntityIndex, 4);
-
-				gMenu[EntityIndex].Create("Control Pug Mod:", true, gAdmin.MenuHandle);
-
-				gMenu[EntityIndex].AddItem(0, "Run Vote Map");
-				gMenu[EntityIndex].AddItem(1, "Run Vote Teams");
-				gMenu[EntityIndex].AddItem(2, "Start Match");
-				gMenu[EntityIndex].AddItem(3, "Stop Match");
-				gMenu[EntityIndex].AddItem(4, "Restart Period");
-				gMenu[EntityIndex].AddItem(5, "Toggle Ready System");
-
-				gMenu[EntityIndex].Show(EntityIndex);
+				gAdmin.MenuControl(EntityIndex);
+				break;
 			}
-			else if (ItemIndex == 4)
+			case 4:
 			{
 				CLIENT_COMMAND(Player->edict(), "messagemode !msg\n");
+				break;
 			}
-			else if (ItemIndex == 5)
+			case 5:
 			{
 				CLIENT_COMMAND(Player->edict(), "messagemode !rcon\n");
+				break;
 			}
 		}
-		else if (gAdmin.GetType(EntityIndex) == 1)
+	}
+}
+
+void CAdmin::MenuKick(int EntityIndex)
+{
+	gMenu[EntityIndex].Create("Kick Player:", true, this->MenuKickHandle);
+
+	CBasePlayer* Players[32] = { NULL };
+
+	auto Num = gPlayer.GetList(Players);
+
+	for (int i = 0; i < Num; i++)
+	{
+		if (!gAdmin.Check(Players[i]->edict()))
 		{
-			auto Target = UTIL_PlayerByIndexSafe(ItemIndex);
+			gMenu[EntityIndex].AddItem(Players[i]->entindex(), STRING(Players[i]->edict()->v.netname));
+		}
+	}
 
-			if (Target)
+	gMenu[EntityIndex].Show(EntityIndex);
+}
+
+void CAdmin::MenuKickHandle(int EntityIndex, int ItemIndex, bool Disabled, const char* Option)
+{
+	auto Player = UTIL_PlayerByIndexSafe(EntityIndex);
+
+	if (Player)
+	{
+		auto Target = UTIL_PlayerByIndexSafe(ItemIndex);
+
+		if (Target)
+		{
+			gPlayer.DropClient(Target->entindex(), "Kicked by %s.", STRING(Player->edict()->v.netname));
+
+			gUtil.SayText(NULL, EntityIndex, "\3%s\1 Kicked \3%s\1", STRING(Player->edict()->v.netname), STRING(Target->edict()->v.netname));
+		}
+	}
+}
+
+void CAdmin::MenuSlap(int EntityIndex)
+{
+	gMenu[EntityIndex].Create("Kick Player:", true, this->MenuSlapHandle);
+
+	CBasePlayer* Players[32] = { NULL };
+
+	auto Num = gPlayer.GetList(Players);
+
+	for (int i = 0; i < Num; i++)
+	{
+		if (!gAdmin.Check(Players[i]->edict()))
+		{
+			gMenu[EntityIndex].AddItem(Players[i]->entindex(), STRING(Players[i]->edict()->v.netname));
+		}
+	}
+
+	gMenu[EntityIndex].Show(EntityIndex);
+}
+
+void CAdmin::MenuSlapHandle(int EntityIndex, int ItemIndex, bool Disabled, const char* Option)
+{
+	auto Player = UTIL_PlayerByIndexSafe(EntityIndex);
+
+	if (Player)
+	{
+		auto Target = UTIL_PlayerByIndexSafe(ItemIndex);
+
+		if (Target)
+		{
+			MDLL_ClientKill(Target->edict());
+
+			gUtil.SayText(NULL, EntityIndex, "\3%s\1 Killed \3%s\1", STRING(Player->edict()->v.netname), STRING(Target->edict()->v.netname));
+		}
+	}
+}
+
+void CAdmin::MenuMap(int EntityIndex)
+{
+	gMenu[EntityIndex].Create("Change Map:", true, this->MenuMapHandle);
+
+	gMenu[EntityIndex].AddList(gUtil.LoadMapList(VOTE_MAP_FILE, true));
+
+	gMenu[EntityIndex].Show(EntityIndex);
+}
+
+void CAdmin::MenuMapHandle(int EntityIndex, int ItemIndex, bool Disabled, const char* Option)
+{
+	auto Player = UTIL_PlayerByIndexSafe(EntityIndex);
+
+	if (Player)
+	{
+		gTask.Create(EntityIndex, 5.0, false, SERVER_COMMAND, (void*)gUtil.VarArgs("changelevel %s\n", Option));
+
+		gUtil.SayText(NULL, EntityIndex, "\3%s\1 changed map to \4%s\1", STRING(Player->edict()->v.netname), Option);
+	}
+}
+
+void CAdmin::MenuControl(int EntityIndex)
+{
+	gMenu[EntityIndex].Create("Control Pug Mod:", true, gAdmin.MenuHandle);
+
+	gMenu[EntityIndex].AddItem(0, "Run Vote Map");
+	gMenu[EntityIndex].AddItem(1, "Run Vote Teams");
+	gMenu[EntityIndex].AddItem(2, "Start Match");
+	gMenu[EntityIndex].AddItem(3, "Stop Match");
+	gMenu[EntityIndex].AddItem(4, "Restart Period");
+	gMenu[EntityIndex].AddItem(5, "Toggle Ready System");
+
+	gMenu[EntityIndex].Show(EntityIndex);
+}
+
+void CAdmin::MenuControlHandle(int EntityIndex, int ItemIndex, bool Disabled, const char* Option)
+{
+	auto Player = UTIL_PlayerByIndexSafe(EntityIndex);
+
+	if (Player)
+	{
+		switch (ItemIndex)
+		{
+			case 0: // Start Vote Map
 			{
-				gPlayer.DropClient(Target->entindex(), "Kicked by %s.", STRING(Player->edict()->v.netname));
-
-				gUtil.SayText(NULL, EntityIndex, "\3%s\1 Kicked \3%s\1", STRING(Player->edict()->v.netname), STRING(Target->edict()->v.netname));
+				gPugMod.StartVoteMap(Player);
+				break;
 			}
-		}
-		else if (gAdmin.GetType(EntityIndex) == 2)
-		{
-			auto Target = UTIL_PlayerByIndexSafe(ItemIndex);
-
-			if (Target)
+			case 1: // Start Vote Teams
 			{
-				MDLL_ClientKill(Target->edict());
+				gPugMod.StartVoteTeam(Player);
 
-				gUtil.SayText(NULL, EntityIndex, "\3%s\1 Killed \3%s\1", STRING(Player->edict()->v.netname), STRING(Target->edict()->v.netname));
+				break;
 			}
-		}
-		else if (gAdmin.GetType(EntityIndex) == 3)
-		{
-			gTask.Create(EntityIndex, 5.0, false, SERVER_COMMAND, (void*)gUtil.VarArgs("changelevel %s\n", Option));
-
-			gUtil.SayText(NULL, EntityIndex, "\3%s\1 changed map to \4%s\1", STRING(Player->edict()->v.netname), Option);
-		}
-		else if (gAdmin.GetType(EntityIndex) == 4)
-		{
-			int State = gPugMod.GetState();
-
-			switch (ItemIndex)
+			case 2: // Start Match
 			{
-				case 0: // Start Vote Map
-				{
-					gPugMod.StartVoteMap(Player);
-					break;
-				}
-				case 1: // Start Vote Teams
-				{
-					gPugMod.StartVoteTeam(Player);
-
-					break;
-				}
-				case 2: // Start Match
-				{
-					gPugMod.StartMatch(Player);
-					break;
-				}
-				case 3: // Stop Match
-				{
-					gPugMod.StopMatch(Player);
-					break;
-				}
-				case 4: // Restart Period
-				{
-					gPugMod.RestarPeriod(Player);
-					break;
-				}
-				case 5: // Toggle Ready System 
-				{
-					gReady.Toggle(Player);
-					break; 
-				}
+				gPugMod.StartMatch(Player);
+				break;
+			}
+			case 3: // Stop Match
+			{
+				gPugMod.StopMatch(Player);
+				break;
+			}
+			case 4: // Restart Period
+			{
+				gPugMod.RestarPeriod(Player);
+				break;
+			}
+			case 5: // Toggle Ready System 
+			{
+				gReady.Toggle(Player);
+				break; 
 			}
 		}
 	}
