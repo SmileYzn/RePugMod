@@ -4,14 +4,9 @@ CPugMod gPugMod;
 
 void CPugMod::Load()
 {
-	// We start at dead state
 	this->SetState(PUG_STATE_DEAD); 
 
-	// After autostart delay time, start PUG
-	if (gCvars.GetAutoStartDelay()->value > 0)
-	{
-		this->NextState(gCvars.GetAutoStartDelay()->value);
-	}
+	this->NextState(gCvars.GetAutoStartDelay()->value);
 }
 
 void CPugMod::Unload()
