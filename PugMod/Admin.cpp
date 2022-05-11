@@ -192,7 +192,7 @@ void CAdmin::MenuMapHandle(int EntityIndex, int ItemIndex, bool Disabled, const 
 
 void CAdmin::MenuControl(int EntityIndex)
 {
-	gMenu[EntityIndex].Create("Control Pug Mod:", true, gAdmin.MenuHandle);
+	gMenu[EntityIndex].Create("Control Pug Mod:", true, gAdmin.MenuControlHandle);
 
 	gMenu[EntityIndex].AddItem(0, "Run Vote Map");
 	gMenu[EntityIndex].AddItem(1, "Run Vote Teams");
