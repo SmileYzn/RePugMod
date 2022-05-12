@@ -48,12 +48,12 @@ public:
 
 	bool CheckBalanceTeams();
 
-	void StartVoteMap(CBasePlayer* Player);
-	void StartVoteTeam(CBasePlayer* Player);
-	void StartMatch(CBasePlayer* Player);
-	void StopMatch(CBasePlayer* Player);
-	void RestarPeriod(CBasePlayer* Player);
-	void EndGame(TeamName Winner);
+	bool StartVoteMap(CBasePlayer* Player);
+	bool StartVoteTeam(CBasePlayer* Player);
+	bool StartMatch(CBasePlayer* Player);
+	bool StopMatch(CBasePlayer* Player);
+	bool RestarPeriod(CBasePlayer* Player);
+	bool EndGame(TeamName Winner);
 
 	int GetRound();
 	int GetScores(int Team);

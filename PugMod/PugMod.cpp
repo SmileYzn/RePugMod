@@ -281,7 +281,7 @@ bool CPugMod::CheckBalanceTeams()
 	return true;
 }
 
-void CPugMod::StartVoteMap(CBasePlayer* Player)
+bool CPugMod::StartVoteMap(CBasePlayer* Player)
 {
 	if (this->m_State != PUG_STATE_DEAD && this->m_State != PUG_STATE_START && this->m_State != PUG_STATE_END)
 	{
@@ -290,14 +290,18 @@ void CPugMod::StartVoteMap(CBasePlayer* Player)
 		gUtil.SayText(NULL, Player->entindex(), "\3%s\1 started Vote Map.",STRING(Player->edict()->v.netname));
 
 		gVoteMap.Init();
+
+		return true;
 	}
 	else
 	{
 		gUtil.SayText(Player->edict(), PRINT_TEAM_RED, "Cannot start an vote in \3%s\1 state.", PUG_MOD_STATES_STR[this->m_State]);
 	}
+
+	return false;
 }
 
-void CPugMod::StartVoteTeam(CBasePlayer* Player)
+bool CPugMod::StartVoteTeam(CBasePlayer* Player)
 {
 	if (this->m_State == PUG_STATE_WARMUP)
 	{
@@ -308,14 +312,18 @@ void CPugMod::StartVoteTeam(CBasePlayer* Player)
 		gUtil.SayText(NULL, Player->entindex(), "\3%s\1 started Vote Team.", STRING(Player->edict()->v.netname));
 
 		this->SetState(PUG_STATE_START);
+
+		return true;
 	}
 	else
 	{
 		gUtil.SayText(Player->edict(), PRINT_TEAM_RED, "Cannot start vote team in \3%s\1 state.", PUG_MOD_STATES_STR[this->m_State]);
 	}
+
+	return false;
 }
 
-void CPugMod::StartMatch(CBasePlayer* Player)
+bool CPugMod::StartMatch(CBasePlayer* Player)
 {
 	if (this->m_State == PUG_STATE_WARMUP || this->m_State == PUG_STATE_HALFTIME)
 	{
@@ -329,28 +337,36 @@ void CPugMod::StartMatch(CBasePlayer* Player)
 		{
 			this->SetState(PUG_STATE_FIRST_HALF);
 		}
+
+		return true;
 	}
 	else
 	{
 		gUtil.SayText(Player->edict(), PRINT_TEAM_RED, "Cannot start match in \3%s\1 state.", PUG_MOD_STATES_STR[this->m_State]);
 	}
+
+	return false;
 }
 
-void CPugMod::StopMatch(CBasePlayer* Player)
+bool CPugMod::StopMatch(CBasePlayer* Player)
 {
 	if (this->m_State >= PUG_STATE_FIRST_HALF && this->m_State <= PUG_STATE_OVERTIME)
 	{
 		gUtil.SayText(NULL, Player->entindex(), "\3%s\1 stopped match.", STRING(Player->edict()->v.netname));
 
 		this->SetState(PUG_STATE_END);
+
+		return true;
 	}
 	else
 	{
 		gUtil.SayText(Player->edict(), PRINT_TEAM_RED, "Cannot stop match in \3%s\1 state.", PUG_MOD_STATES_STR[this->m_State]);
 	}
+
+	return false;
 }
 
-void CPugMod::RestarPeriod(CBasePlayer* Player)
+bool CPugMod::RestarPeriod(CBasePlayer* Player)
 {
 	if (this->m_State == PUG_STATE_FIRST_HALF || this->m_State == PUG_STATE_SECOND_HALF || this->m_State == PUG_STATE_OVERTIME)
 	{
@@ -361,14 +377,18 @@ void CPugMod::RestarPeriod(CBasePlayer* Player)
 		this->m_Score[this->m_State][CT] = 0;
 
 		this->SetState(this->m_State);
+
+		return true;
 	}
 	else
 	{
 		gUtil.SayText(Player->edict(), PRINT_TEAM_RED, "Cannot restart period in \3%s\1 state.", PUG_MOD_STATES_STR[this->m_State]);
 	}
+
+	return false;
 }
 
-void CPugMod::EndGame(TeamName Winner)
+bool CPugMod::EndGame(TeamName Winner)
 {
 	if (Winner == TERRORIST || Winner == CT)
 	{
@@ -387,7 +407,11 @@ void CPugMod::EndGame(TeamName Winner)
 		}
 
 		this->SetState(PUG_STATE_END);
+
+		return true;
 	}
+
+	return false;
 }
 
 int CPugMod::GetRound()
