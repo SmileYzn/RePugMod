@@ -25,8 +25,8 @@
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -49,10 +49,10 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(SolutionDir)\include;$(SolutionDir)\include\metamod;$(SolutionDir)\include\cssdk\common;$(SolutionDir)\include\cssdk\dlls;$(SolutionDir)\include\cssdk\engine;$(SolutionDir)\include\cssdk\game_shared;$(SolutionDir)\include\cssdk\pm_shared;$(SolutionDir)\include\cssdk\public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile>precompiled.h</PrecompiledHeaderFile>
       <PrecompiledHeader>Use</PrecompiledHeader>
+      <Optimization>Disabled</Optimization>
     </ClCompile>
     <Link>
       <ModuleDefinitionFile>MetaMod.def</ModuleDefinitionFile>
