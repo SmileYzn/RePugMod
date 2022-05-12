@@ -13,7 +13,6 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{8EF9FA4E-09F8-4404-9319-742E194DF024}</ProjectGuid>
     <RootNamespace>PugMod</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -53,6 +52,8 @@
       <PrecompiledHeaderFile>precompiled.h</PrecompiledHeaderFile>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <Optimization>Disabled</Optimization>
+      <CompileAsManaged>false</CompileAsManaged>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <ModuleDefinitionFile>MetaMod.def</ModuleDefinitionFile>
@@ -70,6 +71,8 @@
       <AdditionalIncludeDirectories>$(SolutionDir)\include;$(SolutionDir)\include\metamod;$(SolutionDir)\include\cssdk\common;$(SolutionDir)\include\cssdk\dlls;$(SolutionDir)\include\cssdk\engine;$(SolutionDir)\include\cssdk\game_shared;$(SolutionDir)\include\cssdk\pm_shared;$(SolutionDir)\include\cssdk\public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile>precompiled.h</PrecompiledHeaderFile>
       <PrecompiledHeader>Use</PrecompiledHeader>
+      <CompileAsManaged>false</CompileAsManaged>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
