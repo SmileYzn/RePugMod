@@ -20,16 +20,16 @@ public:
 
 private:
 	void Display(int EntityIndex, int Page);
-	void ShowMenu(int EntityIndex, int Slots, int Time, char *Text, int Length);
+	void ShowMenu(int EntityIndex, int Slots, int Time, char* Text, int Length);
 	void HideMenu(int EntityIndex);
 
 	std::string				  m_Text;
 	std::vector<std::string>  m_Data;
 	std::vector<int>		  m_Info;
 	std::vector<bool>         m_Skip;
-	int						  m_Page;
-	bool					  m_Exit;
-	void*					  m_Func;
+	int						  m_Page = 0;
+	bool					  m_Exit = false;
+	void*					  m_Func = nullptr;
 };
 
 extern CMenu gMenu[33];
