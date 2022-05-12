@@ -3,7 +3,7 @@
 
 <p align="center">
     <a href="https://github.com/SmileYzn/RePugMod/releases/latest"><img src="https://img.shields.io/github/downloads/SmileYzn/RePugMod/total?label=Download%40latest&style=flat-square&logo=github&logoColor=white" alt="Download"></a>
-    <a href="https://github.com/SmileYzn/RePugMod/actions"><img src="https://img.shields.io/github/workflow/status/SmileYzn/RePugMod/CI/master?style=flat-square&logo=github&logoColor=white" alt="Build status"></a>
+    <a href="https://github.com/SmileYzn/RePugMod/actions"><img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/SmileYzn/RePugMod/MSBuild?label=Build&style=flat-square"></a>
     <a href="https://github.com/SmileYzn/RePugMod/releases"><img src="https://img.shields.io/github/v/release/SmileYzn/RePugMod?include_prereleases&style=flat-square&logo=github&logoColor=white" alt="Release"></a>
 </p>
 
