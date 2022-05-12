@@ -209,12 +209,19 @@ void CAdmin::MenuControl(int EntityIndex)
 {
 	gMenu[EntityIndex].Create("Control Pug Mod:", true, gAdmin.MenuControlHandle);
 
-	gMenu[EntityIndex].AddItem(0, "Run Vote Map");
-	gMenu[EntityIndex].AddItem(1, "Run Vote Teams");
-	gMenu[EntityIndex].AddItem(2, "Start Match");
-	gMenu[EntityIndex].AddItem(3, "Stop Match");
-	gMenu[EntityIndex].AddItem(4, "Restart Period");
-	gMenu[EntityIndex].AddItem(5, "Toggle Ready System");
+	int State = gPugMod.GetState();
+
+	gMenu[EntityIndex].AddItem(0, "Run Vote Map", (State == PUG_STATE_DEAD || State == PUG_STATE_START || State == PUG_STATE_END));
+
+	gMenu[EntityIndex].AddItem(1, "Run Vote Teams", (State != PUG_STATE_WARMUP));
+
+	gMenu[EntityIndex].AddItem(2, (State == PUG_STATE_HALFTIME) ? "Continue Match" : "Start Match", (State != PUG_STATE_WARMUP && State != PUG_STATE_HALFTIME));
+	
+	gMenu[EntityIndex].AddItem(3, "Stop Match", (State == PUG_STATE_DEAD || State == PUG_STATE_WARMUP || State == PUG_STATE_START || State == PUG_STATE_END));
+
+	gMenu[EntityIndex].AddItem(4, "Restart Period", (State != PUG_STATE_FIRST_HALF && State != PUG_STATE_SECOND_HALF && State != PUG_STATE_OVERTIME));
+
+	gMenu[EntityIndex].AddItem(5, "Toggle Ready System", (State != PUG_STATE_WARMUP));
 
 	gMenu[EntityIndex].Show(EntityIndex);
 }
@@ -258,6 +265,11 @@ void CAdmin::MenuControlHandle(int EntityIndex, int ItemIndex, bool Disabled, co
 				gReady.Toggle(Player);
 				break; 
 			}
+		}
+
+		if (Disabled)
+		{
+			gAdmin.MenuControl(EntityIndex);
 		}
 	}
 }
