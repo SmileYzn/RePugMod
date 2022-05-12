@@ -109,7 +109,7 @@ void CReady::List(CReady* Ready)
 		}
 		else
 		{
-			time_t RemainTime = (gCvars.GetReadyTime()->value - (time(NULL) - Ready->m_SystemTime));
+			time_t RemainTime = (time_t)((int)gCvars.GetReadyTime()->value - (time(NULL) - Ready->m_SystemTime));
 
 			if (RemainTime > 0)
 			{
