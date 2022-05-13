@@ -46,4 +46,5 @@
 #include "VoteTeam.h"
 #include "VoteMenu.h"
 #include "Captain.h"
+#include "KnifeRound.h"
 #include "Stats.h"
