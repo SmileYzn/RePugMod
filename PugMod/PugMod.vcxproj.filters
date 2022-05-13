@@ -73,6 +73,9 @@
     <Filter Include="PugMod\AntiRetry">
       <UniqueIdentifier>{1ce56e3c-36e7-4a6b-a4d5-594a7368b386}</UniqueIdentifier>
     </Filter>
+    <Filter Include="PugMod\KnifeRound">
+      <UniqueIdentifier>{93933c40-f37a-4cbe-8341-427c267e310b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ReGameDLL.h">
@@ -138,6 +141,9 @@
     <ClInclude Include="AntiRetry.h">
       <Filter>PugMod\AntiRetry</Filter>
     </ClInclude>
+    <ClInclude Include="KnifeRound.h">
+      <Filter>PugMod\KnifeRound</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ReGameDLL.cpp">
@@ -202,6 +208,9 @@
     </ClCompile>
     <ClCompile Include="AntiRetry.cpp">
       <Filter>PugMod\AntiRetry</Filter>
+    </ClCompile>
+    <ClCompile Include="KnifeRound.cpp">
+      <Filter>PugMod\KnifeRound</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

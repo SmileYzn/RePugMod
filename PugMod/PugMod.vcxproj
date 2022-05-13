@@ -92,6 +92,7 @@
     <ClInclude Include="AntiRetry.h" />
     <ClInclude Include="Captain.h" />
     <ClInclude Include="Cvars.h" />
+    <ClInclude Include="KnifeRound.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="MetaDLL.h" />
     <ClInclude Include="MetaEngine.h" />
@@ -115,6 +116,7 @@
     <ClCompile Include="AntiRetry.cpp" />
     <ClCompile Include="Captain.cpp" />
     <ClCompile Include="Cvars.cpp" />
+    <ClCompile Include="KnifeRound.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="MetaDLL.cpp" />
     <ClCompile Include="MetaEngine.cpp" />
