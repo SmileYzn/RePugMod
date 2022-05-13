@@ -40,7 +40,7 @@ At the end, server will start a vote map to changelevel to next map automaticall
 <li>Warmup Rounds with some deathmatch gameplay</li>
 <li>Custom map list for vote for next map, teams and more</li>
 <li>Mod support player vote kick, timeout pause, vote map, surrender (Match end vote)</li>
-<li>Supports captain pickup, random balanced, balance by skill from warmup gameplay, swap teams direclty, or kinfe round</li>
+<li>Supports captain pickup, random balanced, balance by skill from warmup, swap teams, or kinfe round</li>
 <li>Support best of x rounds on start to dettermine who will won the first round (MD3 Like)</li>
 <li>Display round damge stats with some commands like .dmg, .hp or .sum and others</li>
 <li>Multi language support</li>
