@@ -192,9 +192,9 @@ void CVoteTeam::SetMode(int GameMode)
 		}
 		case 5: // Knife Round
 		{
-			gUtil.SayText(NULL, PRINT_TEAM_RED, "\3Knife Round not implemented yet.");
+			gKnifeRound.Init();
 
-			this->SetMode(1);
+			gPugMod.NextState(3.0f);
 			break;
 		}
 	}

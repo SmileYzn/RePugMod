@@ -170,7 +170,7 @@ void ReGameDLL_InternalCommand(IReGameHook_InternalCommand* chain, edict_t* pEnt
 	chain->callNext(pEntity, pcmd, parg1);
 }
 
-void ReGameDLL_CBasePlayer_AddAccount(IReGameHook_CBasePlayer_AddAccount *chain, CBasePlayer *pthis, int amount, RewardType type, bool bTrackChange)
+void ReGameDLL_CBasePlayer_AddAccount(IReGameHook_CBasePlayer_AddAccount *chain, CBasePlayer* pthis, int amount, RewardType type, bool bTrackChange)
 {
 	if (gPugMod.ClientAddAccount(pthis, amount, type, bTrackChange))
 	{
@@ -180,11 +180,16 @@ void ReGameDLL_CBasePlayer_AddAccount(IReGameHook_CBasePlayer_AddAccount *chain,
 	chain->callNext(pthis, amount, type, bTrackChange);
 }
 
-bool ReGameDLL_CBasePlayer_HasRestrictItem(IReGameHook_CBasePlayer_HasRestrictItem *chain, CBasePlayer *pthis, ItemID item, ItemRestType type)
+bool ReGameDLL_CBasePlayer_HasRestrictItem(IReGameHook_CBasePlayer_HasRestrictItem *chain, CBasePlayer* pthis, ItemID item, ItemRestType type)
 {
 	auto ret = chain->callNext(pthis, item, type);
 
 	if (gPugMod.ClientHasRestrictItem(pthis, item, type))
+	{
+		return true;
+	}
+
+	if (gKnifeRound.ClientHasRestrictItem(pthis, item, type))
 	{
 		return true;
 	}
@@ -196,6 +201,8 @@ void ReGameDLL_CSGameRules_OnRoundFreezeEnd(IReGameHook_CSGameRules_OnRoundFreez
 {
 	chain->callNext();
 
+	gKnifeRound.RoundStart();
+
 	gPugMod.RoundStart();
 
 	gStats.RoundStart();
@@ -205,6 +212,8 @@ bool ReGameDLL_RoundEnd(IReGameHook_RoundEnd* chain, int winStatus, ScenarioEven
 {
 	auto ret = chain->callNext(winStatus, event, tmDelay);
 
+	gKnifeRound.RoundEnd(winStatus, event, tmDelay);
+
 	gPugMod.RoundEnd(winStatus, event, tmDelay);
 
 	gStats.RoundEnd(winStatus, event, tmDelay);
@@ -212,7 +221,7 @@ bool ReGameDLL_RoundEnd(IReGameHook_RoundEnd* chain, int winStatus, ScenarioEven
 	return ret;
 }
 
-int ReGameDLL_CBasePlayer_TakeDamage(IReGameHook_CBasePlayer_TakeDamage *chain, CBasePlayer *pthis, entvars_t *pevInflictor, entvars_t *pevAttacker, float& flDamage, int bitsDamageType)
+int ReGameDLL_CBasePlayer_TakeDamage(IReGameHook_CBasePlayer_TakeDamage *chain, CBasePlayer* pthis, entvars_t *pevInflictor, entvars_t *pevAttacker, float& flDamage, int bitsDamageType)
 {
 	int ret = chain->callNext(pthis, pevInflictor, pevAttacker, flDamage, bitsDamageType);
 

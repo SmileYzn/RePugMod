@@ -1,9 +1,10 @@
 #pragma once
 
-#define PUG_TASK_EXEC		100
-#define PUG_TASK_VOTE		101
-#define PUG_TASK_LIST		102
-#define PUG_TASK_NEXT		103
+#define PUG_TASK_EXEC 100
+#define PUG_TASK_VOTE 101
+#define PUG_TASK_LIST 102
+#define PUG_TASK_NEXT 103
+#define PUG_TASK_LO3R 104
 
 typedef struct
 {

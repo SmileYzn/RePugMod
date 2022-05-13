@@ -9,7 +9,7 @@ public:
 	void ClientGetIntoGame(CBasePlayer* Player);
 	void RoundStart();
 	void RoundEnd(int winStatus, ScenarioEventEndRound event, float tmDelay);
-	void CBasePlayer_TakeDamage(CBasePlayer *pthis, entvars_t *pevInflictor, entvars_t *pevAttacker, float& flDamage, int bitsDamageType);
+	void CBasePlayer_TakeDamage(CBasePlayer* pthis, entvars_t *pevInflictor, entvars_t *pevAttacker, float& flDamage, int bitsDamageType);
 
 	bool HP(CBasePlayer* Player);
 	bool Damage(CBasePlayer* Player);
