@@ -352,6 +352,8 @@ bool CPugMod::StopMatch(CBasePlayer* Player)
 {
 	if (this->m_State >= PUG_STATE_FIRST_HALF && this->m_State <= PUG_STATE_OVERTIME)
 	{
+		gTask.Remove(PUG_TASK_LO3R);
+
 		gUtil.SayText(NULL, Player->entindex(), "\3%s\1 stopped match.", STRING(Player->edict()->v.netname));
 
 		this->SetState(PUG_STATE_END);
@@ -370,7 +372,10 @@ bool CPugMod::RestarPeriod(CBasePlayer* Player)
 {
 	if (this->m_State == PUG_STATE_FIRST_HALF || this->m_State == PUG_STATE_SECOND_HALF || this->m_State == PUG_STATE_OVERTIME)
 	{
-		gUtil.SayText(NULL, Player->entindex(), "\3%s\1 restarted \4%s\1 period, get ready!.", STRING(Player->edict()->v.netname), PUG_MOD_STATES_STR[this->m_State]);
+		if (Player)
+		{
+			gUtil.SayText(NULL, Player->entindex(), "\3%s\1 restarted \4%s\1 period, get ready!.", STRING(Player->edict()->v.netname), PUG_MOD_STATES_STR[this->m_State]);
+		}
 
 		this->m_Round[this->m_State] = 0;
 		this->m_Score[this->m_State][TERRORIST] = 0;
@@ -382,7 +387,10 @@ bool CPugMod::RestarPeriod(CBasePlayer* Player)
 	}
 	else
 	{
-		gUtil.SayText(Player->edict(), PRINT_TEAM_RED, "Cannot restart period in \3%s\1 state.", PUG_MOD_STATES_STR[this->m_State]);
+		if (Player)
+		{
+			gUtil.SayText(Player->edict(), PRINT_TEAM_RED, "Cannot restart period in \3%s\1 state.", PUG_MOD_STATES_STR[this->m_State]);
+		}
 	}
 
 	return false;
@@ -534,7 +542,7 @@ void CPugMod::LO3(int Delay)
 
 		CVAR_SET_FLOAT("sv_restart", (float)Delay);
 
-		gTask.Create(RANDOM_LONG(200, 600), (float)Delay + 1.0f, false, gPugMod.LO3, (void*)(Delay - 1));
+		gTask.Create(PUG_TASK_LO3R, (float)Delay + 1.0f, false, gPugMod.LO3, (void*)(Delay - 1));
 	}
 	else
 	{
