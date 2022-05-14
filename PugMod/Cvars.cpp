@@ -87,6 +87,9 @@ void CCvars::Load()
 
 	// Anti Reconnect time in seconds (0 Disable)
 	this->m_ReconnectDelay = this->Register("pug_reconnect_delay", "15.0");
+
+	// Knife Round End Type (0 Continue match if no clear winner, 1 restart Knife Round)
+	this->m_KnifeRoundEndType = this->Register("pug_knife_round_end_type", "0");
 }
 
 cvar_t* CCvars::Register(char* Name, char* Value)
@@ -208,4 +211,9 @@ cvar_t* CCvars::GetStatsRoundEnd()
 cvar_t * CCvars::GetReconnectDelay()
 {
 	return this->m_ReconnectDelay;
+}
+
+cvar_t* CCvars::GetKnifeRoundEndType()
+{
+	return this->m_KnifeRoundEndType;
 }

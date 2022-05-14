@@ -28,6 +28,7 @@ public:
 	cvar_t* GetFloodTime();
 	cvar_t* GetStatsRoundEnd();
 	cvar_t* GetReconnectDelay();
+	cvar_t* GetKnifeRoundEndType();
 
 private:
 	cvar_t* m_Config[8];
@@ -51,6 +52,7 @@ private:
 	cvar_t* m_FloodTime;
 	cvar_t* m_StatsRoundEnd;
 	cvar_t* m_ReconnectDelay;
+	cvar_t* m_KnifeRoundEndType;
 };
 
 extern CCvars gCvars;
