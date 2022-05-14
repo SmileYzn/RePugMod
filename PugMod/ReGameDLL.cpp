@@ -201,8 +201,6 @@ void ReGameDLL_CSGameRules_OnRoundFreezeEnd(IReGameHook_CSGameRules_OnRoundFreez
 {
 	chain->callNext();
 
-	gKnifeRound.RoundStart();
-
 	gPugMod.RoundStart();
 
 	gStats.RoundStart();
@@ -233,6 +231,8 @@ int ReGameDLL_CBasePlayer_TakeDamage(IReGameHook_CBasePlayer_TakeDamage *chain, 
 void ReGameDLL_CSGameRules_RestartRound(IReGameHook_CSGameRules_RestartRound * chain)
 {
 	chain->callNext();
+
+	gKnifeRound.RoundRestart();
 
 	gPugMod.RoundRestart();
 
