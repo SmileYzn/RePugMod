@@ -8,7 +8,7 @@ public:
 
 	bool ClientHasRestrictItem(CBasePlayer* Player, ItemID item, ItemRestType type);
 
-	void RoundStart();
+	void RoundRestart();
 	void RoundEnd(int winStatus, ScenarioEventEndRound event, float tmDelay);
 
 	int SetVote(TeamName Team, int Vote);

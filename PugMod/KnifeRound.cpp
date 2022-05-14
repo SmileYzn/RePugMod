@@ -22,10 +22,10 @@ void CKnifeRound::Stop(bool ChangeTeams)
 	CVAR_SET_STRING("mp_give_player_c4", "1");
 
 	if (ChangeTeams)
-	{
+	{	
 		auto VoteChangeTeam = (this->GetVote() > (gPlayer.GetNum(this->m_Winner) / 2));
 
-		if (VoteChangeTeam) // Swap Teams not working!
+		if (VoteChangeTeam) 
 		{
 			if (g_pGameRules)
 			{
@@ -61,43 +61,49 @@ bool CKnifeRound::ClientHasRestrictItem(CBasePlayer* Player, ItemID item, ItemRe
 	return false;
 }
 
-void CKnifeRound::RoundStart()
+void CKnifeRound::RoundRestart()
 {
 	if (this->m_Running)
 	{
-		if (this->m_Winner != UNASSIGNED)
+		if (g_pGameRules)
 		{
-			CBasePlayer* Players[32] = { NULL };
-
-			int Num = gPlayer.GetList(Players, this->m_Winner);
-
-			for (int i = 0; i < Num; i++)
+			if (CSGameRules()->m_bCompleteReset == false)
 			{
-				auto Player = Players[i];
-
-				if (Player)
+				if (this->m_Winner != UNASSIGNED)
 				{
-					if (!Player->IsBot())
+					CBasePlayer* Players[32] = { NULL };
+
+					int Num = gPlayer.GetList(Players, this->m_Winner);
+
+					for (int i = 0; i < Num; i++)
 					{
-						auto EntityIndex = Player->entindex();
+						auto Player = Players[i];
 
-						gMenu[EntityIndex].Create("Select Starting Side:", false, this->MenuHandle);
+						if (Player)
+						{
+							if (!Player->IsBot())
+							{
+								auto EntityIndex = Player->entindex();
 
-						gMenu[EntityIndex].AddItem(1, "Terrorists");
-						gMenu[EntityIndex].AddItem(2, "Counter-Terrorists");
+								gMenu[EntityIndex].Create("Select Starting Side:", false, this->MenuHandle);
 
-						gMenu[EntityIndex].Show(EntityIndex);
+								gMenu[EntityIndex].AddItem(1, "Terrorists");
+								gMenu[EntityIndex].AddItem(2, "Counter-Terrorists");
+
+								gMenu[EntityIndex].Show(EntityIndex);
+							}
+							else
+							{
+								auto Team = Player->m_iTeam == TERRORIST ? CT : TERRORIST;
+
+								this->MenuHandle(Player->entindex(), (int)Team, false, PUG_MOD_TEAM_STR[Team]);
+							}
+						}
 					}
-					else
-					{
-						auto Team = Player->m_iTeam == TERRORIST ? CT : TERRORIST;
 
-						this->MenuHandle(Player->entindex(), (int)Team, false, PUG_MOD_TEAM_STR[Team]);
-					}
+					gTask.Create(PUG_TASK_VOTE, gCvars.GetVoteDelay()->value, false, this->VoteEnd);
 				}
 			}
-
-			gTask.Create(PUG_TASK_VOTE, gCvars.GetVoteDelay()->value, false, this->VoteEnd);
 		}
 	}
 }
@@ -164,7 +170,7 @@ void CKnifeRound::MenuHandle(int EntityIndex, int ItemIndex, bool Disabled, cons
 
 	if (Player)
 	{
-		gKnifeRound.SetVote((TeamName)ItemIndex, 1);
+		gKnifeRound.SetVote(Player->m_iTeam, 1);
 
 		gUtil.SayText(NULL, Player->entindex(), "\3%s\1 choosed \3%s\1.", STRING(Player->edict()->v.netname), Option);
 
