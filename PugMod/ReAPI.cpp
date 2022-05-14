@@ -84,7 +84,6 @@ bool ReAPI_Init()
 
 	LOG_CONSOLE(PLID, "[%s] Re-HLDS API successfully initialized.", Plugin_info.logtag);
 
-	//
 	g_RehldsHookchains->SV_Frame()->registerHook(ReAPI_SV_Frame);
 
 	g_RehldsHookchains->ClientConnected()->registerHook(ReAPI_ClientConnected);
