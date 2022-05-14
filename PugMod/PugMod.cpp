@@ -71,7 +71,6 @@ void CPugMod::SetState(int State)
 				gReady.Unload();
 
 				memset(this->m_Round, 0, sizeof(this->m_Round));
-
 				memset(this->m_Score, 0, sizeof(this->m_Score));
 
 				if (this->CheckBalanceTeams())

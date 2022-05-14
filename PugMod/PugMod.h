@@ -80,9 +80,9 @@ public:
 	void RoundRestart();
 
 private:
-	int m_State;
-	int m_Round[PUG_STATE_END + 1];
-	int m_Score[PUG_STATE_END + 1][SPECTATOR + 1];
+	int m_State = PUG_STATE_DEAD;
+	int m_Round[PUG_STATE_END + 1] = { 0 };
+	int m_Score[PUG_STATE_END + 1][SPECTATOR + 1] = { 0 };
 
 	int m_Frags[33] = { 0 };
 	int m_Death[33] = { 0 };

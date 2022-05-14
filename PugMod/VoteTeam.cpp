@@ -63,7 +63,6 @@ void CVoteTeam::MenuHandle(int EntityIndex, int ItemIndex, bool Disabled, const 
 	}
 }
 
-
 void CVoteTeam::Stop()
 {
 	MENU_RESET_ALL();
@@ -199,7 +198,6 @@ void CVoteTeam::SetMode(int GameMode)
 		}
 	}
 }
-
 
 void CVoteTeam::TeamsRandomize()
 {
