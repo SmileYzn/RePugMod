@@ -102,6 +102,8 @@ void CKnifeRound::RoundRestart()
 					}
 
 					gTask.Create(PUG_TASK_VOTE, gCvars.GetVoteDelay()->value, false, this->VoteEnd);
+
+					gTask.Create(PUG_TASK_LIST, 0.5f, true, this->List, this);
 				}
 			}
 		}
@@ -147,6 +149,23 @@ void CKnifeRound::RoundEnd(int winStatus, ScenarioEventEndRound event, float tmD
 	}
 }
 
+void CKnifeRound::List(CKnifeRound* KnifeRound)
+{
+	char VoteList[128] = { 0 };
+
+	for (int Team = TERRORIST;Team <= CT;Team++)
+	{
+		if (KnifeRound->m_Votes[Team])
+		{
+			snprintf(VoteList, sizeof(VoteList), "%s%s [%d]\n", VoteList, PUG_MOD_TEAM_STR[Team], KnifeRound->m_Votes[Team]);
+		}
+	}
+
+	gUtil.HudMessage(NULL, gUtil.HudParam(0, 255, 0, 0.23, 0.02, 0, 0.0, 0.53, 0.0, 0.0, 1), "Starting Side (%d):", (int)gTask.Timeleft(PUG_TASK_VOTE));
+
+	gUtil.HudMessage(NULL, gUtil.HudParam(255, 255, 225, 0.23, 0.02, 0, 0.0, 0.53, 0.0, 0.0, 2), "\n%s", strlen(VoteList) ? VoteList : "No votes.");
+}
+
 int CKnifeRound::SetVote(TeamName Team, int Vote)
 {
 	this->m_Votes[Team] += Vote;
@@ -172,7 +191,7 @@ void CKnifeRound::MenuHandle(int EntityIndex, int ItemIndex, bool Disabled, cons
 	{
 		gKnifeRound.SetVote(Player->m_iTeam, 1);
 
-		gUtil.SayText(NULL, Player->entindex(), "\3%s\1 choosed \3%s\1.", STRING(Player->edict()->v.netname), Option);
+		gUtil.SayText(NULL, Player->entindex(), "\3%s\1 choosed \3%s\1", STRING(Player->edict()->v.netname), Option);
 
 		if (gKnifeRound.GetCount() >= gPlayer.GetNum(true))
 		{

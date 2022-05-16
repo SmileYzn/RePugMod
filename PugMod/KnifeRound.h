@@ -11,6 +11,8 @@ public:
 	void RoundRestart();
 	void RoundEnd(int winStatus, ScenarioEventEndRound event, float tmDelay);
 
+	static void List(CKnifeRound* KnifeRound);
+
 	int SetVote(TeamName Team, int Vote);
 	int GetVote();
 	int GetCount();
