@@ -1,0 +1,221 @@
+"%s Build %s (%s)"
+en:"%s Build %s (\3%s\1)"
+
+"Say \4.help\1 to view command list."
+en:"Say \4.help\1 to view command list."
+
+"%s started, get ready!"
+en:"%s started, get ready!"
+
+"%s started: \3Good Luck & Have Fun!"
+en:"%s started: \3Good Luck & Have Fun!"
+
+"Failed to start match: \3Not enough players.\1"
+en:"Failed to start match: \3Not enough players.\1"
+
+"Failed to continue match: \3Not enough players.\1"
+en:"Failed to continue match: \3Not enough players.\1"
+
+"\3%s\1 started Vote Map."
+en:"\3%s\1 started Vote Map."
+
+"Cannot start an vote in \3%s\1 state."
+en:"Cannot start an vote in \3%s\1 state."
+
+"\3%s\1 started Vote Team."
+en:"\3%s\1 started Vote Team."
+
+"Cannot start vote team in \3%s\1 state."
+en:"Cannot start vote team in \3%s\1 state."
+
+"\3%s\1 started match."
+en:"\3%s\1 started match."
+
+"Cannot start match in \3%s\1 state."
+en:"Cannot start match in \3%s\1 state."
+
+"\3%s\1 stopped match."
+en:"\3%s\1 stopped match."
+
+"Cannot stop match in \3%s\1 state."
+en:"Cannot stop match in \3%s\1 state."
+
+"\3%s\1 restarted \4%s\1 period, get ready!."
+en:"\3%s\1 restarted \4%s\1 period, get ready!."
+
+"Cannot restart period in \3%s\1 state."
+en:"Cannot restart period in \3%s\1 state."
+
+"Status: \4%s\1 (Players %d) (%d Required of %d Allowed)"
+en:"Status: \4%s\1 (Players %d) (%d Required of %d Allowed)"
+
+"Unable to use this command now."
+en:"Unable to use this command now."
+
+"Game Over! The \3%s\1 have won the game: %d-%d"
+en:"Game Over! The \3%s\1 have won the game: %d-%d"
+
+"The \3%s\1 are winning: %d-%d"
+en:"The \3%s\1 are winning: %d-%d"
+
+"Game Over! Score is tied: %d-%d"
+en:"Game Over! Score is tied: %d-%d"
+
+"Score is tied: %d-%d"
+en:"Score is tied: %d-%d"
+
+"--- MATCH IS LIVE ---"
+en:"--- MATCH IS LIVE ---"
+
+"Changing teams automatically."
+en:"Changing teams automatically."
+
+"Server is full and spectators are not allowed."
+en:"Server is full and spectators are not allowed."
+
+".help"
+en:".help"
+
+"!help"
+en:"!help"
+
+".status"
+en:".status"
+
+".score"
+en:".score"
+
+".ready"
+en:".ready"
+
+".notready"
+en:".notready"
+
+".vote"
+en:".vote"
+
+"!menu"
+en:"!menu"
+
+"!msg"
+en:"!msg"
+
+"!rcon"
+en:"!rcon"
+
+".hp"
+en:".hp"
+
+".dmg"
+en:".dmg"
+
+".rdmg"
+en:".rdmg"
+
+".sum"
+en:".sum"
+
+"Auto Team Select is not allowed."
+en:"Auto Team Select is not allowed."
+
+"You are already on the \3%s\1 team."
+en:"You are already on the \3%s\1 team."
+
+"The \3%s\1 team is complete."
+en:"The \3%s\1 team is complete."
+
+"Please, join in \3Spectator\1 while vote session is running."
+en:"Please, join in \3Spectator\1 while vote session is running."
+
+"Cannot switch when the game is started."
+en:"Cannot switch when the game is started."
+
+"\3Spectators\1 are not allowed."
+en:"\3Spectators\1 are not allowed."
+
+"* Round %d won by: %s"
+en:"* Round %d won by: %s"
+
+"Round %d draw: No clear winner."
+en:"Round %d draw: No clear winner."
+
+"PUG Mod Menu:"
+en:"PUG Mod Menu:"
+
+"Kick Player"
+en:"Kick Player"
+
+"Slap Player"
+en:"Slap Player"
+
+"Change Map"
+en:"Change Map"
+
+"Control Pug Mod"
+en:"Control Pug Mod"
+
+"Send Message"
+en:"Send Message"
+
+"Send Command"
+en:"Send Command"
+
+"Kick Player"
+en:"Kick Player"
+
+"Kicked by %s."
+en:"Kicked by %s."
+
+"\3%s\1 Kicked \3%s\1"
+en:"\3%s\1 Kicked \3%s\1"
+
+"\3%s\1 Killed \3%s\1"
+en:"\3%s\1 Killed \3%s\1"
+
+"\3%s\1 changed map to \4%s\1"
+en:"\3%s\1 changed map to \4%s\1"
+
+"Run Vote Map"
+en:"Run Vote Map"
+
+"Run Vote Teams"
+en:"Run Vote Teams"
+
+"Continue Match"
+en:"Continue Match"
+
+"Start Match"
+en:"Start Match"
+
+"Stop Match"
+en:"Stop Match"
+
+"Restart Period"
+en:"Restart Period"
+
+"Toggle Ready System"
+en:"Toggle Ready System"
+
+"\3(%s)\1: %s"
+en:"\3(%s)\1: %s"
+
+"Usage: !msg \3<Text Message>\1"
+en:"Usage: !msg \3<Text Message>\1"
+
+"\3Command Send\1: %s"
+en:"\3Command Send\1: %s"
+
+"Usage: !send \3<Server Command>\1"
+en:"Usage: !send \3<Server Command>\1"
+
+"Wait %d seconds before retry."
+en:"Wait %d seconds before retry."
+
+"The choice of the teams failed: \3Not enough players.\1"
+en:"The choice of the teams failed: \3Not enough players.\1"
+
+"\3%s\1 is captain of \3%s\1"
+en:"\3%s\1 is captain of \3%s\1"
+
+"\3%s\1 choosed \3%s\1"
+en:"\3%s\1 choosed \3%s\1"

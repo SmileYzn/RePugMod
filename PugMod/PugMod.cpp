@@ -32,7 +32,7 @@ void CPugMod::SetState(int State)
 			{
 				gReady.Load();
 
-				gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, "%s started, get ready!", PUG_MOD_STATES_STR[this->m_State]);
+				gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("%s started, get ready!"), PUG_MOD_STATES_STR[this->m_State]);
 				break;
 			}
 		case PUG_STATE_START:
@@ -77,11 +77,11 @@ void CPugMod::SetState(int State)
 				{
 					this->LO3(3);
 
-					gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, "%s started: \3Good Luck & Have Fun!", PUG_MOD_STATES_STR[this->m_State]); 
+					gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("%s started: \3Good Luck & Have Fun!"), PUG_MOD_STATES_STR[this->m_State]);
 				}
 				else
 				{
-					gUtil.SayText(0, PRINT_TEAM_RED, "Failed to start match: \3Not enough players.\1");
+					gUtil.SayText(0, PRINT_TEAM_RED, _T("Failed to start match: \3Not enough players.\1"));
 
 					this->SetState(PUG_STATE_WARMUP);
 				}
@@ -115,7 +115,7 @@ void CPugMod::SetState(int State)
 					gReady.Load();
 				}
 
-				gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, "%s started, get ready!", PUG_MOD_STATES_STR[this->m_State]);
+				gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("%s started, get ready!"), PUG_MOD_STATES_STR[this->m_State]);
 
 				break;
 			}
@@ -128,11 +128,11 @@ void CPugMod::SetState(int State)
 				{
 					this->LO3(3);
 
-					gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, "%s started: \3Good Luck & Have Fun!", PUG_MOD_STATES_STR[this->m_State]);
+					gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("%s started: \3Good Luck & Have Fun!"), PUG_MOD_STATES_STR[this->m_State]);
 				}
 				else
 				{
-					gUtil.SayText(0, PRINT_TEAM_RED, "Failed to continue match: \3Not enough players.\1");
+					gUtil.SayText(0, PRINT_TEAM_RED, _T("Failed to continue match: \3Not enough players.\1"));
 
 					this->SetState(PUG_STATE_HALFTIME);
 				}
@@ -286,7 +286,7 @@ bool CPugMod::StartVoteMap(CBasePlayer* Player)
 	{
 		gReady.Unload();
 
-		gUtil.SayText(NULL, Player->entindex(), "\3%s\1 started Vote Map.",STRING(Player->edict()->v.netname));
+		gUtil.SayText(NULL, Player->entindex(), _T("\3%s\1 started Vote Map."),STRING(Player->edict()->v.netname));
 
 		gVoteMap.Init();
 
@@ -294,7 +294,7 @@ bool CPugMod::StartVoteMap(CBasePlayer* Player)
 	}
 	else
 	{
-		gUtil.SayText(Player->edict(), PRINT_TEAM_RED, "Cannot start an vote in \3%s\1 state.", PUG_MOD_STATES_STR[this->m_State]);
+		gUtil.SayText(Player->edict(), PRINT_TEAM_RED, _T("Cannot start an vote in \3%s\1 state."), PUG_MOD_STATES_STR[this->m_State]);
 	}
 
 	return false;
@@ -308,7 +308,7 @@ bool CPugMod::StartVoteTeam(CBasePlayer* Player)
 
 		gCvars.GetVoteTeamType()->value = -1.0f;
 
-		gUtil.SayText(NULL, Player->entindex(), "\3%s\1 started Vote Team.", STRING(Player->edict()->v.netname));
+		gUtil.SayText(NULL, Player->entindex(), _T("\3%s\1 started Vote Team."), STRING(Player->edict()->v.netname));
 
 		this->SetState(PUG_STATE_START);
 
@@ -316,7 +316,7 @@ bool CPugMod::StartVoteTeam(CBasePlayer* Player)
 	}
 	else
 	{
-		gUtil.SayText(Player->edict(), PRINT_TEAM_RED, "Cannot start vote team in \3%s\1 state.", PUG_MOD_STATES_STR[this->m_State]);
+		gUtil.SayText(Player->edict(), PRINT_TEAM_RED, _T("Cannot start vote team in \3%s\1 state."), PUG_MOD_STATES_STR[this->m_State]);
 	}
 
 	return false;
@@ -326,7 +326,7 @@ bool CPugMod::StartMatch(CBasePlayer* Player)
 {
 	if (this->m_State == PUG_STATE_WARMUP || this->m_State == PUG_STATE_HALFTIME)
 	{
-		gUtil.SayText(NULL, Player->entindex(), "\3%s\1 started match.", STRING(Player->edict()->v.netname));
+		gUtil.SayText(NULL, Player->entindex(), _T("\3%s\1 started match."), STRING(Player->edict()->v.netname));
 
 		if (this->m_State == PUG_STATE_HALFTIME)
 		{
@@ -341,7 +341,7 @@ bool CPugMod::StartMatch(CBasePlayer* Player)
 	}
 	else
 	{
-		gUtil.SayText(Player->edict(), PRINT_TEAM_RED, "Cannot start match in \3%s\1 state.", PUG_MOD_STATES_STR[this->m_State]);
+		gUtil.SayText(Player->edict(), PRINT_TEAM_RED, _T("Cannot start match in \3%s\1 state."), PUG_MOD_STATES_STR[this->m_State]);
 	}
 
 	return false;
@@ -353,7 +353,7 @@ bool CPugMod::StopMatch(CBasePlayer* Player)
 	{
 		gTask.Remove(PUG_TASK_LO3R);
 
-		gUtil.SayText(NULL, Player->entindex(), "\3%s\1 stopped match.", STRING(Player->edict()->v.netname));
+		gUtil.SayText(NULL, Player->entindex(), _T("\3%s\1 stopped match."), STRING(Player->edict()->v.netname));
 
 		this->SetState(PUG_STATE_END);
 
@@ -361,7 +361,7 @@ bool CPugMod::StopMatch(CBasePlayer* Player)
 	}
 	else
 	{
-		gUtil.SayText(Player->edict(), PRINT_TEAM_RED, "Cannot stop match in \3%s\1 state.", PUG_MOD_STATES_STR[this->m_State]);
+		gUtil.SayText(Player->edict(), PRINT_TEAM_RED, _T("Cannot stop match in \3%s\1 state."), PUG_MOD_STATES_STR[this->m_State]);
 	}
 
 	return false;
@@ -373,7 +373,7 @@ bool CPugMod::RestarPeriod(CBasePlayer* Player)
 	{
 		if (Player)
 		{
-			gUtil.SayText(NULL, Player->entindex(), "\3%s\1 restarted \4%s\1 period, get ready!.", STRING(Player->edict()->v.netname), PUG_MOD_STATES_STR[this->m_State]);
+			gUtil.SayText(NULL, Player->entindex(), _T("\3%s\1 restarted \4%s\1 period, get ready!."), STRING(Player->edict()->v.netname), PUG_MOD_STATES_STR[this->m_State]);
 		}
 
 		this->m_Round[this->m_State] = 0;
@@ -388,7 +388,7 @@ bool CPugMod::RestarPeriod(CBasePlayer* Player)
 	{
 		if (Player)
 		{
-			gUtil.SayText(Player->edict(), PRINT_TEAM_RED, "Cannot restart period in \3%s\1 state.", PUG_MOD_STATES_STR[this->m_State]);
+			gUtil.SayText(Player->edict(), PRINT_TEAM_RED, _T("Cannot restart period in \3%s\1 state."), PUG_MOD_STATES_STR[this->m_State]);
 		}
 	}
 
@@ -476,7 +476,7 @@ void CPugMod::Status(CBasePlayer* Player)
 	(
 		Player->edict(),
 		PRINT_TEAM_DEFAULT,
-		"Status: \4%s\1 (Players %d) (%d Required of %d Allowed)",
+		_T("Status: \4%s\1 (Players %d) (%d Required of %d Allowed)"),
 		PUG_MOD_STATES_STR[this->m_State],
 		gPlayer.GetNum(),
 		(int)gCvars.GetPlayersMin()->value,
@@ -497,7 +497,7 @@ void CPugMod::Scores(CBasePlayer* Player)
 	}
 	else
 	{
-		gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, "Unable to use this command now.");
+		gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("Unable to use this command now."));
 	}
 }
 
@@ -511,7 +511,7 @@ void CPugMod::ViewScores(CBasePlayer* Player)
 		(
 			Player ? Player->edict() : NULL,
 			Winner == TERRORIST ? PRINT_TEAM_RED : PRINT_TEAM_BLUE,
-			(this->m_State == PUG_STATE_END) ? "Game Over! The \3%s\1 have won the game: %d-%d" : "The \3%s\1 are winning: %d-%d",
+			(this->m_State == PUG_STATE_END) ? _T("Game Over! The \3%s\1 have won the game: %d-%d") : _T("The \3%s\1 are winning: %d-%d"),
 			PUG_MOD_TEAM_STR[Winner],
 			this->GetScores(Winner),
 			this->GetScores(Winner == TERRORIST ? CT : TERRORIST)
@@ -523,7 +523,7 @@ void CPugMod::ViewScores(CBasePlayer* Player)
 		(
 			Player ? Player->edict() : NULL,
 			PRINT_TEAM_DEFAULT,
-			(this->m_State == PUG_STATE_END) ? "Game Over! Score is tied: %d-%d" : "Score is tied: %d-%d",
+			(this->m_State == PUG_STATE_END) ? _T("Game Over! Score is tied: %d-%d") : _T("Score is tied: %d-%d"),
 			this->GetScores(TERRORIST),
 			this->GetScores(CT)
 		);
@@ -547,7 +547,7 @@ void CPugMod::LO3(int Delay)
 	{
 		hudtextparms_t Hud = { -1.0f,0.3f,0,0,0xFF,0,0xFF,0,0xFF,0,0xFF,0.0f,0.0f,10.0f,10.0f,0 };
 
-		gUtil.HudMessage(NULL, gUtil.HudParam(0, 255, 0, -1.0, 0.2, 0, 10.0, 10.0), "--- MATCH IS LIVE ---");
+		gUtil.HudMessage(NULL, gUtil.HudParam(0, 255, 0, -1.0, 0.2, 0, 10.0, 10.0), _T("--- MATCH IS LIVE ---"));
 	}
 }
 
@@ -581,7 +581,7 @@ void CPugMod::ClientConnected(edict_t* pEntity)
 	{
 		if (!CVAR_GET_FLOAT("allow_spectators"))
 		{
-			gPlayer.DropClient(ENTINDEX(pEntity), "Server is full and spectators are not allowed.");
+			gPlayer.DropClient(ENTINDEX(pEntity), _T("Server is full and spectators are not allowed."));
 		}
 	}
 }
@@ -642,72 +642,72 @@ bool CPugMod::ClientCommand(CBasePlayer * Player, const char * pcmd, const char 
 			}
 		}
 	}
-	else if (_stricmp(pcmd, ".help") == 0)
+	else if (_stricmp(pcmd, _T(".help")) == 0)
 	{
 		this->Help(Player,false);
 		return true;
 	}
-	else if (_stricmp(pcmd, "!help") == 0)
+	else if (_stricmp(pcmd, _T("!help")) == 0)
 	{
 		this->Help(Player, true);
 		return true;
 	}
-	else if (_stricmp(pcmd, ".status") == 0)
+	else if (_stricmp(pcmd, _T(".status")) == 0)
 	{
 		this->Status(Player);
 		return true;
 	}
-	else if (_stricmp(pcmd, ".score") == 0)
+	else if (_stricmp(pcmd, _T(".score")) == 0)
 	{
 		this->Scores(Player);
 		return true;
 	}
-	else if (_stricmp(pcmd, ".ready") == 0)
+	else if (_stricmp(pcmd, _T(".ready")) == 0)
 	{
 		gReady.Ready(Player);
 		return true;
 	}
-	else if (_stricmp(pcmd, ".notready") == 0)
+	else if (_stricmp(pcmd, _T(".notready")) == 0)
 	{
 		gReady.NotReady(Player);
 		return true;
 	}
-	else if (_stricmp(pcmd, ".vote") == 0)
+	else if (_stricmp(pcmd, _T(".vote")) == 0)
 	{
 		gVoteMenu.Menu(Player);
 		return true;
 	}
-	else if (_stricmp(pcmd, "!menu") == 0)
+	else if (_stricmp(pcmd, _T("!menu")) == 0)
 	{
 		gAdmin.Menu(Player);
 		return true;
 	}
-	else if (_stricmp(pcmd, "!msg") == 0)
+	else if (_stricmp(pcmd, _T("!msg")) == 0)
 	{
 		gAdmin.Chat(Player, CMD_ARGS());
 		return true;
 	}
-	else if (_stricmp(pcmd, "!rcon") == 0)
+	else if (_stricmp(pcmd, _T("!rcon")) == 0)
 	{
 		gAdmin.Rcon(Player, CMD_ARGS());
 		return true;
 	}
-	else if (_stricmp(pcmd, ".hp") == 0)
+	else if (_stricmp(pcmd, _T(".hp")) == 0)
 	{
 		gStats.HP(Player);
 		return true;
 	}
-	else if (_stricmp(pcmd, ".dmg") == 0)
+	else if (_stricmp(pcmd, _T(".dmg")) == 0)
 	{
 		gStats.Damage(Player);
 		return true;
 	}
-	else if (_stricmp(pcmd, ".rdmg") == 0)
+	else if (_stricmp(pcmd, _T(".rdmg")) == 0)
 	{
 		gStats.Received(Player);
 		return true;
 	}
-	else if (_stricmp(pcmd, ".sum") == 0)
+	else if (_stricmp(pcmd, _T(".sum")) == 0)
 	{
 		gStats.Summary(Player);
 		return true;
@@ -753,19 +753,19 @@ bool CPugMod::ClientJoinTeam(CBasePlayer* Player, int NewTeam)
 		gPlayer.TeamInfo(Player->edict(), 33 + 1, "TERRORIST");
 		gPlayer.TeamInfo(Player->edict(), 33 + 2, "CT");
 
-		gUtil.SayText(Player->edict(), PRINT_TEAM_RED, "%s Build %s (\3%s\1)", Plugin_info.name, Plugin_info.date, Plugin_info.author);
-		gUtil.SayText(Player->edict(), PRINT_TEAM_RED, "Say \4.help\1 to view command list.");
+		gUtil.SayText(Player->edict(), PRINT_TEAM_RED, _T("%s Build %s (\3%s\1)"), Plugin_info.name, Plugin_info.date, Plugin_info.author);
+		gUtil.SayText(Player->edict(), PRINT_TEAM_RED, _T("Say \4.help\1 to view command list."));
 	}
 
 	if (NewTeam == 5)
 	{
-		gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, "Auto Team Select is not allowed.");
+		gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("Auto Team Select is not allowed."));
 		return true;
 	}
 
 	if (Player->m_iTeam == NewTeam)
 	{
-		gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, "You are already on the \3%s\1 team.", PUG_MOD_TEAM_STR[Player->m_iTeam]);
+		gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("You are already on the \3%s\1 team."), PUG_MOD_TEAM_STR[Player->m_iTeam]);
 		return true;
 	}
 
@@ -773,7 +773,7 @@ bool CPugMod::ClientJoinTeam(CBasePlayer* Player, int NewTeam)
 	{
 		if (gPlayer.GetNum((TeamName)NewTeam) >= ((int)gCvars.GetPlayersMax()->value / 2))
 		{
-			gUtil.SayText(0, (NewTeam == TERRORIST) ? PRINT_TEAM_RED : PRINT_TEAM_BLUE, "The \3%s\1 team is complete.", PUG_MOD_TEAM_STR[NewTeam]);
+			gUtil.SayText(0, (NewTeam == TERRORIST) ? PRINT_TEAM_RED : PRINT_TEAM_BLUE, _T("The \3%s\1 team is complete."), PUG_MOD_TEAM_STR[NewTeam]);
 			return true;
 		}
 	}
@@ -784,7 +784,7 @@ bool CPugMod::ClientJoinTeam(CBasePlayer* Player, int NewTeam)
 		{
 			if (NewTeam != 6)
 			{
-				gUtil.SayText(Player->edict(), PRINT_TEAM_GREY, "Please, join in \3Spectator\1 while vote session is running.");
+				gUtil.SayText(Player->edict(), PRINT_TEAM_GREY, _T("Please, join in \3Spectator\1 while vote session is running."));
 				return true;
 			}
 		}
@@ -794,7 +794,7 @@ bool CPugMod::ClientJoinTeam(CBasePlayer* Player, int NewTeam)
 	{
 		if (this->m_State >= PUG_STATE_START && this->m_State <= PUG_STATE_OVERTIME)
 		{
-			gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, "Cannot switch when the game is started.");
+			gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("Cannot switch when the game is started."));
 			return true;
 		}
 	}
@@ -805,7 +805,7 @@ bool CPugMod::ClientJoinTeam(CBasePlayer* Player, int NewTeam)
 		{
 			if (!gAdmin.Check(Player))
 			{
-				gUtil.SayText(Player->edict(), PRINT_TEAM_GREY, "\3Spectators\1 are not allowed.");
+				gUtil.SayText(Player->edict(), PRINT_TEAM_GREY, _T("\3Spectators\1 are not allowed."));
 				return true;
 			}
 		}
@@ -834,7 +834,7 @@ void CPugMod::RoundEnd(int winStatus, ScenarioEventEndRound event, float tmDelay
 
 				this->m_Score[this->m_State][TERRORIST]++;
 
-				gUtil.ClientPrint(NULL, PRINT_CONSOLE, "* Round %d won by: %s", this->GetRound(), PUG_MOD_TEAM_STR[TERRORIST]);
+				gUtil.ClientPrint(NULL, PRINT_CONSOLE, _T("* Round %d won by: %s"), this->GetRound(), PUG_MOD_TEAM_STR[TERRORIST]);
 			}
 			else if (winStatus == WINSTATUS_CTS)
 			{
@@ -842,11 +842,11 @@ void CPugMod::RoundEnd(int winStatus, ScenarioEventEndRound event, float tmDelay
 
 				this->m_Score[this->m_State][CT]++;
 
-				gUtil.ClientPrint(NULL, PRINT_CONSOLE, "* Round %d won by: %s", this->GetRound(), PUG_MOD_TEAM_STR[CT]);
+				gUtil.ClientPrint(NULL, PRINT_CONSOLE, _T("* Round %d won by: %s"), this->GetRound(), PUG_MOD_TEAM_STR[CT]);
 			}
 			else if (winStatus == WINSTATUS_DRAW)
 			{
-				gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, "Round %d draw: No clear winner.", this->GetRound());
+				gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("Round %d draw: No clear winner."), this->GetRound());
 			}
 
 			if (this->m_State == PUG_STATE_FIRST_HALF)

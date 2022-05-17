@@ -34,6 +34,7 @@
 // PugMod
 #include "Util.h"
 #include "Cvars.h"
+#include "Translate.h"
 #include "AntiFlood.h"
 #include "AntiRetry.h"
 #include "Player.h"

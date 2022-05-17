@@ -49,7 +49,7 @@ void CCaptain::Init()
 	{
 		this->Stop();
 
-		gUtil.SayText(0, PRINT_TEAM_RED, "The choice of the teams failed: \3Not enough players.\1");
+		gUtil.SayText(0, PRINT_TEAM_RED, _T("The choice of the teams failed: \3Not enough players.\1"));
 	}
 }
 
@@ -98,7 +98,7 @@ void CCaptain::SetCaptain(CBasePlayer* Player, TeamName Team)
 			Player->RoundRespawn();
 		}
 
-		gUtil.SayText(NULL, Player->entindex(), "\3%s\1 is captain of \3%s\1", STRING(Player->edict()->v.netname), PUG_MOD_TEAM_STR[Team]);
+		gUtil.SayText(NULL, Player->entindex(), _T("\3%s\1 is captain of \3%s\1"), STRING(Player->edict()->v.netname), PUG_MOD_TEAM_STR[Team]);
 	}
 }
 
@@ -135,7 +135,7 @@ void CCaptain::GetPlayer(CBasePlayer* Player, CBasePlayer* Target)
 
 			this->List();
 
-			gUtil.SayText(NULL, Player->entindex(), "\3%s\1 choosed \3%s\1", STRING(Player->edict()->v.netname), STRING(Target->edict()->v.netname));
+			gUtil.SayText(NULL, Player->entindex(), _T("\3%s\1 choosed \3%s\1"), STRING(Player->edict()->v.netname), STRING(Target->edict()->v.netname));
 
 			if (this->CheckPlayerCount())
 			{

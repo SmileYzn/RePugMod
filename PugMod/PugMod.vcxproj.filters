@@ -76,6 +76,9 @@
     <Filter Include="PugMod\KnifeRound">
       <UniqueIdentifier>{93933c40-f37a-4cbe-8341-427c267e310b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="PugMod\Translate">
+      <UniqueIdentifier>{0447205c-f24a-4cc8-8242-b29fefac71d7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ReGameDLL.h">
@@ -144,6 +147,9 @@
     <ClInclude Include="KnifeRound.h">
       <Filter>PugMod\KnifeRound</Filter>
     </ClInclude>
+    <ClInclude Include="Translate.h">
+      <Filter>PugMod\Translate</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ReGameDLL.cpp">
@@ -211,6 +217,9 @@
     </ClCompile>
     <ClCompile Include="KnifeRound.cpp">
       <Filter>PugMod\KnifeRound</Filter>
+    </ClCompile>
+    <ClCompile Include="Translate.cpp">
+      <Filter>PugMod\Translate</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

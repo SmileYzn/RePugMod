@@ -39,6 +39,8 @@ void DLL_POST_ServerActivate(edict_t* pEdictList, int edictCount, int clientMax)
 
 	gCvars.Load();
 
+	gTranslate.Load();
+
 	gAdmin.Load();
 
 	gVoteMap.Load();

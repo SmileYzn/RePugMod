@@ -105,6 +105,7 @@
     <ClInclude Include="ReGameDLL.h" />
     <ClInclude Include="Stats.h" />
     <ClInclude Include="Task.h" />
+    <ClInclude Include="Translate.h" />
     <ClInclude Include="Util.h" />
     <ClInclude Include="VoteMap.h" />
     <ClInclude Include="VoteMenu.h" />
@@ -132,6 +133,7 @@
     <ClCompile Include="ReGameDLL.cpp" />
     <ClCompile Include="Stats.cpp" />
     <ClCompile Include="Task.cpp" />
+    <ClCompile Include="Translate.cpp" />
     <ClCompile Include="Util.cpp" />
     <ClCompile Include="VoteMap.cpp" />
     <ClCompile Include="VoteMenu.cpp" />
