@@ -20,7 +20,7 @@ void CTranslate::Load()
 
 				Header = Line;
 			}
-			else if (Line.rfind("bp:", 0) == 0)
+			else if (Line.rfind("en:", 0) == 0)
 			{
 				Line.erase(0, 3);
 
