@@ -1,4 +1,4 @@
-"%s Build %s (%s)"
+"%s Build %s (\3%s\1)"
 en:"%s Build %s (\3%s\1)"
 
 "Say \4.help\1 to view command list."
