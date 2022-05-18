@@ -97,17 +97,23 @@ void CCvars::Load()
 
 cvar_t* CCvars::Register(char* Name, char* Value)
 {
+	// Get Pointer by variable name
 	cvar_t* Pointer = CVAR_GET_POINTER(Name);
 
+	// If not exists
 	if (Pointer == NULL)
 	{
+		// Make structure data
 		cvar_t Register = { Name, Value, FCVAR_SERVER | FCVAR_SPONLY };
 
+		// Register the variable
 		CVAR_REGISTER(&Register);
 
+		// Return created pointer
 		return CVAR_GET_POINTER(Name);
 	}
 
+	// Return existing pointer to variable
 	return Pointer;
 }
 
