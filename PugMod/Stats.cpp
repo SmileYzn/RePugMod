@@ -63,7 +63,7 @@ void CStats::RoundEnd(int winStatus, ScenarioEventEndRound event, float tmDelay)
 									(
 										Players[i]->edict(),
 										PRINT_CONSOLE,
-										"(%d dmg / %d hits) to (%d dmg / %d hits) from %s (%d HP)",
+										_T("(%d dmg / %d hits) to (%d dmg / %d hits) from %s (%d HP)"),
 										this->m_Stats[PlayerIndex][TargetIndex][PUG_STATS_DMG],
 										this->m_Stats[PlayerIndex][TargetIndex][PUG_STATS_HIT],
 										this->m_Stats[TargetIndex][PlayerIndex][PUG_STATS_DMG],
@@ -149,7 +149,7 @@ bool CStats::HP(CBasePlayer* Player)
 									(
 										Player->edict(),
 										Target->entindex(),
-										"\3%s\1 with %d HP (%d AP)",
+										_T("\3%s\1 with %d HP (%d AP)"),
 										STRING(Target->edict()->v.netname),
 										(int)Target->edict()->v.health,
 										(int)Target->edict()->v.armorvalue
@@ -161,7 +161,7 @@ bool CStats::HP(CBasePlayer* Player)
 
 					if (!StatsCount)
 					{
-						gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, "No one is alive.");
+						gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("No one is alive."));
 					}
 
 					return true;
@@ -170,7 +170,7 @@ bool CStats::HP(CBasePlayer* Player)
 		}
 	}
 
-	gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, "Unable to use this command now.");
+	gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("Unable to use this command now."));
 
 	return false;
 }
@@ -205,7 +205,7 @@ bool CStats::Damage(CBasePlayer * Player)
 							(
 								Player->edict(),
 								TargetIndex,
-								"Hit \3%s\1 %d time(s) (Damage %d)",
+								_T("Hit \3%s\1 %d time(s) (Damage %d)"),
 								STRING(Players[i]->edict()->v.netname),
 								this->m_Stats[PlayerIndex][TargetIndex][PUG_STATS_HIT],
 								this->m_Stats[PlayerIndex][TargetIndex][PUG_STATS_DMG]
@@ -215,7 +215,7 @@ bool CStats::Damage(CBasePlayer * Player)
 
 					if (!StatsCount)
 					{
-						gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, "You do not hit anyone in this round.");
+						gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("You do not hit anyone in this round."));
 					}
 
 					return true;
@@ -224,7 +224,7 @@ bool CStats::Damage(CBasePlayer * Player)
 		}
 	}
 
-	gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, "Unable to use this command now.");
+	gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("Unable to use this command now."));
 
 	return false;
 }
@@ -259,7 +259,7 @@ bool CStats::Received(CBasePlayer * Player)
 							(
 								Player->edict(),
 								TargetIndex,
-								"Hit by \3%s\1 %d time(s) (Damage %d)",
+								_T("Hit by \3%s\1 %d time(s) (Damage %d)"),
 								STRING(Players[i]->edict()->v.netname),
 								this->m_Stats[TargetIndex][PlayerIndex][PUG_STATS_HIT],
 								this->m_Stats[TargetIndex][PlayerIndex][PUG_STATS_DMG]
@@ -269,7 +269,7 @@ bool CStats::Received(CBasePlayer * Player)
 
 					if (!StatsCount)
 					{
-						gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, "You were not reached in this round.");
+						gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("You were not reached in this round."));
 					}
 
 					return true;
@@ -278,7 +278,7 @@ bool CStats::Received(CBasePlayer * Player)
 		}
 	}
 
-	gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, "Unable to use this command now.");
+	gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("Unable to use this command now."));
 
 	return false;
 }
@@ -317,7 +317,7 @@ bool CStats::Summary(CBasePlayer* Player)
 								(
 									Player->edict(),
 									TargetIndex,
-									"(%d dmg / %d hits) to (%d dmg / %d hits) from \3%s\1 (%d HP)",
+									_T("(%d dmg / %d hits) to (%d dmg / %d hits) from \3%s\1 (%d HP)"),
 									this->m_Stats[PlayerIndex][TargetIndex][PUG_STATS_DMG],
 									this->m_Stats[PlayerIndex][TargetIndex][PUG_STATS_HIT],
 									this->m_Stats[TargetIndex][PlayerIndex][PUG_STATS_DMG],
@@ -331,7 +331,7 @@ bool CStats::Summary(CBasePlayer* Player)
 
 					if (!StatsCount)
 					{
-						gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, "No stats in this round.");
+						gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("No stats in this round."));
 					}
 
 					return true;
@@ -340,7 +340,7 @@ bool CStats::Summary(CBasePlayer* Player)
 		}
 	}
 
-	gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, "Unable to use this command now.");
+	gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("Unable to use this command now."));
 
 	return false;
 }

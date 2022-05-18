@@ -7,12 +7,12 @@ void CVoteTeam::Load()
 	this->m_Data.clear();
 	this->m_Vote.clear();
 
-	this->m_Data.push_back("Leaders Sorted");
-	this->m_Data.push_back("Random");
-	this->m_Data.push_back("Not Sorted");
-	this->m_Data.push_back("Skill Sorted");
-	this->m_Data.push_back("Swap Teams");
-	this->m_Data.push_back("Knife Round");
+	this->m_Data.push_back(_T("Leaders Sorted"));
+	this->m_Data.push_back(_T("Random"));
+	this->m_Data.push_back(_T("Not Sorted"));
+	this->m_Data.push_back(_T("Skill Sorted"));
+	this->m_Data.push_back(_T("Swap Teams"));
+	this->m_Data.push_back(_T("Knife Round"));
 }
 
 void CVoteTeam::Init()
@@ -31,7 +31,7 @@ void CVoteTeam::Init()
 		{
 			auto EntityIndex = Player->entindex();
 
-			gMenu[EntityIndex].Create("Game Mode:", false, this->MenuHandle);
+			gMenu[EntityIndex].Create(_T("Game Mode:"), false, this->MenuHandle);
 
 			gMenu[EntityIndex].AddList(this->m_Data);
 
@@ -39,7 +39,7 @@ void CVoteTeam::Init()
 		}
 	}
 
-	gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, "Select teams started.");
+	gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("Select teams started."));
 
 	gTask.Create(PUG_TASK_VOTE, gCvars.GetVoteDelay()->value, false, this->Stop);
 
@@ -54,7 +54,7 @@ void CVoteTeam::MenuHandle(int EntityIndex, int ItemIndex, bool Disabled, const 
 	{
 		gVoteTeam.AddVote(ItemIndex, 1);
 
-		gUtil.SayText(NULL, Player->entindex(), "\3%s\1 choosed \3%s\1", STRING(Player->edict()->v.netname), Option);
+		gUtil.SayText(NULL, Player->entindex(), _T("\3%s\1 choosed \3%s\1"), STRING(Player->edict()->v.netname), Option);
 
 		if (gVoteTeam.GetCount() >= gPlayer.GetNum(false))
 		{
@@ -77,7 +77,7 @@ void CVoteTeam::Stop()
 	{
 		gPugMod.NextState(3.0);
 
-		gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, "The choice of the teams failed: \3No votes.");
+		gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("The choice of the teams failed: \3No votes."));
 	}
 	else
 	{
@@ -97,9 +97,9 @@ void CVoteTeam::List(CVoteTeam* VoteTeam)
 		}
 	}
 
-	gUtil.HudMessage(NULL, gUtil.HudParam(0, 255, 0, 0.23, 0.02, 0, 0.0, 0.53, 0.0, 0.0, 1), "Game Mode (%d):",(int)gTask.Timeleft(PUG_TASK_VOTE));
+	gUtil.HudMessage(NULL, gUtil.HudParam(0, 255, 0, 0.23, 0.02, 0, 0.0, 0.53, 0.0, 0.0, 1), _T("Game Mode (%d):"),(int)gTask.Timeleft(PUG_TASK_VOTE));
 
-	gUtil.HudMessage(NULL, gUtil.HudParam(255, 255, 225, 0.23, 0.02, 0, 0.0, 0.53, 0.0, 0.0, 2), "\n%s", strlen(VoteList) ? VoteList : "No votes.");
+	gUtil.HudMessage(NULL, gUtil.HudParam(255, 255, 225, 0.23, 0.02, 0, 0.0, 0.53, 0.0, 0.0, 2), "\n%s", strlen(VoteList) ? VoteList : _T("No votes."));
 }
 
 int CVoteTeam::GetCount()
@@ -156,14 +156,14 @@ void CVoteTeam::SetMode(int GameMode)
 		{
 			this->TeamsRandomize();
 
-			gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, "Mixing teams now.");
+			gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("Mixing teams now."));
 
 			gPugMod.NextState(3.0f);
 			break;
 		}
 		case 2: // Same Teams
 		{
-			gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, "The teams will remain the same.");
+			gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("The teams will remain the same."));
 
 			gPugMod.NextState(3.0f);
 			break;
@@ -172,7 +172,7 @@ void CVoteTeam::SetMode(int GameMode)
 		{
 			this->TeamsOptimize();
 
-			gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, "Balancing teams by skills.");
+			gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("Balancing teams by skills."));
 
 			gPugMod.NextState(3.0f);
 			break;
@@ -184,7 +184,7 @@ void CVoteTeam::SetMode(int GameMode)
 				CSGameRules()->SwapAllPlayers();
 			}
 
-			gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, "Swaping teams now.");
+			gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("Swaping teams now."));
 
 			gPugMod.NextState(3.0f);
 			break;

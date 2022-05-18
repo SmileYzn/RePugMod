@@ -8,6 +8,7 @@ public:
 	cvar_t* Register(char* Name, char* Value);
 
 	cvar_t* GetConfig(int State);
+	cvar_t* GetLanguage();
 	cvar_t* GetAutoStartDelay();
 	cvar_t* GetPlayersMin();
 	cvar_t* GetPlayersMax();
@@ -32,6 +33,7 @@ public:
 
 private:
 	cvar_t* m_Config[8];
+	cvar_t* m_Language;
 	cvar_t* m_AutoStartDelay;
 	cvar_t* m_PlayersMin;
 	cvar_t* m_PlayersMax;

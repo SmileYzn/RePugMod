@@ -145,7 +145,7 @@ void CMenu::Display(int EntityIndex,int Page)
 
 	int PageCount = this->m_Data.size() > MENU_PAGE_OPTION ? (this->m_Data.size() / MENU_PAGE_OPTION + ((this->m_Data.size() % MENU_PAGE_OPTION) ? 1 : 0)) : 1;
 
-	int Len = sprintf(MenuText, "\\y%s\\R%i/%i\n\\w\n", this->m_Text.c_str(), (Page + 1), PageCount);
+	int Len = sprintf(MenuText, "\\y%s\\R%d/%d\n\\w\n", this->m_Text.c_str(), (Page + 1), PageCount);
 
 	unsigned int End = (Start + MENU_PAGE_OPTION);
 
@@ -163,11 +163,11 @@ void CMenu::Display(int EntityIndex,int Page)
 
 		if (this->m_Skip[b])
 		{
-			Len += sprintf(MenuText, "%s\\r%i.\\d %s\n", MenuText, ++BitSum, this->m_Data[b].c_str());
+			Len += sprintf(MenuText, "%s\\r%d.\\d %s\n", MenuText, ++BitSum, this->m_Data[b].c_str());
 		}
 		else
 		{
-			Len += sprintf(MenuText, "%s\\r%i.\\w %s\n", MenuText, ++BitSum, this->m_Data[b].c_str());
+			Len += sprintf(MenuText, "%s\\r%d.\\w %s\n", MenuText, ++BitSum, this->m_Data[b].c_str());
 		}
 	}
 

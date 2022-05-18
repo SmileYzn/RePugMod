@@ -50,7 +50,7 @@ bool CVoteMenu::CheckMenu(CBasePlayer* Player)
 			}
 		}
 
-		gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, "Unable to use this command now.");
+		gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("Unable to use this command now."));
 	}
 
 	return false;
@@ -62,15 +62,15 @@ void CVoteMenu::Menu(CBasePlayer* Player)
 	{
 		auto EntityIndex = Player->entindex();
 
-		gMenu[EntityIndex].Create("Vote Menu:", true, this->MenuHandle);
+		gMenu[EntityIndex].Create(_T("Vote Menu:"), true, this->MenuHandle);
 
-		gMenu[EntityIndex].AddItem(0, "Vote Kick");
-		gMenu[EntityIndex].AddItem(1, "Vote Map", !this->m_MapList.size());
+		gMenu[EntityIndex].AddItem(0, _T("Vote Kick"));
+		gMenu[EntityIndex].AddItem(1, _T("Vote Map"), !this->m_MapList.size());
 
 		bool Disabled = (gPugMod.GetState() != PUG_STATE_FIRST_HALF && gPugMod.GetState() != PUG_STATE_SECOND_HALF && gPugMod.GetState() != PUG_STATE_OVERTIME);
 
-		gMenu[EntityIndex].AddItem(2, "Vote Pause", Disabled || !gCvars.GetVotePauseTime()->value);
-		gMenu[EntityIndex].AddItem(3, "Vote Stop", Disabled);
+		gMenu[EntityIndex].AddItem(2, _T("Vote Pause"), Disabled || !gCvars.GetVotePauseTime()->value);
+		gMenu[EntityIndex].AddItem(3, _T("Vote Stop"), Disabled);
 
 		gMenu[EntityIndex].Show(EntityIndex);
 	}
@@ -122,7 +122,7 @@ void CVoteMenu::VoteKick(CBasePlayer* Player)
 
 		if (Num >= NeedPlayers)
 		{
-			gMenu[PlayerIndex].Create("Vote Kick:", true, this->VoteKickHandle);
+			gMenu[PlayerIndex].Create(_T("Vote Kick"), true, this->VoteKickHandle);
 
 			for (int i = 0; i < Num; i++)
 			{
@@ -146,7 +146,7 @@ void CVoteMenu::VoteKick(CBasePlayer* Player)
 		}
 		else
 		{
-			gUtil.SayText(Player->edict(), PlayerIndex, "Need \3%d\1 players to use vote kick.", NeedPlayers);
+			gUtil.SayText(Player->edict(), PlayerIndex, _T("Need \3%d\1 players to use vote kick."), NeedPlayers);
 		}
 	}
 }
@@ -195,21 +195,21 @@ void CVoteMenu::VoteKickPlayer(CBasePlayer* Player, CBasePlayer* Target, bool Di
 
 				if (!VotesLack)
 				{
-					gPlayer.DropClient(Target->entindex(), "Kicked by Vote Kick.");
+					gPlayer.DropClient(Target->entindex(), _T("Kicked by Vote Kick."));
 
-					gUtil.SayText(NULL, TargetIndex, "\3%s\1 Kicked: \4%d\1 votes reached.", STRING(Target->edict()->v.netname), VotesNeed);
+					gUtil.SayText(NULL, TargetIndex, _T("\3%s\1 Kicked: \4%d\1 votes reached."), STRING(Target->edict()->v.netname), VotesNeed);
 				}
 				else
 				{
-					gUtil.SayText(NULL, PlayerIndex, "\3%s\1 voted to kick \3%s\1: \4%d\1 of \4%d\1 votes to kick.", STRING(Player->edict()->v.netname), STRING(Target->edict()->v.netname), VoteCount, VotesNeed);
-					gUtil.SayText(NULL, PlayerIndex, "Say \3.vote\1 to open vote kick.");
+					gUtil.SayText(NULL, PlayerIndex, _T("\3%s\1 voted to kick \3%s\1: \4%d\1 of \4%d\1 votes to kick."), STRING(Player->edict()->v.netname), STRING(Target->edict()->v.netname), VoteCount, VotesNeed);
+					gUtil.SayText(NULL, PlayerIndex, _T("Say \3.vote\1 to open vote kick."));
 				}
 			}
 			else
 			{
 				gVoteMenu.VoteKick(Player);
 
-				gUtil.SayText(Player->edict(), TargetIndex, "Already voted to kick: \3%s\1...", STRING(Target->edict()->v.netname));
+				gUtil.SayText(Player->edict(), TargetIndex, _T("Already voted to kick: \3%s\1..."), STRING(Target->edict()->v.netname));
 			}
 		}
 	}
@@ -223,7 +223,7 @@ void CVoteMenu::VoteMap(CBasePlayer* Player)
 		{
 			auto PlayerIndex = Player->entindex();
 
-			gMenu[PlayerIndex].Create("Nominate Map:", true, this->VoteMapHandle);
+			gMenu[PlayerIndex].Create(_T("Vote Map"), true, this->VoteMapHandle);
 
 			for (std::size_t MapIndex = 0; MapIndex < this->m_MapList.size(); MapIndex++)
 			{
@@ -268,21 +268,21 @@ void CVoteMenu::VoteMapPickup(CBasePlayer* Player, int MapIndex, bool Disabled)
 
 		if (VotesLack)
 		{
-			gUtil.SayText(NULL, PlayerIndex, "\3%s\1 nomitated \4%s\1: \4%d\1 of \4%d\1 votes to change map.", STRING(Player->edict()->v.netname), this->m_MapList[MapIndex].c_str(), VoteCount, VotesLack);
-			gUtil.SayText(NULL, PlayerIndex, "Say \3.vote\1 to nominate a map.");
+			gUtil.SayText(NULL, PlayerIndex, _T("\3%s\1 nomitated \4%s\1: \4%d\1 of \4%d\1 votes to change map."), STRING(Player->edict()->v.netname), this->m_MapList[MapIndex].c_str(), VoteCount, VotesLack);
+			gUtil.SayText(NULL, PlayerIndex, _T("Say \3.vote\1 to nominate a map."));
 		}
 		else
 		{
 			gTask.Create(PUG_TASK_EXEC, 5.0f, false, SERVER_COMMAND, (void*)gUtil.VarArgs("changelevel %s\n", this->m_MapList[MapIndex].c_str()));
 
-			gUtil.SayText(NULL, PlayerIndex, "Changing map to \4%s\1...", this->m_MapList[MapIndex].c_str());
+			gUtil.SayText(NULL, PlayerIndex, _T("Changing map to \4%s\1..."), this->m_MapList[MapIndex].c_str());
 		}
 	}
 	else
 	{
 		this->VoteMap(Player);
 
-		gUtil.SayText(Player->edict(), Player->entindex(), "Already nominated \3%s\1...", this->m_MapList[MapIndex].c_str());
+		gUtil.SayText(Player->edict(), Player->entindex(), _T("Already nominated \3%s\1..."), this->m_MapList[MapIndex].c_str());
 	}
 }
 
@@ -317,35 +317,35 @@ void CVoteMenu::VotePause(CBasePlayer* Player)
 
 						if (VotesLack)
 						{
-							gUtil.SayText(NULL, PlayerIndex, "\3%s\1 from voted for a timeout: \4%d\1 of \4%d\1 vote(s) to run timeout.", STRING(Player->edict()->v.netname), VoteCount, VotesNeed);
-							gUtil.SayText(NULL, PlayerIndex, "say \3.vote\1 for a timeout.");
+							gUtil.SayText(NULL, PlayerIndex, _T("\3%s\1 from voted for a timeout: \4%d\1 of \4%d\1 vote(s) to run timeout."), STRING(Player->edict()->v.netname), VoteCount, VotesNeed);
+							gUtil.SayText(NULL, PlayerIndex, _T("Say \3.vote\1 for a timeout."));
 						}
 						else
 						{
 							this->m_PausedTeam = Player->m_iTeam;
 							this->m_PausedTime = (int)gCvars.GetVotePauseTime()->value;
 
-							gUtil.SayText(NULL, PlayerIndex, "Match will pause for \4%d\1 seconds on next round.", this->m_PausedTime);
+							gUtil.SayText(NULL, PlayerIndex, _T("Match will pause for \4%d\1 seconds on next round."), this->m_PausedTime);
 						}
 					}
 					else
 					{
-						gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, "You already voted for a timeout.");
+						gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("You already voted for a timeout."));
 					}
 				}
 				else
 				{
-					gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, "The \3%s\1 team already paused the game.", PUG_MOD_TEAM_STR[this->m_PausedTeam]);
+					gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("The \3%s\1 team already paused the game."), PUG_MOD_TEAM_STR[this->m_PausedTeam]);
 				}
 			}
 			else
 			{
-				gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, "Unable to vote to pause the match.");
+				gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("Unable to vote to pause the match."));
 			}
 		}
 		else
 		{
-			gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, "Unable to use this command now.");
+			gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("Unable to use this command now."));
 		}
 	}
 }
@@ -410,19 +410,19 @@ void CVoteMenu::VoteStop(CBasePlayer* Player)
 			
 			if (VotesLack)
 			{
-				gUtil.SayText(NULL, PlayerIndex, "\3%s\1 voted for surrender: \4%d\1 of \4%d\1 vote(s) to stop the match.", STRING(Player->edict()->v.netname), VoteCount, VotesNeed);
-				gUtil.SayText(NULL, PlayerIndex, "say \3.vote\1 to vote for stop the match.");
+				gUtil.SayText(NULL, PlayerIndex, _T("\3%s\1 voted for surrender: \4%d\1 of \4%d\1 vote(s) to stop the match."), STRING(Player->edict()->v.netname), VoteCount, VotesNeed);
+				gUtil.SayText(NULL, PlayerIndex, _T("Say \3.vote\1 to vote for stop the match."));
 			}
 			else
 			{
-				gUtil.SayText(NULL, PlayerIndex, "Game Over! The \3%s\1 Surrendered!", PUG_MOD_TEAM_STR[Player->m_iTeam]);
+				gUtil.SayText(NULL, PlayerIndex, _T("Game Over! The \3%s\1 Surrendered!"), PUG_MOD_TEAM_STR[Player->m_iTeam]);
 
 				gPugMod.EndGame(Player->m_iTeam == TERRORIST ? CT : TERRORIST); 
 			}
 		}
 		else
 		{
-			gUtil.SayText(Player->edict(), PlayerIndex, "You already voted to stop the match.");
+			gUtil.SayText(Player->edict(), PlayerIndex, _T("You already voted to stop the match."));
 		}
 	}
 }

@@ -8,7 +8,14 @@ void CTranslate::Load()
 
 	std::ifstream File(TRANSLATE_FILE, std::ifstream::in|std::ifstream::skipws);
 
-	std::string Line, Header;
+	std::string Line, CurrentKey;
+
+	char* Language = "en";
+
+	if (gCvars.GetLanguage()->string)
+	{
+		Language = gCvars.GetLanguage()->string;
+	}
 
 	while (std::getline(File, Line))
 	{
@@ -18,15 +25,15 @@ void CTranslate::Load()
 			{
 				Line.erase(std::remove(Line.begin(), Line.end(), '\"'), Line.end());
 
-				Header = Line;
+				CurrentKey = Line;
 			}
-			else if (Line.rfind("en:", 0) == 0)
+			else if (Line.rfind(Language, 0) == 0)
 			{
 				Line.erase(0, 3);
 
 				Line.erase(std::remove(Line.begin(), Line.end(), '\"'), Line.end());
 
-				this->m_Data.insert(std::make_pair(Header, Line));
+				this->m_Data.insert(std::make_pair(CurrentKey, Line));
 			}
 		}
 	}

@@ -281,7 +281,7 @@ void CCaptain::List()
 							(
 								szList[Player->m_iTeam],
 								sizeof(szList[Player->m_iTeam]),
-								gCaptain.GetPicking(Player->entindex()) ? "%s%s (C) *\n" : "%s%s (C)\n",
+								gCaptain.GetPicking(Player->entindex()) ? _T("%s%s (C) *\n") : _T("%s%s (C)\n"),
 								szList[Player->m_iTeam],
 								STRING(Player->edict()->v.netname)
 							);

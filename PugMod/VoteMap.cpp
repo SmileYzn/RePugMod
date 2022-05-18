@@ -26,7 +26,7 @@ void CVoteMap::Init()
 		{
 			auto EntityIndex = Player->entindex();
 
-			gMenu[EntityIndex].Create("Vote Map:", false, this->MenuHandle);
+			gMenu[EntityIndex].Create(_T("Vote Map:"), false, this->MenuHandle);
 
 			gMenu[EntityIndex].AddList(this->m_Data);
 
@@ -34,7 +34,7 @@ void CVoteMap::Init()
 		}
 	}
 
-	gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, "Starting Vote Map."); 
+	gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("Starting Vote Map."));
 
 	gTask.Create(PUG_TASK_VOTE, gCvars.GetVoteDelay()->value, false, this->Stop); 
 
@@ -49,7 +49,7 @@ void CVoteMap::MenuHandle(int EntityIndex, int ItemIndex, bool Disabled, const c
 	{
 		gVoteMap.AddVote(ItemIndex, 1);
 
-		gUtil.SayText(NULL, Player->entindex(), "\3%s\1 choosed \3%s\1", STRING(Player->edict()->v.netname), Option);
+		gUtil.SayText(NULL, Player->entindex(), _T("\3%s\1 choosed \3%s\1"), STRING(Player->edict()->v.netname), Option);
 
 		if (gVoteMap.GetCount() >= gPlayer.GetNum(false))
 		{
@@ -71,7 +71,7 @@ void CVoteMap::Stop()
 
 	if (Winner == -1)
 	{
-		gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, "The map choice has failed: \3No votes.");
+		gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("The map choice has failed: \3No votes."));
 
 		gVoteMap.RandomMap(true);
 	}
@@ -79,7 +79,7 @@ void CVoteMap::Stop()
 	{
 		gTask.Create(PUG_TASK_EXEC, 5.0f, false, SERVER_COMMAND, (void*)gUtil.VarArgs("changelevel %s\n", gVoteMap.GetItem(Winner)));
 
-		gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, "Changing map to \4%s\1...", gVoteMap.GetItem(Winner));
+		gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("Changing map to \4%s\1..."), gVoteMap.GetItem(Winner));
 	}
 }
 
@@ -95,9 +95,9 @@ void CVoteMap::List(CVoteMap* VoteMap)
 		}
 	}
 	
-	gUtil.HudMessage(NULL, gUtil.HudParam(0, 255, 0, 0.23, 0.02, 0, 0.0, 0.53, 0.0, 0.0, 1), "Choose the map (%d):",(int)gTask.Timeleft(PUG_TASK_VOTE));
+	gUtil.HudMessage(NULL, gUtil.HudParam(0, 255, 0, 0.23, 0.02, 0, 0.0, 0.53, 0.0, 0.0, 1), _T("Choose the map (%d):"),(int)gTask.Timeleft(PUG_TASK_VOTE));
 
-	gUtil.HudMessage(NULL, gUtil.HudParam(255, 255, 225, 0.23, 0.02, 0, 0.0, 0.53, 0.0, 0.0, 2), "\n%s", strlen(VoteList) ? VoteList : "No votes.");
+	gUtil.HudMessage(NULL, gUtil.HudParam(255, 255, 225, 0.23, 0.02, 0, 0.0, 0.53, 0.0, 0.0, 2), "\n%s", strlen(VoteList) ? VoteList : _T("No votes."));
 }
 
 int CVoteMap::GetCount()
@@ -149,7 +149,7 @@ int CVoteMap::RandomMap(bool Change)
 	{
 		gTask.Create(PUG_TASK_EXEC, 5.0f, false, SERVER_COMMAND, (void*)gUtil.VarArgs("changelevel %s\n", this->m_Data[Random].c_str())); 
 
-		gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, "Changing map to \4%s\1...", this->m_Data[Random].c_str());
+		gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("Changing map to \4%s\1..."), this->m_Data[Random].c_str());
 	}
 
 	return Random;

@@ -14,11 +14,11 @@ void CReady::Load()
 
 	if (gCvars.GetReadyType()->value)
 	{
-		gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, "Say \4.ready\1 to continue."); 
+		gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("Say \4.ready\1 to continue."));
 	}
 	else
 	{
-		gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, "Match will start when all players join in game."); 
+		gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("Match will start when all players join in game."));
 	}
 }
 
@@ -35,20 +35,20 @@ void CReady::Toggle(CBasePlayer* Player)
 	{
 		if (!this->m_Running)
 		{
-			gUtil.SayText(Player->edict(), Player->entindex(), "\3%s\1 enabled Ready System.",STRING(Player->edict()->v.netname));
+			gUtil.SayText(Player->edict(), Player->entindex(), _T("\3%s\1 enabled Ready System."),STRING(Player->edict()->v.netname));
 
 			this->Load();
 		}
 		else
 		{
-			gUtil.SayText(Player->edict(), Player->entindex(), "\3%s\1 disabled Ready System.", STRING(Player->edict()->v.netname));
+			gUtil.SayText(Player->edict(), Player->entindex(), _T("\3%s\1 disabled Ready System."), STRING(Player->edict()->v.netname));
 
 			this->Unload();
 		}
 	}
 	else
 	{
-		gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, "Can't change Ready System while Pug Mod is running.");
+		gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("Can't change Ready System while Pug Mod is running."));
 	}
 }
 
@@ -82,15 +82,15 @@ void CReady::List(CReady* Ready)
 		{
 			Ready->Unload();
 
-			gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, "All playres are ready!"); 
+			gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("All playres are ready!"));
 
 			gPugMod.NextState(0);
 		}
 		else
 		{
-			gUtil.HudMessage(NULL, gUtil.HudParam(0, 255, 0, 0.23, 0.02, 0, 0.0, 0.53, 0.0, 0.0, 1), "Not Ready (%d of %d):", PlayerCount[0], (int)gCvars.GetPlayersMin()->value);
+			gUtil.HudMessage(NULL, gUtil.HudParam(0, 255, 0, 0.23, 0.02, 0, 0.0, 0.53, 0.0, 0.0, 1), _T("Not Ready (%d of %d):"), PlayerCount[0], (int)gCvars.GetPlayersMin()->value);
 
-			gUtil.HudMessage(NULL, gUtil.HudParam(0, 255, 0, 0.58, 0.02, 0, 0.0, 0.53, 0.0, 0.0, 2), "Ready (%d of %d):", PlayerCount[1], (int)gCvars.GetPlayersMin()->value);
+			gUtil.HudMessage(NULL, gUtil.HudParam(0, 255, 0, 0.58, 0.02, 0, 0.0, 0.53, 0.0, 0.0, 2), _T("Ready (%d of %d):"), PlayerCount[1], (int)gCvars.GetPlayersMin()->value);
 
 			gUtil.HudMessage(NULL, gUtil.HudParam(255, 255, 225, 0.23, 0.02, 0, 0.0, 0.53, 0.0, 0.0, 4), "\n%s", PlayerList[0]);
 
@@ -105,7 +105,7 @@ void CReady::List(CReady* Ready)
 		{
 			Ready->m_SystemTime = time(NULL);
 
-			gUtil.HudMessage(NULL, gUtil.HudParam(0, 255, 0, -1.0, 0.2, 0, 0.53, 0.53), "Warmup\n%d Player(s) Left", Needed);
+			gUtil.HudMessage(NULL, gUtil.HudParam(0, 255, 0, -1.0, 0.2, 0, 0.53, 0.53), _T("Warmup\n%d Player(s) Left"), Needed);
 		}
 		else
 		{
@@ -119,7 +119,7 @@ void CReady::List(CReady* Ready)
 				{
 					char Time[32] = { 0 };
 
-					strftime(Time, sizeof(Time), "Starting Match\n%M:%S", tm_info);
+					strftime(Time, sizeof(Time), _T("Starting Match\n%M:%S"), tm_info);
 
 					gUtil.HudMessage(NULL, gUtil.HudParam(0, 255, 0, -1.0, 0.2, 0, 0.53, 0.53), Time);
 				}
@@ -128,7 +128,7 @@ void CReady::List(CReady* Ready)
 			{
 				Ready->Unload();
 
-				gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, "All playres are ready!");
+				gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("All playres are in teams and ready!"));
 
 				gPugMod.NextState(0);
 			}
@@ -148,12 +148,12 @@ void CReady::Ready(CBasePlayer* Player)
 			{
 				this->m_Ready[EntityIndex] = 1;
 
-				gUtil.SayText(NULL, EntityIndex, "\3%s\1 is ready.", STRING(Player->edict()->v.netname));
+				gUtil.SayText(NULL, EntityIndex, _T("\3%s\1 is ready."), STRING(Player->edict()->v.netname));
 			}
 		}
 		else
 		{
-			gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, "Unable to use this command now.");
+			gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("Unable to use this command now."));
 		}
 	}
 }
@@ -170,12 +170,12 @@ void CReady::NotReady(CBasePlayer* Player)
 			{
 				this->m_Ready[EntityIndex] = 0;
 
-				gUtil.SayText(NULL, EntityIndex, "\3%s\1 is not ready.", STRING(Player->edict()->v.netname));
+				gUtil.SayText(NULL, EntityIndex, _T("\3%s\1 is not ready."), STRING(Player->edict()->v.netname));
 			}
 		}
 		else
 		{
-			gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, "Unable to use this command now.");
+			gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("Unable to use this command now."));
 		}
 	}
 }

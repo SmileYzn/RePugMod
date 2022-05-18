@@ -28,6 +28,9 @@ void CCvars::Load()
 	// End
 	this->m_Config[PUG_STATE_END] = this->Register("pug_cfg_end", "end.cfg");
 
+	// Pug Mod Language (Two characters to represent language in lang file)
+	this->m_Language = this->Register("pug_language", "en");
+
 	// Time before initialize Pug Mod after start map (0 to disable auto initialization)
 	this->m_AutoStartDelay = this->Register("pug_auto_start_delay", "6.0");
 
@@ -111,6 +114,11 @@ cvar_t* CCvars::Register(char* Name, char* Value)
 cvar_t* CCvars::GetConfig(int State)
 {
 	return this->m_Config[State];
+}
+
+cvar_t* CCvars::GetLanguage()
+{
+	return this->m_Language;
 }
 
 cvar_t* CCvars::GetAutoStartDelay()

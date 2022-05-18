@@ -85,10 +85,10 @@ void CKnifeRound::RoundRestart()
 							{
 								auto EntityIndex = Player->entindex();
 
-								gMenu[EntityIndex].Create("Select Starting Side:", false, this->MenuHandle);
+								gMenu[EntityIndex].Create(_T("Select Starting Side:"), false, this->MenuHandle);
 
-								gMenu[EntityIndex].AddItem(1, "Terrorists");
-								gMenu[EntityIndex].AddItem(2, "Counter-Terrorists");
+								gMenu[EntityIndex].AddItem(1, _T("Terrorists"));
+								gMenu[EntityIndex].AddItem(2, _T("Counter-Terrorists"));
 
 								gMenu[EntityIndex].Show(EntityIndex);
 							}
@@ -120,19 +120,19 @@ void CKnifeRound::RoundEnd(int winStatus, ScenarioEventEndRound event, float tmD
 			{
 				this->m_Winner = TERRORIST;
 
-				gUtil.SayText(NULL, PRINT_TEAM_RED, "\3%s\1 Won: The \3%s\1 team will decide the starting side.", PUG_MOD_TEAM_STR[this->m_Winner], PUG_MOD_TEAM_STR[this->m_Winner]);
+				gUtil.SayText(NULL, PRINT_TEAM_RED, _T("\3%s\1 Won: The \3%s\1 team will decide the starting side."), PUG_MOD_TEAM_STR[this->m_Winner], PUG_MOD_TEAM_STR[this->m_Winner]);
 			}
 			else if (winStatus == WINSTATUS_CTS && event == ROUND_CTS_WIN)
 			{
 				this->m_Winner = CT;
 
-				gUtil.SayText(NULL, PRINT_TEAM_BLUE, "\3%s\1 Won: The \3%s\1 team will decide the starting side.", PUG_MOD_TEAM_STR[this->m_Winner], PUG_MOD_TEAM_STR[this->m_Winner]);
+				gUtil.SayText(NULL, PRINT_TEAM_BLUE, _T("\3%s\1 Won: The \3%s\1 team will decide the starting side."), PUG_MOD_TEAM_STR[this->m_Winner], PUG_MOD_TEAM_STR[this->m_Winner]);
 			}
 			else
 			{
 				this->m_Winner = UNASSIGNED;
 
-				gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, "Knife Round Failed: \3No clear winner by extermination.");
+				gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("Knife Round Failed: \3No clear winner by extermination."));
 
 				if (!gCvars.GetKnifeRoundEndType()->value)
 				{
@@ -161,9 +161,9 @@ void CKnifeRound::List(CKnifeRound* KnifeRound)
 		}
 	}
 
-	gUtil.HudMessage(NULL, gUtil.HudParam(0, 255, 0, 0.23, 0.02, 0, 0.0, 0.53, 0.0, 0.0, 1), "Starting Side (%d):", (int)gTask.Timeleft(PUG_TASK_VOTE));
+	gUtil.HudMessage(NULL, gUtil.HudParam(0, 255, 0, 0.23, 0.02, 0, 0.0, 0.53, 0.0, 0.0, 1), _T("Starting Side (%d):"), (int)gTask.Timeleft(PUG_TASK_VOTE));
 
-	gUtil.HudMessage(NULL, gUtil.HudParam(255, 255, 225, 0.23, 0.02, 0, 0.0, 0.53, 0.0, 0.0, 2), "\n%s", strlen(VoteList) ? VoteList : "No votes.");
+	gUtil.HudMessage(NULL, gUtil.HudParam(255, 255, 225, 0.23, 0.02, 0, 0.0, 0.53, 0.0, 0.0, 2), "\n%s", strlen(VoteList) ? VoteList : _T("No votes."));
 }
 
 int CKnifeRound::SetVote(TeamName Team, int Vote)
@@ -191,7 +191,7 @@ void CKnifeRound::MenuHandle(int EntityIndex, int ItemIndex, bool Disabled, cons
 	{
 		gKnifeRound.SetVote(Player->m_iTeam, 1);
 
-		gUtil.SayText(NULL, Player->entindex(), "\3%s\1 choosed \3%s\1", STRING(Player->edict()->v.netname), Option);
+		gUtil.SayText(NULL, Player->entindex(), _T("\3%s\1 choosed \3%s\1"), STRING(Player->edict()->v.netname), Option);
 
 		if (gKnifeRound.GetCount() >= gPlayer.GetNum(true))
 		{

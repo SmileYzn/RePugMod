@@ -160,9 +160,6 @@ en:"Send Message"
 "Send Command"
 en:"Send Command"
 
-"Kick Player"
-en:"Kick Player"
-
 "Kicked by %s."
 en:"Kicked by %s."
 
@@ -219,3 +216,226 @@ en:"\3%s\1 is captain of \3%s\1"
 
 "\3%s\1 choosed \3%s\1"
 en:"\3%s\1 choosed \3%s\1"
+
+"%s%s (C) *\n"
+en:"%s%s (C) *\n"
+
+"%s%s (C)\n"
+en:"%s%s (C)\n"
+
+"Select Starting Side:"
+en:"Select Starting Side:"
+
+"Terrorists"
+en:"Terrorists"
+
+"Counter-Terrorists"
+en:"Counter-Terrorists"
+
+"\3%s\1 Won: The \3%s\1 team will decide the starting side."
+en:"\3%s\1 Won: The \3%s\1 team will decide the starting side."
+
+"Knife Round Failed: \3No clear winner by extermination."
+en:"Knife Round Failed: \3No clear winner by extermination."
+
+"Starting Side (%d):"
+en:"Starting Side (%d):"
+
+"No votes."
+en:"No votes."
+
+"Say \4.ready\1 to continue."
+en:"Say \4.ready\1 to continue."
+
+"Match will start when all players join in game."
+en:"Match will start when all players join in game."
+
+"\3%s\1 enabled Ready System."
+en:"\3%s\1 enabled Ready System."
+
+"\3%s\1 disabled Ready System."
+en:"\3%s\1 disabled Ready System."
+
+"Can't change Ready System while Pug Mod is running."
+en:"Can't change Ready System while Pug Mod is running."
+
+"All playres are ready!"
+en:"All playres are ready!"
+
+"Not Ready (%d of %d):"
+en:"Not Ready (%d of %d):"
+
+"Ready (%d of %d):"
+en:"Ready (%d of %d):"
+
+"Warmup\n%d Player(s) Left"
+en:"Warmup\n%d Player(s) Left"
+
+"Starting Match\n%M:%S"
+en:"Starting Match\n%M:%S"
+
+"All playres are in teams and ready"
+en:"All playres are in teams and ready"
+
+"\3%s\1 is ready."
+en:"\3%s\1 is ready."
+
+"\3%s\1 is not ready."
+en:"\3%s\1 is not ready."
+
+"(%d dmg / %d hits) to (%d dmg / %d hits) from %s (%d HP)"
+en:"(%d dmg / %d hits) to (%d dmg / %d hits) from %s (%d HP)"
+
+"\3%s\1 with %d HP (%d AP)"
+en:"\3%s\1 with %d HP (%d AP)"
+
+"No one is alive."
+en:"No one is alive."
+
+"Hit \3%s\1 %d time(s) (Damage %d)"
+en:"Hit \3%s\1 %d time(s) (Damage %d)"
+
+"You do not hit anyone in this round."
+en:"You do not hit anyone in this round."
+
+"Hit by \3%s\1 %d time(s) (Damage %d)"
+en:"Hit by \3%s\1 %d time(s) (Damage %d)"
+
+"You were not reached in this round."
+en:"You were not reached in this round."
+
+"(%d dmg / %d hits) to (%d dmg / %d hits) from \3%s\1 (%d HP)"
+en:"(%d dmg / %d hits) to (%d dmg / %d hits) from \3%s\1 (%d HP)"
+
+"No stats in this round."
+en:"No stats in this round."
+
+"Vote Map:"
+en:"Vote Map:"
+
+"Starting Vote Map."
+en:"Starting Vote Map."
+
+"The map choice has failed: \3No votes."
+en:"The map choice has failed: \3No votes."
+
+"Changing map to \4%s\1..."
+en:"Changing map to \4%s\1..."
+
+"Choose the map (%d):"
+en:"Choose the map (%d):"
+
+"Leaders Sorted"
+en:"Leaders Sorted"
+
+"Random"
+en:"Random"
+
+"Not Sorted"
+en:"Not Sorted"
+
+"Skill Sorted"
+en:"Skill Sorted"
+
+"Swap Teams"
+en:"Swap Teams"
+
+"Knife Round"
+en:"Knife Round"
+
+"Game Mode:"
+en:"Game Mode:"
+
+"Select teams started."
+en:"Select teams started."
+
+"The choice of the teams failed: \3No votes."
+en:"The choice of the teams failed: \3No votes."
+
+"Game Mode (%d):"
+en:"Game Mode (%d):"
+
+"Mixing teams now."
+en:"Mixing teams now."
+
+"The teams will remain the same."
+en:"The teams will remain the same."
+
+"Balancing teams by skills."
+en:"Balancing teams by skills."
+
+"Swaping teams now."
+en:"Swaping teams now."
+
+"Vote Menu:"
+en:"Vote Menu:"
+
+"Vote Kick"
+en:"Vote Kick"
+
+"Vote Map"
+en:"Vote Map"
+
+"Vote Pause"
+en:"Vote Pause"
+
+"Vote Stop"
+en:"Vote Stop"
+
+"Need \3%d\1 players to use vote kick."
+en:"Need \3%d\1 players to use vote kick."
+
+"Kicked by Vote Kick."
+en:"Kicked by Vote Kick."
+
+"\3%s\1 Kicked: \4%d\1 votes reached."
+en:"\3%s\1 Kicked: \4%d\1 votes reached."
+
+"\3%s\1 voted to kick \3%s\1: \4%d\1 of \4%d\1 votes to kick."
+en:"\3%s\1 voted to kick \3%s\1: \4%d\1 of \4%d\1 votes to kick."
+
+"Say \3.vote\1 to open vote kick."
+en:"Say \3.vote\1 to open vote kick."
+
+"Already voted to kick: \3%s\1..."
+en:"Already voted to kick: \3%s\1..."
+
+"\3%s\1 nomitated \4%s\1: \4%d\1 of \4%d\1 votes to change map."
+en:"\3%s\1 nomitated \4%s\1: \4%d\1 of \4%d\1 votes to change map."
+
+"Say \3.vote\1 to nominate a map."
+en:"Say \3.vote\1 to nominate a map."
+
+"Already nominated \3%s\1..."
+en:"Already nominated \3%s\1..."
+
+"\3%s\1 from voted for a timeout: \4%d\1 of \4%d\1 vote(s) to run timeout."
+en:"\3%s\1 from voted for a timeout: \4%d\1 of \4%d\1 vote(s) to run timeout."
+
+"Say \3.vote\1 for a timeout."
+en:"Say \3.vote\1 for a timeout."
+
+"Match will pause for \4%d\1 seconds on next round."
+en:"Match will pause for \4%d\1 seconds on next round."
+
+"You already voted for a timeout."
+en:"You already voted for a timeout."
+
+"The \3%s\1 team already paused the game."
+en:"The \3%s\1 team already paused the game."
+
+"Unable to vote to pause the match."
+en:"Unable to vote to pause the match."
+
+"\3%s\1 voted for surrender: \4%d\1 of \4%d\1 vote(s) to stop the match."
+en:"\3%s\1 voted for surrender: \4%d\1 of \4%d\1 vote(s) to stop the match."
+
+"Say \3.vote\1 to vote for stop the match."
+en:"Say \3.vote\1 to vote for stop the match."
+
+"Game Over! The \3%s\1 Surrendered!"
+en:"Game Over! The \3%s\1 Surrendered!"
+
+"You already voted to stop the match."
+en:"You already voted to stop the match."
+
