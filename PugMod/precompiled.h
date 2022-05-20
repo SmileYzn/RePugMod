@@ -3,6 +3,19 @@
 // Disable security function warnings (MSVC)
 #define _CRT_SECURE_NO_WARNINGS
 
+// If is not MSVC build
+#ifndef _WIN32
+#define _stricmp	strcasecmp
+#define _strnicmp	strncasecmp
+#define _strdup		strdup
+#define _unlink		unlink
+#define _vsnprintf	vsnprintf
+#define _write		write
+#define _close		close
+#define _access		access
+#define _vsnwprintf	vswprintf
+#endif
+
 // System Includes
 #include <string>
 #include <algorithm>
