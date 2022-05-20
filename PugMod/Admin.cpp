@@ -47,7 +47,7 @@ void CAdmin::Menu(CBasePlayer* Player)
 	{
 		auto EntityIndex = Player->entindex();
 
-		gMenu[EntityIndex].Create(_T("PUG Mod Menu:"), true, this->MenuHandle);
+		gMenu[EntityIndex].Create(_T("PUG Mod Menu:"), true, (void*)this->MenuHandle);
 
 		gMenu[EntityIndex].AddItem(0, _T("Kick Player"));
 		gMenu[EntityIndex].AddItem(1, _T("Slap Player"));
@@ -104,7 +104,7 @@ void CAdmin::MenuHandle(int EntityIndex, int ItemIndex, bool Disabled, const cha
 
 void CAdmin::MenuKick(int EntityIndex)
 {
-	gMenu[EntityIndex].Create(_T("Kick Player"), true, this->MenuKickHandle);
+	gMenu[EntityIndex].Create(_T("Kick Player"), true, (void*)this->MenuKickHandle);
 
 	CBasePlayer* Players[32] = { NULL };
 
@@ -145,7 +145,7 @@ void CAdmin::MenuKickHandle(int EntityIndex, int ItemIndex, bool Disabled, const
 
 void CAdmin::MenuSlap(int EntityIndex)
 {
-	gMenu[EntityIndex].Create(_T("Slap Player"), true, this->MenuSlapHandle);
+	gMenu[EntityIndex].Create(_T("Slap Player"), true, (void*)this->MenuSlapHandle);
 
 	CBasePlayer* Players[32] = { NULL };
 
@@ -186,7 +186,7 @@ void CAdmin::MenuSlapHandle(int EntityIndex, int ItemIndex, bool Disabled, const
 
 void CAdmin::MenuMap(int EntityIndex)
 {
-	gMenu[EntityIndex].Create(_T("Change Map"), true, this->MenuMapHandle);
+	gMenu[EntityIndex].Create(_T("Change Map"), true, (void*)this->MenuMapHandle);
 
 	gMenu[EntityIndex].AddList(gUtil.LoadMapList(VOTE_MAP_FILE, true));
 
@@ -207,7 +207,7 @@ void CAdmin::MenuMapHandle(int EntityIndex, int ItemIndex, bool Disabled, const 
 
 void CAdmin::MenuControl(int EntityIndex)
 {
-	gMenu[EntityIndex].Create(_T("Control Pug Mod"), true, gAdmin.MenuControlHandle);
+	gMenu[EntityIndex].Create(_T("Control Pug Mod"), true, (void*)gAdmin.MenuControlHandle);
 
 	int State = gPugMod.GetState();
 

@@ -31,7 +31,7 @@ void CVoteTeam::Init()
 		{
 			auto EntityIndex = Player->entindex();
 
-			gMenu[EntityIndex].Create(_T("Game Mode:"), false, this->MenuHandle);
+			gMenu[EntityIndex].Create(_T("Game Mode:"), false, (void*)this->MenuHandle);
 
 			gMenu[EntityIndex].AddList(this->m_Data);
 

@@ -85,7 +85,7 @@ void CKnifeRound::RoundRestart()
 							{
 								auto EntityIndex = Player->entindex();
 
-								gMenu[EntityIndex].Create(_T("Select Starting Side:"), false, this->MenuHandle);
+								gMenu[EntityIndex].Create(_T("Select Starting Side:"), false, (void*)this->MenuHandle);
 
 								gMenu[EntityIndex].AddItem(1, _T("Terrorists"));
 								gMenu[EntityIndex].AddItem(2, _T("Counter-Terrorists"));

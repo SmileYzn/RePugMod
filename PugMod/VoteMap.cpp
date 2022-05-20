@@ -26,7 +26,7 @@ void CVoteMap::Init()
 		{
 			auto EntityIndex = Player->entindex();
 
-			gMenu[EntityIndex].Create(_T("Vote Map:"), false, this->MenuHandle);
+			gMenu[EntityIndex].Create(_T("Vote Map:"), false, (void*)this->MenuHandle);
 
 			gMenu[EntityIndex].AddList(this->m_Data);
 

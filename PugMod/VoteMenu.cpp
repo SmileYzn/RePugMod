@@ -62,7 +62,7 @@ void CVoteMenu::Menu(CBasePlayer* Player)
 	{
 		auto EntityIndex = Player->entindex();
 
-		gMenu[EntityIndex].Create(_T("Vote Menu:"), true, this->MenuHandle);
+		gMenu[EntityIndex].Create(_T("Vote Menu:"), true, (void*)this->MenuHandle);
 
 		gMenu[EntityIndex].AddItem(0, _T("Vote Kick"));
 		gMenu[EntityIndex].AddItem(1, _T("Vote Map"), !this->m_MapList.size());
@@ -122,7 +122,7 @@ void CVoteMenu::VoteKick(CBasePlayer* Player)
 
 		if (Num >= NeedPlayers)
 		{
-			gMenu[PlayerIndex].Create(_T("Vote Kick"), true, this->VoteKickHandle);
+			gMenu[PlayerIndex].Create(_T("Vote Kick"), true, (void*)this->VoteKickHandle);
 
 			for (int i = 0; i < Num; i++)
 			{
@@ -223,7 +223,7 @@ void CVoteMenu::VoteMap(CBasePlayer* Player)
 		{
 			auto PlayerIndex = Player->entindex();
 
-			gMenu[PlayerIndex].Create(_T("Vote Map"), true, this->VoteMapHandle);
+			gMenu[PlayerIndex].Create(_T("Vote Map"), true, (void*)this->VoteMapHandle);
 
 			for (std::size_t MapIndex = 0; MapIndex < this->m_MapList.size(); MapIndex++)
 			{
