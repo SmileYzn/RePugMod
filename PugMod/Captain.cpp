@@ -213,7 +213,7 @@ void CCaptain::Menu(TeamName Team)
 
 			gMenu[EntityIndex].Show(EntityIndex);
 
-			gTask.Create(Team, 10.0f, false, this->GetRandomPlayer, (void*)EntityIndex);
+			gTask.Create(Team, 10.0f, false, (void*)this->GetRandomPlayer, (void*)EntityIndex);
 		}
 	}
 }
