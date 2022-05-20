@@ -5,7 +5,7 @@ class CCvars
 public:
 	void Load();
 
-	cvar_t* Register(char* Name, char* Value);
+	cvar_t* Register(const char* Name, const char* Value);
 
 	cvar_t* GetConfig(int State);
 	cvar_t* GetLanguage();

@@ -95,7 +95,7 @@ void CCvars::Load()
 	this->m_KnifeRoundEndType = this->Register("pug_knife_round_end_type", "0");
 }
 
-cvar_t* CCvars::Register(char* Name, char* Value)
+cvar_t* CCvars::Register(const char* Name, const char* Value)
 {
 	// Get Pointer by variable name
 	cvar_t* Pointer = CVAR_GET_POINTER(Name);
@@ -104,7 +104,7 @@ cvar_t* CCvars::Register(char* Name, char* Value)
 	if (Pointer == NULL)
 	{
 		// Make structure data
-		cvar_t Register = { Name, Value, FCVAR_SERVER | FCVAR_SPONLY };
+		cvar_t Register = { Name, (char*)Value, FCVAR_SERVER | FCVAR_SPONLY };
 
 		// Register the variable
 		CVAR_REGISTER(&Register);

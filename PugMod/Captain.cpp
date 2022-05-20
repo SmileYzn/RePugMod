@@ -41,7 +41,7 @@ void CCaptain::Init()
 
 		this->SetCaptain(gPlayer.GetRandom(SPECTATOR), CT);
 		
-		gTask.Create(PUG_TASK_LIST, 0.5f, true, this->List);
+		gTask.Create(PUG_TASK_LIST, 0.5f, true, (void*)this->List);
 
 		this->Menu((TeamName)RANDOM_LONG(TERRORIST, CT)); 
 	} 
