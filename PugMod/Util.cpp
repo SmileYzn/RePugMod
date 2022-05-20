@@ -4,7 +4,7 @@ CUtil gUtil;
 
 void CUtil::ServerPrint(const char* Format, ...)
 {
-	va_list argList = { 0 };
+	va_list argList;
 
 	va_start(argList, Format);
 
@@ -28,7 +28,7 @@ void CUtil::ServerPrint(const char* Format, ...)
 
 void CUtil::ServerCommand(const char* Format, ...)
 {
-	va_list argList = { 0 };
+	va_list argList;
 
 	va_start(argList, Format);
 
@@ -51,7 +51,7 @@ void CUtil::ServerCommand(const char* Format, ...)
 
 void CUtil::ClientPrint(edict_t* pEntity, int msg_dest, const char* Format, ...)
 {
-	va_list argList = { 0 };
+	va_list argList;
 
 	va_start(argList, Format);
 
@@ -99,7 +99,7 @@ void CUtil::SayText(edict_t* pEntity, int Sender, const char* Format, ...)
 
 	if (iMsgSayText || (iMsgSayText = GET_USER_MSG_ID(PLID, "SayText", NULL)))
 	{
-		va_list argList = { 0 };
+		va_list argList;
 
 		va_start(argList, Format);
 
@@ -194,7 +194,7 @@ hudtextparms_t CUtil::HudParam(int red, int green, int blue, float x, float y, i
 
 void CUtil::HudMessage(edict_t* pEntity, const hudtextparms_t &textparms, const char *Format, ...)
 {
-	va_list argList = { 0 };
+	va_list argList;
 
 	va_start(argList, Format);
 

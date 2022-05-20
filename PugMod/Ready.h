@@ -13,7 +13,7 @@ public:
 private:
 	bool m_Running = false;
 	int m_Ready[33] = { 0 };
-	time_t m_SystemTime = NULL;
+	time_t m_SystemTime = 0;
 };
 
 extern CReady gReady;
