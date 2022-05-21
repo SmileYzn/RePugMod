@@ -90,12 +90,12 @@ void CAdmin::MenuHandle(int EntityIndex, int ItemIndex, bool Disabled, const cha
 			}
 			case 4:
 			{
-				CLIENT_COMMAND(Player->edict(), "messagemode !msg\n");
+				gUtil.ClientCommand(Player->edict(), "messagemode !msg");
 				break;
 			}
 			case 5:
 			{
-				CLIENT_COMMAND(Player->edict(), "messagemode !rcon\n");
+				gUtil.ClientCommand(Player->edict(), "messagemode !rcon");
 				break;
 			}
 		}

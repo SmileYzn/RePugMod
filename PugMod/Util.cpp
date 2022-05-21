@@ -49,6 +49,32 @@ void CUtil::ServerCommand(const char* Format, ...)
 	SERVER_COMMAND(Buffer);
 }
 
+void CUtil::ClientCommand(edict_t* pEntity, const char* Format, ...)
+{
+	if (pEntity)
+	{
+		va_list argList;
+
+		va_start(argList, Format);
+
+		char Buffer[255] = { 0 };
+
+		int Length = vsnprintf(Buffer, sizeof(Buffer), Format, argList);
+
+		va_end(argList);
+
+		if (Length > 254)
+		{
+			Length = 254;
+		}
+
+		Buffer[Length++] = '\n';
+		Buffer[Length] = 0;
+
+		CLIENT_COMMAND(pEntity, Buffer);
+	}
+}
+
 void CUtil::ClientPrint(edict_t* pEntity, int msg_dest, const char* Format, ...)
 {
 	va_list argList;
@@ -158,7 +184,7 @@ void CUtil::SayText(edict_t* pEntity, int Sender, const char* Format, ...)
 	}
 }
 
-char* CUtil::VarArgs(char *format, ...)
+char* CUtil::VarArgs(const char *format, ...)
 {
 	va_list argptr;
 

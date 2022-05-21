@@ -5,16 +5,6 @@
 
 // If is not MSVC build
 #ifndef _WIN32
-#define REGAMEDLL_FIXES
-#define REGAMEDLL_API
-#define REGAMEDLL_ADD
-#define UNICODE_FIXES
-#define BUILD_LATEST
-#define CLIENT_WEAPONS
-#define USE_QSTRING
-#define _LINUX
-#define LINUX
-#define NDEBUG
 #define _GLIBCXX_USE_CXX11_ABI		0
 #define _stricmp					strcasecmp
 #define _strnicmp					strncasecmp

@@ -19,7 +19,7 @@ int CPlayer::GetList(CBasePlayer* Players[32])
 {
 	int Num = 0;
 
-	memset(Players, NULL, sizeof(Players));
+	memset(Players, NULL, 32);
 
 	for (int i = 1; i <= gpGlobals->maxClients; ++i)
 	{
@@ -47,7 +47,7 @@ int CPlayer::GetList(CBasePlayer* Players[32], TeamName Team)
 {
 	int Num = 0;
 
-	memset(Players, NULL, sizeof(Players));
+	memset(Players, NULL, 32);
 
 	for (int i = 1; i <= gpGlobals->maxClients; ++i)
 	{
