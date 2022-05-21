@@ -6,11 +6,11 @@ void CTranslate::Load()
 {
 	this->m_Data.clear();
 
-	std::ifstream File(TRANSLATE_FILE, std::ifstream::in|std::ifstream::skipws);
+	std::ifstream File(TRANSLATE_FILE, std::ifstream::in);
 
 	std::string Line, CurrentKey;
 
-	char* Language = "en";
+	std::string Language = "en";
 
 	if (gCvars.GetLanguage()->string)
 	{
@@ -27,7 +27,7 @@ void CTranslate::Load()
 
 				CurrentKey = Line;
 			}
-			else if (Line.rfind(Language, 0) == 0)
+			else if (Line.rfind(Language.c_str(), 0) == 0)
 			{
 				Line.erase(0, 3);
 
