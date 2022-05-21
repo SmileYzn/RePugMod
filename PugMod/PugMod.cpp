@@ -459,13 +459,13 @@ void CPugMod::Help(CBasePlayer * Player,bool AdminHelp)
 {
 	if (!AdminHelp)
 	{
-		gUtil.ShowMotd(Player->edict(), HELP_FILE_PLAYER, strlen(HELP_FILE_PLAYER));
+		gUtil.ShowMotd(Player->edict(), gCvars.GetHelpFilePlayer()->string, strlen(gCvars.GetHelpFilePlayer()->string));
 	}
 	else
 	{
 		if (gAdmin.Check(Player))
 		{
-			gUtil.ShowMotd(Player->edict(), HELP_FILE_ADMIN, strlen(HELP_FILE_ADMIN));
+			gUtil.ShowMotd(Player->edict(), gCvars.GetHelpFileAdmin()->string, strlen(gCvars.GetHelpFileAdmin()->string));
 		}
 	}
 }
@@ -611,7 +611,7 @@ bool CPugMod::ClientCommand(CBasePlayer * Player, const char * pcmd, const char 
 		{
 			if (CMD_ARGS())
 			{
-				CLIENT_COMMAND(Player->edict(), "%s\n", CMD_ARGS());
+				gUtil.ClientCommand(Player->edict(), "%s", CMD_ARGS());
 				return true;
 			}
 		}

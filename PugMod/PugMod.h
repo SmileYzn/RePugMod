@@ -1,8 +1,5 @@
 #pragma once
 
-#define HELP_FILE_PLAYER "cstrike/addons/pugmod/help_player.htm"
-#define HELP_FILE_ADMIN "cstrike/addons/pugmod/help_admin.htm"
-
 enum PUG_MOD_STATES_NUM
 {
 	PUG_STATE_DEAD			= 0,

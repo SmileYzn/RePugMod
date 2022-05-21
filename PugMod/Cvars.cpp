@@ -93,6 +93,12 @@ void CCvars::Load()
 
 	// Knife Round End Type (0 Continue match if no clear winner, 1 restart Knife Round)
 	this->m_KnifeRoundEndType = this->Register("pug_knife_round_end_type", "0");
+
+	// Admin help MOTD page (File path or website URL)
+	this->m_HelpFileAdmin = this->Register("pug_help_admin", "cstrike/addons/pugmod/help_admin.htm");
+
+	// Player help MOTD page (File path or website URL)
+	this->m_HelpFilePlayer = this->Register("pug_help_player", "cstrike/addons/pugmod/help_player.htm");
 }
 
 cvar_t* CCvars::Register(const char* Name, const char* Value)
@@ -230,4 +236,14 @@ cvar_t * CCvars::GetReconnectDelay()
 cvar_t* CCvars::GetKnifeRoundEndType()
 {
 	return this->m_KnifeRoundEndType;
+}
+
+cvar_t* CCvars::GetHelpFileAdmin()
+{
+	return this->m_HelpFileAdmin;
+}
+
+cvar_t* CCvars::GetHelpFilePlayer()
+{
+	return this->m_HelpFilePlayer;
 }
