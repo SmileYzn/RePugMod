@@ -15,11 +15,11 @@ void CPlayer::TeamInfo(edict_t* pEntity, int playerIndex, const char *pszTeamNam
 	}
 }
 
-int CPlayer::GetList(CBasePlayer* Players[32])
+int CPlayer::GetList(CBasePlayer* Players[MAX_CLIENTS])
 {
 	int Num = 0;
 
-	memset(Players, 0, 32);
+	memset(Players, 0, MAX_CLIENTS);
 
 	for (int i = 1; i <= gpGlobals->maxClients; ++i)
 	{
@@ -43,11 +43,11 @@ int CPlayer::GetList(CBasePlayer* Players[32])
 	return Num;
 }
 
-int CPlayer::GetList(CBasePlayer* Players[32], TeamName Team)
+int CPlayer::GetList(CBasePlayer* Players[MAX_CLIENTS], TeamName Team)
 {
 	int Num = 0;
 
-	memset(Players, 0, 32);
+	memset(Players, 0, MAX_CLIENTS);
 
 	for (int i = 1; i <= gpGlobals->maxClients; ++i)
 	{
@@ -168,7 +168,7 @@ CBasePlayer* CPlayer::GetRandom(TeamName Team)
 {
 	int Num = 0;
 
-	CBasePlayer* Players[32] = { NULL };
+	CBasePlayer* Players[MAX_CLIENTS] = { NULL };
 
 	if (Team != UNASSIGNED)
 	{

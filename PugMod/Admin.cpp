@@ -106,7 +106,7 @@ void CAdmin::MenuKick(int EntityIndex)
 {
 	gMenu[EntityIndex].Create(_T("Kick Player"), true, (void*)this->MenuKickHandle);
 
-	CBasePlayer* Players[32] = { NULL };
+	CBasePlayer* Players[MAX_CLIENTS] = { NULL };
 
 	auto Num = gPlayer.GetList(Players);
 
@@ -147,7 +147,7 @@ void CAdmin::MenuSlap(int EntityIndex)
 {
 	gMenu[EntityIndex].Create(_T("Slap Player"), true, (void*)this->MenuSlapHandle);
 
-	CBasePlayer* Players[32] = { NULL };
+	CBasePlayer* Players[MAX_CLIENTS] = { NULL };
 
 	auto Num = gPlayer.GetList(Players);
 

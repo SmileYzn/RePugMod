@@ -39,7 +39,7 @@ void CStats::RoundEnd(int winStatus, ScenarioEventEndRound event, float tmDelay)
 		{
 			if (gPugMod.GetState() == PUG_STATE_FIRST_HALF || gPugMod.GetState() == PUG_STATE_SECOND_HALF || gPugMod.GetState() == PUG_STATE_OVERTIME)
 			{
-				CBasePlayer* Players[32] = { NULL };
+				CBasePlayer* Players[MAX_CLIENTS] = { NULL };
 
 				auto Num = gPlayer.GetList(Players);
 
@@ -129,7 +129,7 @@ bool CStats::HP(CBasePlayer* Player)
 				{
 					auto StatsCount = 0;
 
-					CBasePlayer* Players[32] = { NULL };
+					CBasePlayer* Players[MAX_CLIENTS] = { NULL };
 
 					auto Num = gPlayer.GetList(Players);
 
@@ -189,7 +189,7 @@ bool CStats::Damage(CBasePlayer * Player)
 
 					auto PlayerIndex = Player->entindex();
 
-					CBasePlayer* Players[32] = { NULL };
+					CBasePlayer* Players[MAX_CLIENTS] = { NULL };
 
 					auto Num = gPlayer.GetList(Players);
 
@@ -243,7 +243,7 @@ bool CStats::Received(CBasePlayer * Player)
 
 					auto PlayerIndex = Player->entindex();
 
-					CBasePlayer* Players[32] = { NULL };
+					CBasePlayer* Players[MAX_CLIENTS] = { NULL };
 
 					auto Num = gPlayer.GetList(Players);
 
@@ -297,7 +297,7 @@ bool CStats::Summary(CBasePlayer* Player)
 
 					auto PlayerIndex = Player->entindex();
 
-					CBasePlayer* Players[32] = { NULL };
+					CBasePlayer* Players[MAX_CLIENTS] = { NULL };
 
 					auto Num = gPlayer.GetList(Players);
 

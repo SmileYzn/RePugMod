@@ -19,7 +19,7 @@ void CVoteTeam::Init()
 {
 	this->m_Vote.clear();
 
-	CBasePlayer* Players[32] = { NULL };
+	CBasePlayer* Players[MAX_CLIENTS] = { NULL };
 
 	auto Num = gPlayer.GetList(Players);
 
@@ -202,7 +202,7 @@ void CVoteTeam::SetMode(int GameMode)
 void CVoteTeam::TeamsRandomize()
 {
 	// Entity Array
-	CBasePlayer* Players[32] = { NULL };
+	CBasePlayer* Players[MAX_CLIENTS] = { NULL };
 
 	// Get players that are joined in TR or CT
 	auto Num = gPlayer.GetList(Players);
@@ -247,7 +247,7 @@ void CVoteTeam::TeamsRandomize()
 void CVoteTeam::TeamsOptimize()
 {
 	// Entity Array
-	CBasePlayer* Players[32] = { NULL };
+	CBasePlayer* Players[MAX_CLIENTS] = { NULL };
 
 	// Skills Array
 	std::array<float, 32> Skills = { 0 };

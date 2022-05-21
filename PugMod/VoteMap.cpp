@@ -14,7 +14,7 @@ void CVoteMap::Init()
 
 	this->m_Data = gUtil.LoadMapList(VOTE_MAP_FILE, gCvars.GetVoteMapSelf()->value ? true : false);
 	
-	CBasePlayer* Players[32] = { NULL };
+	CBasePlayer* Players[MAX_CLIENTS] = { NULL };
 
 	auto Num = gPlayer.GetList(Players);
 

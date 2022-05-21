@@ -92,7 +92,7 @@ void CPugMod::SetState(int State)
 			{
 				if ((int)gCvars.GetShowScoreType()->value == 2)
 				{
-					CBasePlayer* Players[32] = { NULL };
+					CBasePlayer* Players[MAX_CLIENTS] = { NULL };
 
 					auto Num = gPlayer.GetList(Players);
 
@@ -908,7 +908,7 @@ void CPugMod::RoundRestart()
 
 					if (gCvars.GetShowScoreType()->value == 2)
 					{
-						CBasePlayer* Players[32] = { nullptr };
+						CBasePlayer* Players[MAX_CLIENTS] = { nullptr };
 
 						auto Num = gPlayer.GetList(Players);
 

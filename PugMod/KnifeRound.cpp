@@ -71,7 +71,7 @@ void CKnifeRound::RoundRestart()
 			{
 				if (this->m_Winner != UNASSIGNED)
 				{
-					CBasePlayer* Players[32] = { NULL };
+					CBasePlayer* Players[MAX_CLIENTS] = { NULL };
 
 					int Num = gPlayer.GetList(Players, this->m_Winner);
 

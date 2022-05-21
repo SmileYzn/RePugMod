@@ -112,7 +112,7 @@ void CVoteMenu::VoteKick(CBasePlayer* Player)
 {
 	if (this->CheckMenu(Player))
 	{
-		CBasePlayer* Players[32] = { NULL };
+		CBasePlayer* Players[MAX_CLIENTS] = { NULL };
 
 		auto Num = gPlayer.GetList(Players,Player->m_iTeam);
 

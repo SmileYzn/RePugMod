@@ -5,8 +5,8 @@ class CPlayer
 public:
 	void TeamInfo(edict_t* pEntity, int playerIndex, const char *pszTeamName);
 
-	int GetList(CBasePlayer* pPlayers[32]);
-	int GetList(CBasePlayer* pPlayers[32], TeamName Team);
+	int GetList(CBasePlayer* pPlayers[MAX_CLIENTS]);
+	int GetList(CBasePlayer* pPlayers[MAX_CLIENTS], TeamName Team);
 
 	int GetNum(bool CountBots, int &InGame, int &NumTerrorist, int &NumCT, int &NumSpectator);
 	int GetNum();

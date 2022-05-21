@@ -20,7 +20,7 @@ void CCaptain::Init()
 
 	if (gPlayer.GetNum() >= (int)(gCvars.GetPlayersMin()->value / 2))
 	{
-		CBasePlayer* Players[32] = { NULL };
+		CBasePlayer* Players[MAX_CLIENTS] = { NULL };
 
 		auto Num = gPlayer.GetList(Players);
 
@@ -202,7 +202,7 @@ void CCaptain::Menu(TeamName Team)
 
 			gMenu[EntityIndex].Create(PUG_MOD_TEAM_STR[SPECTATOR], false, (void*)this->MenuHandle);
 
-			CBasePlayer* Players[32] = { NULL };
+			CBasePlayer* Players[MAX_CLIENTS] = { NULL };
 
 			auto Num = gPlayer.GetList(Players, SPECTATOR);
 
