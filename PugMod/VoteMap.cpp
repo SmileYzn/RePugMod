@@ -77,7 +77,7 @@ void CVoteMap::Stop()
 	}
 	else 
 	{
-		gTask.Create(PUG_TASK_EXEC, 5.0f, false, gVoteMap.Changelevel, (void*)gVoteMap.GetItem(Winner));
+		gTask.Create(PUG_TASK_EXEC, 5.0f, false, SERVER_COMMAND, gUtil.VarArgs("changelevel %s\n", gVoteMap.GetItem(Winner)));
 
 		gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("Changing map to \4%s\1..."), gVoteMap.GetItem(Winner));
 	}
@@ -155,7 +155,7 @@ int CVoteMap::RandomMap(bool Change)
 
 	if (Change)
 	{
-		gTask.Create(PUG_TASK_EXEC, 5.0f, false, this->Changelevel, (void*)this->m_Data[Random].c_str());
+		gTask.Create(PUG_TASK_EXEC, 5.0f, false, SERVER_COMMAND, gUtil.VarArgs("changelevel %s\n", this->m_Data[Random].c_str()));
 
 		gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("Changing map to \4%s\1..."), this->m_Data[Random].c_str());
 	}

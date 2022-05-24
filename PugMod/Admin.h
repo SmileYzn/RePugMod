@@ -20,7 +20,6 @@ public:
 
 	void MenuMap(int EntityIndex);
 	static void MenuMapHandle(int EntityIndex, int ItemIndex, bool Disabled, const char* Option);
-	static void Changelevel(char* MapName);
 
 	void MenuControl(int EntityIndex);
 	static void MenuControlHandle(int EntityIndex, int ItemIndex, bool Disabled, const char* Option);

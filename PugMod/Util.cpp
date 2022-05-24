@@ -10,7 +10,7 @@ char* CUtil::VarArgs(const char* Format, ...)
 
 	va_start(argList, Format);
 
-	vsprintf(VarArgs, Format, argList);
+	vsnprintf(VarArgs, sizeof(VarArgs), Format, argList);
 
 	va_end(argList);
 
