@@ -101,9 +101,9 @@ void CKnifeRound::RoundRestart()
 						}
 					}
 
-					gTask.Create(PUG_TASK_VOTE, gCvars.GetVoteDelay()->value, false, (void*)this->VoteEnd);
+					gTask.Create(PUG_TASK_VOTE, gCvars.GetVoteDelay()->value, false, this->VoteEnd);
 
-					gTask.Create(PUG_TASK_LIST, 0.5f, true, (void*)this->List, this);
+					gTask.Create(PUG_TASK_LIST, 0.5f, true, this->List, this);
 				}
 			}
 		}

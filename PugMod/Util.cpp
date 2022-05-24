@@ -49,6 +49,14 @@ void CUtil::ServerCommand(const char* Format, ...)
 	SERVER_COMMAND(Buffer);
 }
 
+void CUtil::ServerChangeLevel(const char* MapName)
+{
+	if (MapName)
+	{
+		CHANGE_LEVEL(MapName, nullptr);
+	}
+}
+
 void CUtil::ClientCommand(edict_t* pEntity, const char* Format, ...)
 {
 	if (pEntity)
@@ -182,21 +190,6 @@ void CUtil::SayText(edict_t* pEntity, int Sender, const char* Format, ...)
 			}
 		}
 	}
-}
-
-char* CUtil::VarArgs(const char *format, ...)
-{
-	va_list argptr;
-
-	static char VarArgs[1024] = { 0 };
-
-	va_start(argptr, format);
-
-	vsprintf(VarArgs, format, argptr);
-
-	va_end(argptr);
-
-	return VarArgs; 
 }
 
 hudtextparms_t CUtil::HudParam(int red, int green, int blue, float x, float y, int effects, float fxtime, float holdtime, float fadeintime, float fadeouttime, int channel)

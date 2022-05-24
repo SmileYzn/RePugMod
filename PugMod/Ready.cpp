@@ -10,7 +10,7 @@ void CReady::Load()
 
 	this->m_Running = true;
 
-	gTask.Create(PUG_TASK_LIST, 0.5f, true, (void*)this->List, this);
+	gTask.Create(PUG_TASK_LIST, 0.5f, true, this->List, this);
 
 	if (gCvars.GetReadyType()->value)
 	{

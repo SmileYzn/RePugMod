@@ -41,9 +41,9 @@ void CVoteTeam::Init()
 
 	gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("Select teams started."));
 
-	gTask.Create(PUG_TASK_VOTE, gCvars.GetVoteDelay()->value, false, (void*)this->Stop);
+	gTask.Create(PUG_TASK_VOTE, gCvars.GetVoteDelay()->value, false, this->Stop);
 
-	gTask.Create(PUG_TASK_LIST, 0.5f, true, (void*)this->List, this);
+	gTask.Create(PUG_TASK_LIST, 0.5f, true, this->List, this);
 }
 
 void CVoteTeam::MenuHandle(int EntityIndex, int ItemIndex, bool Disabled, const char* Option)
