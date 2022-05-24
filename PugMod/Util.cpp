@@ -72,11 +72,11 @@ void CUtil::ServerCommand(const char* Format, ...)
 	SERVER_COMMAND(Buffer);
 }
 
-void CUtil::ServerChangelevel(const char* MapName)
+void CUtil::ServerCommandStatic(char* Command)
 {
-	if (MapName)
+	if (Command)
 	{
-		SERVER_COMMAND(gUtil.VarArgs("changelevel %s", MapName));
+		SERVER_COMMAND(Command);
 	}
 }
 

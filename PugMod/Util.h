@@ -23,7 +23,7 @@ public:
 	char* VarArgs(char* Format, ...);
 	void ServerPrint(const char* Format, ...);
 	void ServerCommand(const char* Format, ...);
-	static void ServerChangelevel(const char* MapName);
+	static void ServerCommandStatic(char* Command);
 	void ClientCommand(edict_t* pEntity, const char* Format, ...);
 	void ClientPrint(edict_t* pEntity, int msg_dest, const char* Format, ...);
 	void SayText(edict_t* pEntity, int Sender, const char* Format, ...);

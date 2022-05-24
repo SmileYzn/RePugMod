@@ -273,7 +273,7 @@ void CVoteMenu::VoteMapPickup(CBasePlayer* Player, int MapIndex, bool Disabled)
 		}
 		else
 		{
-			gTask.Create(PUG_TASK_EXEC, 5.0f, false, gUtil.ServerChangelevel, (char*)this->m_MapList[MapIndex].c_str());
+			gTask.Create(PUG_TASK_EXEC, 5.0f, false, gUtil.ServerCommandStatic, gUtil.VarArgs("changelevel %s", this->m_MapList[MapIndex].c_str()));
 
 			gUtil.SayText(NULL, PlayerIndex, _T("Changing map to \4%s\1..."), this->m_MapList[MapIndex].c_str());
 		}
