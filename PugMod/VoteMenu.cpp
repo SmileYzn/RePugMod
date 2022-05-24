@@ -126,17 +126,17 @@ void CVoteMenu::VoteKick(CBasePlayer* Player)
 
 			for (int i = 0; i < Num; i++)
 			{
-				auto Player = Players[i];
+				auto Target = Players[i];
 
-				if (Player)
+				if (Target)
 				{
-					auto TargetIndex = Player->entindex();
+					auto TargetIndex = Target->entindex();
 
 					if (PlayerIndex != TargetIndex)
 					{
-						if (!gAdmin.Check(Player))
+						if (!gAdmin.Check(Target))
 						{
-							gMenu[PlayerIndex].AddItem(TargetIndex, STRING(Player->edict()->v.netname), this->m_VoteKick[PlayerIndex][TargetIndex]);
+							gMenu[PlayerIndex].AddItem(TargetIndex, STRING(Target->edict()->v.netname), this->m_VoteKick[PlayerIndex][TargetIndex]);
 						}
 					}
 				}

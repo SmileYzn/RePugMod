@@ -277,24 +277,18 @@ void CCaptain::List()
 					{
 						if (gCaptain.GetCaptain(Player->entindex()) != UNASSIGNED)
 						{
-							snprintf
-							(
-								szList[Player->m_iTeam],
-								sizeof(szList[Player->m_iTeam]),
-								gCaptain.GetPicking(Player->entindex()) ? _T("%s%s (C) *\n") : _T("%s%s (C)\n"),
-								szList[Player->m_iTeam],
-								STRING(Player->edict()->v.netname)
-							);
+							if (gCaptain.GetPicking(Player->entindex()))
+							{
+								snprintf(szList[Player->m_iTeam],sizeof(szList[Player->m_iTeam]),_T("%s%s (C) *\n"),szList[Player->m_iTeam],STRING(Player->edict()->v.netname));
+							}
+							else
+							{
+								snprintf(szList[Player->m_iTeam], sizeof(szList[Player->m_iTeam]), _T("%s%s (C)\n"), szList[Player->m_iTeam], STRING(Player->edict()->v.netname));
+							}
 						}
 						else
 						{
-							snprintf
-							(
-								szList[Player->m_iTeam],
-								sizeof(szList[Player->m_iTeam]),
-								"%s%s\n", szList[Player->m_iTeam],
-								STRING(Player->edict()->v.netname)
-							);
+							snprintf(szList[Player->m_iTeam],sizeof(szList[Player->m_iTeam]),"%s%s\n", szList[Player->m_iTeam],STRING(Player->edict()->v.netname));
 						}
 
 						Count[Player->m_iTeam]++;

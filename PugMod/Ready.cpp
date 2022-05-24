@@ -101,7 +101,7 @@ void CReady::List(CReady* Ready)
 	{
 		int Needed = ((int)gCvars.GetPlayersMin()->value - gPlayer.GetNum());
 
-		if (Needed > 0)
+		if (Needed)
 		{
 			Ready->m_SystemTime = time(NULL);
 
