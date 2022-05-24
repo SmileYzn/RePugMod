@@ -2,6 +2,21 @@
 
 CUtil gUtil;
 
+char* CUtil::VarArgs(const char* Format, ...)
+{
+	va_list argList;
+
+	va_start(argList, Format);
+
+	static char VarArgs[255];
+
+	int Length = vsnprintf(VarArgs, sizeof(VarArgs), Format, argList);
+
+	va_end(argList);
+
+	return VarArgs;
+}
+
 void CUtil::ServerPrint(const char* Format, ...)
 {
 	va_list argList;
@@ -47,36 +62,6 @@ void CUtil::ServerCommand(const char* Format, ...)
 	Buffer[Length] = 0;
 
 	SERVER_COMMAND(Buffer);
-}
-
-void CUtil::ServerCommand(float Delay, const char* Format, ...)
-{
-	va_list argList;
-
-	va_start(argList, Format);
-
-	static char Buffer[255] = { 0 };
-
-	int Length = vsnprintf(Buffer, sizeof(Buffer), Format, argList);
-
-	va_end(argList);
-
-	if (Length > 254)
-	{
-		Length = 254;
-	}
-
-	Buffer[Length++] = '\n';
-	Buffer[Length] = 0;
-
-	if (Delay > 0)
-	{
-		gTask.Create(PUG_TASK_EXEC, Delay, false, SERVER_COMMAND, Buffer);
-	}
-	else
-	{
-		SERVER_COMMAND(Buffer);
-	}
 }
 
 void CUtil::ClientCommand(edict_t* pEntity, const char* Format, ...)
