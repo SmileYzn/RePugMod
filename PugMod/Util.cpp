@@ -14,6 +14,14 @@ char* CUtil::VarArgs(const char* Format, ...)
 
 	va_end(argList);
 
+	if (Length > 254)
+	{
+		Length = 254;
+	}
+
+	VarArgs[Length++] = '\n';
+	VarArgs[Length] = 0;
+
 	return VarArgs;
 }
 
