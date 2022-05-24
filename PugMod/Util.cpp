@@ -2,25 +2,17 @@
 
 CUtil gUtil;
 
-char* CUtil::VarArgs(char* Format, ...)
+char* CUtil::VarArgs(const char* Format, ...)
 {
 	va_list argList;
 
-	static char VarArgs[255];
+	static char VarArgs[1024];
 
 	va_start(argList, Format);
 
-	int Length = vsnprintf(VarArgs, sizeof(VarArgs), Format, argList);
+	vsprintf(VarArgs, Format, argList);
 
 	va_end(argList);
-
-	if (Length > 254)
-	{
-		Length = 254;
-	}
-
-	VarArgs[Length++] = '\n';
-	VarArgs[Length] = 0;
 
 	return VarArgs;
 }

@@ -20,7 +20,7 @@ enum UTIL_SAY_TEXT_COLOR
 class CUtil
 {
 public:
-	char* VarArgs(char* Format, ...);
+	char* VarArgs(const char* Format, ...);
 	void ServerPrint(const char* Format, ...);
 	void ServerCommand(const char* Format, ...);
 	static void ServerCommandStatic(char* Command);
