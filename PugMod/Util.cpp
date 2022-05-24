@@ -2,13 +2,13 @@
 
 CUtil gUtil;
 
-char* CUtil::VarArgs(const char* Format, ...)
+char* CUtil::VarArgs(char* Format, ...)
 {
 	va_list argList;
 
-	va_start(argList, Format);
-
 	static char VarArgs[255];
+
+	va_start(argList, Format);
 
 	int Length = vsnprintf(VarArgs, sizeof(VarArgs), Format, argList);
 
@@ -70,6 +70,14 @@ void CUtil::ServerCommand(const char* Format, ...)
 	Buffer[Length] = 0;
 
 	SERVER_COMMAND(Buffer);
+}
+
+void CUtil::ServerChangelevel(const char* MapName)
+{
+	if (MapName)
+	{
+		SERVER_COMMAND(gUtil.VarArgs("changelevel %s", MapName));
+	}
 }
 
 void CUtil::ClientCommand(edict_t* pEntity, const char* Format, ...)
