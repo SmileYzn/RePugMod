@@ -63,20 +63,13 @@ float CTask::Timeleft(int Index)
 
 void CTask::Think()
 {
-	for (auto& it : this->m_Data)
-	{
-		if (gpGlobals->time >= it.second.EndTime)
-		{
-			P_TASK_INFO Task = it.second;
+	P_TASK_INFO Task = { 0 };
 
-			if (it.second.Loop)
-			{
-				it.second.EndTime += it.second.Time;
-			}
-			else
-			{
-				this->m_Data.erase(it.first);
-			}
+	for (std::map<int, P_TASK_INFO>::iterator it = this->m_Data.begin();it != this->m_Data.end();)
+	{
+		if (gpGlobals->time >= it->second.EndTime)
+		{
+			Task = it->second;
 
 			if (Task.FunctionParameter != nullptr)
 			{
@@ -86,6 +79,21 @@ void CTask::Think()
 			{
 				((void(*)())Task.FunctionCallback)();
 			}
+
+			if (it->second.Loop)
+			{
+				it->second.EndTime += it->second.Time;
+
+				it++;
+			}
+			else
+			{
+				it = this->m_Data.erase(it);
+			}
+		}
+		else
+		{
+			it++;
 		}
 	}
 }
