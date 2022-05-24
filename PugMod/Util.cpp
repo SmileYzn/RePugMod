@@ -49,11 +49,33 @@ void CUtil::ServerCommand(const char* Format, ...)
 	SERVER_COMMAND(Buffer);
 }
 
-void CUtil::ServerChangeLevel(const char* MapName)
+void CUtil::ServerCommand(float Delay, const char* Format, ...)
 {
-	if (MapName)
+	va_list argList;
+
+	va_start(argList, Format);
+
+	static char Buffer[255] = { 0 };
+
+	int Length = vsnprintf(Buffer, sizeof(Buffer), Format, argList);
+
+	va_end(argList);
+
+	if (Length > 254)
 	{
-		CHANGE_LEVEL(MapName, nullptr);
+		Length = 254;
+	}
+
+	Buffer[Length++] = '\n';
+	Buffer[Length] = 0;
+
+	if (Delay > 0)
+	{
+		gTask.Create(PUG_TASK_EXEC, Delay, false, SERVER_COMMAND, Buffer);
+	}
+	else
+	{
+		SERVER_COMMAND(Buffer);
 	}
 }
 

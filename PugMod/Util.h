@@ -22,7 +22,7 @@ class CUtil
 public:
 	void ServerPrint(const char* Format, ...);
 	void ServerCommand(const char* Format, ...);
-	static void ServerChangeLevel(const char* MapName);
+	void ServerCommand(float Delay,const char* Format, ...);
 	void ClientCommand(edict_t* pEntity, const char* Format, ...);
 	void ClientPrint(edict_t* pEntity, int msg_dest, const char* Format, ...);
 	void SayText(edict_t* pEntity, int Sender, const char* Format, ...);

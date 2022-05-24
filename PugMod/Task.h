@@ -13,8 +13,8 @@ typedef struct
 	float EndTime;
 	bool  Loop;
 	void* FunctionCallback;
-	void*  FunctionParameter;
-} P_TASK_INFO, *LP_TASK_INFO;
+	void* FunctionParameter;
+} P_TASK_INFO, * LP_TASK_INFO;
 
 class CTask
 {
