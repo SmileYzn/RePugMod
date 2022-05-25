@@ -200,7 +200,7 @@ void CCaptain::Menu(TeamName Team)
 		{
 			auto EntityIndex = Player->entindex();
 
-			gMenu[EntityIndex].Create(PUG_MOD_TEAM_STR[SPECTATOR], false, this->MenuHandle);
+			gMenu[EntityIndex].Create(PUG_MOD_TEAM_STR[SPECTATOR], false, (void*)this->MenuHandle);
 
 			CBasePlayer* Players[MAX_CLIENTS] = { NULL };
 
