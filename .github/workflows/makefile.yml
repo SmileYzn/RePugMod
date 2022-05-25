@@ -1,0 +1,25 @@
+name: Makefile CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+      
+    - name: Install build dependencies
+      run: sudo apt-get install -qq -y build-essential g++ gcc-multilib g++-multilib cppcheckmake check
+      
+    - name: Open PugMod Directory
+      run: cd PugMod
+      
+    - name: Run build
+      run: make
+    
