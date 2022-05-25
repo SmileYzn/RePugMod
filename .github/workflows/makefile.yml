@@ -18,7 +18,7 @@ jobs:
       run: sudo apt-get install -qq -y build-essential g++ gcc-multilib g++-multilib
       
     - name: Open PugMod Directory
-      run: cd PugMod
+      run: ls
       
     - name: Run build
       run: make
