@@ -94,6 +94,9 @@ void CCvars::Load()
 	// Anti Reconnect time in seconds (0 Disable)
 	this->m_ReconnectDelay = this->Register("pug_reconnect_delay", "15.0");
 
+	// Time to ban a player after try to drop or reconnect from a live game (0 Disable, time in minutes)
+	this->m_ReconnectBanTime = this->Register("pug_reconnect_ban_time", "0");
+
 	// Knife Round End Type (0 Continue match if no clear winner, 1 restart Knife Round)
 	this->m_KnifeRoundEndType = this->Register("pug_knife_round_end_type", "0");
 
@@ -239,6 +242,11 @@ cvar_t* CCvars::GetStatsRoundEnd()
 cvar_t * CCvars::GetReconnectDelay()
 {
 	return this->m_ReconnectDelay;
+}
+
+cvar_t* CCvars::GetReconnectBanTime()
+{
+	return m_ReconnectBanTime;
 }
 
 cvar_t* CCvars::GetKnifeRoundEndType()

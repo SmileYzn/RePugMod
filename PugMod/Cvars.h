@@ -30,6 +30,7 @@ public:
 	cvar_t* GetFloodTime();
 	cvar_t* GetStatsRoundEnd();
 	cvar_t* GetReconnectDelay();
+	cvar_t* GetReconnectBanTime();
 	cvar_t* GetKnifeRoundEndType();
 	cvar_t* GetHelpFileAdmin();
 	cvar_t* GetHelpFilePlayer();
@@ -58,6 +59,7 @@ private:
 	cvar_t* m_FloodTime;
 	cvar_t* m_StatsRoundEnd;
 	cvar_t* m_ReconnectDelay;
+	cvar_t* m_ReconnectBanTime;
 	cvar_t* m_KnifeRoundEndType;
 	cvar_t* m_HelpFileAdmin;
 	cvar_t* m_HelpFilePlayer;
