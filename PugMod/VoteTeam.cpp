@@ -87,19 +87,23 @@ void CVoteTeam::Stop()
 
 void CVoteTeam::List(CVoteTeam* VoteTeam)
 {
-	char VoteList[511] = { 0 };
+	std::string VoteList;
 
-	for (std::size_t MapIndex = 0; MapIndex < VoteTeam->m_Data.size(); MapIndex++)
+	for (std::size_t VoteIndex = 0; VoteIndex < VoteTeam->m_Data.size(); VoteIndex++)
 	{
-		if (VoteTeam->m_Vote[MapIndex])
+		if (VoteTeam->m_Vote[VoteIndex])
 		{
-			snprintf(VoteList, sizeof(VoteList), "%s%s [%d]\n", VoteList, VoteTeam->m_Data[MapIndex].c_str(), VoteTeam->m_Vote[MapIndex]);
+			char Line[128] = { 0 };
+
+			snprintf(Line, sizeof(Line), "%s [%d]\n", VoteTeam->m_Data[VoteIndex].c_str(), VoteTeam->m_Vote[VoteIndex]);
+
+			VoteList.append(Line);
 		}
 	}
 
 	gUtil.HudMessage(NULL, gUtil.HudParam(0, 255, 0, 0.23, 0.02, 0, 0.0, 0.53, 0.0, 0.0, 1), _T("Game Mode (%d):"),(int)gTask.Timeleft(PUG_TASK_VOTE));
 
-	gUtil.HudMessage(NULL, gUtil.HudParam(255, 255, 225, 0.23, 0.02, 0, 0.0, 0.53, 0.0, 0.0, 2), "\n%s", strlen(VoteList) ? VoteList : _T("No votes."));
+	gUtil.HudMessage(NULL, gUtil.HudParam(255, 255, 225, 0.23, 0.02, 0, 0.0, 0.53, 0.0, 0.0, 2), "\n%s", VoteList.length() ? VoteList.c_str() : _T("No votes."));
 }
 
 int CVoteTeam::GetCount()

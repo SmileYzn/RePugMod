@@ -259,7 +259,7 @@ void CCaptain::GetRandomPlayer(int EntityIndex)
 
 void CCaptain::List()
 {
-	char szList[SPECTATOR + 1][320] = { 0 };
+	std::string PlayerList[SPECTATOR + 1];
 
 	int Count[SPECTATOR + 1] = { 0 };
 
@@ -275,23 +275,23 @@ void CCaptain::List()
 				{
 					if (Player->m_iTeam != UNASSIGNED)
 					{
+						Count[Player->m_iTeam]++;
+
+						PlayerList[Player->m_iTeam].append(STRING(Player->edict()->v.netname));
+
 						if (gCaptain.GetCaptain(Player->entindex()) != UNASSIGNED)
 						{
 							if (gCaptain.GetPicking(Player->entindex()))
 							{
-								snprintf(szList[Player->m_iTeam],sizeof(szList[Player->m_iTeam]),_T("%s%s (C) *\n"),szList[Player->m_iTeam],STRING(Player->edict()->v.netname));
+								PlayerList[Player->m_iTeam].append("(C) *");
 							}
 							else
 							{
-								snprintf(szList[Player->m_iTeam], sizeof(szList[Player->m_iTeam]), _T("%s%s (C)\n"), szList[Player->m_iTeam], STRING(Player->edict()->v.netname));
+								PlayerList[Player->m_iTeam].append("(C)");
 							}
 						}
-						else
-						{
-							snprintf(szList[Player->m_iTeam],sizeof(szList[Player->m_iTeam]),"%s%s\n", szList[Player->m_iTeam],STRING(Player->edict()->v.netname));
-						}
 
-						Count[Player->m_iTeam]++;
+						PlayerList[Player->m_iTeam].append("\n");
 					}
 				}
 			}
@@ -300,23 +300,23 @@ void CCaptain::List()
 
 	for (int i = 0; i < 5 - Count[CT]; i++)
 	{
-		snprintf(szList[CT], sizeof(szList[CT]), "%s\n", szList[CT]);
+		PlayerList[CT].append("%s\n");
 	}
 
 	gUtil.HudMessage(NULL, gUtil.HudParam(0, 255, 0, 0.75, 0.02, 0, 0.0, 53.0, 0.0, 0.0, 1), PUG_MOD_TEAM_STR[TERRORIST]);
 
-	gUtil.HudMessage(NULL, gUtil.HudParam(255, 255, 255, 0.75, 0.02, 0, 0.0, 53.0, 0.0, 0.0, 2), "\n%s", szList[TERRORIST]);
+	gUtil.HudMessage(NULL, gUtil.HudParam(255, 255, 255, 0.75, 0.02, 0, 0.0, 53.0, 0.0, 0.0, 2), "\n%s", PlayerList[TERRORIST].c_str());
 
 	if (Count[SPECTATOR])
 	{
 		gUtil.HudMessage(NULL, gUtil.HudParam(0, 255, 0, 0.75, 0.28, 0, 0.0, 53.0, 0.0, 0.0, 3), "%s\n\n\n\n\n\n%s", PUG_MOD_TEAM_STR[CT], PUG_MOD_TEAM_STR[SPECTATOR]);
 
-		gUtil.HudMessage(NULL, gUtil.HudParam(255, 255, 255, 0.75, 0.28, 0, 0.0, 53.0, 0.0, 0.0, 4), "\n%s\n%s", szList[CT], szList[SPECTATOR]);
+		gUtil.HudMessage(NULL, gUtil.HudParam(255, 255, 255, 0.75, 0.28, 0, 0.0, 53.0, 0.0, 0.0, 4), "\n%s\n%s", PlayerList[CT].c_str(), PlayerList[SPECTATOR].c_str());
 	}
 	else
 	{
 		gUtil.HudMessage(NULL, gUtil.HudParam(0, 255, 0, 0.75, 0.28, 0, 0.0, 53.0, 0.0, 0.0, 3), PUG_MOD_TEAM_STR[CT]);
 
-		gUtil.HudMessage(NULL, gUtil.HudParam(255, 255, 255, 0.75, 0.28, 0, 0.0, 53.0, 0.0, 0.0, 4), "\n%s", szList[CT]);
+		gUtil.HudMessage(NULL, gUtil.HudParam(255, 255, 255, 0.75, 0.28, 0, 0.0, 53.0, 0.0, 0.0, 4), "\n%s", PlayerList[CT].c_str());
 	}
 }

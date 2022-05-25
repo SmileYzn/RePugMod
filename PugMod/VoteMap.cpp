@@ -93,19 +93,23 @@ void CVoteMap::Changelevel(char* MapName)
 
 void CVoteMap::List(CVoteMap* VoteMap)
 {
-	char VoteList[511] = { 0 };
+	std::string VoteList;
 
 	for (std::size_t MapIndex = 0; MapIndex < VoteMap->m_Data.size(); MapIndex++)
 	{
 		if (VoteMap->m_Vote[MapIndex])
 		{
-			snprintf(VoteList, sizeof(VoteList), "%s%s [%d]\n", VoteList, VoteMap->m_Data[MapIndex].c_str(), VoteMap->m_Vote[MapIndex]);
+			char Line[128] = { 0 };
+
+			snprintf(Line, sizeof(Line), "%s [%d]\n", VoteMap->m_Data[MapIndex].c_str(), VoteMap->m_Vote[MapIndex]);
+
+			VoteList.append(Line);
 		}
 	}
 	
 	gUtil.HudMessage(NULL, gUtil.HudParam(0, 255, 0, 0.23, 0.02, 0, 0.0, 0.53, 0.0, 0.0, 1), _T("Choose the map (%d):"),(int)gTask.Timeleft(PUG_TASK_VOTE));
 
-	gUtil.HudMessage(NULL, gUtil.HudParam(255, 255, 225, 0.23, 0.02, 0, 0.0, 0.53, 0.0, 0.0, 2), "\n%s", strlen(VoteList) ? VoteList : _T("No votes."));
+	gUtil.HudMessage(NULL, gUtil.HudParam(255, 255, 225, 0.23, 0.02, 0, 0.0, 0.53, 0.0, 0.0, 2), "\n%s", VoteList.length() ? VoteList.c_str() : _T("No votes."));
 }
 
 int CVoteMap::GetCount()

@@ -56,7 +56,7 @@ void CReady::List(CReady* Ready)
 {
 	if (gCvars.GetReadyType()->value)
 	{
-		char PlayerList[2][512] = { 0 };
+		std::string PlayerList[2];
 
 		int  PlayerCount[2] = { 0 };
 
@@ -74,7 +74,9 @@ void CReady::List(CReady* Ready)
 
 				PlayerCount[State]++;
 
-				snprintf(PlayerList[State], sizeof(PlayerList[State]), "%s%s\n", PlayerList[State], STRING(Player->edict()->v.netname));
+				PlayerList[State].append(STRING(Player->edict()->v.netname));
+
+				PlayerList[State].append("\n");
 			}
 		}
 
@@ -92,9 +94,9 @@ void CReady::List(CReady* Ready)
 
 			gUtil.HudMessage(NULL, gUtil.HudParam(0, 255, 0, 0.58, 0.02, 0, 0.0, 0.53, 0.0, 0.0, 2), _T("Ready (%d of %d):"), PlayerCount[1], (int)gCvars.GetPlayersMin()->value);
 
-			gUtil.HudMessage(NULL, gUtil.HudParam(255, 255, 225, 0.23, 0.02, 0, 0.0, 0.53, 0.0, 0.0, 4), "\n%s", PlayerList[0]);
+			gUtil.HudMessage(NULL, gUtil.HudParam(255, 255, 225, 0.23, 0.02, 0, 0.0, 0.53, 0.0, 0.0, 4), "\n%s", PlayerList[0].c_str());
 
-			gUtil.HudMessage(NULL, gUtil.HudParam(255, 255, 225, 0.58, 0.02, 0, 0.0, 0.53, 0.0, 0.0, 3), "\n%s", PlayerList[1]);
+			gUtil.HudMessage(NULL, gUtil.HudParam(255, 255, 225, 0.58, 0.02, 0, 0.0, 0.53, 0.0, 0.0, 3), "\n%s", PlayerList[1].c_str());
 		}
 	}
 	else
