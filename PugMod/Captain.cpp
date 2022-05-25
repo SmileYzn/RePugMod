@@ -283,11 +283,11 @@ void CCaptain::List()
 						{
 							if (gCaptain.GetPicking(Player->entindex()))
 							{
-								PlayerList[Player->m_iTeam].append("(C) *");
+								PlayerList[Player->m_iTeam].append(_T("(C) *"));
 							}
 							else
 							{
-								PlayerList[Player->m_iTeam].append("(C)");
+								PlayerList[Player->m_iTeam].append(_T("(C)"));
 							}
 						}
 
