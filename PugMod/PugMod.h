@@ -44,6 +44,7 @@ public:
 	static void RunState(CPugMod* PugMod);
 
 	bool CheckBalanceTeams();
+	void SaveScores();
 
 	bool StartVoteMap(CBasePlayer* Player);
 	bool StartVoteTeam(CBasePlayer* Player);
