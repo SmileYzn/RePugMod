@@ -4,7 +4,7 @@ plugin_info_t Plugin_info =
 {
 	META_INTERFACE_VERSION,
 	"Pug Mod",
-	"0.1.1",
+	"0.1.2",
 	__DATE__,
 	"SmileY",
 	"https://vecdigital.com.br",
