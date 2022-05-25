@@ -41,6 +41,18 @@ bool CAdmin::Check(CBasePlayer* Player)
 	return this->Check(Player->edict());
 }
 
+bool CAdmin::Check(const char* Auth)
+{
+	if (Auth)
+	{
+		auto it = this->m_Data.find(Auth);
+
+		return (it != this->m_Data.end());
+	}
+
+	return false;
+}
+
 void CAdmin::Menu(CBasePlayer* Player)
 {
 	if (this->Check(Player->edict()))
