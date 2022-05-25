@@ -187,7 +187,7 @@ CBasePlayer* CPlayer::GetRandom(TeamName Team)
 	return NULL;
 }
 
-bool CPlayer::DropClient(int EntityIndex, const char* Format, ...)
+void CPlayer::DropClient(int EntityIndex, const char* Format, ...)
 {
 	auto Gameclient = g_RehldsSvs->GetClient(EntityIndex - 1);
 
@@ -195,7 +195,7 @@ bool CPlayer::DropClient(int EntityIndex, const char* Format, ...)
 	{
 		va_list argptr;
 
-		static char Buffer[128] = { 0 };
+		char Buffer[128] = { 0 };
 
 		va_start(argptr, Format);
 
@@ -203,10 +203,52 @@ bool CPlayer::DropClient(int EntityIndex, const char* Format, ...)
 
 		va_end(argptr);
 
-		g_RehldsFuncs->DropClient(Gameclient, false, Buffer);
+		if (g_RehldsFuncs)
+		{
+			g_RehldsFuncs->DropClient(Gameclient, false, Buffer);
+		}
+		else
+		{
+			auto Player = UTIL_PlayerByIndexSafe(EntityIndex);
 
-		return true;
+			if (Player)
+			{
+				if(Player->edict())
+				{
+					if (strlen(Buffer) > 0)
+					{
+						gUtil.ServerCommand("kick #%d %s", GETPLAYERUSERID(Player->edict()),Buffer);
+					}
+					else
+					{
+						gUtil.ServerCommand("kick #%d", GETPLAYERUSERID(Player->edict()));
+					}
+				}
+				
+			}
+		}
 	}
+}
 
-	return false;
+void CPlayer::BanClient(int EntityIndex, int Time, bool Kick)
+{
+	auto Player = UTIL_PlayerByIndexSafe(EntityIndex);
+
+	if (Player)
+	{
+		if (Player->edict())
+		{
+			if (Kick)
+			{
+				gUtil.ServerCommand("banid %d #%d kick", Time, GETPLAYERUSERID(Player->edict()));
+			}
+			else
+			{
+				gUtil.ServerCommand("banid %d #%d", Time, GETPLAYERUSERID(Player->edict()));
+			}
+
+			SERVER_COMMAND("writeid;writeip\n");
+			SERVER_EXECUTE();
+		}
+	}
 }

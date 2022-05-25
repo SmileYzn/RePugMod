@@ -15,7 +15,8 @@ public:
 
 	CBasePlayer* GetRandom(TeamName Team);
 
-	bool DropClient(int EntityIndex, const char* Format, ...);
+	void DropClient(int EntityIndex, const char* Format, ...);
+	void BanClient(int EntityIndex, int Time, bool Kick);
 };
 
 extern CPlayer gPlayer;
