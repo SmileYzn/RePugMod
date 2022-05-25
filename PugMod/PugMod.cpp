@@ -108,7 +108,7 @@ void CPugMod::SetState(int State)
 					}
 				}
 
-				gTask.Create(PUG_TASK_EXEC, 5.0f, false, this->SwapTeams, this);
+				gTask.Create(PUG_TASK_EXEC, 5.0f, false, (void*)this->SwapTeams, this);
 
 				if (gPlayer.GetNum() < (int)gCvars.GetPlayersMin()->value)
 				{
@@ -145,7 +145,7 @@ void CPugMod::SetState(int State)
 
 				gCvars.GetVoteMap()->value = 1;
 
-				gTask.Create(PUG_TASK_EXEC, 5.0f, false, this->RunState, &gPugMod);
+				gTask.Create(PUG_TASK_EXEC, 5.0f, false, (void*)this->RunState, &gPugMod);
 
 				break;
 			}
@@ -164,7 +164,7 @@ void CPugMod::NextState(float Delay)
 {
 	if (Delay)
 	{
-		gTask.Create(PUG_TASK_NEXT, Delay, false, this->RunState, this);
+		gTask.Create(PUG_TASK_NEXT, Delay, false, (void*)this->RunState, this);
 	}
 	else
 	{
@@ -541,7 +541,7 @@ void CPugMod::LO3(int Delay)
 
 		CVAR_SET_FLOAT("sv_restart", (float)Delay);
 
-		gTask.Create(PUG_TASK_LO3R, (float)Delay + 1.0f, false, gPugMod.LO3, (void*)(Delay - 1));
+		gTask.Create(PUG_TASK_LO3R, (float)Delay + 1.0f, false, (void*)gPugMod.LO3, (void*)(Delay - 1));
 	}
 	else
 	{

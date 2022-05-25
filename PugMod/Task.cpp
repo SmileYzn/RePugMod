@@ -14,7 +14,7 @@ void CTask::Clear()
 
 void CTask::Create(int Index, float Time, bool Loop, void* FunctionCallback)
 {
-	this->Create(Index, Time, Loop, FunctionCallback, nullptr);
+	this->Create(Index, Time, Loop, FunctionCallback, NULL);
 }
 
 void CTask::Create(int Index, float Time, bool Loop, void* FunctionCallback, void* FunctionParameter)
@@ -71,15 +71,6 @@ void CTask::Think()
 		{
 			Task = it->second;
 
-			if (Task.FunctionParameter != nullptr)
-			{
-				((void(*)(void*))Task.FunctionCallback)(Task.FunctionParameter);
-			}
-			else
-			{
-				((void(*)())Task.FunctionCallback)();
-			}
-
 			if (it->second.Loop)
 			{
 				it->second.EndTime += it->second.Time;
@@ -89,6 +80,11 @@ void CTask::Think()
 			else
 			{
 				it = this->m_Data.erase(it);
+			}
+
+			if (Task.FunctionCallback)
+			{
+				((void(*)(void*))Task.FunctionCallback)(Task.FunctionParameter);
 			}
 		}
 		else

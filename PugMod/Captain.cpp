@@ -41,7 +41,7 @@ void CCaptain::Init()
 
 		this->SetCaptain(gPlayer.GetRandom(SPECTATOR), CT);
 		
-		gTask.Create(PUG_TASK_LIST, 0.5f, true, this->List);
+		gTask.Create(PUG_TASK_LIST, 0.5f, true, (void*)this->List);
 
 		this->Menu((TeamName)RANDOM_LONG(TERRORIST, CT)); 
 	} 
@@ -213,7 +213,7 @@ void CCaptain::Menu(TeamName Team)
 
 			gMenu[EntityIndex].Show(EntityIndex);
 
-			gTask.Create(Team, 10.0f, false, this->GetRandomPlayer, (void*)EntityIndex);
+			gTask.Create(Team, 10.0f, false, (void*)this->GetRandomPlayer, (void*)EntityIndex);
 		}
 	}
 }
@@ -290,7 +290,7 @@ void CCaptain::List()
 								PlayerList[Player->m_iTeam].append(_T("(C)"));
 							}
 						}
-
+						
 						PlayerList[Player->m_iTeam].append("\n");
 					}
 				}

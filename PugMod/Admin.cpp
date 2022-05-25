@@ -199,7 +199,7 @@ void CAdmin::MenuMapHandle(int EntityIndex, int ItemIndex, bool Disabled, const 
 
 	if (Player)
 	{
-		gTask.Create(PUG_TASK_EXEC, 5.0f, false, SERVER_COMMAND, gUtil.VarArgs("changelevel %s\n", Option));
+		gTask.Create(PUG_TASK_EXEC, 5.0f, false, (void*)SERVER_COMMAND, gUtil.VarArgs("changelevel %s\n", Option));
 
 		gUtil.SayText(NULL, EntityIndex, _T("\3%s\1 changed map to \4%s\1"), STRING(Player->edict()->v.netname), Option);
 	}
