@@ -277,21 +277,21 @@ void CCaptain::List()
 					{
 						Count[Player->m_iTeam]++;
 
-						PlayerList[Player->m_iTeam].append(STRING(Player->edict()->v.netname));
+						PlayerList[Player->m_iTeam] += STRING(Player->edict()->v.netname);
 
 						if (gCaptain.GetCaptain(Player->entindex()) != UNASSIGNED)
 						{
 							if (gCaptain.GetPicking(Player->entindex()))
 							{
-								PlayerList[Player->m_iTeam].append(_T("(C) *"));
+								PlayerList[Player->m_iTeam] += _T("(C) *");
 							}
 							else
 							{
-								PlayerList[Player->m_iTeam].append(_T("(C)"));
+								PlayerList[Player->m_iTeam] += _T("(C)");
 							}
 						}
 						
-						PlayerList[Player->m_iTeam].append("\n");
+						PlayerList[Player->m_iTeam] += "\n";
 					}
 				}
 			}
@@ -300,7 +300,7 @@ void CCaptain::List()
 
 	for (int i = 0; i < 5 - Count[CT]; i++)
 	{
-		PlayerList[CT].append("%s\n");
+		PlayerList[CT] += "\n";
 	}
 
 	gUtil.HudMessage(NULL, gUtil.HudParam(0, 255, 0, 0.75, 0.02, 0, 0.0, 53.0, 0.0, 0.0, 1), PUG_MOD_TEAM_STR[TERRORIST]);
