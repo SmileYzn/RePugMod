@@ -247,7 +247,8 @@ void CPlayer::BanClient(int EntityIndex, int Time, bool Kick)
 				gUtil.ServerCommand("banid %d #%d", Time, GETPLAYERUSERID(Player->edict()));
 			}
 
-			SERVER_COMMAND("writeid;writeip\n");
+			gUtil.ServerCommand("writeid;writeip");
+
 			SERVER_EXECUTE();
 		}
 	}
