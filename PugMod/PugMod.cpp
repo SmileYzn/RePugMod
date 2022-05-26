@@ -22,6 +22,11 @@ int CPugMod::GetState()
 	return this->m_State;
 }
 
+bool CPugMod::IsLive()
+{
+	return (this->m_State == PUG_STATE_FIRST_HALF || this->m_State == PUG_STATE_SECOND_HALF || this->m_State == PUG_STATE_OVERTIME);
+}
+
 void CPugMod::SetState(int State)
 {
 	this->m_State = State;
@@ -378,7 +383,7 @@ bool CPugMod::StopMatch(CBasePlayer* Player)
 
 bool CPugMod::RestarPeriod(CBasePlayer* Player)
 {
-	if (this->m_State == PUG_STATE_FIRST_HALF || this->m_State == PUG_STATE_SECOND_HALF || this->m_State == PUG_STATE_OVERTIME)
+	if (this->IsLive())
 	{
 		if (Player)
 		{
@@ -831,7 +836,7 @@ bool CPugMod::ClientJoinTeam(CBasePlayer* Player, int NewTeam)
 
 void CPugMod::RoundStart()
 {
-	if (this->m_State == PUG_STATE_FIRST_HALF || this->m_State == PUG_STATE_SECOND_HALF || this->m_State == PUG_STATE_OVERTIME)
+	if (this->IsLive())
 	{
 		this->ViewScores(NULL);
 	}
@@ -839,7 +844,7 @@ void CPugMod::RoundStart()
 
 void CPugMod::RoundEnd(int winStatus, ScenarioEventEndRound event, float tmDelay)
 {
-	if (this->m_State == PUG_STATE_FIRST_HALF || this->m_State == PUG_STATE_SECOND_HALF || this->m_State == PUG_STATE_OVERTIME)
+	if (this->IsLive())
 	{
 		if (winStatus != WINSTATUS_NONE)
 		{

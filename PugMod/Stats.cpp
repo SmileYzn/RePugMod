@@ -4,7 +4,7 @@ CStats gStats;
 
 void CStats::ClientGetIntoGame(CBasePlayer* Player)
 {
-	if (gPugMod.GetState() == PUG_STATE_FIRST_HALF || gPugMod.GetState() == PUG_STATE_SECOND_HALF || gPugMod.GetState() == PUG_STATE_OVERTIME)
+	if (gPugMod.IsLive())
 	{
 		auto EntityIndex = Player->entindex();
 
@@ -18,7 +18,7 @@ void CStats::ClientGetIntoGame(CBasePlayer* Player)
 
 void CStats::RoundStart()
 {
-	if (gPugMod.GetState() == PUG_STATE_FIRST_HALF || gPugMod.GetState() == PUG_STATE_SECOND_HALF || gPugMod.GetState() == PUG_STATE_OVERTIME)
+	if (gPugMod.IsLive())
 	{
 		for (int i = 1; i <= gpGlobals->maxClients; ++i)
 		{
@@ -37,7 +37,7 @@ void CStats::RoundEnd(int winStatus, ScenarioEventEndRound event, float tmDelay)
 	{
 		if (gCvars.GetStatsRoundEnd()->value)
 		{
-			if (gPugMod.GetState() == PUG_STATE_FIRST_HALF || gPugMod.GetState() == PUG_STATE_SECOND_HALF || gPugMod.GetState() == PUG_STATE_OVERTIME)
+			if (gPugMod.IsLive())
 			{
 				CBasePlayer* Players[MAX_CLIENTS] = { NULL };
 
@@ -85,7 +85,7 @@ void CStats::CBasePlayer_TakeDamage(CBasePlayer* pthis, entvars_t* pevInflictor,
 {
 	if (g_pGameRules)
 	{
-		if (gPugMod.GetState() == PUG_STATE_FIRST_HALF || gPugMod.GetState() == PUG_STATE_SECOND_HALF || gPugMod.GetState() == PUG_STATE_OVERTIME)
+		if (gPugMod.IsLive())
 		{
 			auto pEdict = ENT(pevAttacker);
 
@@ -121,7 +121,7 @@ bool CStats::HP(CBasePlayer* Player)
 {
 	if (g_pGameRules)
 	{
-		if (gPugMod.GetState() == PUG_STATE_FIRST_HALF || gPugMod.GetState() == PUG_STATE_SECOND_HALF || gPugMod.GetState() == PUG_STATE_OVERTIME)
+		if (gPugMod.IsLive())
 		{
 			if (!Player->IsAlive() || CSGameRules()->m_bRoundTerminating || CSGameRules()->IsFreezePeriod())
 			{	
@@ -179,7 +179,7 @@ bool CStats::Damage(CBasePlayer * Player)
 {
 	if (g_pGameRules)
 	{
-		if (gPugMod.GetState() == PUG_STATE_FIRST_HALF || gPugMod.GetState() == PUG_STATE_SECOND_HALF || gPugMod.GetState() == PUG_STATE_OVERTIME)
+		if (gPugMod.IsLive())
 		{
 			if (!Player->IsAlive() || CSGameRules()->m_bRoundTerminating || CSGameRules()->IsFreezePeriod())
 			{
@@ -233,7 +233,7 @@ bool CStats::Received(CBasePlayer * Player)
 {
 	if (g_pGameRules)
 	{
-		if (gPugMod.GetState() == PUG_STATE_FIRST_HALF || gPugMod.GetState() == PUG_STATE_SECOND_HALF || gPugMod.GetState() == PUG_STATE_OVERTIME)
+		if (gPugMod.IsLive())
 		{
 			if (!Player->IsAlive() || CSGameRules()->m_bRoundTerminating || CSGameRules()->IsFreezePeriod())
 			{
@@ -287,7 +287,7 @@ bool CStats::Summary(CBasePlayer* Player)
 {
 	if (g_pGameRules)
 	{
-		if (gPugMod.GetState() == PUG_STATE_FIRST_HALF || gPugMod.GetState() == PUG_STATE_SECOND_HALF || gPugMod.GetState() == PUG_STATE_OVERTIME)
+		if (gPugMod.IsLive())
 		{
 			if (!Player->IsAlive() || CSGameRules()->m_bRoundTerminating || CSGameRules()->IsFreezePeriod())
 			{

@@ -11,6 +11,7 @@ void CVoteMenu::Load()
 	memset(this->m_VotedPause, false, sizeof(this->m_VotedPause));
 	
 	this->m_PausedTeam = UNASSIGNED;
+
 	this->m_PausedTime = 0;
 
 	this->m_MapList.clear();
@@ -65,12 +66,12 @@ void CVoteMenu::Menu(CBasePlayer* Player)
 		gMenu[EntityIndex].Create(_T("Vote Menu:"), true, (void*)this->MenuHandle);
 
 		gMenu[EntityIndex].AddItem(0, _T("Vote Kick"));
-		gMenu[EntityIndex].AddItem(1, _T("Vote Map"), !this->m_MapList.size());
 
-		bool Disabled = (gPugMod.GetState() != PUG_STATE_FIRST_HALF && gPugMod.GetState() != PUG_STATE_SECOND_HALF && gPugMod.GetState() != PUG_STATE_OVERTIME);
+		gMenu[EntityIndex].AddItem(1, _T("Vote Map"), (this->m_MapList.size() < 1));
 
-		gMenu[EntityIndex].AddItem(2, _T("Vote Pause"), Disabled || !gCvars.GetVotePauseTime()->value);
-		gMenu[EntityIndex].AddItem(3, _T("Vote Stop"), Disabled);
+		gMenu[EntityIndex].AddItem(2, _T("Vote Pause"), !(gPugMod.IsLive() && gCvars.GetVotePauseTime()->value));
+
+		gMenu[EntityIndex].AddItem(3, _T("Vote Stop"), !gPugMod.IsLive());
 
 		gMenu[EntityIndex].Show(EntityIndex);
 	}
@@ -298,7 +299,7 @@ void CVoteMenu::VotePause(CBasePlayer* Player)
 {
 	if (this->CheckMenu(Player))
 	{
-		if (gPugMod.GetState() == PUG_STATE_FIRST_HALF || gPugMod.GetState() == PUG_STATE_SECOND_HALF || gPugMod.GetState() == PUG_STATE_OVERTIME)
+		if (gPugMod.IsLive())
 		{
 			if (gCvars.GetVotePauseTime()->value)
 			{
@@ -360,7 +361,7 @@ void CVoteMenu::VotePause(CBasePlayer* Player)
 
 void CVoteMenu::RoundRestart()
 {
-	if (gPugMod.GetState() == PUG_STATE_FIRST_HALF || gPugMod.GetState() == PUG_STATE_SECOND_HALF || gPugMod.GetState() == PUG_STATE_OVERTIME)
+	if (gPugMod.IsLive())
 	{
 		if (this->m_PausedTime > 0)
 		{
@@ -397,40 +398,47 @@ void CVoteMenu::VoteStop(CBasePlayer* Player)
 {
 	if (this->CheckMenu(Player))
 	{
-		auto PlayerIndex = Player->entindex();
-
-		if (!this->m_VotedStop[PlayerIndex][Player->m_iTeam])
+		if (gPugMod.IsLive())
 		{
-			this->m_VotedStop[PlayerIndex][Player->m_iTeam] = true;
+			auto PlayerIndex = Player->entindex();
 
-			int VoteCount = 0;
-
-			for (int i = 1; i <= gpGlobals->maxClients; ++i)
+			if (!this->m_VotedStop[PlayerIndex][Player->m_iTeam])
 			{
-				if (this->m_VotedStop[i][Player->m_iTeam])
+				this->m_VotedStop[PlayerIndex][Player->m_iTeam] = true;
+
+				int VoteCount = 0;
+
+				for (int i = 1; i <= gpGlobals->maxClients; ++i)
 				{
-					VoteCount++;
+					if (this->m_VotedStop[i][Player->m_iTeam])
+					{
+						VoteCount++;
+					}
 				}
-			}
 
-			int VotesNeed = (int)(gPlayer.GetNum(Player->m_iTeam) * gCvars.GetVotePercentage()->value);
-			int VotesLack = (VotesNeed - VoteCount);
-			
-			if (VotesLack)
-			{
-				gUtil.SayText(NULL, PlayerIndex, _T("\3%s\1 voted for surrender: \4%d\1 of \4%d\1 vote(s) to stop the match."), STRING(Player->edict()->v.netname), VoteCount, VotesNeed);
-				gUtil.SayText(NULL, PlayerIndex, _T("Say \3.vote\1 to vote for stop the match."));
+				int VotesNeed = (int)(gPlayer.GetNum(Player->m_iTeam) * gCvars.GetVotePercentage()->value);
+				int VotesLack = (VotesNeed - VoteCount);
+
+				if (VotesLack)
+				{
+					gUtil.SayText(NULL, PlayerIndex, _T("\3%s\1 voted for surrender: \4%d\1 of \4%d\1 vote(s) to stop the match."), STRING(Player->edict()->v.netname), VoteCount, VotesNeed);
+					gUtil.SayText(NULL, PlayerIndex, _T("Say \3.vote\1 to vote for stop the match."));
+				}
+				else
+				{
+					gUtil.SayText(NULL, PlayerIndex, _T("Game Over! The \3%s\1 Surrendered!"), PUG_MOD_TEAM_STR[Player->m_iTeam]);
+
+					gPugMod.EndGame(Player->m_iTeam == TERRORIST ? CT : TERRORIST);
+				}
 			}
 			else
 			{
-				gUtil.SayText(NULL, PlayerIndex, _T("Game Over! The \3%s\1 Surrendered!"), PUG_MOD_TEAM_STR[Player->m_iTeam]);
-
-				gPugMod.EndGame(Player->m_iTeam == TERRORIST ? CT : TERRORIST); 
+				gUtil.SayText(Player->edict(), PlayerIndex, _T("You already voted to stop the match."));
 			}
 		}
 		else
 		{
-			gUtil.SayText(Player->edict(), PlayerIndex, _T("You already voted to stop the match."));
+			gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("Unable to use this command now."));
 		}
 	}
 }

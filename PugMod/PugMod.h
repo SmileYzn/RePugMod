@@ -38,7 +38,10 @@ public:
 	void Load();
 	void Unload();
 
-	int  GetState();
+	int GetState();
+
+	bool IsLive();
+
 	void SetState(int State);
 	void NextState(float Delay);
 	static void RunState(CPugMod* PugMod);
