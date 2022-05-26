@@ -93,11 +93,10 @@ void CVoteTeam::List(CVoteTeam* VoteTeam)
 	{
 		if (VoteTeam->m_Vote[VoteIndex])
 		{
-			char Line[128] = { 0 };
-
-			snprintf(Line, sizeof(Line), "%s [%d]\n", VoteTeam->m_Data[VoteIndex].c_str(), VoteTeam->m_Vote[VoteIndex]);
-
-			VoteList.append(Line);
+			VoteList += VoteTeam->m_Data[VoteIndex];
+			VoteList += " [";
+			VoteList += std::to_string(VoteTeam->m_Vote[VoteIndex]);
+			VoteList += "]\n";
 		}
 	}
 
