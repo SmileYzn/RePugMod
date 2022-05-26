@@ -160,8 +160,8 @@ en:"Send Message"
 "Send Command"
 en:"Send Command"
 
-"Kicked by %s."
-en:"Kicked by %s."
+"Kicked by %s"
+en:"Kicked by %s"
 
 "\3%s\1 Kicked \3%s\1"
 en:"\3%s\1 Kicked \3%s\1"
@@ -222,6 +222,15 @@ en:"(C) *"
 
 "(C)"
 en:"(C)"
+
+"Knife Round Starting: \4Get Ready!!"
+en:"Knife Round Starting: \4Get Ready!!"
+
+"Changing teams automatically."
+en:"Changing teams automatically."
+
+"Teams will remain unchanged."
+en:"Teams will remain unchanged."
 
 "Select Starting Side:"
 en:"Select Starting Side:"
