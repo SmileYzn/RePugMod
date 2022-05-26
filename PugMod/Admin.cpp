@@ -145,12 +145,12 @@ void CAdmin::MenuKickHandle(int EntityIndex, int ItemIndex, bool Disabled, const
 	if (Player)
 	{
 		auto Target = UTIL_PlayerByIndexSafe(ItemIndex);
-
+		
 		if (Target)
 		{
-			gPlayer.DropClient(Target->entindex(), _T("Kicked by %s."), STRING(Player->edict()->v.netname));
+			gUtil.SayText(NULL, Player->entindex(), _T("\3%s\1 Kicked \3%s\1"), STRING(Player->edict()->v.netname), STRING(Target->edict()->v.netname));
 
-			gUtil.SayText(NULL, EntityIndex, _T("\3%s\1 Kicked \3%s\1"), STRING(Player->edict()->v.netname), STRING(Target->edict()->v.netname));
+			gPlayer.DropClient(Target->entindex(), _T("Kicked by %s"), STRING(Player->edict()->v.netname));
 		}
 	}
 }
@@ -189,9 +189,9 @@ void CAdmin::MenuSlapHandle(int EntityIndex, int ItemIndex, bool Disabled, const
 
 		if (Target)
 		{
-			MDLL_ClientKill(Target->edict());
-
 			gUtil.SayText(NULL, EntityIndex, _T("\3%s\1 Killed \3%s\1"), STRING(Player->edict()->v.netname), STRING(Target->edict()->v.netname));
+
+			MDLL_ClientKill(Target->edict());
 		}
 	}
 }
