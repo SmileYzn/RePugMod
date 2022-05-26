@@ -193,19 +193,19 @@ void CPlayer::DropClient(int EntityIndex, const char* Format, ...)
 
 	if (Gameclient)
 	{
-		va_list argptr;
+		va_list argList;
 
-		char Buffer[128] = { 0 };
+		va_start(argList, Format);
 
-		va_start(argptr, Format);
+		char Buffer[255] = { 0 };
 
-		vsprintf(Buffer, Format, argptr);
+		int Length = vsnprintf(Buffer, sizeof(Buffer), Format, argList);
 
-		va_end(argptr);
+		va_end(argList);
 
 		if (g_RehldsFuncs)
 		{
-			g_RehldsFuncs->DropClient(Gameclient, false, Buffer);
+			g_RehldsFuncs->DropClient(Gameclient, false, "%s", Buffer);
 		}
 		else
 		{
