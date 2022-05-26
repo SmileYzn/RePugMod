@@ -11,19 +11,19 @@ public:
 	void RoundRestart();
 	void RoundEnd(int winStatus, ScenarioEventEndRound event, float tmDelay);
 
-	static void List(CKnifeRound* KnifeRound);
+	static void List();
 
-	int SetVote(TeamName Team, int Vote);
-	int GetVote();
-	int GetCount();
+	TeamName GetWinner();
+	int AddVote(TeamName Team);
+	int GetVote(TeamName Team);
 
 	static void MenuHandle(int EntityIndex, int ItemIndex, bool Disabled, const char* Option);
 	static void VoteEnd();
 
 private:
-	bool		m_Running    = false;
-	TeamName	m_Winner	 = UNASSIGNED;
-	int			m_Votes[SPECTATOR + 1] = {0};
+	bool		m_Running = false;
+	TeamName	m_Winner = UNASSIGNED;
+	int			m_Votes[SPECTATOR + 1] = { 0 };
 };
 
 extern CKnifeRound gKnifeRound;

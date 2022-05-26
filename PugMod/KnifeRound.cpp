@@ -10,9 +10,9 @@ void CKnifeRound::Init()
 
 	memset(this->m_Votes, 0, sizeof(this->m_Votes));
 
-	CVAR_SET_STRING("mp_give_player_c4", "0");
+	CVAR_SET_STRING("mp_give_player_c4", "0"); 
 
-	gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, "Knife Round Starting: \4Get Ready!!");
+	gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("Knife Round Starting: \4Get Ready!!"));
 }
 
 void CKnifeRound::Stop(bool ChangeTeams)
@@ -22,21 +22,19 @@ void CKnifeRound::Stop(bool ChangeTeams)
 	CVAR_SET_STRING("mp_give_player_c4", "1");
 
 	if (ChangeTeams)
-	{	
-		auto VoteChangeTeam = (this->GetVote() > (gPlayer.GetNum(this->m_Winner) / 2));
-
-		if (VoteChangeTeam) 
+	{
+		if ((this->GetVote(this->GetWinner()) < (gPlayer.GetNum(this->GetWinner()) / 2)))
 		{
 			if (g_pGameRules)
 			{
 				CSGameRules()->SwapAllPlayers();
 			}
 
-			gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, "Changing teams automatically.");
+			gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("Changing teams automatically."));
 		}
 		else
 		{
-			gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, "Teams will remain unchanged.");
+			gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("Teams will remain unchanged."));
 		}
 	}
 
@@ -94,16 +92,14 @@ void CKnifeRound::RoundRestart()
 							}
 							else
 							{
-								auto Team = Player->m_iTeam == TERRORIST ? CT : TERRORIST;
-
-								this->MenuHandle(Player->entindex(), (int)Team, false, PUG_MOD_TEAM_STR[Team]);
+								this->AddVote((Player->m_iTeam == TERRORIST ? CT : TERRORIST));
 							}
 						}
 					}
 
 					gTask.Create(PUG_TASK_VOTE, gCvars.GetVoteDelay()->value, false, (void*)this->VoteEnd);
 
-					gTask.Create(PUG_TASK_LIST, 0.5f, true, (void*)this->List, this);
+					gTask.Create(PUG_TASK_LIST, 0.5f, true, (void*)this->List);
 				}
 			}
 		}
@@ -149,38 +145,46 @@ void CKnifeRound::RoundEnd(int winStatus, ScenarioEventEndRound event, float tmD
 	}
 }
 
-void CKnifeRound::List(CKnifeRound* KnifeRound)
+void CKnifeRound::List()
 {
-	char VoteList[128] = { 0 };
+	std::string VoteList;
 
-	for (int Team = TERRORIST;Team <= CT;Team++)
+	if (gKnifeRound.GetVote(TERRORIST))
 	{
-		if (KnifeRound->m_Votes[Team])
-		{
-			snprintf(VoteList, sizeof(VoteList), "%s%s [%d]\n", VoteList, PUG_MOD_TEAM_STR[Team], KnifeRound->m_Votes[Team]);
-		}
+		VoteList += PUG_MOD_TEAM_STR[TERRORIST];
+		VoteList += " [";
+		VoteList += std::to_string(gKnifeRound.GetVote(TERRORIST));
+		VoteList += "]\n";
+	}
+
+	if (gKnifeRound.GetVote(CT))
+	{
+		VoteList += PUG_MOD_TEAM_STR[CT];
+		VoteList += " [";
+		VoteList += std::to_string(gKnifeRound.GetVote(CT));
+		VoteList += "]\n";
 	}
 
 	gUtil.HudMessage(NULL, gUtil.HudParam(0, 255, 0, 0.23, 0.02, 0, 0.0, 0.53, 0.0, 0.0, 1), _T("Starting Side (%d):"), (int)gTask.Timeleft(PUG_TASK_VOTE));
 
-	gUtil.HudMessage(NULL, gUtil.HudParam(255, 255, 225, 0.23, 0.02, 0, 0.0, 0.53, 0.0, 0.0, 2), "\n%s", strlen(VoteList) ? VoteList : _T("No votes."));
+	gUtil.HudMessage(NULL, gUtil.HudParam(255, 255, 225, 0.23, 0.02, 0, 0.0, 0.53, 0.0, 0.0, 2), "\n%s", VoteList.length() ? VoteList.c_str() : _T("No votes."));
 }
 
-int CKnifeRound::SetVote(TeamName Team, int Vote)
+TeamName CKnifeRound::GetWinner()
 {
-	this->m_Votes[Team] += Vote;
+	return this->m_Winner;
+}
+
+int CKnifeRound::AddVote(TeamName Team)
+{
+	this->m_Votes[Team]++;
 
 	return this->m_Votes[Team];
 }
 
-int CKnifeRound::GetVote()
+int CKnifeRound::GetVote(TeamName Team)
 {
-	return this->m_Votes[this->m_Winner];
-}
-
-int CKnifeRound::GetCount()
-{
-	return (this->m_Votes[TERRORIST] + this->m_Votes[CT]);
+	return this->m_Votes[Team];
 }
 
 void CKnifeRound::MenuHandle(int EntityIndex, int ItemIndex, bool Disabled, const char* Option)
@@ -189,11 +193,11 @@ void CKnifeRound::MenuHandle(int EntityIndex, int ItemIndex, bool Disabled, cons
 
 	if (Player)
 	{
-		gKnifeRound.SetVote(Player->m_iTeam, 1);
+		gKnifeRound.AddVote((TeamName)ItemIndex);
 
 		gUtil.SayText(NULL, Player->entindex(), _T("\3%s\1 choosed \3%s\1"), STRING(Player->edict()->v.netname), Option);
 
-		if (gKnifeRound.GetCount() >= gPlayer.GetNum(true))
+		if ((gKnifeRound.GetVote(TERRORIST) + gKnifeRound.GetVote(CT)) >= gPlayer.GetNum(gKnifeRound.GetWinner()))
 		{
 			gKnifeRound.VoteEnd();
 		}
