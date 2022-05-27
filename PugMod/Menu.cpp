@@ -8,10 +8,6 @@ void CMenu::Clear()
 
 	this->m_Data.clear();
 
-	this->m_Info.clear();
-
-	this->m_Skip.clear();
-
 	this->m_Page = -1;
 
 	this->m_Exit = false;
@@ -32,22 +28,32 @@ void CMenu::Create(std::string Title, bool Exit, void* CallbackFunction)
 	this->m_Func = CallbackFunction; 
 }
 
+void CMenu::SetItem(int Item, std::string Text, bool Disabled)
+{
+	if (Item < this->m_Data.size())
+	{
+		this->m_Data[Item].Text = Text;
+
+		this->m_Data[Item].Item = Item;
+
+		this->m_Data[Item].Disabled = Disabled;
+	}
+	else
+	{
+		this->AddItem(Item, Text, Disabled);
+	}
+}
+
 void CMenu::AddItem(int Item, std::string Text, bool Disabled)
 {
-	this->m_Data.push_back(Text);
+	P_MENU_ITEM ItemData = { Item, Text, Disabled };
 
-	this->m_Info.push_back(Item);
-
-	this->m_Skip.push_back(Disabled);
+	this->m_Data.push_back(ItemData);
 }
 
 void CMenu::AddList(std::vector<std::string> List)
 {
 	this->m_Data.clear();
-
-	this->m_Info.clear();
-
-	this->m_Skip.clear();
 
 	for (size_t i = 0; i < List.size(); i++)
 	{
@@ -57,7 +63,7 @@ void CMenu::AddList(std::vector<std::string> List)
 
 void CMenu::Show(int EntityIndex)
 {
-	if (this->m_Data.size() && this->m_Info.size())
+	if (this->m_Data.size() && this->m_Data.size())
 	{
 		this->Display(EntityIndex, 0);
 	}
@@ -92,13 +98,13 @@ bool CMenu::Handle(int EntityIndex, int Key)
 				{
 					unsigned int ItemIndex = (Key + (this->m_Page * MENU_PAGE_OPTION)) - 1;
 
-					if (ItemIndex < this->m_Info.size())
+					if (ItemIndex < this->m_Data.size())
 					{
 						this->Hide(EntityIndex);
 
 						if (this->m_Func)
 						{
-							((void(*)(int, int, bool, const char*))this->m_Func)(EntityIndex, this->m_Info[ItemIndex], this->m_Skip[ItemIndex], this->m_Data[ItemIndex].c_str());
+							((void(*)(int, int, bool, const char*))this->m_Func)(EntityIndex, this->m_Data[ItemIndex].Item, this->m_Data[ItemIndex].Disabled, this->m_Data[ItemIndex].Text.c_str());
 						}
 					}
 				}
@@ -171,8 +177,8 @@ void CMenu::Display(int EntityIndex, int Page)
 
 		MenuText += "\\r";
 		MenuText += std::to_string(++BitSum);
-		MenuText += this->m_Skip[b] ? ".\\d " : ".\\w ";
-		MenuText += this->m_Data[b];
+		MenuText += this->m_Data[b].Disabled ? ".\\d " : ".\\w ";
+		MenuText += this->m_Data[b].Text;
 		MenuText += "\n";
 	}
 
