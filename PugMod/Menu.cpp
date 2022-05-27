@@ -115,7 +115,7 @@ bool CMenu::Handle(int EntityIndex, int Key)
 	return false;
 }
 
-void CMenu::Display(int EntityIndex,int Page)
+void CMenu::Display(int EntityIndex, int Page)
 {
 	if (Page < 0)
 	{
@@ -141,12 +141,20 @@ void CMenu::Display(int EntityIndex,int Page)
 		Start = Page = this->m_Page = 0;
 	}
 
-	char MenuText[512] = { 0 };
-
 	int PageCount = this->m_Data.size() > MENU_PAGE_OPTION ? (this->m_Data.size() / MENU_PAGE_OPTION + ((this->m_Data.size() % MENU_PAGE_OPTION) ? 1 : 0)) : 1;
 
-	int Len = sprintf(MenuText, "\\y%s\\R%d/%d\n\\w\n", this->m_Text.c_str(), (Page + 1), PageCount);
+	std::string MenuText = "\\y" + this->m_Text;
 
+	if (PageCount > 1)
+	{
+		MenuText += "\\R";
+		MenuText += std::to_string(Page + 1);
+		MenuText += "/";
+		MenuText += std::to_string(PageCount);
+	}
+
+	MenuText += "\n\\w\n";
+	
 	unsigned int End = (Start + MENU_PAGE_OPTION);
 
 	if (End > this->m_Data.size())
@@ -161,14 +169,11 @@ void CMenu::Display(int EntityIndex,int Page)
 	{
 		Slots |= (1 << BitSum);
 
-		if (this->m_Skip[b])
-		{
-			Len += sprintf(MenuText, "%s\\r%d.\\d %s\n", MenuText, ++BitSum, this->m_Data[b].c_str());
-		}
-		else
-		{
-			Len += sprintf(MenuText, "%s\\r%d.\\w %s\n", MenuText, ++BitSum, this->m_Data[b].c_str());
-		}
+		MenuText += "\\r";
+		MenuText += std::to_string(++BitSum);
+		MenuText += this->m_Skip[b] ? ".\\d " : ".\\w ";
+		MenuText += this->m_Data[b];
+		MenuText += "\n";
 	}
 
 	if (End != this->m_Data.size())
@@ -177,15 +182,15 @@ void CMenu::Display(int EntityIndex,int Page)
 
 		if (Page)
 		{
-			Len += sprintf(MenuText, "%s%s", MenuText, "\n\\r9.\\w Next\n\\r0.\\w Back");
+			MenuText += "\n\\r9.\\w Next\n\\r0.\\w Back";
 		}
 		else
 		{
-			Len += sprintf(MenuText, "%s%s", MenuText, "\n\\r9.\\w Next");
+			MenuText += "\n\\r9.\\w Next";
 
 			if (this->m_Exit)
 			{
-				Len += sprintf(MenuText, "%s\n\\r0.\\w Exit", MenuText);
+				MenuText += "\n\\r0.\\w Exit";
 			}
 		}
 	}
@@ -193,21 +198,21 @@ void CMenu::Display(int EntityIndex,int Page)
 	{
 		if (Page)
 		{
-			Len += sprintf(MenuText, "%s\n\\r0.\\w Back", MenuText);
+			MenuText += "\n\\r0.\\w Back";
 		}
 		else
 		{
 			if (this->m_Exit)
 			{
-				Len += sprintf(MenuText, "%s\n\\r0.\\w Exit", MenuText);
+				MenuText += "\n\\r0.\\w Exit";
 			}
 		}
 	}
 
-	this->ShowMenu(EntityIndex, Slots, -1, MenuText, Len);
+	this->ShowMenu(EntityIndex, Slots, -1, MenuText);
 }
 
-void CMenu::ShowMenu(int EntityIndex, int Slots, int Time, char *Text, int Length)
+void CMenu::ShowMenu(int EntityIndex, int Slots, int Time, std::string MenuText)
 {
 	auto Player = UTIL_PlayerByIndexSafe(EntityIndex);
 
@@ -220,34 +225,35 @@ void CMenu::ShowMenu(int EntityIndex, int Slots, int Time, char *Text, int Lengt
 			if (iMsgShowMenu || (iMsgShowMenu = GET_USER_MSG_ID(PLID, "ShowMenu", NULL)))
 			{
 				Player->m_iMenu = Menu_OFF;
+				
+				char BufferMenu[MAX_BUFFER_MENU * 6] = { 0 };
 
-				char *n = Text;
-				char c = 0;
-				int a;
+				MenuText.copy(BufferMenu, MenuText.length() + 1);
 
-				do
+				char* pMenuList = BufferMenu;
+				char* aMenuList = BufferMenu;
+
+				int iCharCount = 0;
+
+				while (pMenuList && *pMenuList)
 				{
-					a = Length;
+					char szChunk[MAX_BUFFER_MENU + 1] = {0};
 
-					if (a > MAX_BUFFER_MENU)
-					{
-						a = MAX_BUFFER_MENU;
-					}
+					strncpy(szChunk, pMenuList, MAX_BUFFER_MENU);
 
-					Length -= a;
-					c = *(n += a);
-					*n = 0;
+					szChunk[MAX_BUFFER_MENU] = 0;
 
-					MESSAGE_BEGIN(MSG_ONE, iMsgShowMenu, NULL, Player->edict());
+					iCharCount += strlen(szChunk);
+
+					pMenuList = aMenuList + iCharCount;
+
+					MESSAGE_BEGIN(MSG_ONE, iMsgShowMenu, nullptr, Player->edict());
 					WRITE_SHORT(Slots);
 					WRITE_CHAR(Time);
-					WRITE_BYTE(c ? 1 : 0);
-					WRITE_STRING(Text);
+					WRITE_BYTE(*pMenuList ? TRUE : FALSE);
+					WRITE_STRING(szChunk);
 					MESSAGE_END();
-
-					*n = c;
-					Text = n;
-				} while (*n);
+				}
 			}
 		}
 	}

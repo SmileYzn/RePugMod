@@ -279,7 +279,7 @@ void CPugMod::SaveScores()
 	{
 		CBasePlayer* Players[MAX_CLIENTS] = { NULL };
 
-		auto Num = gPlayer.GetList(Players);
+		auto Num = gPlayer.GetList(Players, true);
 
 		for (int i = 0; i < Num; i++)
 		{
@@ -610,6 +610,9 @@ void CPugMod::ClientGetIntoGame(CBasePlayer* Player)
 {
 	this->m_Frags[Player->entindex()] = 0;
 	this->m_Death[Player->entindex()] = 0;
+
+	gUtil.SayText(Player->edict(), PRINT_TEAM_RED, _T("%s Build %s (\3%s\1)"), Plugin_info.name, Plugin_info.date, Plugin_info.author);
+	gUtil.SayText(Player->edict(), PRINT_TEAM_RED, _T("Say \4.help\1 to view command list."));
 }
 
 void CPugMod::ClientDisconnected(edict_t* pEntity)
@@ -772,9 +775,6 @@ bool CPugMod::ClientJoinTeam(CBasePlayer* Player, int NewTeam)
 	{
 		gPlayer.TeamInfo(Player->edict(), 33 + 1, "TERRORIST");
 		gPlayer.TeamInfo(Player->edict(), 33 + 2, "CT");
-
-		gUtil.SayText(Player->edict(), PRINT_TEAM_RED, _T("%s Build %s (\3%s\1)"), Plugin_info.name, Plugin_info.date, Plugin_info.author);
-		gUtil.SayText(Player->edict(), PRINT_TEAM_RED, _T("Say \4.help\1 to view command list."));
 	}
 
 	if (NewTeam == 5)
@@ -930,7 +930,7 @@ void CPugMod::RoundRestart()
 					{
 						CBasePlayer* Players[MAX_CLIENTS] = { nullptr };
 
-						auto Num = gPlayer.GetList(Players);
+						auto Num = gPlayer.GetList(Players, true);
 
 						for (int i = 0; i < Num; i++)
 						{

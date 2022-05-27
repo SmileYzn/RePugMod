@@ -41,7 +41,7 @@ void CStats::RoundEnd(int winStatus, ScenarioEventEndRound event, float tmDelay)
 			{
 				CBasePlayer* Players[MAX_CLIENTS] = { NULL };
 
-				auto Num = gPlayer.GetList(Players);
+				auto Num = gPlayer.GetList(Players, true);
 
 				for (int i = 0; i < Num; i++)
 				{
@@ -131,7 +131,7 @@ bool CStats::HP(CBasePlayer* Player)
 
 					CBasePlayer* Players[MAX_CLIENTS] = { NULL };
 
-					auto Num = gPlayer.GetList(Players);
+					auto Num = gPlayer.GetList(Players, true);
 
 					for (int i = 0; i < Num; i++)
 					{
@@ -191,7 +191,7 @@ bool CStats::Damage(CBasePlayer * Player)
 
 					CBasePlayer* Players[MAX_CLIENTS] = { NULL };
 
-					auto Num = gPlayer.GetList(Players);
+					auto Num = gPlayer.GetList(Players, true);
 
 					for (int i = 0; i < Num; i++)
 					{
@@ -245,7 +245,7 @@ bool CStats::Received(CBasePlayer * Player)
 
 					CBasePlayer* Players[MAX_CLIENTS] = { NULL };
 
-					auto Num = gPlayer.GetList(Players);
+					auto Num = gPlayer.GetList(Players, true);
 
 					for (int i = 0; i < Num; i++)
 					{
@@ -299,7 +299,7 @@ bool CStats::Summary(CBasePlayer* Player)
 
 					CBasePlayer* Players[MAX_CLIENTS] = { NULL };
 
-					auto Num = gPlayer.GetList(Players);
+					auto Num = gPlayer.GetList(Players, true);
 
 					for (int i = 0; i < Num; i++)
 					{

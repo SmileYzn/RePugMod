@@ -15,7 +15,7 @@ void CPlayer::TeamInfo(edict_t* pEntity, int playerIndex, const char *pszTeamNam
 	}
 }
 
-int CPlayer::GetList(CBasePlayer* Players[MAX_CLIENTS])
+int CPlayer::GetList(CBasePlayer* Players[MAX_CLIENTS], bool InGameOnly)
 {
 	int Num = 0;
 
@@ -31,7 +31,14 @@ int CPlayer::GetList(CBasePlayer* Players[MAX_CLIENTS])
 			{
 				if (!Player->IsDormant())
 				{
-					if (Player->m_iTeam == TERRORIST || Player->m_iTeam == CT)
+					if (InGameOnly)
+					{
+						if (Player->m_iTeam == TERRORIST || Player->m_iTeam == CT)
+						{
+							Players[Num++] = Player;
+						}
+					}
+					else
 					{
 						Players[Num++] = Player;
 					}
@@ -176,7 +183,7 @@ CBasePlayer* CPlayer::GetRandom(TeamName Team)
 	}
 	else
 	{
-		Num = this->GetList(Players);
+		Num = this->GetList(Players, true);
 	}
 
 	if (Num)

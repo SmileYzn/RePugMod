@@ -65,7 +65,7 @@ void CVoteMenu::Menu(CBasePlayer* Player)
 
 		gMenu[EntityIndex].Create(_T("Vote Menu:"), true, (void*)this->MenuHandle);
 
-		gMenu[EntityIndex].AddItem(0, _T("Vote Kick"));
+		gMenu[EntityIndex].AddItem(0, _T("Vote Kick"), (gPlayer.GetNum() <= 1));
 
 		gMenu[EntityIndex].AddItem(1, _T("Vote Map"), (this->m_MapList.size() < 1));
 
@@ -115,7 +115,7 @@ void CVoteMenu::VoteKick(CBasePlayer* Player)
 	{
 		CBasePlayer* Players[MAX_CLIENTS] = { NULL };
 
-		auto Num = gPlayer.GetList(Players,Player->m_iTeam);
+		auto Num = gPlayer.GetList(Players, Player->m_iTeam);
 
 		int NeedPlayers = (gCvars.GetPlayersMin()->value / 2);
 

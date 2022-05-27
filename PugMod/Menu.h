@@ -20,7 +20,7 @@ public:
 
 private:
 	void Display(int EntityIndex, int Page);
-	void ShowMenu(int EntityIndex, int Slots, int Time, char* Text, int Length);
+	void ShowMenu(int EntityIndex, int Slots, int Time, std::string MenuText);
 	void HideMenu(int EntityIndex);
 
 	std::string				  m_Text;

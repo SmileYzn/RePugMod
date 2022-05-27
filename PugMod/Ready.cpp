@@ -62,7 +62,7 @@ void CReady::List(CReady* Ready)
 
 		CBasePlayer* Players[MAX_CLIENTS] = { NULL };
 
-		auto Num = gPlayer.GetList(Players);
+		auto Num = gPlayer.GetList(Players, true);
 
 		for (int i = 0; i < Num; i++)
 		{

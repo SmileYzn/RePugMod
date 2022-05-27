@@ -61,11 +61,18 @@ void CAdmin::Menu(CBasePlayer* Player)
 
 		gMenu[EntityIndex].Create(_T("PUG Mod Menu:"), true, (void*)this->MenuHandle);
 
+		int PlayerNum = gPlayer.GetNum();
+
 		gMenu[EntityIndex].AddItem(0, _T("Kick Player"));
+
 		gMenu[EntityIndex].AddItem(1, _T("Slap Player"));
+
 		gMenu[EntityIndex].AddItem(2, _T("Change Map"));
+
 		gMenu[EntityIndex].AddItem(3, _T("Control Pug Mod"));
+
 		gMenu[EntityIndex].AddItem(4, _T("Send Message"));
+
 		gMenu[EntityIndex].AddItem(5, _T("Send Command"));
 
 		gMenu[EntityIndex].Show(EntityIndex);
@@ -120,7 +127,7 @@ void CAdmin::MenuKick(int EntityIndex)
 
 	CBasePlayer* Players[MAX_CLIENTS] = { NULL };
 
-	auto Num = gPlayer.GetList(Players);
+	auto Num = gPlayer.GetList(Players, false);
 
 	for (int i = 0; i < Num; i++)
 	{
@@ -161,7 +168,7 @@ void CAdmin::MenuSlap(int EntityIndex)
 
 	CBasePlayer* Players[MAX_CLIENTS] = { NULL };
 
-	auto Num = gPlayer.GetList(Players);
+	auto Num = gPlayer.GetList(Players, false);
 
 	for (int i = 0; i < Num; i++)
 	{

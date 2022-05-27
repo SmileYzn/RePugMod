@@ -21,7 +21,7 @@ void CVoteTeam::Init()
 
 	CBasePlayer* Players[MAX_CLIENTS] = { NULL };
 
-	auto Num = gPlayer.GetList(Players);
+	auto Num = gPlayer.GetList(Players, true);
 
 	for (int i = 0; i < Num; i++)
 	{
@@ -208,7 +208,7 @@ void CVoteTeam::TeamsRandomize()
 	CBasePlayer* Players[MAX_CLIENTS] = { NULL };
 
 	// Get players that are joined in TR or CT
-	auto Num = gPlayer.GetList(Players);
+	auto Num = gPlayer.GetList(Players, true);
 
 	// Set first random team (TR or CT)
 	TeamName Team = (TeamName)RANDOM_LONG(TERRORIST, CT);
@@ -259,7 +259,7 @@ void CVoteTeam::TeamsOptimize()
 	std::array<float, 32> Sorted = { 0 };
 
 	// Get players that are joined in TR or CT
-	auto Num = gPlayer.GetList(Players);
+	auto Num = gPlayer.GetList(Players, true);
 
 	// Loop
 	for (int i = 0; i < Num; i++)
