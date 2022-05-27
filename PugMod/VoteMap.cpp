@@ -154,7 +154,9 @@ const char* CVoteMap::GetItem(int ItemIndex)
 
 int CVoteMap::RandomMap(bool Change)
 {
-	int Random = RANDOM_LONG(0, this->m_Data.size() - 1);
+	std::srand(std::time(0));
+
+	int Random = std::rand() % this->m_Data.size();;
 
 	if (Change)
 	{
