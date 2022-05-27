@@ -16,6 +16,9 @@ public:
 	void MenuKick(int EntityIndex);
 	static void MenuKickHandle(int EntityIndex, int ItemIndex, bool Disabled, const char* Option);
 
+	void MenuBan(int EntityIndex);
+	static void MenuBanHandle(int EntityIndex, int ItemIndex, bool Disabled, const char* Option);
+
 	void MenuSlap(int EntityIndex);
 	static void MenuSlapHandle(int EntityIndex, int ItemIndex, bool Disabled, const char* Option);
 

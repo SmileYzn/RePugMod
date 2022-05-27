@@ -65,15 +65,19 @@ void CAdmin::Menu(CBasePlayer* Player)
 
 		gMenu[EntityIndex].AddItem(0, _T("Kick Player"));
 
-		gMenu[EntityIndex].AddItem(1, _T("Slap Player"));
+		gMenu[EntityIndex].AddItem(1, "Ban Player");
 
-		gMenu[EntityIndex].AddItem(2, _T("Change Map"));
+		gMenu[EntityIndex].AddItem(2, _T("Slap Player"));
 
-		gMenu[EntityIndex].AddItem(3, _T("Control Pug Mod"));
+		gMenu[EntityIndex].AddItem(3, "Team Player");
 
-		gMenu[EntityIndex].AddItem(4, _T("Send Message"));
+		gMenu[EntityIndex].AddItem(4, _T("Change Map"));
 
-		gMenu[EntityIndex].AddItem(5, _T("Send Command"));
+		gMenu[EntityIndex].AddItem(5, _T("Control Pug Mod"));
+
+		gMenu[EntityIndex].AddItem(6, _T("Send Message"));
+
+		gMenu[EntityIndex].AddItem(7, _T("Send Command"));
 
 		gMenu[EntityIndex].Show(EntityIndex);
 	}
@@ -94,25 +98,35 @@ void CAdmin::MenuHandle(int EntityIndex, int ItemIndex, bool Disabled, const cha
 			}
 			case 1:
 			{
-				gAdmin.MenuSlap(EntityIndex);
+				gAdmin.MenuBan(EntityIndex);
 				break;
 			}
 			case 2:
 			{
-				gAdmin.MenuMap(EntityIndex);
+				gAdmin.MenuSlap(EntityIndex);
 				break;
 			}
 			case 3:
 			{
-				gAdmin.MenuControl(EntityIndex);
+				//
 				break;
 			}
 			case 4:
 			{
-				gUtil.ClientCommand(Player->edict(), "messagemode !msg");
+				gAdmin.MenuMap(EntityIndex);
 				break;
 			}
 			case 5:
+			{
+				gAdmin.MenuControl(EntityIndex);
+				break;
+			}
+			case 6:
+			{
+				gUtil.ClientCommand(Player->edict(), "messagemode !msg");
+				break;
+			}
+			case 7:
 			{
 				gUtil.ClientCommand(Player->edict(), "messagemode !rcon");
 				break;
@@ -160,6 +174,34 @@ void CAdmin::MenuKickHandle(int EntityIndex, int ItemIndex, bool Disabled, const
 			gPlayer.DropClient(Target->entindex(), _T("Kicked by %s"), STRING(Player->edict()->v.netname));
 		}
 	}
+}
+
+void CAdmin::MenuBan(int EntityIndex)
+{
+	gMenu[EntityIndex].Create("Ban Player", true, (void*)this->MenuBanHandle);
+
+	CBasePlayer* Players[MAX_CLIENTS] = { NULL };
+
+	auto Num = gPlayer.GetList(Players, false);
+
+	for (int i = 0; i < Num; i++)
+	{
+		auto Player = Players[i];
+
+		if (Player)
+		{
+			if (!gAdmin.Check(Player))
+			{
+				gMenu[EntityIndex].AddItem(Player->entindex(), STRING(Player->edict()->v.netname));
+			}
+		}
+	}
+
+	gMenu[EntityIndex].Show(EntityIndex);
+}
+
+void CAdmin::MenuBanHandle(int EntityIndex, int ItemIndex, bool Disabled, const char* Option)
+{
 }
 
 void CAdmin::MenuSlap(int EntityIndex)
