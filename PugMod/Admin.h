@@ -22,6 +22,9 @@ public:
 	void MenuSlap(int EntityIndex);
 	static void MenuSlapHandle(int EntityIndex, int ItemIndex, bool Disabled, const char* Option);
 
+	void MenuTeam(int EntityIndex);
+	static void MenuTeamHandle(int EntityIndex, int ItemIndex, bool Disabled, const char* Option);
+
 	void MenuMap(int EntityIndex);
 	static void MenuMapHandle(int EntityIndex, int ItemIndex, bool Disabled, const char* Option);
 

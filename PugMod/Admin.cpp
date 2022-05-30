@@ -108,7 +108,7 @@ void CAdmin::MenuHandle(int EntityIndex, int ItemIndex, bool Disabled, const cha
 			}
 			case 3:
 			{
-				//
+				gAdmin.MenuTeam(EntityIndex);
 				break;
 			}
 			case 4:
@@ -166,7 +166,7 @@ void CAdmin::MenuKickHandle(int EntityIndex, int ItemIndex, bool Disabled, const
 	if (Player)
 	{
 		auto Target = UTIL_PlayerByIndexSafe(ItemIndex);
-		
+
 		if (Target)
 		{
 			gUtil.SayText(NULL, Player->entindex(), _T("\3%s\1 Kicked \3%s\1"), STRING(Player->edict()->v.netname), STRING(Target->edict()->v.netname));
@@ -202,7 +202,7 @@ void CAdmin::MenuBan(int EntityIndex)
 
 void CAdmin::MenuBanHandle(int EntityIndex, int ItemIndex, bool Disabled, const char* Option)
 {
-
+	/**/
 }
 
 void CAdmin::MenuSlap(int EntityIndex)
@@ -227,6 +227,35 @@ void CAdmin::MenuSlap(int EntityIndex)
 	}
 
 	gMenu[EntityIndex].Show(EntityIndex);
+}
+
+void CAdmin::MenuTeam(int EntityIndex)
+{
+	gMenu[EntityIndex].Create("Team Menu", true, (void*)this->MenuTeamHandle);
+
+	CBasePlayer* Players[MAX_CLIENTS] = { NULL };
+
+	auto Num = gPlayer.GetList(Players, false);
+
+	for (int i = 0; i < Num; i++)
+	{
+		auto Player = Players[i];
+
+		if (Player)
+		{
+			if (!gAdmin.Check(Player))
+			{
+				gMenu[EntityIndex].AddItem(Player->entindex(), gUtil.VarArgs("%s \\R\y%s",STRING(Player->edict()->v.netname)));
+			}
+		}
+	}
+
+	gMenu[EntityIndex].Show(EntityIndex);
+}
+
+void CAdmin::MenuTeamHandle(int EntityIndex, int ItemIndex, bool Disabled, const char* Option)
+{
+	/**/
 }
 
 void CAdmin::MenuSlapHandle(int EntityIndex, int ItemIndex, bool Disabled, const char* Option)
@@ -278,7 +307,7 @@ void CAdmin::MenuControl(int EntityIndex)
 	gMenu[EntityIndex].AddItem(1, _T("Run Vote Teams"), (State != PUG_STATE_WARMUP));
 
 	gMenu[EntityIndex].AddItem(2, (State == PUG_STATE_HALFTIME) ? _T("Continue Match") : _T("Start Match"), (State != PUG_STATE_WARMUP && State != PUG_STATE_HALFTIME));
-	
+
 	gMenu[EntityIndex].AddItem(3, _T("Stop Match"), (State == PUG_STATE_DEAD || State == PUG_STATE_WARMUP || State == PUG_STATE_START || State == PUG_STATE_END));
 
 	gMenu[EntityIndex].AddItem(4, _T("Restart Period"), (State != PUG_STATE_FIRST_HALF && State != PUG_STATE_SECOND_HALF && State != PUG_STATE_OVERTIME));
@@ -322,10 +351,10 @@ void CAdmin::MenuControlHandle(int EntityIndex, int ItemIndex, bool Disabled, co
 				gPugMod.RestarPeriod(Player);
 				break;
 			}
-			case 5: // Toggle Ready System 
+			case 5: // Toggle Ready System
 			{
 				gReady.Toggle(Player);
-				break; 
+				break;
 			}
 		}
 
