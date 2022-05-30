@@ -245,7 +245,7 @@ void CAdmin::MenuTeam(int EntityIndex)
 		{
 			if (!gAdmin.Check(Player))
 			{
-				gMenu[EntityIndex].AddItem(Player->entindex(), gUtil.VarArgs("%s \\R\y%s",STRING(Player->edict()->v.netname)));
+				gMenu[EntityIndex].AddItem(Player->entindex(), gUtil.VarArgs("%s \\R\\y%s", STRING(Player->edict()->v.netname), PUG_MOD_TEAM_STR[Player->m_iTeam]));
 			}
 		}
 	}

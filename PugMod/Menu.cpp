@@ -25,7 +25,7 @@ void CMenu::Create(std::string Title, bool Exit, void* CallbackFunction)
 
 	this->m_Exit = Exit;
 
-	this->m_Func = CallbackFunction; 
+	this->m_Func = CallbackFunction;
 }
 
 void CMenu::AddItem(int Info, std::string Text, bool Disabled)
@@ -80,7 +80,7 @@ bool CMenu::Handle(int EntityIndex, int Key)
 				}
 				else
 				{
-					unsigned int ItemIndex = (Key + (this->m_Page * MENU_PAGE_OPTION)) - 1;
+					unsigned int ItemIndex = (Key + (this->m_Page * this->m_PageOption)) - 1;
 
 					if (ItemIndex < this->m_Data.size())
 					{
@@ -144,7 +144,7 @@ void CMenu::Display(int EntityIndex, int Page)
 	}
 
 	MenuText += "\n\\w\n";
-	
+
 	unsigned int End = (Start + this->m_PageOption);
 
 	if (End > this->m_Data.size())
@@ -168,7 +168,7 @@ void CMenu::Display(int EntityIndex, int Page)
 
 	if (End != this->m_Data.size())
 	{
-		Slots |= (1 << 8); // MENU_KEY_9; 
+		Slots |= (1 << 8); // MENU_KEY_9;
 
 		if (Page)
 		{
@@ -215,7 +215,7 @@ void CMenu::ShowMenu(int EntityIndex, int Slots, int Time, std::string MenuText)
 			if (iMsgShowMenu || (iMsgShowMenu = GET_USER_MSG_ID(PLID, "ShowMenu", NULL)))
 			{
 				Player->m_iMenu = Menu_OFF;
-				
+
 				char BufferMenu[MAX_BUFFER_MENU * 6] = { 0 };
 
 				MenuText.copy(BufferMenu, MenuText.length() + 1);
