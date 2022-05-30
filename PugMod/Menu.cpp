@@ -28,25 +28,9 @@ void CMenu::Create(std::string Title, bool Exit, void* CallbackFunction)
 	this->m_Func = CallbackFunction; 
 }
 
-void CMenu::SetItem(int Item, std::string Text, bool Disabled)
+void CMenu::AddItem(int Info, std::string Text, bool Disabled)
 {
-	if (Item < this->m_Data.size())
-	{
-		this->m_Data[Item].Text = Text;
-
-		this->m_Data[Item].Item = Item;
-
-		this->m_Data[Item].Disabled = Disabled;
-	}
-	else
-	{
-		this->AddItem(Item, Text, Disabled);
-	}
-}
-
-void CMenu::AddItem(int Item, std::string Text, bool Disabled)
-{
-	P_MENU_ITEM ItemData = { Item, Text, Disabled };
+	P_MENU_ITEM ItemData = { Info, Text, Disabled };
 
 	this->m_Data.push_back(ItemData);
 }
@@ -63,7 +47,7 @@ void CMenu::AddList(std::vector<std::string> List)
 
 void CMenu::Show(int EntityIndex)
 {
-	if (this->m_Data.size() && this->m_Data.size())
+	if (this->m_Data.size())
 	{
 		this->Display(EntityIndex, 0);
 	}
@@ -104,7 +88,7 @@ bool CMenu::Handle(int EntityIndex, int Key)
 
 						if (this->m_Func)
 						{
-							((void(*)(int, int, bool, const char*))this->m_Func)(EntityIndex, this->m_Data[ItemIndex].Item, this->m_Data[ItemIndex].Disabled, this->m_Data[ItemIndex].Text.c_str());
+							((void(*)(int, int, bool, const char*))this->m_Func)(EntityIndex, this->m_Data[ItemIndex].Info, this->m_Data[ItemIndex].Disabled, this->m_Data[ItemIndex].Text.c_str());
 						}
 					}
 				}
@@ -140,14 +124,14 @@ void CMenu::Display(int EntityIndex, int Page)
 		this->m_Page = Page;
 	}
 
-	unsigned int Start = (Page * MENU_PAGE_OPTION);
+	unsigned int Start = (Page * this->m_PageOption);
 
 	if (Start >= this->m_Data.size())
 	{
 		Start = Page = this->m_Page = 0;
 	}
 
-	int PageCount = this->m_Data.size() > MENU_PAGE_OPTION ? (this->m_Data.size() / MENU_PAGE_OPTION + ((this->m_Data.size() % MENU_PAGE_OPTION) ? 1 : 0)) : 1;
+	int PageCount = (int)this->m_Data.size() > this->m_PageOption ? (this->m_Data.size() / this->m_PageOption + ((this->m_Data.size() % this->m_PageOption) ? 1 : 0)) : 1;
 
 	std::string MenuText = "\\y" + this->m_Text;
 
@@ -161,7 +145,7 @@ void CMenu::Display(int EntityIndex, int Page)
 
 	MenuText += "\n\\w\n";
 	
-	unsigned int End = (Start + MENU_PAGE_OPTION);
+	unsigned int End = (Start + this->m_PageOption);
 
 	if (End > this->m_Data.size())
 	{

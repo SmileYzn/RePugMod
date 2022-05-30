@@ -202,6 +202,7 @@ void CAdmin::MenuBan(int EntityIndex)
 
 void CAdmin::MenuBanHandle(int EntityIndex, int ItemIndex, bool Disabled, const char* Option)
 {
+
 }
 
 void CAdmin::MenuSlap(int EntityIndex)

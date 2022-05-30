@@ -1,11 +1,11 @@
 #pragma once
 
-#define MENU_PAGE_OPTION 8
+#define MENU_PAGE_OPTION 7
 #define MENU_RESET_ALL() for (int i = 1; i <= gpGlobals->maxClients; ++i) { gMenu[i].Hide(i); }
 
 typedef struct
 {
-	int Item;
+	int			Info;
 	std::string Text;
 	bool		Disabled;
 } P_MENU_ITEM, *LP_MENU_ITEM;
@@ -17,8 +17,7 @@ public:
 
 	void Create(std::string Title, bool Exit, void* CallbackFunction);
 
-	void SetItem(int Item, std::string Text, bool Disabled = false);
-	void AddItem(int Item, std::string Text, bool Disabled = false);
+	void AddItem(int Info, std::string Text, bool Disabled = false);
 	void AddList(std::vector<std::string> List);
 
 	void Show(int EntityIndex);
@@ -35,6 +34,7 @@ private:
 	std::vector<P_MENU_ITEM>  m_Data;
 	int						  m_Page = 0;
 	bool					  m_Exit = false;
+	int						  m_PageOption = MENU_PAGE_OPTION;
 	void*					  m_Func = nullptr;
 };
 
