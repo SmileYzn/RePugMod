@@ -21,3 +21,14 @@ jobs:
       working-directory: ./PugMod
       run: make
     
+   - name: Move files
+      run: |
+        mkdir -p publish/addons/pugmod/dlls
+        mv ./PugMod/Release/pugmod_mm.so publish/addons/pugmod/dlls
+        cp -ar ../cstrike publish
+
+    - name: Deploy artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: linux
+        path: publish/*
