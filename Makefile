@@ -1,17 +1,18 @@
-CSSDK 	= include/cssdk
-METAMOD = include/metamod
+SRC_DIR = PugMod
+CSSDK 	= $(SRC_DIR)/include/cssdk
+METAMOD = $(SRC_DIR)/include/metamod
 
 NAME = pugmod
 
 COMPILER = g++
 
-OBJECTS = *.cpp
+OBJECTS = $(SRC_DIR)/*.cpp
 
 LINK =
 
 OPT_FLAGS = -O3 -msse3 -flto -funroll-loops -fomit-frame-pointer -fno-stack-protector -fPIC
 
-INCLUDE = -I. -I$(CSSDK)/common -I$(CSSDK)/dlls -I$(CSSDK)/engine -I$(CSSDK)/game_shared -I$(CSSDK)/pm_shared -I$(CSSDK)/public -I$(METAMOD)
+INCLUDE = -I$(SRC_DIR)/. -I$(CSSDK)/common -I$(CSSDK)/dlls -I$(CSSDK)/engine -I$(CSSDK)/game_shared -I$(CSSDK)/pm_shared -I$(CSSDK)/public -I$(METAMOD)
 
 CFLAGS = $(OPT_FLAGS) -g -DNDEBUG -Dlinux -D__linux__ -D__USE_GNU -std=gnu++17 -m32 -shared
 
