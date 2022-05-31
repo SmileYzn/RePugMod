@@ -34,6 +34,7 @@ public:
 	cvar_t* GetKnifeRoundEndType();
 	cvar_t* GetHelpFileAdmin();
 	cvar_t* GetHelpFilePlayer();
+	cvar_t* GetBanTimes();
 
 private:
 	cvar_t* m_Config[8];
@@ -63,6 +64,7 @@ private:
 	cvar_t* m_KnifeRoundEndType;
 	cvar_t* m_HelpFileAdmin;
 	cvar_t* m_HelpFilePlayer;
+	cvar_t* m_BanTimes;
 };
 
 extern CCvars gCvars;

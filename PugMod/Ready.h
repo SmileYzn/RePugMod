@@ -12,7 +12,7 @@ public:
 
 private:
 	bool m_Running = false;
-	int m_Ready[33] = { 0 };
+	int m_Ready[MAX_CLIENTS + 1] = { 0 };
 	time_t m_SystemTime = 0;
 };
 

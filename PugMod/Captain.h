@@ -16,7 +16,7 @@ public:
 
 	void Menu(TeamName Team);
 
-	static void MenuHandle(int EntityIndex, int ItemIndex, bool Disabled, const char* Option);
+	static void MenuHandle(int EntityIndex, P_MENU_ITEM Item);
 	static void GetRandomPlayer(int EntityIndex);
 	static void List();
 private:

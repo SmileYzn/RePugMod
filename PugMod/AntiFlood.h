@@ -9,8 +9,8 @@ public:
 	bool ClientCommand(CBasePlayer* Player, const char* pcmd, const char* parg1);
 
 private:
-	int   m_Flood[33] = { 0 };
-	float m_Flooding[33] = { 0 };
+	int   m_Flood[MAX_CLIENTS+1] = { 0 };
+	float m_Flooding[MAX_CLIENTS+1] = { 0 };
 };
 
 extern CAntiFlood gAntiFlood;

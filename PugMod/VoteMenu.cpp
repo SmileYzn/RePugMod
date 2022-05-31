@@ -77,13 +77,13 @@ void CVoteMenu::Menu(CBasePlayer* Player)
 	}
 }
 
-void CVoteMenu::MenuHandle(int EntityIndex, int ItemIndex, bool Disabled, const char* Option)
+void CVoteMenu::MenuHandle(int EntityIndex, P_MENU_ITEM Item)
 {
 	auto Player = UTIL_PlayerByIndexSafe(EntityIndex);
 
 	if (Player)
 	{
-		switch (ItemIndex)
+		switch (Item.Info)
 		{
 			case 0:
 			{
@@ -152,17 +152,17 @@ void CVoteMenu::VoteKick(CBasePlayer* Player)
 	}
 }
 
-void CVoteMenu::VoteKickHandle(int EntityIndex, int ItemIndex, bool Disabled, const char * Option)
+void CVoteMenu::VoteKickHandle(int EntityIndex, P_MENU_ITEM Item)
 {
 	auto Player = UTIL_PlayerByIndexSafe(EntityIndex);
 
 	if (Player)
 	{
-		auto Target = UTIL_PlayerByIndexSafe(ItemIndex);
+		auto Target = UTIL_PlayerByIndexSafe(Item.Info);
 
 		if (Target)
 		{
-			gVoteMenu.VoteKickPlayer(Player, Target, Disabled);
+			gVoteMenu.VoteKickPlayer(Player, Target, Item.Disabled);
 		}
 	}
 }
@@ -236,13 +236,13 @@ void CVoteMenu::VoteMap(CBasePlayer* Player)
 	}
 }
 
-void CVoteMenu::VoteMapHandle(int EntityIndex, int ItemIndex, bool Disabled, const char * Option)
+void CVoteMenu::VoteMapHandle(int EntityIndex, P_MENU_ITEM Item)
 {
 	auto Player = UTIL_PlayerByIndexSafe(EntityIndex);
 
 	if (Player)
 	{
-		gVoteMenu.VoteMapPickup(Player, ItemIndex, Disabled);
+		gVoteMenu.VoteMapPickup(Player, Item.Info, Item.Disabled);
 	}
 }
 

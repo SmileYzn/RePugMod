@@ -17,7 +17,7 @@ public:
 	int AddVote(TeamName Team);
 	int GetVote(TeamName Team);
 
-	static void MenuHandle(int EntityIndex, int ItemIndex, bool Disabled, const char* Option);
+	static void MenuHandle(int EntityIndex, P_MENU_ITEM Item);
 	static void VoteEnd();
 
 private:

@@ -1,3 +1,27 @@
+"Dead"
+en:"Dead"
+
+"Warmup"
+en:"Warmup"
+
+"Starting"
+en:"Starting"
+
+"First Half"
+en:"First Half"
+
+"Half Time"
+en:"Half Time"
+
+"Second Half"
+en:"Second Half"
+
+"Overtime"
+en:"Overtime"
+
+"Finished"
+en:"Finished"
+
 "%s Build %s (\3%s\1)"
 en:"%s Build %s (\3%s\1)"
 

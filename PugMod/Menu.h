@@ -8,6 +8,7 @@ typedef struct
 	int			Info;
 	std::string Text;
 	bool		Disabled;
+	int			Extra;
 } P_MENU_ITEM, *LP_MENU_ITEM;
 
 class CMenu
@@ -17,14 +18,15 @@ public:
 
 	void Create(std::string Title, bool Exit, void* CallbackFunction);
 
-	void AddItem(int Info, std::string Text, bool Disabled = false);
+	void AddItem(int Info, std::string Text);
+	void AddItem(int Info, std::string Text, bool Disabled);
+	void AddItem(int Info, std::string Text, bool Disabled, int Extra);
 	void AddList(std::vector<std::string> List);
 
 	void Show(int EntityIndex);
 	void Hide(int EntityIndex);
 
 	bool Handle(int EntityIndex, int Key);
-	
 private:
 	void Display(int EntityIndex, int Page);
 	void ShowMenu(int EntityIndex, int Slots, int Time, std::string MenuText);
@@ -38,4 +40,4 @@ private:
 	void*					  m_Func = nullptr;
 };
 
-extern CMenu gMenu[33];
+extern CMenu gMenu[MAX_CLIENTS+1];

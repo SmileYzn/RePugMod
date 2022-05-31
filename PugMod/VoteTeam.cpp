@@ -46,15 +46,15 @@ void CVoteTeam::Init()
 	gTask.Create(PUG_TASK_LIST, 0.5f, true, (void*)this->List, this);
 }
 
-void CVoteTeam::MenuHandle(int EntityIndex, int ItemIndex, bool Disabled, const char* Option)
+void CVoteTeam::MenuHandle(int EntityIndex, P_MENU_ITEM Item)
 {
 	auto Player = UTIL_PlayerByIndexSafe(EntityIndex);
 
 	if (Player)
 	{
-		gVoteTeam.AddVote(ItemIndex, 1);
+		gVoteTeam.AddVote(Item.Info, 1);
 
-		gUtil.SayText(NULL, Player->entindex(), _T("\3%s\1 choosed \3%s\1"), STRING(Player->edict()->v.netname), Option);
+		gUtil.SayText(NULL, Player->entindex(), _T("\3%s\1 choosed \3%s\1"), STRING(Player->edict()->v.netname), Item.Disabled);
 
 		if (gVoteTeam.GetCount() >= gPlayer.GetNum(false))
 		{

@@ -11,25 +11,27 @@ public:
 	bool Check(const char* Auth);
 
 	void Menu(CBasePlayer* Player);
-	static void MenuHandle(int EntityIndex, int ItemIndex, bool Disabled, const char* Option);
+	static void MenuHandle(int EntityIndex, P_MENU_ITEM Item);
 
 	void MenuKick(int EntityIndex);
-	static void MenuKickHandle(int EntityIndex, int ItemIndex, bool Disabled, const char* Option);
+	static void MenuKickHandle(int EntityIndex, P_MENU_ITEM Item);
 
 	void MenuBan(int EntityIndex);
-	static void MenuBanHandle(int EntityIndex, int ItemIndex, bool Disabled, const char* Option);
+	static void MenuBanHandle(int EntityIndex, P_MENU_ITEM Item);
+	static void MenuBanHandleExtra(int EntityIndex, P_MENU_ITEM Item);
 
 	void MenuSlap(int EntityIndex);
-	static void MenuSlapHandle(int EntityIndex, int ItemIndex, bool Disabled, const char* Option);
+	static void MenuSlapHandle(int EntityIndex, P_MENU_ITEM Item);
 
 	void MenuTeam(int EntityIndex);
-	static void MenuTeamHandle(int EntityIndex, int ItemIndex, bool Disabled, const char* Option);
+	static void MenuTeamHandle(int EntityIndex, P_MENU_ITEM Item);
+	static void MenuTeamHandleExtra(int EntityIndex, P_MENU_ITEM Item);
 
 	void MenuMap(int EntityIndex);
-	static void MenuMapHandle(int EntityIndex, int ItemIndex, bool Disabled, const char* Option);
+	static void MenuMapHandle(int EntityIndex, P_MENU_ITEM Item);
 
 	void MenuControl(int EntityIndex);
-	static void MenuControlHandle(int EntityIndex, int ItemIndex, bool Disabled, const char* Option);
+	static void MenuControlHandle(int EntityIndex, P_MENU_ITEM Item);
 
 	void Chat(CBasePlayer* Player, const char* Args);
 	void Rcon(CBasePlayer* Player, const char* Args);

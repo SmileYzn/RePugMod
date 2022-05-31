@@ -187,15 +187,15 @@ int CKnifeRound::GetVote(TeamName Team)
 	return this->m_Votes[Team];
 }
 
-void CKnifeRound::MenuHandle(int EntityIndex, int ItemIndex, bool Disabled, const char* Option)
+void CKnifeRound::MenuHandle(int EntityIndex, P_MENU_ITEM Item)
 {
 	auto Player = UTIL_PlayerByIndexSafe(EntityIndex);
 
 	if (Player)
 	{
-		gKnifeRound.AddVote((TeamName)ItemIndex);
+		gKnifeRound.AddVote((TeamName)Item.Info);
 
-		gUtil.SayText(NULL, Player->entindex(), _T("\3%s\1 choosed \3%s\1"), STRING(Player->edict()->v.netname), Option);
+		gUtil.SayText(NULL, Player->entindex(), _T("\3%s\1 choosed \3%s\1"), STRING(Player->edict()->v.netname), Item.Text.c_str());
 
 		if ((gKnifeRound.GetVote(TERRORIST) + gKnifeRound.GetVote(CT)) >= gPlayer.GetNum(gKnifeRound.GetWinner()))
 		{

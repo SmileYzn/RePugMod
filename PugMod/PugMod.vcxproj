@@ -13,6 +13,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{8EF9FA4E-09F8-4404-9319-742E194DF024}</ProjectGuid>
     <RootNamespace>PugMod</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -54,6 +55,7 @@
       <Optimization>Disabled</Optimization>
       <CompileAsManaged>false</CompileAsManaged>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <ModuleDefinitionFile>MetaMod.def</ModuleDefinitionFile>
@@ -73,6 +75,7 @@
       <CompileAsManaged>false</CompileAsManaged>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -105,6 +108,7 @@
     <ClInclude Include="ReGameDLL.h" />
     <ClInclude Include="Stats.h" />
     <ClInclude Include="Task.h" />
+    <ClInclude Include="TimeFormat.h" />
     <ClInclude Include="Translate.h" />
     <ClInclude Include="Util.h" />
     <ClInclude Include="VoteMap.h" />
@@ -133,6 +137,7 @@
     <ClCompile Include="ReGameDLL.cpp" />
     <ClCompile Include="Stats.cpp" />
     <ClCompile Include="Task.cpp" />
+    <ClCompile Include="TimeFormat.cpp" />
     <ClCompile Include="Translate.cpp" />
     <ClCompile Include="Util.cpp" />
     <ClCompile Include="VoteMap.cpp" />

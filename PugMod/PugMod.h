@@ -39,6 +39,7 @@ public:
 	void Unload();
 
 	int GetState();
+	char* GetStateName();
 
 	bool IsLive();
 
@@ -85,8 +86,8 @@ private:
 	int m_Round[PUG_STATE_END + 1] = { 0 };
 	int m_Score[PUG_STATE_END + 1][SPECTATOR + 1] = { 0 };
 
-	int m_Frags[33] = { 0 };
-	int m_Death[33] = { 0 };
+	int m_Frags[MAX_CLIENTS + 1] = { 0 };
+	int m_Death[MAX_CLIENTS + 1] = { 0 };
 };
 
 extern CPugMod gPugMod;

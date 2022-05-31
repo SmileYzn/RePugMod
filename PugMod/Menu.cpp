@@ -1,6 +1,6 @@
 #include "precompiled.h"
 
-CMenu gMenu[33];
+CMenu gMenu[MAX_CLIENTS+1];
 
 void CMenu::Clear()
 {
@@ -28,9 +28,19 @@ void CMenu::Create(std::string Title, bool Exit, void* CallbackFunction)
 	this->m_Func = CallbackFunction;
 }
 
+void CMenu::AddItem(int Info, std::string Text)
+{
+	this->AddItem(Info, Text, false, 0);
+}
+
 void CMenu::AddItem(int Info, std::string Text, bool Disabled)
 {
-	P_MENU_ITEM ItemData = { Info, Text, Disabled };
+	this->AddItem(Info, Text, Disabled, 0);
+}
+
+void CMenu::AddItem(int Info, std::string Text, bool Disabled, int Extra)
+{
+	P_MENU_ITEM ItemData = { Info, Text, Disabled, Extra};
 
 	this->m_Data.push_back(ItemData);
 }
@@ -41,7 +51,7 @@ void CMenu::AddList(std::vector<std::string> List)
 
 	for (size_t i = 0; i < List.size(); i++)
 	{
-		this->AddItem(i, List[i].c_str(), false);
+		this->AddItem(i, List[i]);
 	}
 }
 
@@ -88,7 +98,7 @@ bool CMenu::Handle(int EntityIndex, int Key)
 
 						if (this->m_Func)
 						{
-							((void(*)(int, int, bool, const char*))this->m_Func)(EntityIndex, this->m_Data[ItemIndex].Info, this->m_Data[ItemIndex].Disabled, this->m_Data[ItemIndex].Text.c_str());
+							((void(*)(int, P_MENU_ITEM))this->m_Func)(EntityIndex, this->m_Data[ItemIndex]);
 						}
 					}
 				}

@@ -22,6 +22,15 @@ int CPugMod::GetState()
 	return this->m_State;
 }
 
+char* CPugMod::GetStateName()
+{
+	static char Name[32] = { 0 };
+
+	strcpy(Name, _T(PUG_MOD_STATES_STR[this->m_State]));
+
+	return Name;
+}
+
 bool CPugMod::IsLive()
 {
 	return (this->m_State == PUG_STATE_FIRST_HALF || this->m_State == PUG_STATE_SECOND_HALF || this->m_State == PUG_STATE_OVERTIME);
@@ -37,7 +46,7 @@ void CPugMod::SetState(int State)
 			{
 				gReady.Load();
 
-				gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("%s started, get ready!"), PUG_MOD_STATES_STR[this->m_State]);
+				gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("%s started, get ready!"), this->GetStateName());
 				break;
 			}
 		case PUG_STATE_START:
@@ -82,7 +91,7 @@ void CPugMod::SetState(int State)
 				{
 					this->LO3(3);
 
-					gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("%s started: \3Good Luck & Have Fun!"), PUG_MOD_STATES_STR[this->m_State]);
+					gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("%s started: \3Good Luck & Have Fun!"), this->GetStateName());
 				}
 				else
 				{
@@ -99,7 +108,7 @@ void CPugMod::SetState(int State)
 
 				gTask.Create(PUG_TASK_EXEC, 5.0f, false, (void*)this->SwapTeams, this);
 
-				gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("%s started, get ready!"), PUG_MOD_STATES_STR[this->m_State]);
+				gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("%s started, get ready!"), this->GetStateName());
 
 				if (gPlayer.GetNum() >= (int)gCvars.GetPlayersMin()->value)
 				{
@@ -121,7 +130,7 @@ void CPugMod::SetState(int State)
 				{
 					this->LO3(3);
 
-					gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("%s started: \3Good Luck & Have Fun!"), PUG_MOD_STATES_STR[this->m_State]);
+					gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("%s started: \3Good Luck & Have Fun!"), this->GetStateName());
 				}
 				else
 				{
@@ -308,7 +317,7 @@ bool CPugMod::StartVoteMap(CBasePlayer* Player)
 	}
 	else
 	{
-		gUtil.SayText(Player->edict(), PRINT_TEAM_RED, _T("Cannot start an vote in \3%s\1 state."), PUG_MOD_STATES_STR[this->m_State]);
+		gUtil.SayText(Player->edict(), PRINT_TEAM_RED, _T("Cannot start an vote in \3%s\1 state."), this->GetStateName());
 	}
 
 	return false;
@@ -330,7 +339,7 @@ bool CPugMod::StartVoteTeam(CBasePlayer* Player)
 	}
 	else
 	{
-		gUtil.SayText(Player->edict(), PRINT_TEAM_RED, _T("Cannot start vote team in \3%s\1 state."), PUG_MOD_STATES_STR[this->m_State]);
+		gUtil.SayText(Player->edict(), PRINT_TEAM_RED, _T("Cannot start vote team in \3%s\1 state."), this->GetStateName());
 	}
 
 	return false;
@@ -355,7 +364,7 @@ bool CPugMod::StartMatch(CBasePlayer* Player)
 	}
 	else
 	{
-		gUtil.SayText(Player->edict(), PRINT_TEAM_RED, _T("Cannot start match in \3%s\1 state."), PUG_MOD_STATES_STR[this->m_State]);
+		gUtil.SayText(Player->edict(), PRINT_TEAM_RED, _T("Cannot start match in \3%s\1 state."), this->GetStateName());
 	}
 
 	return false;
@@ -375,7 +384,7 @@ bool CPugMod::StopMatch(CBasePlayer* Player)
 	}
 	else
 	{
-		gUtil.SayText(Player->edict(), PRINT_TEAM_RED, _T("Cannot stop match in \3%s\1 state."), PUG_MOD_STATES_STR[this->m_State]);
+		gUtil.SayText(Player->edict(), PRINT_TEAM_RED, _T("Cannot stop match in \3%s\1 state."), this->GetStateName());
 	}
 
 	return false;
@@ -387,7 +396,7 @@ bool CPugMod::RestarPeriod(CBasePlayer* Player)
 	{
 		if (Player)
 		{
-			gUtil.SayText(NULL, Player->entindex(), _T("\3%s\1 restarted \4%s\1 period, get ready!."), STRING(Player->edict()->v.netname), PUG_MOD_STATES_STR[this->m_State]);
+			gUtil.SayText(NULL, Player->entindex(), _T("\3%s\1 restarted \4%s\1 period, get ready!."), STRING(Player->edict()->v.netname), this->GetStateName());
 		}
 
 		this->m_Round[this->m_State] = 0;
@@ -402,7 +411,7 @@ bool CPugMod::RestarPeriod(CBasePlayer* Player)
 	{
 		if (Player)
 		{
-			gUtil.SayText(Player->edict(), PRINT_TEAM_RED, _T("Cannot restart period in \3%s\1 state."), PUG_MOD_STATES_STR[this->m_State]);
+			gUtil.SayText(Player->edict(), PRINT_TEAM_RED, _T("Cannot restart period in \3%s\1 state."), this->GetStateName());
 		}
 	}
 
@@ -491,7 +500,7 @@ void CPugMod::Status(CBasePlayer* Player)
 		Player->edict(),
 		PRINT_TEAM_DEFAULT,
 		_T("Status: \4%s\1 (Players %d) (%d Required of %d Allowed)"),
-		PUG_MOD_STATES_STR[this->m_State],
+		this->GetStateName(),
 		gPlayer.GetNum(),
 		(int)gCvars.GetPlayersMin()->value,
 		(int)gCvars.GetPlayersMax()->value

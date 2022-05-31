@@ -105,6 +105,9 @@ void CCvars::Load()
 
 	// Player help MOTD page (File path or website URL)
 	this->m_HelpFilePlayer = this->Register("pug_help_player", "cstrike/addons/pugmod/help_player.htm");
+
+	// Allowed ban times in minutes (0 To ban permanently)
+	this->m_BanTimes = this->Register("pug_ban_times", "0 5 10 15 30 45 60 120");
 }
 
 cvar_t* CCvars::Register(const char* Name, const char* Value)
@@ -262,4 +265,9 @@ cvar_t* CCvars::GetHelpFileAdmin()
 cvar_t* CCvars::GetHelpFilePlayer()
 {
 	return this->m_HelpFilePlayer;
+}
+
+cvar_t* CCvars::GetBanTimes()
+{
+	return m_BanTimes;
 }

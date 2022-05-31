@@ -19,7 +19,6 @@
 
 // System Includes
 #include <string>
-#include <algorithm>
 #include <vector>
 #include <map>
 #include <array>
@@ -49,6 +48,7 @@
 #include "Util.h"
 #include "Cvars.h"
 #include "Translate.h"
+#include "TimeFormat.h"
 #include "AntiFlood.h"
 #include "AntiRetry.h"
 #include "Player.h"

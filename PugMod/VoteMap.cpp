@@ -41,15 +41,15 @@ void CVoteMap::Init()
 	gTask.Create(PUG_TASK_LIST, 0.5f, true, (void*)this->List, this);
 }
 
-void CVoteMap::MenuHandle(int EntityIndex, int ItemIndex, bool Disabled, const char* Option)
+void CVoteMap::MenuHandle(int EntityIndex, P_MENU_ITEM Item)
 {
 	auto Player = UTIL_PlayerByIndexSafe(EntityIndex);
 
 	if (Player)
 	{
-		gVoteMap.AddVote(ItemIndex, 1);
+		gVoteMap.AddVote(Item.Info, 1);
 
-		gUtil.SayText(NULL, Player->entindex(), _T("\3%s\1 choosed \3%s\1"), STRING(Player->edict()->v.netname), Option);
+		gUtil.SayText(NULL, Player->entindex(), _T("\3%s\1 choosed \3%s\1"), STRING(Player->edict()->v.netname), Item.Text.c_str());
 
 		if (gVoteMap.GetCount() >= gPlayer.GetNum(false))
 		{
