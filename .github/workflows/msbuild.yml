@@ -41,14 +41,10 @@ jobs:
     - name: Move files
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: |
-        mkdir publish\addons\pugmod\dlls
-        mkdir publish\addons\pugmod\cfg
-
-        move ${{env.BUILD_CONFIGURATION}}\*.* publish\addons\pugmod\dlls
-
-        move ${{env.SOLUTION_FILE_PATH}}\cstrike\*.* publish
-        move ${{env.SOLUTION_FILE_PATH}}\cstrike\addons\pugmod\*.* publish\addons\pugmod
-        move ${{env.SOLUTION_FILE_PATH}}\cstrike\addons\pugmod\cfg\*.* publish\addons\pugmod\cfg
+        move ${{env.SOLUTION_FILE_PATH}}\cstrike publish
+        
+        mkdir publish\cstrike\addons\pugmod\dlls
+        move ${{env.BUILD_CONFIGURATION}}\*.dll publish\cstrike\addons\pugmod\dlls
 
     - name: Deploy artifacts
       uses: actions/upload-artifact@v2
