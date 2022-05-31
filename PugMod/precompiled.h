@@ -22,6 +22,7 @@
 #include <vector>
 #include <map>
 #include <array>
+#include <iterator>
 
 // CSSDK
 #include <extdll.h>
