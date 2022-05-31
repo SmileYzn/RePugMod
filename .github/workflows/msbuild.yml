@@ -37,3 +37,21 @@ jobs:
       # Add additional options to the MSBuild command line here (like platform or verbosity level).
       # See https://docs.microsoft.com/visualstudio/msbuild/msbuild-command-line-reference
       run: msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} ${{env.SOLUTION_FILE_PATH}}
+
+    - name: Move files
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run: |
+        mkdir publish\addons\pugmod\dlls
+        mkdir publish\addons\pugmod\cfg
+
+        move ${{env.BUILD_CONFIGURATION}}\*.* publish\addons\pugmod\dlls
+
+        move ${{env.SOLUTION_FILE_PATH}}\cstrike\*.* publish
+        move ${{env.SOLUTION_FILE_PATH}}\cstrike\addons\pugmod\*.* publish\addons\pugmod
+        move ${{env.SOLUTION_FILE_PATH}}\cstrike\addons\pugmod\cfg\*.* publish\addons\pugmod\cfg
+
+    - name: Deploy artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: win32
+          path: publish/*
