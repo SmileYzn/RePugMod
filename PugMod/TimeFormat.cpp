@@ -73,37 +73,37 @@ std::string CTimeFormat::GetTimeLength(long unitCnt, TimeUnitType Type)
 
 		if (yearCnt > 0)
 		{
-            timeElement[++maxElementIdx] = std::to_string(yearCnt) + " " + (yearCnt == 1 ? "year" : "years");
+            timeElement[++maxElementIdx] = std::to_string(yearCnt) + " " + (yearCnt == 1 ? _T("year") : _T("years"));
 		}
 
 		if (monthCnt > 0)
 		{
-            timeElement[++maxElementIdx] = std::to_string(monthCnt) + " " + (monthCnt == 1 ? "month" : "months");
+            timeElement[++maxElementIdx] = std::to_string(monthCnt) + " " + (monthCnt == 1 ? _T("month") : _T("months"));
 		}
 
 		if (weekCnt > 0)
 		{
-            timeElement[++maxElementIdx] = std::to_string(weekCnt) + " " + (weekCnt == 1 ? "week" : "weeks");
+            timeElement[++maxElementIdx] = std::to_string(weekCnt) + " " + (weekCnt == 1 ? _T("week") : _T("weeks"));
 		}
 
 		if (dayCnt > 0)
 		{
-            timeElement[++maxElementIdx] = std::to_string(dayCnt) + " " + (dayCnt == 1 ? "day" : "days");
+            timeElement[++maxElementIdx] = std::to_string(dayCnt) + " " + (dayCnt == 1 ? _T("day") : _T("days"));
 		}
 
 		if (hourCnt > 0)
 		{
-            timeElement[++maxElementIdx] = std::to_string(hourCnt) + " " + (hourCnt == 1 ? "hour" : "hours");
+            timeElement[++maxElementIdx] = std::to_string(hourCnt) + " " + (hourCnt == 1 ? _T("hour") : _T("hours"));
 		}
 
 		if (minuteCnt > 0)
 		{
-            timeElement[++maxElementIdx] = std::to_string(minuteCnt) + " " + (minuteCnt == 1 ? "minute" : "minutes");
+            timeElement[++maxElementIdx] = std::to_string(minuteCnt) + " " + (minuteCnt == 1 ? _T("minute") : _T("minutes"));
 		}
 
 		if (secondCnt > 0)
 		{
-            timeElement[++maxElementIdx] = std::to_string(secondCnt) + " " + (secondCnt == 1 ? "second" : "seconds");
+            timeElement[++maxElementIdx] = std::to_string(secondCnt) + " " + (secondCnt == 1 ? _T("second") : _T("seconds"));
 		}
 
         switch (maxElementIdx)
@@ -115,39 +115,39 @@ std::string CTimeFormat::GetTimeLength(long unitCnt, TimeUnitType Type)
             }
             case 1:
             {
-                Output = timeElement[0] + " and " + timeElement[1];
+                Output = timeElement[0] + " " + _T("and") + " " + timeElement[1];
                 break;
             }
             case 2:
             {
-                Output = timeElement[0] + ", " + timeElement[1] + " and " + timeElement[2];
+                Output = timeElement[0] + ", " + timeElement[1] + " " + _T("and") + " " +  timeElement[2];
                 break;
             }
             case 3:
             {
-                Output = timeElement[0] + ", " + timeElement[1] + ", " + timeElement[2] + " and " + timeElement[3];
+                Output = timeElement[0] + ", " + timeElement[1] + ", " + timeElement[2] + " " + _T("and") + " " +  timeElement[3];
                 break;
             }
             case 4:
             {
-                Output = timeElement[0] + ", " + timeElement[1] + ", " + timeElement[2] + ", " + timeElement[3] + " and " + timeElement[4];
+                Output = timeElement[0] + ", " + timeElement[1] + ", " + timeElement[2] + ", " + timeElement[3] + " " + _T("and") + " " +  timeElement[4];
                 break;
             }
             case 5:
             {
-                Output = timeElement[0] + ", " + timeElement[1] + ", " + timeElement[2] + ", " + timeElement[3] + ", " + timeElement[4] + " and " + timeElement[5];
+                Output = timeElement[0] + ", " + timeElement[1] + ", " + timeElement[2] + ", " + timeElement[3] + ", " + timeElement[4] + " " + _T("and") + " " +  timeElement[5];
                 break;
             }
             case 6:
             {
-                Output = timeElement[0] + ", " + timeElement[1] + ", " + timeElement[2] + ", " + timeElement[3] + ", " + timeElement[4] + ", " + timeElement[5] + " and " + timeElement[6];
+                Output = timeElement[0] + ", " + timeElement[1] + ", " + timeElement[2] + ", " + timeElement[3] + ", " + timeElement[4] + ", " + timeElement[5] + " " + _T("and") + " " + timeElement[6];
                 break;
             }
         }
     }
     else
     {
-        Output = "Permanently";
+        Output = _T("Permanently");
     }
 
     return Output;
