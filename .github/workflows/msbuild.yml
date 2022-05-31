@@ -51,7 +51,6 @@ jobs:
         move ${{env.SOLUTION_FILE_PATH}}\cstrike\addons\pugmod\cfg\*.* publish\addons\pugmod\cfg
 
     - name: Deploy artifacts
-      working-directory: ${{env.GITHUB_WORKSPACE}}
       uses: actions/upload-artifact@v2
       with:
         name: win32
