@@ -42,9 +42,9 @@ jobs:
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: |
         move ${{env.SOLUTION_FILE_PATH}}\cstrike publish
-        
-        mkdir publish\cstrike\addons\pugmod\dlls
-        move ${{env.BUILD_CONFIGURATION}}\*.dll publish\cstrike\addons\pugmod\dlls
+
+        mkdir publish\addons\pugmod\dlls
+        move ${{env.BUILD_CONFIGURATION}}\*.dll publish\addons\pugmod\dlls
 
     - name: Deploy artifacts
       uses: actions/upload-artifact@v2
