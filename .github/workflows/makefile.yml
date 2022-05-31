@@ -21,7 +21,7 @@ jobs:
       working-directory: ./PugMod
       run: make
     
-   - name: Move files
+    - name: Move files
       run: |
         mkdir -p publish/addons/pugmod/dlls
         mv ./PugMod/Release/pugmod_mm.so publish/addons/pugmod/dlls
