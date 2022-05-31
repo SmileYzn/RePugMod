@@ -472,3 +472,30 @@ en:"Game Over! The \3%s\1 Surrendered!"
 "You already voted to stop the match."
 en:"You already voted to stop the match."
 
+"Ban Player"
+en:"Ban Player"
+
+"Choose a time to ban \\w%s\\y"
+en:"Choose a time to ban \\w%s\\y"
+
+"\3%s\1 Banned \3%s\1: \4%s\1."
+en:"\3%s\1 Banned \3%s\1: \4%s\1."
+
+"Team Player"
+en:"Team Player"
+
+"Set \\w%s\\y Team"
+en:"Set \\w%s\\y Team"
+
+"Terrorist"
+en:"Terrorist"
+
+"Counter-Terrorist"
+en:"Counter-Terrorist"
+
+"Spectator"
+en:"Spectator"
+
+"\4%s\1 moved \3%s\1 to \3%s\1"
+en:"\4%s\1 moved \3%s\1 to \3%s\1"
+

@@ -40,7 +40,7 @@ void CMenu::AddItem(int Info, std::string Text, bool Disabled)
 
 void CMenu::AddItem(int Info, std::string Text, bool Disabled, int Extra)
 {
-	P_MENU_ITEM ItemData = { Info, Text, Disabled, Extra};
+	P_MENU_ITEM ItemData = { Info, Text, Disabled, Extra };
 
 	this->m_Data.push_back(ItemData);
 }
