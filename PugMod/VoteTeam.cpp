@@ -54,7 +54,7 @@ void CVoteTeam::MenuHandle(int EntityIndex, P_MENU_ITEM Item)
 	{
 		gVoteTeam.AddVote(Item.Info, 1);
 
-		gUtil.SayText(NULL, Player->entindex(), _T("\3%s\1 choosed \3%s\1"), STRING(Player->edict()->v.netname), Item.Disabled);
+		gUtil.SayText(NULL, Player->entindex(), _T("\3%s\1 choosed \3%s\1"), STRING(Player->edict()->v.netname), Item.Text.c_str());
 
 		if (gVoteTeam.GetCount() >= gPlayer.GetNum(false))
 		{
@@ -217,10 +217,10 @@ void CVoteTeam::TeamsRandomize()
 	while (Num)
 	{
 		// Get Random index from player count minus one (Like Num)
-		int Rand = RANDOM_LONG(0, (Num - 1));
+		auto Random = RANDOM_LONG(0, Num - 1);
 
 		// Pointer
-		auto Player = Players[Rand];
+		auto Player = Players[Random];
 
 		// If is not null
 		if (Player)
@@ -229,19 +229,16 @@ void CVoteTeam::TeamsRandomize()
 			Player->CSPlayer()->JoinTeam(Team);
 
 			// Remove this entity from players count number
-			Players[Rand] = Players[--Num];
+			Players[Random] = Players[--Num];
 
 			// Set next team for next random player
-			Team = (Team == TERRORIST) ? CT : TERRORIST;
+			Team = (TeamName)(Team % CT + TERRORIST);
 		}
 	}
 
 	// If has CSGameRules
 	if (g_pGameRules)
 	{
-		// Balance Teams to prevent incorrect count
-		CSGameRules()->BalanceTeams();
-
 		// Restart Round
 		CSGameRules()->RestartRound();
 	}
@@ -304,7 +301,7 @@ void CVoteTeam::TeamsOptimize()
 					Player->CSPlayer()->JoinTeam(Team);
 
 					// Get the next team oposite from current team for next skilled player
-					Team = (Team == TERRORIST) ? CT : TERRORIST;
+					Team = (TeamName)(Team % CT + TERRORIST);
 				}
 			}
 		}
@@ -314,7 +311,7 @@ void CVoteTeam::TeamsOptimize()
 	if (g_pGameRules)
 	{
 		// Balance Teams to prevent incorrect count
-		CSGameRules()->BalanceTeams();
+		//CSGameRules()->BalanceTeams();
 
 		// Restart Round
 		CSGameRules()->RestartRound();
