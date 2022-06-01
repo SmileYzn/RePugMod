@@ -297,6 +297,7 @@ void CPugMod::SaveScores()
 			if (Player)
 			{
 				this->m_Frags[Player->entindex()] = Player->edict()->v.frags;
+
 				this->m_Death[Player->entindex()] = Player->m_iDeaths;
 			}
 		}
@@ -937,7 +938,7 @@ void CPugMod::RoundRestart()
 
 					if (gCvars.GetShowScoreType()->value == 2)
 					{
-						CBasePlayer* Players[MAX_CLIENTS] = { nullptr };
+						CBasePlayer* Players[MAX_CLIENTS] = { NULL };
 
 						auto Num = gPlayer.GetList(Players, true);
 
@@ -949,14 +950,14 @@ void CPugMod::RoundRestart()
 							{
 								auto EntityIndex = Player->entindex();
 
-								if (this->m_Frags[EntityIndex] || this->m_Death[EntityIndex])
+								if (this->m_Frags[EntityIndex] > 0 || this->m_Death[EntityIndex] > 0)
 								{
 									Player->m_iDeaths = this->m_Death[EntityIndex];
 
-									Player->edict()->v.frags = 0.0f;
-
-									Player->AddPoints(this->m_Frags[EntityIndex], TRUE);
+									Player->edict()->v.frags = this->m_Frags[EntityIndex];
 								}
+
+								Player->AddPoints(0, TRUE);
 							}
 						}
 					}
