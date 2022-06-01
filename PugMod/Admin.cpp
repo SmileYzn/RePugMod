@@ -124,15 +124,11 @@ void CAdmin::MenuHandle(int EntityIndex, P_MENU_ITEM Item)
 			case 6:
 			{
 				gUtil.ClientCommand(Player->edict(), "messagemode !msg");
-
-				gAdmin.Menu(Player);
 				break;
 			}
 			case 7:
 			{
 				gUtil.ClientCommand(Player->edict(), "messagemode !rcon");
-
-				gAdmin.Menu(Player);
 				break;
 			}
 		}
@@ -176,8 +172,6 @@ void CAdmin::MenuKickHandle(int EntityIndex, P_MENU_ITEM Item)
 			gUtil.SayText(NULL, Player->entindex(), _T("\3%s\1 Kicked \3%s\1"), STRING(Player->edict()->v.netname), STRING(Target->edict()->v.netname));
 
 			gPlayer.DropClient(Target->entindex(), _T("Kicked by %s"), STRING(Player->edict()->v.netname));
-
-			gAdmin.MenuKick(EntityIndex);
 		}
 	}
 }
@@ -254,8 +248,6 @@ void CAdmin::MenuBanHandleExtra(int EntityIndex, P_MENU_ITEM Item)
 			gUtil.SayText(NULL, Player->entindex(), _T("\3%s\1 Banned \3%s\1: \4%s\1."), STRING(Player->edict()->v.netname), STRING(Target->edict()->v.netname), Item.Text.c_str());
 
 			gUtil.ServerCommand("banid %d #%d kick;writeid", Item.Extra, GETPLAYERUSERID(Target->edict()));
-
-			gAdmin.MenuBan(EntityIndex);
 		}
 	}
 }
@@ -298,8 +290,6 @@ void CAdmin::MenuSlapHandle(int EntityIndex, P_MENU_ITEM Item)
 
 			MDLL_ClientKill(Target->edict());
 		}
-
-		gAdmin.MenuSlap(EntityIndex);
 	}
 }
 
@@ -374,8 +364,6 @@ void CAdmin::MenuTeamHandleExtra(int EntityIndex, P_MENU_ITEM Item)
 			}
 
 			gUtil.SayText(NULL, Target->entindex(), _T("\4%s\1 moved \3%s\1 to \3%s\1"), STRING(Player->edict()->v.netname), STRING(Target->edict()->v.netname), Item.Text.c_str());
-
-			gAdmin.MenuTeam(EntityIndex);
 		}
 	}
 }
