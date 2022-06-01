@@ -40,7 +40,6 @@ void CUtil::ServerPrint(const char* Format, ...)
 	SERVER_PRINT(Buffer);
 }
 
-
 void CUtil::ServerCommand(const char* Format, ...)
 {
 	va_list argList;
