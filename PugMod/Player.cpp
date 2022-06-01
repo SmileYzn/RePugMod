@@ -29,19 +29,16 @@ int CPlayer::GetList(CBasePlayer* Players[MAX_CLIENTS], bool InGameOnly)
 		{
 			if (!FNullEnt(Player->edict()))
 			{
-				if (!Player->IsDormant())
+				if (InGameOnly)
 				{
-					if (InGameOnly)
-					{
-						if (Player->m_iTeam == TERRORIST || Player->m_iTeam == CT)
-						{
-							Players[Num++] = Player;
-						}
-					}
-					else
+					if (Player->m_iTeam == TERRORIST || Player->m_iTeam == CT)
 					{
 						Players[Num++] = Player;
 					}
+				}
+				else
+				{
+					Players[Num++] = Player;
 				}
 			}
 		}
@@ -64,12 +61,9 @@ int CPlayer::GetList(CBasePlayer* Players[MAX_CLIENTS], TeamName Team)
 		{
 			if (!FNullEnt(Player->edict()))
 			{
-				if (!Player->IsDormant())
+				if (Player->m_iTeam == Team)
 				{
-					if (Player->m_iTeam == Team)
-					{
-						Players[Num++] = Player;
-					}
+					Players[Num++] = Player;
 				}
 			}
 		}
@@ -90,33 +84,30 @@ int CPlayer::GetNum(bool CountBots, int & InGame, int & NumTerrorist, int & NumC
 		{
 			if (!FNullEnt(Player->edict()))
 			{
-				if (!Player->IsDormant())
+				if (CountBots == false)
 				{
-					if (CountBots == false)
+					if (Player->IsBot())
 					{
-						if (Player->IsBot())
-						{
-							continue;
-						}
+						continue;
 					}
+				}
 
-					switch (Player->m_iTeam)
+				switch (Player->m_iTeam)
+				{
+					case TERRORIST:
 					{
-						case TERRORIST:
-						{
-							NumTerrorist++;
-							break;
-						}
-						case CT:
-						{
-							NumCT++;
-							break;
-						}
-						case SPECTATOR:
-						{
-							NumSpectator++;
-							break;
-						}
+						NumTerrorist++;
+						break;
+					}
+					case CT:
+					{
+						NumCT++;
+						break;
+					}
+					case SPECTATOR:
+					{
+						NumSpectator++;
+						break;
 					}
 				}
 			}
