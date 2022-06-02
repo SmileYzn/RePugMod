@@ -220,39 +220,42 @@ void CMenu::ShowMenu(int EntityIndex, int Slots, int Time, std::string MenuText)
 	{
 		if (!Player->IsDormant())
 		{
-			static int iMsgShowMenu;
-
-			if (iMsgShowMenu || (iMsgShowMenu = GET_USER_MSG_ID(PLID, "ShowMenu", NULL)))
+			if (!Player->IsBot())
 			{
-				Player->m_iMenu = Menu_OFF;
+				static int iMsgShowMenu;
 
-				char BufferMenu[MAX_BUFFER_MENU * 6] = { 0 };
-
-				MenuText.copy(BufferMenu, MenuText.length() + 1);
-
-				char* pMenuList = BufferMenu;
-				char* aMenuList = BufferMenu;
-
-				int iCharCount = 0;
-
-				while (pMenuList && *pMenuList)
+				if (iMsgShowMenu || (iMsgShowMenu = GET_USER_MSG_ID(PLID, "ShowMenu", NULL)))
 				{
-					char szChunk[MAX_BUFFER_MENU + 1] = {0};
+					Player->m_iMenu = Menu_OFF;
 
-					strncpy(szChunk, pMenuList, MAX_BUFFER_MENU);
+					char BufferMenu[MAX_BUFFER_MENU * 6] = { 0 };
 
-					szChunk[MAX_BUFFER_MENU] = 0;
+					MenuText.copy(BufferMenu, MenuText.length() + 1);
 
-					iCharCount += strlen(szChunk);
+					char* pMenuList = BufferMenu;
+					char* aMenuList = BufferMenu;
 
-					pMenuList = aMenuList + iCharCount;
+					int iCharCount = 0;
 
-					MESSAGE_BEGIN(MSG_ONE, iMsgShowMenu, nullptr, Player->edict());
-					WRITE_SHORT(Slots);
-					WRITE_CHAR(Time);
-					WRITE_BYTE(*pMenuList ? TRUE : FALSE);
-					WRITE_STRING(szChunk);
-					MESSAGE_END();
+					while (pMenuList && *pMenuList)
+					{
+						char szChunk[MAX_BUFFER_MENU + 1] = { 0 };
+
+						strncpy(szChunk, pMenuList, MAX_BUFFER_MENU);
+
+						szChunk[MAX_BUFFER_MENU] = 0;
+
+						iCharCount += strlen(szChunk);
+
+						pMenuList = aMenuList + iCharCount;
+
+						MESSAGE_BEGIN(MSG_ONE, iMsgShowMenu, nullptr, Player->edict());
+						WRITE_SHORT(Slots);
+						WRITE_CHAR(Time);
+						WRITE_BYTE(*pMenuList ? TRUE : FALSE);
+						WRITE_STRING(szChunk);
+						MESSAGE_END();
+					}
 				}
 			}
 		}
@@ -265,20 +268,23 @@ void CMenu::HideMenu(int EntityIndex)
 
 	if (Player)
 	{
-		if (!Player->IsDormant())
+		if (!Player->IsBot())
 		{
-			static int iMsgShowMenu;
-
-			if (iMsgShowMenu || (iMsgShowMenu = GET_USER_MSG_ID(PLID, "ShowMenu", NULL)))
+			if (!Player->IsDormant())
 			{
-				Player->m_iMenu = Menu_OFF;
+				static int iMsgShowMenu;
 
-				MESSAGE_BEGIN(MSG_ONE, iMsgShowMenu, nullptr, Player->edict());
-				WRITE_SHORT(0);
-				WRITE_CHAR(0);
-				WRITE_BYTE(0);
-				WRITE_STRING("");
-				MESSAGE_END();
+				if (iMsgShowMenu || (iMsgShowMenu = GET_USER_MSG_ID(PLID, "ShowMenu", NULL)))
+				{
+					Player->m_iMenu = Menu_OFF;
+
+					MESSAGE_BEGIN(MSG_ONE, iMsgShowMenu, nullptr, Player->edict());
+					WRITE_SHORT(0);
+					WRITE_CHAR(0);
+					WRITE_BYTE(0);
+					WRITE_STRING("");
+					MESSAGE_END();
+				}
 			}
 		}
 	}
