@@ -61,7 +61,24 @@ void CVoteMap::MenuHandle(int EntityIndex, P_MENU_ITEM Item)
 
 void CVoteMap::Stop()
 {
-	MENU_RESET_ALL();
+	CBasePlayer* Players[MAX_CLIENTS] = { NULL };
+
+	int Num = gPlayer.GetList(Players, true);
+
+	for (int i = 0; i < Num; i++)
+	{
+		auto Player = Players[i];
+
+		if (Player)
+		{
+			if (!Player->IsBot())
+			{
+				int EntityIndex = Player->entindex();
+
+				gMenu[EntityIndex].Hide(EntityIndex);
+			}
+		}
+	}
 
 	gTask.Remove(PUG_TASK_LIST);
 
