@@ -47,8 +47,8 @@ At the end, server will start a vote map to changelevel to next map automaticall
 <li>Minimalist admin flag system to manage the admins in game</li>
 <li>Dead talk support (Dead teammate's can talk)</li>
 <li>Anti Flood for chat and radio messages</li>
-<li>Mod runs intp ReHLDS with ReGameDLL_CS server</li>
-<li>Server can run on windows for now</li>
+<li>Mod runs into ReHLDS with ReGameDLL_CS server</li>
+<li>Pug Mod can run on Windows or Linux servers</li>
 <li>Custom server configuration to optmize the game</li>
 <li>Other features that is not listed here you can see in your wiki</li>
 </ul>
