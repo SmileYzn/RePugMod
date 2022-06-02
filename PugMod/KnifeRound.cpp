@@ -10,16 +10,12 @@ void CKnifeRound::Init()
 
 	memset(this->m_Votes, 0, sizeof(this->m_Votes));
 
-	CVAR_SET_STRING("mp_give_player_c4", "0");
-
 	gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("Knife Round Starting: \4Get Ready!!"));
 }
 
 void CKnifeRound::Stop(bool ChangeTeams)
 {
 	this->m_Running = false;
-
-	CVAR_SET_STRING("mp_give_player_c4", "1");
 
 	if (ChangeTeams)
 	{
@@ -57,6 +53,11 @@ bool CKnifeRound::ClientHasRestrictItem(CBasePlayer* Player, ItemID item, ItemRe
 	}
 
 	return false;
+}
+
+bool CKnifeRound::GiveC4()
+{
+	return this->m_Running;
 }
 
 void CKnifeRound::RoundRestart()
@@ -97,9 +98,16 @@ void CKnifeRound::RoundRestart()
 						}
 					}
 
-					gTask.Create(PUG_TASK_VOTE, gCvars.GetVoteDelay()->value, false, (void*)this->VoteEnd);
+					if ((gKnifeRound.GetVote(TERRORIST) + gKnifeRound.GetVote(CT)) >= gPlayer.GetNum(gKnifeRound.GetWinner()))
+					{
+						gKnifeRound.VoteEnd();
+					}
+					else
+					{
+						gTask.Create(PUG_TASK_VOTE, gCvars.GetVoteDelay()->value, false, (void*)this->VoteEnd);
 
-					gTask.Create(PUG_TASK_LIST, 0.5f, true, (void*)this->List);
+						gTask.Create(PUG_TASK_LIST, 0.5f, true, (void*)this->List);
+					}
 				}
 			}
 		}
@@ -206,7 +214,24 @@ void CKnifeRound::MenuHandle(int EntityIndex, P_MENU_ITEM Item)
 
 void CKnifeRound::VoteEnd()
 {
-	MENU_RESET_ALL();
+	CBasePlayer* Players[MAX_CLIENTS] = { NULL };
+
+	int Num = gPlayer.GetList(Players, true);
+
+	for (int i = 0; i < Num; i++)
+	{
+		auto Player = Players[i];
+
+		if (Player)
+		{
+			if (!Player->IsBot())
+			{
+				int EntityIndex = Player->entindex();
+
+				gMenu[EntityIndex].Hide(EntityIndex);
+			}
+		}
+	}
 
 	gTask.Remove(PUG_TASK_LIST);
 

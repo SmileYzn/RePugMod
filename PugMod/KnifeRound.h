@@ -7,6 +7,7 @@ public:
 	void Stop(bool ChangeTeams);
 
 	bool ClientHasRestrictItem(CBasePlayer* Player, ItemID item, ItemRestType type);
+	bool GiveC4();
 
 	void RoundRestart();
 	void RoundEnd(int winStatus, ScenarioEventEndRound event, float tmDelay);
