@@ -10,7 +10,7 @@ void CKnifeRound::Init()
 
 	memset(this->m_Votes, 0, sizeof(this->m_Votes));
 
-	CVAR_SET_STRING("mp_give_player_c4", "0"); 
+	CVAR_SET_STRING("mp_give_player_c4", "0");
 
 	gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("Knife Round Starting: \4Get Ready!!"));
 }
