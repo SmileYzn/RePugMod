@@ -151,7 +151,7 @@ void CAdmin::MenuKick(int EntityIndex)
 		{
 			if (!gAdmin.Check(Player))
 			{
-				gMenu[EntityIndex].AddItem(Player->entindex(), STRING(Player->edict()->v.netname));
+				gMenu[EntityIndex].AddItem(Player->entindex(), gUtil.VarArgs("%s \\R\\y%s", STRING(Player->edict()->v.netname), (Player->m_iTeam == CT ? "CT" : (Player->m_iTeam == TERRORIST ? "TR" : "SPEC"))));
 			}
 		}
 	}
@@ -192,7 +192,7 @@ void CAdmin::MenuBan(int EntityIndex)
 		{
 			if (!gAdmin.Check(Player))
 			{
-				gMenu[EntityIndex].AddItem(Player->entindex(), STRING(Player->edict()->v.netname));
+				gMenu[EntityIndex].AddItem(Player->entindex(), gUtil.VarArgs("%s \\R\\y%s", STRING(Player->edict()->v.netname), (Player->m_iTeam == CT ? "CT" : (Player->m_iTeam == TERRORIST ? "TR" : "SPEC"))));
 			}
 		}
 	}
@@ -268,7 +268,7 @@ void CAdmin::MenuSlap(int EntityIndex)
 		{
 			if (!gAdmin.Check(Player))
 			{
-				gMenu[EntityIndex].AddItem(Player->entindex(), STRING(Player->edict()->v.netname));
+				gMenu[EntityIndex].AddItem(Player->entindex(), gUtil.VarArgs("%s \\R\\y%s", STRING(Player->edict()->v.netname), (Player->m_iTeam == CT ? "CT" : (Player->m_iTeam == TERRORIST ? "TR" : "SPEC"))), !Player->IsAlive());
 			}
 		}
 	}
