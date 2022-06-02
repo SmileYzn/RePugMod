@@ -1,7 +1,6 @@
 #pragma once
 
 #define MENU_PAGE_OPTION 7
-#define MENU_RESET_ALL() for (int i = 1; i <= gpGlobals->maxClients; ++i) { gMenu[i].Hide(i); }
 
 typedef struct
 {
