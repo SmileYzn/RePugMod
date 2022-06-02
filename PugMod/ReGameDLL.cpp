@@ -89,6 +89,8 @@ bool ReGameDLL_Init()
 
 	g_ReGameHookchains->CBasePlayer_HasRestrictItem()->registerHook(ReGameDLL_CBasePlayer_HasRestrictItem);
 
+	g_ReGameHookchains->CSGameRules_GiveC4()->registerHook(ReGameDLL_CSGameRules_GiveC4);
+
 	g_ReGameHookchains->CSGameRules_OnRoundFreezeEnd()->registerHook(ReGameDLL_CSGameRules_OnRoundFreezeEnd);
 
 	g_ReGameHookchains->RoundEnd()->registerHook(ReGameDLL_RoundEnd);
@@ -111,6 +113,8 @@ bool ReGameDLL_Stop()
 	g_ReGameHookchains->CBasePlayer_AddAccount()->unregisterHook(ReGameDLL_CBasePlayer_AddAccount);
 
 	g_ReGameHookchains->CBasePlayer_HasRestrictItem()->unregisterHook(ReGameDLL_CBasePlayer_HasRestrictItem);
+
+	g_ReGameHookchains->CSGameRules_GiveC4()->unregisterHook(ReGameDLL_CSGameRules_GiveC4);
 
 	g_ReGameHookchains->CSGameRules_OnRoundFreezeEnd()->unregisterHook(ReGameDLL_CSGameRules_OnRoundFreezeEnd);
 
@@ -197,6 +201,14 @@ bool ReGameDLL_CBasePlayer_HasRestrictItem(IReGameHook_CBasePlayer_HasRestrictIt
 	}
 
 	return ret;
+}
+
+void ReGameDLL_CSGameRules_GiveC4(IReGameHook_CSGameRules_GiveC4* chain)
+{
+	if (gKnifeRound.GiveC4() == false)
+	{
+		chain->callNext();
+	}
 }
 
 void ReGameDLL_CSGameRules_OnRoundFreezeEnd(IReGameHook_CSGameRules_OnRoundFreezeEnd* chain)
