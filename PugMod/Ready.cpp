@@ -52,6 +52,17 @@ void CReady::Toggle(CBasePlayer* Player)
 	}
 }
 
+void CReady::ClientGetIntoGame(CBasePlayer* Player)
+{
+	if (this->m_Running)
+	{
+		if (Player)
+		{
+			this->m_Ready[Player->entindex()] = 0;
+		}
+	}
+}
+
 void CReady::List(CReady* Ready)
 {
 	if (gCvars.GetReadyType()->value)

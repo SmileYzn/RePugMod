@@ -145,6 +145,8 @@ bool ReGameDLL_CBasePlayer_GetIntoGame(IReGameHook_CBasePlayer_GetIntoGame* chai
 
 	gPugMod.ClientGetIntoGame(Player);
 
+	gReady.ClientGetIntoGame(Player);
+
 	gStats.ClientGetIntoGame(Player);
 
 	return ret;

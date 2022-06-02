@@ -6,6 +6,9 @@ public:
 	void Load();
 	void Unload();
 	void Toggle(CBasePlayer* Player);
+
+	void ClientGetIntoGame(CBasePlayer* Player);
+
 	static void List(CReady* Ready);
 	void Ready(CBasePlayer* pPlayer);
 	void NotReady(CBasePlayer* pPlayer);
