@@ -1,548 +1,731 @@
 "Dead"
 en:"Dead"
+bp:"Nenhum"
 
 "Warmup"
 en:"Warmup"
+bp:"Aquecimento"
 
 "Starting"
 en:"Starting"
+bp:"Inciando"
 
 "First Half"
 en:"First Half"
+bp:"Primero Tempo"
 
 "Half Time"
 en:"Half Time"
+bp:"Intervalo"
 
 "Second Half"
 en:"Second Half"
+bp:"Segundo Tempo"
 
 "Overtime"
 en:"Overtime"
+bp:"Overtime"
 
 "Finished"
 en:"Finished"
+bp:"Fim"
 
 "%s Build %s (\3%s\1)"
 en:"%s Build %s (\3%s\1)"
+bp:"%s Versão %s (\3%s\1)"
 
 "Say \4.help\1 to view command list."
 en:"Say \4.help\1 to view command list."
+bp:"Say \4.help\1 para ver a lista de comandos."
 
 "%s started, get ready!"
 en:"%s started, get ready!"
+bp:"%s iniciado, prepare-se!"
 
 "%s started: \3Good Luck & Have Fun!"
 en:"%s started: \3Good Luck & Have Fun!"
+bp:"%s iniciado: \3Good Luck & Have Fun!"
 
 "Failed to start match: \3Not enough players.\1"
 en:"Failed to start match: \3Not enough players.\1"
+bp:"Falha ao começar a partida: \3Jogadores insuficientes.\1"
 
 "Failed to continue match: \3Not enough players.\1"
 en:"Failed to continue match: \3Not enough players.\1"
+bp:"Falha ao continuar partida: \3ogadores insuficientes.\1"
 
 "\3%s\1 started Vote Map."
 en:"\3%s\1 started Vote Map."
+bp:"\3%s\1 iniciou a escolha do mapa."
 
 "Cannot start an vote in \3%s\1 state."
 en:"Cannot start an vote in \3%s\1 state."
+bp:"Falha ao iniciar a escolha do mapa no estado \3%s\1."
 
 "\3%s\1 started Vote Team."
 en:"\3%s\1 started Vote Team."
+bp:"\3%s\1 iniciou a escolha dos times."
 
 "Cannot start vote team in \3%s\1 state."
 en:"Cannot start vote team in \3%s\1 state."
+bp:"Falha ao iniciar a escolha dos times no estado \3%s\1."
 
 "\3%s\1 started match."
 en:"\3%s\1 started match."
+bp:"\3%s\1 iniciou a partida."
 
 "Cannot start match in \3%s\1 state."
 en:"Cannot start match in \3%s\1 state."
+bp:"Falha ao iniciar a partida no estado \3%s\1."
 
 "\3%s\1 stopped match."
 en:"\3%s\1 stopped match."
+bp:"\3%s\1 finalizou a partida."
 
 "Cannot stop match in \3%s\1 state."
 en:"Cannot stop match in \3%s\1 state."
+bp:"Falha ao finalizar a partida no estado \3%s\1."
 
 "\3%s\1 restarted \4%s\1 period, get ready!."
 en:"\3%s\1 restarted \4%s\1 period, get ready!."
+bp:"\3%s\1 reiniciou o periodo \4%s\1, esteja pronto!."
 
 "Cannot restart period in \3%s\1 state."
 en:"Cannot restart period in \3%s\1 state."
+bp:"Falha ao reiniciar o periodo no estado \3%s\1."
 
 "Status: \4%s\1 (Players %d) (%d Required of %d Allowed)"
 en:"Status: \4%s\1 (Players %d) (%d Required of %d Allowed)"
+bp:"Status: \4%s\1 (Jogadores %d) (%d Requeridos de %d permitidos)"
 
 "Unable to use this command now."
 en:"Unable to use this command now."
+bp:"Impossível usar esse comando agora."
 
 "Game Over! The \3%s\1 have won the game: %d-%d"
 en:"Game Over! The \3%s\1 have won the game: %d-%d"
+bp:"Fim de Jogo! Os ^3%s^1 venceram: %d-%d"
 
 "The \3%s\1 are winning: %d-%d"
 en:"The \3%s\1 are winning: %d-%d"
+bp:"Os ^3%s^1 estão vencendo: %d-%d"
 
 "Game Over! Score is tied: %d-%d"
 en:"Game Over! Score is tied: %d-%d"
+bp:"Fim de Jogo! Placar empatado: %d-%d"
 
 "Score is tied: %d-%d"
 en:"Score is tied: %d-%d"
+bp:"Placar empetado: %d-%d"
 
 "--- MATCH IS LIVE ---"
 en:"--- MATCH IS LIVE ---"
+bp:"--- MATCH IS LIVE ---"
 
 "Changing teams automatically."
 en:"Changing teams automatically."
+bp:"Trocando os times automaticamente."
 
 "Server is full and spectators are not allowed."
 en:"Server is full and spectators are not allowed."
+bp:"Servidor cheio e espectadores não são permitidos."
 
 ".help"
 en:".help"
+bp:".help"
 
 "!help"
 en:"!help"
+bp:"!help"
 
 ".status"
 en:".status"
+bp:".status"
 
 ".score"
 en:".score"
+bp:".score"
 
 ".ready"
 en:".ready"
+bp:".ready"
 
 ".notready"
 en:".notready"
+bp:".notready"
 
 ".vote"
 en:".vote"
+bp:".vote"
 
 "!menu"
 en:"!menu"
+bp:"!menu"
 
 "!msg"
 en:"!msg"
+bp:"!msg"
 
 "!rcon"
 en:"!rcon"
+bp:"!rcon"
 
 ".hp"
 en:".hp"
+bp:".hp"
 
 ".dmg"
 en:".dmg"
+bp:".dmg"
 
 ".rdmg"
 en:".rdmg"
+bp:".rdmg"
 
 ".sum"
 en:".sum"
+bp:".sum"
 
 "Auto Team Select is not allowed."
 en:"Auto Team Select is not allowed."
+bp:"A Auto Seleção não é permitida."
 
 "You are already on the \3%s\1 team."
 en:"You are already on the \3%s\1 team."
+bp:"Você já está no time \3%s\1."
 
 "The \3%s\1 team is complete."
 en:"The \3%s\1 team is complete."
+bp:"O time \3%s\1 está completo."
 
 "Please, join in \3Spectator\1 while vote session is running."
 en:"Please, join in \3Spectator\1 while vote session is running."
+bp:"Somente \3Espectador\1 é permitido durante a votação."
 
 "Cannot switch when the game is started."
 en:"Cannot switch when the game is started."
+bp:"Troca de times não permitida durante a partida."
 
 "\3Spectators\1 are not allowed."
 en:"\3Spectators\1 are not allowed."
+bp:"\3Espectadores\1 não são permitidos."
 
 "* Round %d won by: %s"
 en:"* Round %d won by: %s"
+bp:"* Round %d ganho port: %s"
 
 "Round %d draw: No clear winner."
 en:"Round %d draw: No clear winner."
+bp:"Round %d empatado: Nenhum vencedor."
 
 "PUG Mod Menu:"
 en:"PUG Mod Menu:"
+bp:"Pug Mod Menu"
 
 "Kick Player"
 en:"Kick Player"
+bp:"Kickar Jogador"
 
 "Slap Player"
 en:"Slap Player"
+bp:"Matar Jogador"
 
 "Change Map"
 en:"Change Map"
+bp:"Mudar Mapa"
 
 "Control Pug Mod"
 en:"Control Pug Mod"
+bp:"Controlar Pug Mod"
 
 "Send Message"
 en:"Send Message"
+bp:"Enviar Mensagem"
 
 "Send Command"
 en:"Send Command"
+bp:"Enviar Comando"
 
 "Kicked by %s"
 en:"Kicked by %s"
+bp:"Kickado por %s"
 
 "\3%s\1 Kicked \3%s\1"
 en:"\3%s\1 Kicked \3%s\1"
+bp:"\3%s\1 Kickou \3%s\1"
 
 "\3%s\1 Killed \3%s\1"
 en:"\3%s\1 Killed \3%s\1"
+bp:"\3%s\1 Matou \3%s\1"
 
 "\3%s\1 changed map to \4%s\1"
 en:"\3%s\1 changed map to \4%s\1"
+bp:"\3%s\1 alterou o mapa para \3%s\1"
 
 "Run Vote Map"
 en:"Run Vote Map"
+bp:"Executar Vote Map"
 
 "Run Vote Teams"
 en:"Run Vote Teams"
+bp:"Executar Escolha dos Times"
 
 "Continue Match"
 en:"Continue Match"
+bp:"Continuar Partida"
 
 "Start Match"
 en:"Start Match"
+bp:"Iniciar Partida"
 
 "Stop Match"
 en:"Stop Match"
+bp:"Parar Partida"
 
 "Restart Period"
 en:"Restart Period"
+bp:"Reiniciar Período"
 
 "Toggle Ready System"
 en:"Toggle Ready System"
+bp:"Ativar/Inativar Sistema Ready"
 
 "\3(%s)\1: %s"
 en:"\3(%s)\1: %s"
+bp:"\3(%s)\1: %s"
 
 "Usage: !msg \3<Text Message>\1"
 en:"Usage: !msg \3<Text Message>\1"
+bp:""
 
 "\3Command Send\1: %s"
 en:"\3Command Send\1: %s"
+bp:"\3Command Enviado\1: %s"
 
 "Usage: !send \3<Server Command>\1"
 en:"Usage: !send \3<Server Command>\1"
+bp:"Uso: !send \3<Comando do Servidor>\1"
 
 "Wait %d seconds before retry."
 en:"Wait %d seconds before retry."
+bp:"Aguarde %d segundos antes de entrar novamente."
 
 "The choice of the teams failed: \3Not enough players.\1"
 en:"The choice of the teams failed: \3Not enough players.\1"
+bp:"A escolha dos times falhou: \3Jogadores insuficientes.\1"
 
 "\3%s\1 is captain of \3%s\1"
 en:"\3%s\1 is captain of \3%s\1"
+bp:"\3%s\1 e o capitão de \3%s\1"
 
 "\3%s\1 choosed \3%s\1"
 en:"\3%s\1 choosed \3%s\1"
+bp:"\3%s\1 escolheu \3%s\1"
 
 "(C) *"
 en:"(C) *"
+bp:"(C) *"
 
 "(C)"
 en:"(C)"
+bp:"(C)"
 
 "Knife Round Starting: \4Get Ready!!"
 en:"Knife Round Starting: \4Get Ready!!"
+bp:"Iniciando Round Faca: \4Esteja Pronto!!"
 
 "Changing teams automatically."
 en:"Changing teams automatically."
+bp:"Trocando os times automaticamente."
 
 "Teams will remain unchanged."
 en:"Teams will remain unchanged."
+bp:"Os times serão os mesmos."
 
 "Select Starting Side:"
 en:"Select Starting Side:"
+bp:"Escolha o lado do seu time:"
 
 "Terrorists"
 en:"Terrorists"
+bp:"Terrorists"
 
 "Counter-Terrorists"
 en:"Counter-Terrorists"
+bp:"Counter-Terrorists"
 
 "\3%s\1 Won: The \3%s\1 team will decide the starting side."
 en:"\3%s\1 Won: The \3%s\1 team will decide the starting side."
+bp:"\3%s\1 Venceram: O time \3%s\1 vai decidir o lado."
 
 "Knife Round Failed: \3No clear winner by extermination."
 en:"Knife Round Failed: \3No clear winner by extermination."
+bp:"O Round Faca Falhou: \3Nenhum vencedor por eliminação."
 
 "Starting Side (%d):"
 en:"Starting Side (%d):"
+bp:"Time Inicial (%d):"
 
 "No votes."
 en:"No votes."
+bp:"Nenhum Voto."
 
 "Say \4.ready\1 to continue."
 en:"Say \4.ready\1 to continue."
+bp:"Say \4.ready\1 para continuar."
 
 "Match will start when all players join in game."
 en:"Match will start when all players join in game."
+bp:"A partida vai começar quando todos estiverem no jogo."
 
 "\3%s\1 enabled Ready System."
 en:"\3%s\1 enabled Ready System."
+bp:"\3%s\1 ativou o Ready System."
 
 "\3%s\1 disabled Ready System."
 en:"\3%s\1 disabled Ready System."
+bp:"\3%s\1 desativou o Ready System."
 
 "Can't change Ready System while Pug Mod is running."
 en:"Can't change Ready System while Pug Mod is running."
+bp:"Impossível alterar o Ready System durante a partida."
 
 "All playres are ready!"
 en:"All playres are ready!"
+bp:"Todos os jogadores estão prontos!"
 
 "Not Ready (%d of %d):"
 en:"Not Ready (%d of %d):"
+bp:"Aquecendo (%d de %d):"
 
 "Ready (%d of %d):"
 en:"Ready (%d of %d):"
+bp:"Prontos (%d de %d):"
 
 "Warmup\n%d Player(s) Left"
 en:"Warmup\n%d Player(s) Left"
+bp:"Aquecimento\n%d Jogadores(s) Para Entrar"
 
 "Starting Match\n%M:%S"
 en:"Starting Match\n%M:%S"
+bp:"Iniciando Partida em\n%M:%S
 
 "All playres are in teams and ready"
 en:"All playres are in teams and ready"
+bp:"Todos os jogadores estão nos times e prontos"
 
 "\3%s\1 is ready."
 en:"\3%s\1 is ready."
+bp:"\3%s\1 está pronto."
 
 "\3%s\1 is not ready."
 en:"\3%s\1 is not ready."
+bp:"\3%s\1 não está pronto.."
 
 "(%d dmg / %d hits) to (%d dmg / %d hits) from %s (%d HP)"
 en:"(%d dmg / %d hits) to (%d dmg / %d hits) from %s (%d HP)"
+bp:"(%d dmg / %d hits) em (%d dmg / %d hits) de %s (%d HP)"
 
 "\3%s\1 with %d HP (%d AP)"
 en:"\3%s\1 with %d HP (%d AP)"
+bp:"\3%s\1 tem %d HP (%d AP)"
 
 "No one is alive."
 en:"No one is alive."
+bp:"Ninguém está vivo."
 
 "Hit \3%s\1 %d time(s) (Damage %d)"
 en:"Hit \3%s\1 %d time(s) (Damage %d)"
+bp:"Acertou \3%s\1 %d veze(s) (Dano %d)""
 
 "You do not hit anyone in this round."
 en:"You do not hit anyone in this round."
+bp:"Você não acertou ninguém nesse round."
 
 "Hit by \3%s\1 %d time(s) (Damage %d)"
 en:"Hit by \3%s\1 %d time(s) (Damage %d)"
+bp:"Dano por \3%s\1 %d veze(s) (Dano %d)"
 
 "You were not reached in this round."
 en:"You were not reached in this round."
+bp:"Você não foi atingidi nesse round."
 
 "(%d dmg / %d hits) to (%d dmg / %d hits) from \3%s\1 (%d HP)"
 en:"(%d dmg / %d hits) to (%d dmg / %d hits) from \3%s\1 (%d HP)"
+bp:"(%d dmg / %d hits) em (%d dmg / %d hits) de \3%s\1 (%d HP)"
 
 "No stats in this round."
 en:"No stats in this round."
+bp:"Nenhum stats nesse round."
 
 "Vote Map:"
 en:"Vote Map:"
+bp:"Escolha do mapa:"
 
 "Starting Vote Map."
 en:"Starting Vote Map."
+bp:"Inciando escolha do mapa."
 
 "The map choice has failed: \3No votes."
 en:"The map choice has failed: \3No votes."
+bp:"A escolha do mapa falhou: \3Nenhum voto."
 
 "Changing map to \4%s\1..."
 en:"Changing map to \4%s\1..."
+bp:"O próxmio mapa será \4%s\1..."
 
 "Choose the map (%d):"
 en:"Choose the map (%d):"
+bp:"Escolha do mapa (%d):"
 
 "Leaders Sorted"
 en:"Leaders Sorted"
+bp:"Capitães"
 
 "Random"
 en:"Random"
+bp:"Misturar Times"
 
 "Not Sorted"
 en:"Not Sorted"
+bp:"Sem Sorteio"
 
 "Skill Sorted"
 en:"Skill Sorted"
+bp:"Balancear Skill"
 
 "Swap Teams"
 en:"Swap Teams"
+bp:"Trocar Times"
 
 "Knife Round"
 en:"Knife Round"
+bp:"Round Faca"
 
 "Game Mode:"
 en:"Game Mode:"
+bp:"Modo de Jogo:"
 
 "Select teams started."
 en:"Select teams started."
+bp:"Escolha dos times iniciada."
 
 "The choice of the teams failed: \3No votes."
 en:"The choice of the teams failed: \3No votes."
+bp:"A escolha dos times falhou: \3Nenhum voto."
 
 "Game Mode (%d):"
 en:"Game Mode (%d):"
+bp:"Modo de Jogo (%d):"
 
 "Mixing teams now."
 en:"Mixing teams now."
+bp:"Misturando times automaticamente."
 
 "The teams will remain the same."
 en:"The teams will remain the same."
+bp:"Os times serão os mesmos."
 
 "Balancing teams by skills."
 en:"Balancing teams by skills."
+bp:"Balanceando times por sua skill."
 
 "Swaping teams now."
 en:"Swaping teams now."
+bp:"Trocando os times de lado."
 
 "Vote Menu:"
 en:"Vote Menu:"
+bp:"Menu de Votação:"
 
 "Vote Kick"
 en:"Vote Kick"
+bp:"Votar Kick"
 
 "Vote Map"
 en:"Vote Map"
+bp:"Votar Mapa"
 
 "Vote Pause"
 en:"Vote Pause"
+bp:"Votar Pausa"
 
 "Vote Stop"
 en:"Vote Stop"
+bp:"Votar Redenção"
 
 "Need \3%d\1 players to use vote kick."
 en:"Need \3%d\1 players to use vote kick."
+bp:"Faltam \3%d\1 jogadores para usar o Vote Kick."
 
 "Kicked by Vote Kick."
 en:"Kicked by Vote Kick."
+bp:"Kickado pelo Vote Kick."
 
 "\3%s\1 Kicked: \4%d\1 votes reached."
 en:"\3%s\1 Kicked: \4%d\1 votes reached."
+bp:"\3%s\1 Kickado: \4%d\1 votos alcançados."
 
 "\3%s\1 voted to kick \3%s\1: \4%d\1 of \4%d\1 votes to kick."
 en:"\3%s\1 voted to kick \3%s\1: \4%d\1 of \4%d\1 votes to kick."
+bp:"\3%s\1 votou para kickar \3%s\1: Faltam mais \4%d\1 votos para kickar."
 
 "Say \3.vote\1 to open vote kick."
 en:"Say \3.vote\1 to open vote kick."
+bp:"Say \3.vote\1 para abrir o vote kick."
 
 "Already voted to kick: \3%s\1..."
 en:"Already voted to kick: \3%s\1..."
+bp:"Você ja votou para kickar: \3%s\1..."
 
 "\3%s\1 nomitated \4%s\1: \4%d\1 of \4%d\1 votes to change map."
 en:"\3%s\1 nomitated \4%s\1: \4%d\1 of \4%d\1 votes to change map."
+bp:"\3%s\1 nomeou \4%s\1: \4%d\1 de \4%d\1 votos para mudar o mapa."
 
 "Say \3.vote\1 to nominate a map."
 en:"Say \3.vote\1 to nominate a map."
+bp:"Say \3.vote\1 para nomear um mapa."
 
 "Already nominated \3%s\1..."
 en:"Already nominated \3%s\1..."
+bp:"Você já nomeou \3%s\1..."
 
 "\3%s\1 from voted for a timeout: \4%d\1 of \4%d\1 vote(s) to run timeout."
 en:"\3%s\1 from voted for a timeout: \4%d\1 of \4%d\1 vote(s) to run timeout."
+bp:"\3%s\1 votou para pausar a partida: \4%d\1 de \4%d\1 voto(s) para pausar a partida."
 
 "Say \3.vote\1 for a timeout."
 en:"Say \3.vote\1 for a timeout."
+bp:"Say \3.vote\1 para votar uma pausa na partida."
 
 "Match will pause for \4%d\1 seconds on next round."
 en:"Match will pause for \4%d\1 seconds on next round."
+bp:"A partida será pausada por \4%d\1 segundos no próximo round."
 
 "You already voted for a timeout."
 en:"You already voted for a timeout."
+bp:"Você já votou para pausar a partida."
 
 "The \3%s\1 team already paused the game."
 en:"The \3%s\1 team already paused the game."
+bp:"O time \3%s\1 já pausaram a partida."
 
 "Unable to vote to pause the match."
 en:"Unable to vote to pause the match."
+bp:"Impossível votar a pausa da partida."
 
 "\3%s\1 voted for surrender: \4%d\1 of \4%d\1 vote(s) to stop the match."
 en:"\3%s\1 voted for surrender: \4%d\1 of \4%d\1 vote(s) to stop the match."
+bp:"\3%s\1 votou para rendição: \4%d\1 de \4%d\1 voto(s) para rendição do time."
 
 "Say \3.vote\1 to vote for stop the match."
 en:"Say \3.vote\1 to vote for stop the match."
+bp:"Say \3.vote\1 para votar uma rendição."
 
 "Game Over! The \3%s\1 Surrendered!"
 en:"Game Over! The \3%s\1 Surrendered!"
+bp:"Fim de Jogo! Os \3%s\1 se renderam!"
 
 "You already voted to stop the match."
 en:"You already voted to stop the match."
+bp:"Você já votou para rendição."
 
 "Ban Player"
 en:"Ban Player"
+bp:"Banir Jogador"
 
 "Choose a time to ban \\w%s\\y"
 en:"Choose a time to ban \\w%s\\y"
+bp:"Escolha um tempo para banir \\w%s\\y"
 
 "\3%s\1 Banned \3%s\1: \4%s\1."
 en:"\3%s\1 Banned \3%s\1: \4%s\1."
+bp:"\3%s\1 Baniu \3%s\1: \4%s\1."
 
 "Team Player"
 en:"Team Player"
+bp:"Time do Jogador"
 
 "Set \\w%s\\y Team"
 en:"Set \\w%s\\y Team"
+bp:"Escolha o time de \\w%s\\y"
 
 "Terrorist"
 en:"Terrorist"
+bp:"Terrorista"
 
 "Counter-Terrorist"
 en:"Counter-Terrorist"
+bp:"Contra-Terrorista"
 
 "Spectator"
 en:"Spectator"
+bp:"Espectador"
 
 "\4%s\1 moved \3%s\1 to \3%s\1"
 en:"\4%s\1 moved \3%s\1 to \3%s\1"
+bp:"\4%s\1 moveu \3%s\1 para \3%s\1"
 
 "Permanently"
 en:"Permanently"
+bp:"Permanentemente"
 
 "and"
 en:"and"
+bp:"e"
 
 "year"
 en:"year"
+bp:"ano"
 
 "years"
 en:"years"
+bp:"anos"
 
 "month"
 en:"month"
+bp:"mês"
 
 "months"
 en:"months"
+bp:"meses"
 
 "week"
 en:"week"
+bp:"semana"
 
 "weeks"
 en:"weeks"
+bp:"semanas"
 
 "day"
 en:"day"
+bp:"dia"
 
 "days"
 en:"days"
+bp:"dias"
 
 "hour"
 en:"hour"
+bp:"hora"
 
 "hours"
 en:"hours"
+bp:"horas"
 
 "minute"
 en:"minute"
+bp:"minuto"
 
 "minutes"
 en:"minutes"
+bp:"minutos"
 
 "second"
 en:"second"
+bp:"segundo"
 
 "seconds"
 en:"seconds"
+bp:"segundos"
