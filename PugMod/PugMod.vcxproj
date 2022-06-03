@@ -48,7 +48,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <AdditionalIncludeDirectories>$(ProjectDir)include;$(ProjectDir)include\metamod;$(ProjectDir)include\cssdk\common;$(ProjectDir)include\cssdk\dlls;$(ProjectDir)include\cssdk\engine;$(ProjectDir)include\cssdk\game_shared;$(ProjectDir)include\cssdk\pm_shared;$(ProjectDir)include\cssdk\public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile>precompiled.h</PrecompiledHeaderFile>
       <PrecompiledHeader>Use</PrecompiledHeader>
@@ -74,13 +74,18 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <CompileAsManaged>false</CompileAsManaged>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <DebugInformationFormat>None</DebugInformationFormat>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <ModuleDefinitionFile>MetaMod.def</ModuleDefinitionFile>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
       <Command>.\PostRelease.bat</Command>
