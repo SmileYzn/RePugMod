@@ -469,7 +469,7 @@ int CPugMod::GetScores(int Team)
 	return Score;
 }
 
-int CPugMod::GetWinner()
+TeamName CPugMod::GetWinner()
 {
 	if (this->GetScores(TERRORIST) != this->GetScores(CT))
 	{

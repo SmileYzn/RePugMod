@@ -59,7 +59,8 @@ public:
 
 	int GetRound();
 	int GetScores(int Team);
-	int GetWinner();
+
+	TeamName GetWinner();
 
 	void Help(CBasePlayer* Player,bool AdminHelp);
 	void Status(CBasePlayer* Player);
