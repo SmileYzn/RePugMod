@@ -61,6 +61,7 @@ public:
 	int GetScores(int Team);
 
 	TeamName GetWinner();
+	TeamName GetOvertimeWinner();
 
 	void Help(CBasePlayer* Player,bool AdminHelp);
 	void Status(CBasePlayer* Player);
