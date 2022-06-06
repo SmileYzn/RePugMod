@@ -12,7 +12,7 @@ public:
 
 	static void MenuHandle(int EntityIndex, P_MENU_ITEM Item);
 	static void Stop();
-	static void Changelevel(char* MapName);
+	static void Changelevel();
 	static void List(CVoteMap* VoteMap);
 
 	int GetCount();

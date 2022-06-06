@@ -94,17 +94,24 @@ void CVoteMap::Stop()
 	}
 	else 
 	{
-		gTask.Create(PUG_TASK_EXEC, 5.0f, false, (void*)SERVER_COMMAND, gUtil.VarArgs("changelevel %s\n", gVoteMap.GetItem(Winner)));
+	    gTask.Create(PUG_TASK_EXEC, 5.0f, false, (void*)gVoteMap.Changelevel);
 
-		gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("Changing map to \4%s\1..."), gVoteMap.GetItem(Winner));
+	    gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("Changing map to \4%s\1..."), gVoteMap.GetItem(Winner));
 	}
 }
 
-void CVoteMap::Changelevel(char* MapName)
+void CVoteMap::Changelevel()
 {
-	if (MapName)
+	int Winner = gVoteMap.GetWinner();
+
+	if(Winner != -1)
 	{
-		SERVER_COMMAND(gUtil.VarArgs("changelevel %s\n", MapName));
+		const char* Map = gVoteMap.GetItem(Winner);
+
+		if(Map)
+		{
+			gUtil.ServerCommand("changelevel %s",Map);
+		}
 	}
 }
 
