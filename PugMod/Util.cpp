@@ -6,7 +6,7 @@ char* CUtil::VarArgs(const char* Format, ...)
 {
 	va_list argList;
 
-	static char VarArgs[1024];
+	static char VarArgs[512];
 
 	va_start(argList, Format);
 
