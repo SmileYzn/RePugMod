@@ -61,8 +61,6 @@ void CAdmin::Menu(CBasePlayer* Player)
 
 		gMenu[EntityIndex].Create(_T("PUG Mod Menu:"), true, (void*)this->MenuHandle);
 
-		int PlayerNum = gPlayer.GetNum();
-
 		gMenu[EntityIndex].AddItem(0, _T("Kick Player"));
 
 		gMenu[EntityIndex].AddItem(1, _T("Ban Player"));
