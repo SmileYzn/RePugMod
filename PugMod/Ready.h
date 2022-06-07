@@ -9,9 +9,14 @@ public:
 
 	void ClientGetIntoGame(CBasePlayer* Player);
 
-	static void List(CReady* Ready);
+	static void List();
+
 	void Ready(CBasePlayer* pPlayer);
 	void NotReady(CBasePlayer* pPlayer);
+	bool GetReady(int EntityIndex);
+
+	time_t GetSystemTime();
+	void   SetSystemTime(time_t Time);
 
 private:
 	bool m_Running = false;

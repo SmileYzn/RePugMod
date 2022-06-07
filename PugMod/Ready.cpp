@@ -10,7 +10,7 @@ void CReady::Load()
 
 	this->m_Running = true;
 
-	gTask.Create(PUG_TASK_LIST, 0.5f, true, (void*)this->List, this);
+	gTask.Create(PUG_TASK_LIST, 0.5f, true, (void*)this->List);
 
 	if (gCvars.GetReadyType()->value)
 	{
@@ -63,7 +63,7 @@ void CReady::ClientGetIntoGame(CBasePlayer* Player)
 	}
 }
 
-void CReady::List(CReady* Ready)
+void CReady::List()
 {
 	if (gCvars.GetReadyType()->value)
 	{
@@ -81,7 +81,7 @@ void CReady::List(CReady* Ready)
 
 			if (Player)
 			{
-				int State = Ready->m_Ready[Player->entindex()] ? 1 : 0;
+				int State = gReady.GetReady(Player->entindex()) ? 1 : 0;
 
 				PlayerCount[State]++;
 
@@ -93,7 +93,7 @@ void CReady::List(CReady* Ready)
 
 		if (PlayerCount[1] >= (int)gCvars.GetPlayersMin()->value)
 		{
-			Ready->Unload();
+			gReady.Unload();
 
 			gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("All playres are ready!"));
 
@@ -116,13 +116,13 @@ void CReady::List(CReady* Ready)
 
 		if (Needed)
 		{
-			Ready->m_SystemTime = time(NULL);
+			gReady.SetSystemTime(time(NULL));
 
 			gUtil.HudMessage(NULL, gUtil.HudParam(0, 255, 0, -1.0, 0.2, 0, 0.53, 0.53), _T("Warmup\n%d Player(s) Left"), Needed);
 		}
 		else
 		{
-			time_t RemainTime = (time_t)((int)gCvars.GetReadyTime()->value - (time(NULL) - Ready->m_SystemTime));
+			time_t RemainTime = (time_t)((int)gCvars.GetReadyTime()->value - (time(NULL) - gReady.GetSystemTime()));
 
 			if (RemainTime > 0)
 			{
@@ -139,7 +139,7 @@ void CReady::List(CReady* Ready)
 			}
 			else
 			{
-				Ready->Unload();
+				gReady.Unload();
 
 				gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("All playres are in teams and ready!"));
 
@@ -191,4 +191,19 @@ void CReady::NotReady(CBasePlayer* Player)
 			gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("Unable to use this command now."));
 		}
 	}
+}
+
+bool CReady::GetReady(int EntityIndex)
+{
+	return this->m_Ready[EntityIndex] ? true : false;
+}
+
+time_t CReady::GetSystemTime()
+{
+	return this->m_SystemTime;
+}
+
+void CReady::SetSystemTime(time_t Time)
+{
+	this->m_SystemTime = Time;
 }
