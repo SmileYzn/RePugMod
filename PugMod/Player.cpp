@@ -197,7 +197,7 @@ void CPlayer::DropClient(int EntityIndex, const char* Format, ...)
 
 		char Buffer[255] = { 0 };
 
-		int Length = vsnprintf(Buffer, sizeof(Buffer), Format, argList);
+		vsnprintf(Buffer, sizeof(Buffer), Format, argList);
 
 		va_end(argList);
 
