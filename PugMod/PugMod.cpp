@@ -63,7 +63,7 @@ void CPugMod::SetState(int State)
 					}
 					else if (gCvars.GetVoteMapType()->value == 2)
 					{
-						gVoteMap.RandomMap(true);
+						gVoteMap.RandomMap();
 					}
 				}
 				else
