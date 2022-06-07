@@ -287,14 +287,6 @@ void CVoteMenu::VoteMapPickup(CBasePlayer* Player, int MapIndex, bool Disabled)
 	}
 }
 
-void CVoteMenu::Changelevel(char* MapName)
-{
-	if (MapName)
-	{
-		SERVER_COMMAND(gUtil.VarArgs("changelevel %s\n", MapName));
-	}
-}
-
 void CVoteMenu::VotePause(CBasePlayer* Player)
 {
 	if (this->CheckMenu(Player))

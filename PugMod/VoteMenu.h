@@ -21,7 +21,6 @@ public:
 	void		VoteMap(CBasePlayer* Player);
 	static void VoteMapHandle(int EntityIndex, P_MENU_ITEM Item);
 	void		VoteMapPickup(CBasePlayer* Player, int MapIndex, bool Disabled);
-	static void Changelevel(char* MapName);
 
 	void VotePause(CBasePlayer* Player);
 	void RoundRestart();
