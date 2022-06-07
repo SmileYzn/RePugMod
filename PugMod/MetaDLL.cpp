@@ -43,8 +43,6 @@ void DLL_POST_ServerActivate(edict_t* pEdictList, int edictCount, int clientMax)
 
 	gAdmin.Load();
 
-	gVoteMap.Load();
-
 	gVoteTeam.Load();
 
 	gCaptain.Clear();
