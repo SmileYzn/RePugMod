@@ -106,7 +106,7 @@ void CPugMod::SetState(int State)
 			{
 				this->SaveScores();
 
-				gTask.Create(PUG_TASK_EXEC, 5.0f, false, (void*)this->SwapTeams, this);
+				gTask.Create(PUG_TASK_EXEC, 5.0f, false, (void*)this->SwapTeams);
 
 				gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("%s started, get ready!"), this->GetStateName());
 
@@ -147,8 +147,8 @@ void CPugMod::SetState(int State)
 
 				gCvars.GetVoteMap()->value = 1;
 
-				gTask.Create(PUG_TASK_EXEC, 5.0f, false, (void*)this->RunState, &gPugMod);
-
+				this->NextState(5.0f);
+				
 				break;
 			}
 	}
@@ -166,19 +166,19 @@ void CPugMod::NextState(float Delay)
 {
 	if (Delay)
 	{
-		gTask.Create(PUG_TASK_NEXT, Delay, false, (void*)this->RunState, this);
+		gTask.Create(PUG_TASK_NEXT, Delay, false, (void*)this->RunState);
 	}
 	else
 	{
-		this->RunState(this);
+		this->RunState();
 	}
 }
 
-void CPugMod::RunState(CPugMod* PugMod)
+void CPugMod::RunState()
 {
 	int Next = PUG_STATE_DEAD;
 
-	switch (PugMod->m_State)
+	switch (gPugMod.GetState())
 	{
 		case PUG_STATE_DEAD:
 			{
@@ -202,7 +202,7 @@ void CPugMod::RunState(CPugMod* PugMod)
 			}
 		case PUG_STATE_HALFTIME:
 			{
-				if (PugMod->GetRound() < (int)gCvars.GetPlayRounds()->value)
+				if (gPugMod.GetRound() < (int)gCvars.GetPlayRounds()->value)
 				{
 					Next = PUG_STATE_SECOND_HALF;
 				}
@@ -217,9 +217,9 @@ void CPugMod::RunState(CPugMod* PugMod)
 			{
 				Next = PUG_STATE_END;
 
-				if (PugMod->GetScores(TERRORIST) == (int)gCvars.GetPlayRounds()->value / 2)
+				if (gPugMod.GetScores(TERRORIST) == (int)gCvars.GetPlayRounds()->value / 2)
 				{
-					if (PugMod->GetScores(CT) == (int)gCvars.GetPlayRounds()->value / 2)
+					if (gPugMod.GetScores(CT) == (int)gCvars.GetPlayRounds()->value / 2)
 					{
 						if ((int)gCvars.GetPlayRoundsOvertimeType()->value == 1)
 						{
@@ -234,7 +234,7 @@ void CPugMod::RunState(CPugMod* PugMod)
 			{
 				Next = PUG_STATE_HALFTIME;
 
-				if (PugMod->GetOvertimeWinner() != UNASSIGNED)
+				if (gPugMod.GetOvertimeWinner() != UNASSIGNED)
 				{
 					Next = PUG_STATE_END;
 				}
@@ -248,7 +248,7 @@ void CPugMod::RunState(CPugMod* PugMod)
 			}
 	}
 
-	PugMod->SetState(Next);
+	gPugMod.SetState(Next);
 }
 
 bool CPugMod::CheckBalanceTeams()
@@ -596,11 +596,11 @@ void CPugMod::LO3(int Delay)
 	}
 }
 
-void CPugMod::SwapTeams(CPugMod* PugMod)
+void CPugMod::SwapTeams()
 {
-	if (PugMod->GetRound() == (int)gCvars.GetPlayRounds()->value)
+	if (gPugMod.GetRound() == (int)gCvars.GetPlayRounds()->value)
 	{
-		if (PugMod->GetScores(TERRORIST) == PugMod->GetScores(CT))
+		if (gPugMod.GetScores(TERRORIST) == gPugMod.GetScores(CT))
 		{
 			if (!gCvars.GetPlayRoundsOvertimeSwap()->value)
 			{
@@ -609,14 +609,7 @@ void CPugMod::SwapTeams(CPugMod* PugMod)
 		}
 	}
 
-	for (int iState = PUG_STATE_FIRST_HALF; iState <= PUG_STATE_OVERTIME; iState++)
-	{
-		int ScoreTR = PugMod->m_Score[iState][TERRORIST];
-
-		PugMod->m_Score[iState][TERRORIST] = PugMod->m_Score[iState][CT];
-
-		PugMod->m_Score[iState][CT] = ScoreTR;
-	}
+	gPugMod.SwapScores();
 
 	if (g_pGameRules)
 	{
@@ -624,6 +617,14 @@ void CPugMod::SwapTeams(CPugMod* PugMod)
 	}
 
 	gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, "Changing teams automatically.");
+}
+
+void CPugMod::SwapScores()
+{
+	for (int iState = PUG_STATE_FIRST_HALF; iState <= PUG_STATE_OVERTIME; iState++)
+	{
+		std::swap(this->m_Score[iState][TERRORIST], this->m_Score[iState][CT]);
+	}
 }
 
 void CPugMod::ClientConnected(edict_t* pEntity)

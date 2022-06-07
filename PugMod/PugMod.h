@@ -45,7 +45,7 @@ public:
 
 	void SetState(int State);
 	void NextState(float Delay);
-	static void RunState(CPugMod* PugMod);
+	static void RunState();
 
 	bool CheckBalanceTeams();
 	void SaveScores();
@@ -69,7 +69,9 @@ public:
 	void ViewScores(CBasePlayer* Player);
 
 	static void LO3(int Delay);
-	static void SwapTeams(CPugMod* PugMod);
+	static void SwapTeams();
+
+	void SwapScores();
 
 	void ClientConnected(edict_t* pEntity);
 	void ClientGetIntoGame(CBasePlayer* Player);
