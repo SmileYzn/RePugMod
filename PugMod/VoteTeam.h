@@ -1,27 +1,34 @@
 #pragma once
 
+struct P_VOTE_TEAM_ITEM
+{
+	int Votes;
+	std::string Name;
+
+	P_VOTE_TEAM_ITEM(int Votes, std::string Name) : Votes(Votes), Name(Name) {}
+};
+
 class CVoteTeam
 {
 public:
-	void Load();
 	void Init();
 
-	void AddVote(int ItemIndex, int Vote) { this->m_Vote[ItemIndex] += Vote; }
+	void AddVote(int Item, int Vote);
+	auto GetVote();
 
 	static void MenuHandle(int EntityIndex, P_MENU_ITEM Item);
 	static void Stop();
-	static void List(CVoteTeam* VoteTeam);
+	static void List();
 
 	int GetCount();
 	int GetWinner();
-	const char* GetItem(int ItemIndex);
 
 	void SetMode(int GameMode);
 	void TeamsRandomize();
 	void TeamsOptimize();
+
 private:
-	std::vector<std::string> m_Data;
-	std::map<int, int>       m_Vote;
+	std::map<int, P_VOTE_TEAM_ITEM> m_Data;
 };
 
 extern CVoteTeam gVoteTeam;

@@ -2,22 +2,16 @@
 
 CVoteTeam gVoteTeam;
 
-void CVoteTeam::Load()
-{
-	this->m_Data.clear();
-	this->m_Vote.clear();
-
-	this->m_Data.push_back(_T("Leaders Sorted"));
-	this->m_Data.push_back(_T("Random"));
-	this->m_Data.push_back(_T("Not Sorted"));
-	this->m_Data.push_back(_T("Skill Sorted"));
-	this->m_Data.push_back(_T("Swap Teams"));
-	this->m_Data.push_back(_T("Knife Round"));
-}
-
 void CVoteTeam::Init()
 {
-	this->m_Vote.clear();
+	this->m_Data.clear();
+
+	this->m_Data.insert(std::make_pair(0, P_VOTE_TEAM_ITEM(0, _T("Leaders Sorted"))));
+	this->m_Data.insert(std::make_pair(1, P_VOTE_TEAM_ITEM(0, _T("Random"))));
+	this->m_Data.insert(std::make_pair(2, P_VOTE_TEAM_ITEM(0, _T("Not Sorted"))));
+	this->m_Data.insert(std::make_pair(3, P_VOTE_TEAM_ITEM(0, _T("Skill Sorted"))));
+	this->m_Data.insert(std::make_pair(4, P_VOTE_TEAM_ITEM(0, _T("Swap Teams"))));
+	this->m_Data.insert(std::make_pair(5, P_VOTE_TEAM_ITEM(0, _T("Knife Round"))));
 
 	CBasePlayer* Players[MAX_CLIENTS] = { NULL };
 
@@ -33,7 +27,10 @@ void CVoteTeam::Init()
 
 			gMenu[EntityIndex].Create(_T("Game Mode:"), false, (void*)this->MenuHandle);
 
-			gMenu[EntityIndex].AddList(this->m_Data);
+			for (auto const& [Key, Item] : this->m_Data)
+			{
+				gMenu[EntityIndex].AddItem(Key, Item.Name);
+			}
 
 			gMenu[EntityIndex].Show(EntityIndex);
 		}
@@ -43,7 +40,22 @@ void CVoteTeam::Init()
 
 	gTask.Create(PUG_TASK_VOTE, gCvars.GetVoteDelay()->value, false, (void*)this->Stop);
 
-	gTask.Create(PUG_TASK_LIST, 0.5f, true, (void*)this->List, this);
+	gTask.Create(PUG_TASK_LIST, 0.5f, true, (void*)this->List);
+}
+
+void CVoteTeam::AddVote(int Item, int Vote)
+{
+	auto it = this->m_Data.find(Item);
+
+	if (it != this->m_Data.end())
+	{
+		it->second.Votes += Vote;
+	}
+}
+
+auto CVoteTeam::GetVote()
+{
+	return this->m_Data;
 }
 
 void CVoteTeam::MenuHandle(int EntityIndex, P_MENU_ITEM Item)
@@ -102,33 +114,35 @@ void CVoteTeam::Stop()
 	}
 }
 
-void CVoteTeam::List(CVoteTeam* VoteTeam)
+void CVoteTeam::List()
 {
 	std::string VoteList;
 
-	for (std::size_t VoteIndex = 0; VoteIndex < VoteTeam->m_Data.size(); VoteIndex++)
+	for (auto const& [Key, Item] : gVoteTeam.GetVote())
 	{
-		if (VoteTeam->m_Vote[VoteIndex])
+		if (Item.Votes > 0)
 		{
-			VoteList += VoteTeam->m_Data[VoteIndex];
-			VoteList += " [";
-			VoteList += std::to_string(VoteTeam->m_Vote[VoteIndex]);
-			VoteList += "]\n";
+			VoteList += Item.Name;
+			VoteList += " - ";
+			VoteList += std::to_string(Item.Votes);
+			VoteList += " ";
+			VoteList += (Item.Votes > 1) ? _T("votes") : _T("vote");
+			VoteList += "\n";
 		}
 	}
 
 	gUtil.HudMessage(NULL, gUtil.HudParam(0, 255, 0, 0.23, 0.02, 0, 0.0, 0.53, 0.0, 0.0, 1), _T("Game Mode (%d):"), (int)gTask.Timeleft(PUG_TASK_VOTE));
 
-	gUtil.HudMessage(NULL, gUtil.HudParam(255, 255, 225, 0.23, 0.02, 0, 0.0, 0.53, 0.0, 0.0, 2), "\n%s", VoteList.length() ? VoteList.c_str() : _T("No votes."));
+	gUtil.HudMessage(NULL, gUtil.HudParam(255, 255, 225, 0.23, 0.02, 0, 0.0, 0.53, 0.0, 0.0, 2), "\n%s", VoteList.length() ? VoteList.c_str() : _T("No Votes."));
 }
 
 int CVoteTeam::GetCount()
 {
 	int Count = 0;
 
-	for (std::size_t i = 0; i < this->m_Data.size(); i++)
+	for (auto const& [Key, Item] : this->m_Data)
 	{
-		Count += this->m_Vote[i];
+		Count += Item.Votes;
 	}
 
 	return Count;
@@ -136,31 +150,27 @@ int CVoteTeam::GetCount()
 
 int CVoteTeam::GetWinner()
 {
-	int Winner = 0, WinnerVotes = 0;
+	int Winner = -1;
+	int WinnerVotes = 0;
 
-	for (std::size_t i = 0; i < this->m_Data.size(); i++)
+	for (auto const& [Key, Item] : this->m_Data)
 	{
-		if (this->m_Vote[i] > WinnerVotes)
+		if (Item.Votes > WinnerVotes)
 		{
-			Winner = i;
-			WinnerVotes = this->m_Vote[i];
+			Winner = Key;
+			WinnerVotes = Item.Votes;
 		}
-		else if (this->m_Vote[i] == WinnerVotes)
+		else if (Item.Votes == WinnerVotes)
 		{
 			if (RANDOM_LONG(0, 1))
 			{
-				Winner = i;
-				WinnerVotes = this->m_Vote[i];
+				Winner = Key;
+				WinnerVotes = Item.Votes;
 			}
 		}
 	}
 
-	return this->m_Vote[Winner] == 0 ? -1 : Winner;
-}
-
-const char* CVoteTeam::GetItem(int ItemIndex)
-{
-	return this->m_Data[ItemIndex].c_str();
+	return Winner;
 }
 
 void CVoteTeam::SetMode(int GameMode)
