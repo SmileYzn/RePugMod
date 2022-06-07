@@ -2,17 +2,16 @@
 
 CVoteMap gVoteMap;
 
-void CVoteMap::Load()
-{
-	this->m_Data.clear();
-	this->m_Vote.clear();
-}
-
 void CVoteMap::Init()
 {
-	this->m_Vote.clear();
+	this->m_Data.clear();
 
-	this->m_Data = gUtil.LoadMapList(VOTE_MAP_FILE, gCvars.GetVoteMapSelf()->value ? true : false);
+	auto ItemList = gUtil.LoadMapList(VOTE_MAP_FILE, gCvars.GetVoteMapSelf()->value ? true : false);
+
+	for (auto Option : ItemList)
+	{
+		this->m_Data.insert(std::make_pair(Option,0));
+	}
 	
 	CBasePlayer* Players[MAX_CLIENTS] = { NULL };
 
@@ -28,7 +27,7 @@ void CVoteMap::Init()
 
 			gMenu[EntityIndex].Create(_T("Vote Map:"), false, (void*)this->MenuHandle);
 
-			gMenu[EntityIndex].AddList(this->m_Data);
+			gMenu[EntityIndex].AddList(ItemList);
 
 			gMenu[EntityIndex].Show(EntityIndex);
 		}
@@ -38,7 +37,22 @@ void CVoteMap::Init()
 
 	gTask.Create(PUG_TASK_VOTE, gCvars.GetVoteDelay()->value, false, (void*)this->Stop);
 
-	gTask.Create(PUG_TASK_LIST, 0.5f, true, (void*)this->List, this);
+	gTask.Create(PUG_TASK_LIST, 0.5f, true, (void*)this->List);
+}
+
+void CVoteMap::AddVote(std::string Item, int Vote)
+{
+	auto it = this->m_Data.find(Item);
+
+	if (it != this->m_Data.end())
+	{
+		it->second += Vote;
+	}
+}
+
+std::map<std::string, int> CVoteMap::GetVote()
+{
+	return this->m_Data;
 }
 
 void CVoteMap::MenuHandle(int EntityIndex, P_MENU_ITEM Item)
@@ -47,7 +61,7 @@ void CVoteMap::MenuHandle(int EntityIndex, P_MENU_ITEM Item)
 
 	if (Player)
 	{
-		gVoteMap.AddVote(Item.Info, 1);
+		gVoteMap.AddVote(Item.Text, 1);
 
 		gUtil.SayText(NULL, Player->entindex(), _T("\3%s\1 choosed \3%s\1"), STRING(Player->edict()->v.netname), Item.Text.c_str());
 
@@ -57,7 +71,6 @@ void CVoteMap::MenuHandle(int EntityIndex, P_MENU_ITEM Item)
 		}
 	}
 }
-
 
 void CVoteMap::Stop()
 {
@@ -84,109 +97,104 @@ void CVoteMap::Stop()
 
 	gTask.Remove(PUG_TASK_VOTE);
 
-	int Winner = gVoteMap.GetWinner();
+	auto Winner = gVoteMap.GetWinner();
 
-	if (Winner == -1)
+	if (Winner.length())
+	{
+		gTask.Create(PUG_TASK_EXEC, 5.0f, false, (void*)gVoteMap.Changelevel);
+
+		gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("Changing map to \4%s\1..."), Winner.c_str());
+	}
+	else 
 	{
 		gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("The map choice has failed: \3No votes."));
 
 		gVoteMap.RandomMap(true);
 	}
-	else 
-	{
-	    gTask.Create(PUG_TASK_EXEC, 5.0f, false, (void*)gVoteMap.Changelevel);
-
-	    gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("Changing map to \4%s\1..."), gVoteMap.GetItem(Winner));
-	}
 }
 
 void CVoteMap::Changelevel()
 {
-	int Winner = gVoteMap.GetWinner();
+	auto Winner = gVoteMap.GetWinner();
 
-	if(Winner != -1)
+	if(Winner.length())
 	{
-		const char* Map = gVoteMap.GetItem(Winner);
-
-		if(Map)
-		{
-			gUtil.ServerCommand("changelevel %s",Map);
-		}
+		gUtil.ServerCommand("changelevel %s", Winner.c_str());
 	}
 }
 
-void CVoteMap::List(CVoteMap* VoteMap)
+void CVoteMap::List()
 {
 	std::string VoteList;
 
-	for (std::size_t MapIndex = 0; MapIndex < VoteMap->m_Data.size(); MapIndex++)
+	for (auto const& Item : gVoteMap.GetVote())
 	{
-		if (VoteMap->m_Vote[MapIndex])
+		if (Item.second > 0)
 		{
-			VoteList += VoteMap->m_Data[MapIndex];
-			VoteList += " [";
-			VoteList += std::to_string(VoteMap->m_Vote[MapIndex]);
-			VoteList += "]\n";
+			VoteList += Item.first;
+			VoteList += " - ";
+			VoteList += std::to_string(Item.second);
+			VoteList += " ";
+			VoteList += (Item.second > 1) ? _T("votes") : _T("vote");
 		}
 	}
 
 	gUtil.HudMessage(NULL, gUtil.HudParam(0, 255, 0, 0.23, 0.02, 0, 0.0, 0.53, 0.0, 0.0, 1), _T("Choose the map (%d):"),(int)gTask.Timeleft(PUG_TASK_VOTE));
 	
-	gUtil.HudMessage(NULL, gUtil.HudParam(255, 255, 225, 0.23, 0.02, 0, 0.0, 0.53, 0.0, 0.0, 2), "\n%s", VoteList.length() ? VoteList.c_str() : _T("No votes."));
+	gUtil.HudMessage(NULL, gUtil.HudParam(255, 255, 225, 0.23, 0.02, 0, 0.0, 0.53, 0.0, 0.0, 2), "\n%s", VoteList.length() ? VoteList.c_str() : _T("No Votes."));
 }
 
 int CVoteMap::GetCount()
 {
 	int Count = 0;
 
-	for (std::size_t i = 0; i < this->m_Data.size(); i++)
+	for (auto const& Item : this->m_Data)
 	{
-		Count += this->m_Vote[i];
+		Count += Item.second;
 	}
 
 	return Count;
 }
 
-int CVoteMap::GetWinner()
+std::string CVoteMap::GetWinner()
 {
-	int Winner = 0, WinnerVotes = 0;
+	std::string Winner = "";
 
-	for (std::size_t i = 0; i < this->m_Data.size(); i++)
+	int WinnerVotes = 0;
+	
+	for (auto const& Item : this->m_Data)
 	{
-		if (this->m_Vote[i] > WinnerVotes)
+		if (Item.second > WinnerVotes)
 		{
-			Winner = i;
-			WinnerVotes = this->m_Vote[i];
+			Winner = Item.first;
+			WinnerVotes = Item.second;
 		}
-		else if (this->m_Vote[i] == WinnerVotes)
+		else if (Item.second == WinnerVotes)
 		{
 			if (RANDOM_LONG(0, 1))
 			{
-				Winner = i;
-				WinnerVotes = this->m_Vote[i];
+				Winner = Item.first;
+				WinnerVotes = Item.second;
 			}
 		}
 	}
 
-	return this->m_Vote[Winner] == 0 ? -1 : Winner;
-}
-
-const char* CVoteMap::GetItem(int ItemIndex)
-{
-	return this->m_Data[ItemIndex].c_str(); 
+	return Winner;
 }
 
 int CVoteMap::RandomMap(bool Change)
 {
 	std::srand(std::time(0));
 
-	int Random = std::rand() % this->m_Data.size();;
+	auto MapList = gUtil.LoadMapList(VOTE_MAP_FILE, false);
+
+	int Random = std::rand() % MapList.size();
 
 	if (Change)
 	{
-		gTask.Create(PUG_TASK_EXEC, 5.0f, false, (void*)SERVER_COMMAND, gUtil.VarArgs("changelevel %s\n", this->m_Data[Random].c_str()));
+		gTask.Create(PUG_TASK_EXEC, 5.0f, false, (void*)SERVER_COMMAND, gUtil.VarArgs("changelevel %s\n", MapList[Random].c_str()));
 
-		gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("Changing map to \4%s\1..."), this->m_Data[Random].c_str());
+		gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("Changing map to \4%s\1..."), MapList[Random].c_str());
 	}
 
 	return Random;
