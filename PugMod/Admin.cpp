@@ -149,7 +149,7 @@ void CAdmin::MenuKick(int EntityIndex)
 		{
 			if (!gAdmin.Check(Player))
 			{
-				gMenu[EntityIndex].AddItem(Player->entindex(), gUtil.VarArgs("%s \\R\\y%s", STRING(Player->edict()->v.netname), (Player->m_iTeam == CT ? "CT" : (Player->m_iTeam == TERRORIST ? "TR" : "SPEC"))));
+				gMenu[EntityIndex].AddItem(Player->entindex(), STRING(Player->edict()->v.netname));
 			}
 		}
 	}
@@ -190,7 +190,7 @@ void CAdmin::MenuBan(int EntityIndex)
 		{
 			if (!gAdmin.Check(Player))
 			{
-				gMenu[EntityIndex].AddItem(Player->entindex(), gUtil.VarArgs("%s \\R\\y%s", STRING(Player->edict()->v.netname), (Player->m_iTeam == CT ? "CT" : (Player->m_iTeam == TERRORIST ? "TR" : "SPEC"))));
+				gMenu[EntityIndex].AddItem(Player->entindex(), STRING(Player->edict()->v.netname));
 			}
 		}
 	}
@@ -208,7 +208,11 @@ void CAdmin::MenuBanHandle(int EntityIndex, P_MENU_ITEM Item)
 
 		if (Target)
 		{
-			gMenu[EntityIndex].Create(gUtil.VarArgs(_T("Choose a time to ban \\w%s\\y"), STRING(Target->edict()->v.netname)), true, (void*)gAdmin.MenuBanHandleExtra);
+			char Title[128] = { 0 };
+
+			sprintf(Title, _T("Choose a time to ban \\w%s\\y"), STRING(Target->edict()->v.netname));
+
+			gMenu[EntityIndex].Create(Title, true, (void*)gAdmin.MenuBanHandleExtra);
 
 			std::string BanTimes("0 5 10 15 30 45 60 120");
 
@@ -266,7 +270,7 @@ void CAdmin::MenuSlap(int EntityIndex)
 		{
 			if (!gAdmin.Check(Player))
 			{
-				gMenu[EntityIndex].AddItem(Player->entindex(), gUtil.VarArgs("%s \\R\\y%s", STRING(Player->edict()->v.netname), (Player->m_iTeam == CT ? "CT" : (Player->m_iTeam == TERRORIST ? "TR" : "SPEC"))), !Player->IsAlive());
+				gMenu[EntityIndex].AddItem(Player->entindex(), STRING(Player->edict()->v.netname), !Player->IsAlive());
 			}
 		}
 	}
@@ -309,7 +313,7 @@ void CAdmin::MenuTeam(int EntityIndex)
 			{
 				if (!gAdmin.Check(Player))
 				{
-					gMenu[EntityIndex].AddItem(Player->entindex(), gUtil.VarArgs("%s \\R\\y%s", STRING(Player->edict()->v.netname), (Player->m_iTeam == CT ? "CT" : (Player->m_iTeam == TERRORIST ? "TR" : "SPEC"))));
+					gMenu[EntityIndex].AddItem(Player->entindex(), STRING(Player->edict()->v.netname));
 				}
 			}
 		}
@@ -328,7 +332,11 @@ void CAdmin::MenuTeamHandle(int EntityIndex, P_MENU_ITEM Item)
 
 		if (Target)
 		{
-			gMenu[EntityIndex].Create(gUtil.VarArgs(_T("Set \\w%s\\y Team"), STRING(Target->edict()->v.netname)), true, (void*)gAdmin.MenuTeamHandleExtra);
+			char Title[128] = { 0 };
+
+			sprintf(Title, _T("Set \\w%s\\y Team"), STRING(Target->edict()->v.netname));
+
+			gMenu[EntityIndex].Create(Title, true, (void*)gAdmin.MenuTeamHandleExtra);
 
 			gMenu[EntityIndex].AddItem(Target->entindex(), _T("Terrorist"), Target->m_iTeam == TERRORIST, TERRORIST);
 
