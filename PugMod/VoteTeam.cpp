@@ -337,9 +337,6 @@ void CVoteTeam::TeamsOptimize()
 	// If has CSGameRules
 	if (g_pGameRules)
 	{
-		// Balance Teams to prevent incorrect count
-		//CSGameRules()->BalanceTeams();
-
 		// Restart Round
 		CSGameRules()->RestartRound();
 	}
