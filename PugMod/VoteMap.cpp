@@ -104,6 +104,8 @@ void CVoteMap::Stop()
 	if (it != MapList.end())
 	{
 		gTask.Create(PUG_TASK_EXEC, 5.0f, false, (void*)SERVER_COMMAND, gUtil.VarArgs("changelevel %s\n", it->second.Name.c_str()));
+
+		gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("Changing map to \4%s\1..."), it->second.Name.c_str());
 	}
 	else
 	{
