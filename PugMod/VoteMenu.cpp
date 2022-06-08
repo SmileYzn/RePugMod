@@ -382,6 +382,8 @@ void CVoteMenu::RoundRestart()
 
 			this->m_PausedTeam = UNASSIGNED;
 			this->m_PausedTime = 0; 
+
+			memset(this->m_VotedPause, false, sizeof(this->m_VotedPause));
 		}
 	}
 }
