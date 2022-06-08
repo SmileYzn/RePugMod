@@ -2,10 +2,11 @@
 
 struct P_VOTE_TEAM_ITEM
 {
+	int Index;
 	int Votes;
 	std::string Name;
 
-	P_VOTE_TEAM_ITEM(int Votes, std::string Name) : Votes(Votes), Name(Name) {}
+	P_VOTE_TEAM_ITEM(int Index, int Votes, std::string Name) : Index(Index), Votes(Votes), Name(Name) {}
 };
 
 class CVoteTeam
@@ -21,7 +22,7 @@ public:
 	static void List();
 
 	int GetCount();
-	int GetWinner();
+	P_VOTE_TEAM_ITEM GetWinner();
 
 	void SetMode(int GameMode);
 	void TeamsRandomize();

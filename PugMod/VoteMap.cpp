@@ -8,9 +8,13 @@ void CVoteMap::Init()
 
 	auto ItemList = gUtil.LoadMapList(VOTE_MAP_FILE, gCvars.GetVoteMapSelf()->value ? true : false);
 
-	for (auto Option : ItemList)
+	int ItemIndex = 0;
+
+	for (auto MapName : ItemList)
 	{
-		this->m_Data.insert(std::make_pair(Option, 0));
+		this->m_Data.insert(std::make_pair(ItemIndex, P_VOTE_MAP_ITEM(ItemIndex, 0, MapName)));
+
+		ItemIndex++;
 	}
 
 	CBasePlayer* Players[MAX_CLIENTS] = { NULL };
@@ -40,17 +44,17 @@ void CVoteMap::Init()
 	gTask.Create(PUG_TASK_LIST, 0.5f, true, (void*)this->List);
 }
 
-void CVoteMap::AddVote(std::string Item, int Vote)
+void CVoteMap::AddVote(int Item, int Vote)
 {
 	auto it = this->m_Data.find(Item);
 
 	if (it != this->m_Data.end())
 	{
-		it->second += Vote;
+		it->second.Votes += Vote;
 	}
 }
 
-std::map<std::string, int> CVoteMap::GetVote()
+auto CVoteMap::GetVote()
 {
 	return this->m_Data;
 }
@@ -61,7 +65,7 @@ void CVoteMap::MenuHandle(int EntityIndex, P_MENU_ITEM Item)
 
 	if (Player)
 	{
-		gVoteMap.AddVote(Item.Text, 1);
+		gVoteMap.AddVote(Item.Info, 1);
 
 		gUtil.SayText(NULL, Player->entindex(), _T("\3%s\1 choosed \3%s\1"), STRING(Player->edict()->v.netname), Item.Text.c_str());
 
@@ -99,11 +103,11 @@ void CVoteMap::Stop()
 
 	auto Winner = gVoteMap.GetWinner();
 
-	if (Winner.length())
+	if (Winner.Votes > 0)
 	{
 		gTask.Create(PUG_TASK_EXEC, 5.0f, false, (void*)gVoteMap.Changelevel);
 
-		gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("Changing map to \4%s\1..."), Winner.c_str());
+		gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("Changing map to \4%s\1..."), Winner.Name.c_str());
 	}
 	else
 	{
@@ -117,9 +121,9 @@ void CVoteMap::Changelevel()
 {
 	auto Winner = gVoteMap.GetWinner();
 
-	if (Winner.length())
+	if (Winner.Name.length() > 0)
 	{
-		gUtil.ServerCommand("changelevel %s", Winner.c_str());
+		gUtil.ServerCommand("changelevel %s", Winner.Name.c_str());
 	}
 }
 
@@ -127,15 +131,15 @@ void CVoteMap::List()
 {
 	std::string VoteList;
 
-	for (auto const& Item : gVoteMap.GetVote())
+	for (auto const& [Key, Item] : gVoteMap.GetVote())
 	{
-		if (Item.second > 0)
+		if (Item.Votes > 0)
 		{
-			VoteList += Item.first;
+			VoteList += Item.Name;
 			VoteList += " - ";
-			VoteList += std::to_string(Item.second);
+			VoteList += std::to_string(Item.Votes);
 			VoteList += " ";
-			VoteList += (Item.second > 1) ? _T("votes") : _T("vote");
+			VoteList += (Item.Votes > 1) ? _T("votes") : _T("vote");
 			VoteList += "\n";
 		}
 	}
@@ -149,38 +153,37 @@ int CVoteMap::GetCount()
 {
 	int Count = 0;
 
-	for (auto const& Item : this->m_Data)
+	for (auto const& [Key, Item] : this->m_Data)
 	{
-		Count += Item.second;
+		Count += Item.Votes;
 	}
 
 	return Count;
 }
 
-std::string CVoteMap::GetWinner()
+P_VOTE_MAP_ITEM CVoteMap::GetWinner()
 {
-	std::string Winner = "";
-
+	int Winner = 0;
 	int WinnerVotes = 0;
 
-	for (auto const& Item : this->m_Data)
+	for (auto const& [Key, Item] : this->m_Data)
 	{
-		if (Item.second > WinnerVotes)
+		if (Item.Votes > WinnerVotes)
 		{
-			Winner = Item.first;
-			WinnerVotes = Item.second;
+			Winner = Key;
+			WinnerVotes = Item.Votes;
 		}
-		else if (Item.second == WinnerVotes)
+		else if (Item.Votes == WinnerVotes)
 		{
 			if (RANDOM_LONG(0, 1))
 			{
-				Winner = Item.first;
-				WinnerVotes = Item.second;
+				Winner = Key;
+				WinnerVotes = Item.Votes;
 			}
 		}
 	}
 
-	return Winner;
+	return this->m_Data.at(Winner);
 }
 
 int CVoteMap::RandomMap()

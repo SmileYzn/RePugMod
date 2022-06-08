@@ -6,12 +6,12 @@ void CVoteTeam::Init()
 {
 	this->m_Data.clear();
 
-	this->m_Data.insert(std::make_pair(0, P_VOTE_TEAM_ITEM(0, _T("Leaders Sorted"))));
-	this->m_Data.insert(std::make_pair(1, P_VOTE_TEAM_ITEM(0, _T("Random"))));
-	this->m_Data.insert(std::make_pair(2, P_VOTE_TEAM_ITEM(0, _T("Not Sorted"))));
-	this->m_Data.insert(std::make_pair(3, P_VOTE_TEAM_ITEM(0, _T("Skill Sorted"))));
-	this->m_Data.insert(std::make_pair(4, P_VOTE_TEAM_ITEM(0, _T("Swap Teams"))));
-	this->m_Data.insert(std::make_pair(5, P_VOTE_TEAM_ITEM(0, _T("Knife Round"))));
+	this->m_Data.insert(std::make_pair(0, P_VOTE_TEAM_ITEM(0, 0, _T("Leaders Sorted"))));
+	this->m_Data.insert(std::make_pair(1, P_VOTE_TEAM_ITEM(1, 0, _T("Random"))));
+	this->m_Data.insert(std::make_pair(2, P_VOTE_TEAM_ITEM(2, 0, _T("Not Sorted"))));
+	this->m_Data.insert(std::make_pair(3, P_VOTE_TEAM_ITEM(3, 0, _T("Skill Sorted"))));
+	this->m_Data.insert(std::make_pair(4, P_VOTE_TEAM_ITEM(4, 0, _T("Swap Teams"))));
+	this->m_Data.insert(std::make_pair(5, P_VOTE_TEAM_ITEM(5, 0, _T("Knife Round"))));
 
 	CBasePlayer* Players[MAX_CLIENTS] = { NULL };
 
@@ -100,17 +100,17 @@ void CVoteTeam::Stop()
 
 	gTask.Remove(PUG_TASK_VOTE);
 
-	int Winner = gVoteTeam.GetWinner();
+	auto GameMode = gVoteTeam.GetWinner();
 
-	if (Winner == -1)
+	if (GameMode.Votes > 0)
+	{
+		gVoteTeam.SetMode(GameMode.Index);
+	}
+	else
 	{
 		gPugMod.NextState(3.0);
 
 		gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("The choice of the teams failed: \3No votes."));
-	}
-	else
-	{
-		gVoteTeam.SetMode(Winner);
 	}
 }
 
@@ -148,9 +148,9 @@ int CVoteTeam::GetCount()
 	return Count;
 }
 
-int CVoteTeam::GetWinner()
+P_VOTE_TEAM_ITEM CVoteTeam::GetWinner()
 {
-	int Winner = -1;
+	int Winner = 0;
 	int WinnerVotes = 0;
 
 	for (auto const& [Key, Item] : this->m_Data)
@@ -170,7 +170,7 @@ int CVoteTeam::GetWinner()
 		}
 	}
 
-	return Winner;
+	return this->m_Data.at(Winner);
 }
 
 void CVoteTeam::SetMode(int GameMode)
