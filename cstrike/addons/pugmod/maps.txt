@@ -1,6 +1,7 @@
 de_dust2
 de_tuscan
 de_nuke
+de_esl_autumn
 de_inferno
 de_mirage
 de_train
@@ -10,10 +11,15 @@ de_cpl_fire
 de_hell
 de_russka
 de_cbble
+de_cpl_fire
 de_aztec
+de_blue
 de_storm
+de_cevo_concrete2
 de_torn
+de_comrade_3rdroute
 de_vertigo
 de_piranesi
 de_dust
+de_core_beta5
 de_airstrip
