@@ -12,8 +12,6 @@ void CVoteMenu::Load()
 	
 	this->m_PausedTeam = UNASSIGNED;
 
-	this->m_PausedTime = 0;
-
 	this->m_MapList.clear();
 
 	this->m_MapList = gUtil.LoadMapList(VOTE_MENU_MAPS_FILE, gCvars.GetVoteMapSelf()->value ? true : false);
@@ -289,64 +287,75 @@ void CVoteMenu::VoteMapPickup(CBasePlayer* Player, int MapIndex, bool Disabled)
 
 void CVoteMenu::VotePause(CBasePlayer* Player)
 {
-	if (this->CheckMenu(Player))
+	if (g_pGameRules)
 	{
-		if (gPugMod.IsLive())
+		if (this->CheckMenu(Player))
 		{
-			if (gCvars.GetVotePauseTime()->value)
+			if (gPugMod.IsLive())
 			{
-				if (this->m_PausedTeam == UNASSIGNED)
+				if (gCvars.GetVotePauseTime()->value)
 				{
-					auto PlayerIndex = Player->entindex();
-
-					if (!this->m_VotedPause[PlayerIndex][Player->m_iTeam])
+					if (this->m_PausedTeam == UNASSIGNED)
 					{
-						this->m_VotedPause[PlayerIndex][Player->m_iTeam] = true;
-
-						int VoteCount = 0;
-
-						for (int i = 1; i <= gpGlobals->maxClients; ++i)
+						if (!CSGameRules()->IsFreezePeriod())
 						{
-							if (this->m_VotedPause[i][Player->m_iTeam])
+							auto PlayerIndex = Player->entindex();
+
+							if (!this->m_VotedPause[PlayerIndex][Player->m_iTeam])
 							{
-								VoteCount++;
+								this->m_VotedPause[PlayerIndex][Player->m_iTeam] = true;
+
+								int VoteCount = 0;
+
+								for (int i = 1; i <= gpGlobals->maxClients; ++i)
+								{
+									if (this->m_VotedPause[i][Player->m_iTeam])
+									{
+										VoteCount++;
+									}
+								}
+
+								int VotesNeed = (int)(gPlayer.GetNum(Player->m_iTeam) * gCvars.GetVotePercentage()->value);
+								int VotesLack = (VotesNeed - VoteCount);
+								VotesLack = 0;
+								if (VotesLack)
+								{
+									gUtil.SayText(NULL, PlayerIndex, _T("\3%s\1 from voted for a timeout: \4%d\1 of \4%d\1 vote(s) to run timeout."), STRING(Player->edict()->v.netname), VoteCount, VotesNeed);
+									gUtil.SayText(NULL, PlayerIndex, _T("Say \3.vote\1 for a timeout."));
+								}
+								else
+								{
+									this->m_PausedTeam = Player->m_iTeam;
+
+									gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("The \3%s\1 team paused the game."), PUG_MOD_TEAM_STR[this->m_PausedTeam]);
+
+									gUtil.SayText(NULL, PlayerIndex, _T("Match will pause for \4%d\1 seconds on next round."), (int)gCvars.GetVotePauseTime()->value);
+								}
 							}
-						}
-
-						int VotesNeed = (int)(gPlayer.GetNum(Player->m_iTeam) * gCvars.GetVotePercentage()->value);
-						int VotesLack = (VotesNeed - VoteCount);
-
-						if (VotesLack)
-						{
-							gUtil.SayText(NULL, PlayerIndex, _T("\3%s\1 from voted for a timeout: \4%d\1 of \4%d\1 vote(s) to run timeout."), STRING(Player->edict()->v.netname), VoteCount, VotesNeed);
-							gUtil.SayText(NULL, PlayerIndex, _T("Say \3.vote\1 for a timeout."));
+							else
+							{
+								gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("You already voted for a timeout."));
+							}
 						}
 						else
 						{
-							this->m_PausedTeam = Player->m_iTeam;
-							this->m_PausedTime = (int)gCvars.GetVotePauseTime()->value;
-
-							gUtil.SayText(NULL, PlayerIndex, _T("Match will pause for \4%d\1 seconds on next round."), this->m_PausedTime);
+							gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("Unable to pause the match while is in freezetime period."));
 						}
 					}
 					else
 					{
-						gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("You already voted for a timeout."));
+						gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("The \3%s\1 team already paused the game."), PUG_MOD_TEAM_STR[this->m_PausedTeam]);
 					}
 				}
 				else
 				{
-					gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("The \3%s\1 team already paused the game."), PUG_MOD_TEAM_STR[this->m_PausedTeam]);
+					gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("Unable to vote to pause the match."));
 				}
 			}
 			else
 			{
-				gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("Unable to vote to pause the match."));
+				gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("Unable to use this command now."));
 			}
-		}
-		else
-		{
-			gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("Unable to use this command now."));
 		}
 	}
 }
@@ -355,35 +364,54 @@ void CVoteMenu::RoundRestart()
 {
 	if (gPugMod.IsLive())
 	{
-		if (this->m_PausedTime > 0)
+		if (gCvars.GetVotePauseTime()->value > 0)
 		{
 			if (this->m_PausedTeam != UNASSIGNED)
 			{
-				if (g_pGameRules)
-				{
-					if (!CSGameRules()->m_bCompleteReset)
-					{
-						CSGameRules()->m_bFreezePeriod   = true;
-						CSGameRules()->m_iIntroRoundTime += this->m_PausedTime;
-						CSGameRules()->m_iRoundTimeSecs  += this->m_PausedTime;
-						CSGameRules()->m_fRoundStartTime = gpGlobals->time;
+				gUtil.SetRoundTime((int)gCvars.GetVotePauseTime()->value, true);
 
-						static int iMsgRoundTime;
-
-						if (iMsgRoundTime || (iMsgRoundTime = GET_USER_MSG_ID(PLID, "RoundTime", NULL)))
-						{
-							MESSAGE_BEGIN(MSG_ALL, iMsgRoundTime);
-							WRITE_SHORT(CSGameRules()->GetRoundRemainingTimeReal());
-							MESSAGE_END();
-						}
-					}
-				}
+				gTask.Create(PUG_TASK_PAUS, 0.5, true, (void*)this->VotePauseTimer);
 			}
+		}
+	}
+}
 
-			this->m_PausedTeam = UNASSIGNED;
-			this->m_PausedTime = 0; 
+void CVoteMenu::RoundStart()
+{
+	if (this->m_PausedTeam != UNASSIGNED)
+	{
+		this->m_PausedTeam = UNASSIGNED;
 
-			memset(this->m_VotedPause, false, sizeof(this->m_VotedPause));
+		memset(this->m_VotedPause, false, sizeof(this->m_VotedPause));
+	}
+}
+
+void CVoteMenu::VotePauseTimer()
+{
+	if (g_pGameRules)
+	{
+		time_t RemainTime = (time_t)(gCvars.GetVotePauseTime()->value - (float)(gpGlobals->time - CSGameRules()->m_fRoundStartTime));
+
+		if (RemainTime > 0)
+		{
+			struct tm* tm_info = localtime(&RemainTime);
+
+			if (tm_info)
+			{
+				char Time[32] = { 0 };
+
+				strftime(Time, sizeof(Time), _T("MATCH IS PAUSED\n%M:%S"), tm_info);
+
+				gUtil.HudMessage(NULL, gUtil.HudParam(0, 255, 0, -1.0, 0.2, 0, 0.6, 0.6), Time);
+			}
+		}
+		else
+		{
+			gUtil.SetRoundTime((int)CVAR_GET_FLOAT("mp_freezetime"), true);
+
+			gTask.Remove(PUG_TASK_PAUS);
+
+			gUtil.HudMessage(NULL, gUtil.HudParam(0, 255, 0, -1.0, 0.2, 0, 10.0, 10.0), _T("--- MATCH IS LIVE ---"));
 		}
 	}
 }

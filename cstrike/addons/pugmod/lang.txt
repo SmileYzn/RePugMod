@@ -598,6 +598,10 @@ bp:"\3%s\1 votou para pausar a partida: \4%d\1 de \4%d\1 voto(s) para pausar a p
 en:"Say \3.vote\1 for a timeout."
 bp:"Say \3.vote\1 para votar uma pausa na partida."
 
+"The \3%s\1 team paused the game."
+en:"The \3%s\1 team paused the game."
+bp:"O time \3%s\1 pausou a partida."
+
 "Match will pause for \4%d\1 seconds on next round."
 en:"Match will pause for \4%d\1 seconds on next round."
 bp:"A partida será pausada por \4%d\1 segundos no próximo round."
@@ -605,6 +609,10 @@ bp:"A partida será pausada por \4%d\1 segundos no próximo round."
 "You already voted for a timeout."
 en:"You already voted for a timeout."
 bp:"Você já votou para pausar a partida."
+
+"Unable to pause the match while is in freezetime period."
+en:"Unable to pause the match while is in freezetime period."
+bp:"Impossível pausar enquanto estiver no período freezetime."
 
 "The \3%s\1 team already paused the game."
 en:"The \3%s\1 team already paused the game."

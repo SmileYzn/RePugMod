@@ -398,3 +398,26 @@ std::vector<std::string> CUtil::LoadMapList(const char * Path, bool AllowCurrent
 	return MapList;
 }
 
+void CUtil::SetRoundTime(int Time, bool FreezePeriod)
+{
+	if (g_pGameRules)
+	{
+		if (!CSGameRules()->m_bCompleteReset)
+		{
+			CSGameRules()->m_bFreezePeriod = true;
+			CSGameRules()->m_iRoundTimeSecs = Time;
+			CSGameRules()->m_iIntroRoundTime = Time;
+			CSGameRules()->m_fRoundStartTime = gpGlobals->time;
+		}
+	}
+
+	static int iMsgRoundTime;
+
+	if (iMsgRoundTime || (iMsgRoundTime = GET_USER_MSG_ID(PLID, "RoundTime", NULL)))
+	{
+		MESSAGE_BEGIN(MSG_ALL, iMsgRoundTime);
+		WRITE_SHORT(Time);
+		MESSAGE_END();
+	}
+}
+

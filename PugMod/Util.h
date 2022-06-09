@@ -33,6 +33,7 @@ public:
 	unsigned short FixedUnsigned16(float value, float scale);
 	void ShowMotd(edict_t* pEntity, char *Motd, int MotdLength);
 	std::vector<std::string> LoadMapList(const char * Path, bool AllowCurrentMap);
+	void SetRoundTime(int Time, bool FreezePeriod);
 };
 
 extern CUtil gUtil;

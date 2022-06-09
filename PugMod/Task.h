@@ -5,6 +5,7 @@
 #define PUG_TASK_LIST 102
 #define PUG_TASK_NEXT 103
 #define PUG_TASK_LO3R 104
+#define PUG_TASK_PAUS 105
 
 typedef struct
 {

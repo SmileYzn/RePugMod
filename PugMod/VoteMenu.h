@@ -24,6 +24,8 @@ public:
 
 	void VotePause(CBasePlayer* Player);
 	void RoundRestart();
+	void RoundStart();
+	static void VotePauseTimer();
 
 	void VoteStop(CBasePlayer* Player);
 
@@ -34,9 +36,7 @@ private:
 	bool m_VotedStop[MAX_CLIENTS + 1][SPECTATOR + 1] = { 0 };
 
 	std::vector<std::string> m_MapList;
-
 	TeamName m_PausedTeam = UNASSIGNED;
-	int m_PausedTime = 0;
 };
 
 extern CVoteMenu gVoteMenu;
