@@ -590,8 +590,6 @@ void CPugMod::LO3(int Delay)
 	}
 	else
 	{
-		hudtextparms_t Hud = { -1.0f,0.3f,0,0,0xFF,0,0xFF,0,0xFF,0,0xFF,0.0f,0.0f,10.0f,10.0f,0 };
-
 		gUtil.HudMessage(NULL, gUtil.HudParam(0, 255, 0, -1.0, 0.2, 0, 10.0, 10.0), _T("--- MATCH IS LIVE ---"));
 	}
 }
