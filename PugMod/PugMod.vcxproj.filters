@@ -82,6 +82,9 @@
     <Filter Include="PugMod\Time">
       <UniqueIdentifier>{2271a969-8816-4f8c-9395-c9518cde3552}</UniqueIdentifier>
     </Filter>
+    <Filter Include="PugMod\VoteKick">
+      <UniqueIdentifier>{2de4fbef-174d-4f2a-af74-3ae8e6c2c50b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ReGameDLL.h">
@@ -156,6 +159,9 @@
     <ClInclude Include="TimeFormat.h">
       <Filter>PugMod\Time</Filter>
     </ClInclude>
+    <ClInclude Include="VoteKick.h">
+      <Filter>PugMod\VoteKick</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ReGameDLL.cpp">
@@ -229,6 +235,9 @@
     </ClCompile>
     <ClCompile Include="TimeFormat.cpp">
       <Filter>PugMod\Time</Filter>
+    </ClCompile>
+    <ClCompile Include="VoteKick.cpp">
+      <Filter>PugMod\VoteKick</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

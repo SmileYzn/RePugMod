@@ -14,10 +14,6 @@ public:
 	void Menu(CBasePlayer* Player);
 	static void MenuHandle(int EntityIndex, P_MENU_ITEM Item);
 
-	void		VoteKick(CBasePlayer* Player);
-	static void VoteKickHandle(int EntityIndex, P_MENU_ITEM Item);
-	void		VoteKickPlayer(CBasePlayer* Player, CBasePlayer* Target, bool Disabled);
-
 	void		VoteMap(CBasePlayer* Player);
 	static void VoteMapHandle(int EntityIndex, P_MENU_ITEM Item);
 	void		VoteMapPickup(CBasePlayer* Player, int MapIndex, bool Disabled);
@@ -30,7 +26,6 @@ public:
 	void VoteStop(CBasePlayer* Player);
 
 private:
-	bool m_VoteKick[MAX_CLIENTS + 1][MAX_CLIENTS + 1] = { 0 };
 	bool m_VotedMap[MAX_CLIENTS + 1][MAX_CLIENTS + 1] = { 0 };
 	bool m_VotedPause[MAX_CLIENTS + 1][SPECTATOR + 1] = { 0 };
 	bool m_VotedStop[MAX_CLIENTS + 1][SPECTATOR + 1] = { 0 };

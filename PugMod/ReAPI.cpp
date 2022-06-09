@@ -122,13 +122,20 @@ void ReAPI_ClientConnected(IRehldsHook_ClientConnected* chain, IGameClient* clie
 
 void ReAPI_SV_DropClient(IRehldsHook_SV_DropClient* chain, IGameClient* client, bool crash, const char* Reason)
 {
-	gCaptain.ClientDisconnected(client->GetEdict());
+	auto pEenity = client->GetEdict();
 
-	gVoteMenu.ClientDisconnected(client->GetEdict());
+	if (!FNullEnt(pEenity))
+	{
+		gCaptain.ClientDisconnected(pEenity);
 
-	gAntiRetry.ClientDisconnected(client->GetEdict(), crash, Reason);
+		gVoteMenu.ClientDisconnected(pEenity);
+
+		gVoteKick.ClientDisconnected(pEenity);
+
+		gAntiRetry.ClientDisconnected(pEenity, crash, Reason);
+
+		gPugMod.ClientDisconnected(pEenity);
+	}
 
 	chain->callNext(client, crash, Reason);
-
-	gPugMod.ClientDisconnected(client->GetEdict());
 }

@@ -61,6 +61,7 @@
 #include "VoteMap.h"
 #include "VoteTeam.h"
 #include "VoteMenu.h"
+#include "VoteKick.h"
 #include "Captain.h"
 #include "KnifeRound.h"
 #include "Stats.h"

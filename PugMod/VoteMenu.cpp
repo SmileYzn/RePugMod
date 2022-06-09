@@ -4,8 +4,6 @@ CVoteMenu gVoteMenu;
 
 void CVoteMenu::Load()
 {
-	memset(this->m_VoteKick, false, sizeof(this->m_VoteKick));
-
 	memset(this->m_VotedMap, false, sizeof(this->m_VotedMap));
 
 	memset(this->m_VotedPause, false, sizeof(this->m_VotedPause));
@@ -23,12 +21,6 @@ void CVoteMenu::ClientDisconnected(edict_t * pEntity)
 	{
 		auto EntityIndex = ENTINDEX(pEntity);
 
-		for (int i = 1; i <= gpGlobals->maxClients; ++i)
-		{
-			this->m_VoteKick[i][EntityIndex] = false;
-		}
-
-		memset(this->m_VoteKick[EntityIndex], false, sizeof(this->m_VoteKick[EntityIndex]));
 		memset(this->m_VotedMap[EntityIndex], false, sizeof(this->m_VotedMap[EntityIndex]));
 		memset(this->m_VotedPause[EntityIndex], false, sizeof(this->m_VotedPause[EntityIndex]));
 		memset(this->m_VotedStop[EntityIndex], false, sizeof(this->m_VotedStop[EntityIndex]));
@@ -85,7 +77,7 @@ void CVoteMenu::MenuHandle(int EntityIndex, P_MENU_ITEM Item)
 		{
 			case 0:
 			{
-				gVoteMenu.VoteKick(Player);
+				gVoteKick.VoteKick(Player);
 				break;
 			}
 			case 1:
@@ -102,113 +94,6 @@ void CVoteMenu::MenuHandle(int EntityIndex, P_MENU_ITEM Item)
 			{
 				gVoteMenu.VoteStop(Player);
 				break;
-			}
-		}
-	}
-}
-
-void CVoteMenu::VoteKick(CBasePlayer* Player)
-{
-	if (this->CheckMenu(Player))
-	{
-		CBasePlayer* Players[MAX_CLIENTS] = { NULL };
-
-		auto Num = gPlayer.GetList(Players, Player->m_iTeam);
-
-		int NeedPlayers = (gCvars.GetPlayersMin()->value / 2);
-
-		auto PlayerIndex = Player->entindex();
-
-		if (Num >= NeedPlayers)
-		{
-			gMenu[PlayerIndex].Create(_T("Vote Kick"), true, (void*)this->VoteKickHandle);
-
-			for (int i = 0; i < Num; i++)
-			{
-				auto Target = Players[i];
-
-				if (Target)
-				{
-					auto TargetIndex = Target->entindex();
-
-					if (PlayerIndex != TargetIndex)
-					{
-						if (!gAdmin.Check(Target))
-						{
-							gMenu[PlayerIndex].AddItem(TargetIndex, STRING(Target->edict()->v.netname), this->m_VoteKick[PlayerIndex][TargetIndex]);
-						}
-					}
-				}
-			}
-
-			gMenu[PlayerIndex].Show(PlayerIndex);
-		}
-		else
-		{
-			gUtil.SayText(Player->edict(), PlayerIndex, _T("Need \3%d\1 players to use vote kick."), NeedPlayers);
-		}
-	}
-}
-
-void CVoteMenu::VoteKickHandle(int EntityIndex, P_MENU_ITEM Item)
-{
-	auto Player = UTIL_PlayerByIndexSafe(EntityIndex);
-
-	if (Player)
-	{
-		auto Target = UTIL_PlayerByIndexSafe(Item.Info);
-
-		if (Target)
-		{
-			gVoteMenu.VoteKickPlayer(Player, Target, Item.Disabled);
-		}
-	}
-}
-
-void CVoteMenu::VoteKickPlayer(CBasePlayer* Player, CBasePlayer* Target, bool Disabled)
-{
-	if (Player)
-	{
-		if (Target)
-		{
-			auto TargetIndex = Target->entindex();
-
-			if (!Disabled)
-			{
-				auto PlayerIndex = Player->entindex();
-
-				this->m_VoteKick[PlayerIndex][TargetIndex] = true;
-
-				int VoteCount = 0;
-
-				for (int i = 1; i <= gpGlobals->maxClients; ++i)
-				{
-					if (this->m_VoteKick[i][Target->entindex()])
-					{
-						VoteCount++;
-					}
-				}
-
-				int VotesNeed = (gPlayer.GetNum(Player->m_iTeam) - 1);
-				int VotesLack = (VotesNeed - VoteCount);
-
-				if (!VotesLack)
-				{
-					gPlayer.DropClient(Target->entindex(), _T("Kicked by Vote Kick."));
-
-					gUtil.SayText(NULL, TargetIndex, _T("\3%s\1 Kicked: \4%d\1 votes reached."), STRING(Target->edict()->v.netname), VotesNeed);
-				}
-				else
-				{
-					gUtil.SayText(NULL, PlayerIndex, _T("\3%s\1 voted to kick \3%s\1: \4%d\1 of \4%d\1 votes to kick."), STRING(Player->edict()->v.netname), STRING(Target->edict()->v.netname), VoteCount, VotesNeed);
-					gUtil.SayText(NULL, PlayerIndex, _T("Say \3.vote\1 to open vote kick."));
-				}
-			}
-			else
-			{
-				gVoteMenu.VoteKick(Player);
-
-				gUtil.SayText(Player->edict(), TargetIndex, _T("Already voted to kick: \3%s\1..."), STRING(Target->edict()->v.netname));
 			}
 		}
 	}
