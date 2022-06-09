@@ -219,7 +219,7 @@ void ReGameDLL_CSGameRules_OnRoundFreezeEnd(IReGameHook_CSGameRules_OnRoundFreez
 
 	gStats.RoundStart();
 
-	gVoteMenu.RoundStart();
+	gVotePause.RoundStart();
 }
 
 bool ReGameDLL_RoundEnd(IReGameHook_RoundEnd* chain, int winStatus, ScenarioEventEndRound event, float tmDelay)
@@ -252,5 +252,5 @@ void ReGameDLL_CSGameRules_RestartRound(IReGameHook_CSGameRules_RestartRound * c
 
 	gPugMod.RoundRestart();
 
-	gVoteMenu.RoundRestart();
+	gVotePause.RoundRestart();
 }

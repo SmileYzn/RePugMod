@@ -119,6 +119,7 @@
     <ClInclude Include="Util.h" />
     <ClInclude Include="VoteMap.h" />
     <ClInclude Include="VoteMenu.h" />
+    <ClInclude Include="VotePause.h" />
     <ClInclude Include="VoteTeam.h" />
   </ItemGroup>
   <ItemGroup>
@@ -149,6 +150,7 @@
     <ClCompile Include="Util.cpp" />
     <ClCompile Include="VoteMap.cpp" />
     <ClCompile Include="VoteMenu.cpp" />
+    <ClCompile Include="VotePause.cpp" />
     <ClCompile Include="VoteTeam.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

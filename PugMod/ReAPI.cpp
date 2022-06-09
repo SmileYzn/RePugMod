@@ -132,6 +132,8 @@ void ReAPI_SV_DropClient(IRehldsHook_SV_DropClient* chain, IGameClient* client, 
 
 		gVoteKick.ClientDisconnected(pEenity);
 
+		gVotePause.ClientDisconnected(pEenity);
+
 		gAntiRetry.ClientDisconnected(pEenity, crash, Reason);
 
 		gPugMod.ClientDisconnected(pEenity);

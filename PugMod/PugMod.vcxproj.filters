@@ -85,6 +85,9 @@
     <Filter Include="PugMod\VoteKick">
       <UniqueIdentifier>{2de4fbef-174d-4f2a-af74-3ae8e6c2c50b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="PugMod\VotePause">
+      <UniqueIdentifier>{362359b8-6461-43dd-be2b-ef6ee2cc1955}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ReGameDLL.h">
@@ -162,6 +165,9 @@
     <ClInclude Include="VoteKick.h">
       <Filter>PugMod\VoteKick</Filter>
     </ClInclude>
+    <ClInclude Include="VotePause.h">
+      <Filter>PugMod\VotePause</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ReGameDLL.cpp">
@@ -238,6 +244,9 @@
     </ClCompile>
     <ClCompile Include="VoteKick.cpp">
       <Filter>PugMod\VoteKick</Filter>
+    </ClCompile>
+    <ClCompile Include="VotePause.cpp">
+      <Filter>PugMod\VotePause</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

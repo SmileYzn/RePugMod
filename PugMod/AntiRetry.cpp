@@ -27,35 +27,32 @@ void CAntiRetry::ClientConnected(edict_t * pEntity)
 
 void CAntiRetry::ClientDisconnected(edict_t* pEntity, bool crash, const char* Reason)
 {
-	if (pEntity)
+	if (FStrEq(Reason, "Client sent 'drop'") || FStrEq(Reason, "Timed out"))
 	{
-		if (FStrEq(Reason, "Client sent 'drop'") || FStrEq(Reason, "Timed out"))
+		if (gCvars.GetReconnectDelay()->value > 0)
 		{
-			if (gCvars.GetReconnectDelay()->value > 0)
+			const char* Auth = GETPLAYERAUTHID(pEntity);
+
+			if (!gAdmin.Check(Auth))
 			{
-				const char* Auth = GETPLAYERAUTHID(pEntity);
+				auto Player = UTIL_PlayerByIndexSafe(ENTINDEX(pEntity));
 
-				if (!gAdmin.Check(Auth))
+				if (Player)
 				{
-					auto Player = UTIL_PlayerByIndexSafe(ENTINDEX(pEntity));
-
-					if (Player)
+					if (Player->m_iTeam == TERRORIST || Player->m_iTeam == CT)
 					{
-						if (Player->m_iTeam == TERRORIST || Player->m_iTeam == CT)
+						if (gCvars.GetReconnectBanTime()->value > 0)
 						{
-							if (gCvars.GetReconnectBanTime()->value > 0)
+							if (gPugMod.GetState() >= PUG_STATE_FIRST_HALF && gPugMod.GetState() <= PUG_STATE_OVERTIME)
 							{
-								if (gPugMod.GetState() >= PUG_STATE_FIRST_HALF && gPugMod.GetState() <= PUG_STATE_OVERTIME)
-								{
-									gPlayer.BanClient(Player->entindex(), (int)gCvars.GetReconnectBanTime()->value, false);
-								}
+								gPlayer.BanClient(Player->entindex(), (int)gCvars.GetReconnectBanTime()->value, false);
 							}
-							else
-							{
-								this->m_Data.erase(Auth);
+						}
+						else
+						{
+							this->m_Data.erase(Auth);
 
-								this->m_Data.insert(std::make_pair(Auth, time(NULL) + (int)gCvars.GetReconnectDelay()->value));
-							}
+							this->m_Data.insert(std::make_pair(Auth, time(NULL) + (int)gCvars.GetReconnectDelay()->value));
 						}
 					}
 				}

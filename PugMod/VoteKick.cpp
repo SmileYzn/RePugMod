@@ -4,19 +4,16 @@ CVoteKick gVoteKick;
 
 void CVoteKick::ClientDisconnected(edict_t* pEntity)
 {
-	if (!FNullEnt(pEntity))
-	{
-		auto EntityIndex = ENTINDEX(pEntity);
+	auto EntityIndex = ENTINDEX(pEntity);
 
-		for (int i = 1; i <= gpGlobals->maxClients; ++i)
-		{
-			this->m_VoteKick[i][EntityIndex] = false;
-			this->m_VoteKick[EntityIndex][i] = false;
-		}
+	for (int i = 1; i <= gpGlobals->maxClients; ++i)
+	{
+		this->m_VoteKick[i][EntityIndex] = false;
+		this->m_VoteKick[EntityIndex][i] = false;
 	}
 }
 
-bool CVoteKick::CheckMenu(CBasePlayer* Player)
+bool CVoteKick::Check(CBasePlayer* Player)
 {
 	if (Player->m_iTeam == TERRORIST || Player->m_iTeam == CT)
 	{
@@ -24,10 +21,7 @@ bool CVoteKick::CheckMenu(CBasePlayer* Player)
 
 		if (State >= PUG_STATE_WARMUP && State <= PUG_STATE_END)
 		{
-			if (State != PUG_STATE_START)
-			{
-				return !gTask.Exists(PUG_TASK_EXEC);
-			}
+			return !gTask.Exists(PUG_TASK_EXEC);
 		}
 
 		gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("Unable to use this command now."));
@@ -36,9 +30,9 @@ bool CVoteKick::CheckMenu(CBasePlayer* Player)
 	return false;
 }
 
-void CVoteKick::VoteKick(CBasePlayer* Player)
+void CVoteKick::Menu(CBasePlayer* Player)
 {
-	if (this->CheckMenu(Player))
+	if (this->Check(Player))
 	{
 		CBasePlayer* Players[MAX_CLIENTS] = { NULL };
 
@@ -50,7 +44,7 @@ void CVoteKick::VoteKick(CBasePlayer* Player)
 
 		if (Num >= NeedPlayers)
 		{
-			gMenu[PlayerIndex].Create(_T("Vote Kick"), true, (void*)this->VoteKickHandle);
+			gMenu[PlayerIndex].Create(_T("Vote Kick"), true, (void*)this->MenuHandle);
 
 			for (int i = 0; i < Num; i++)
 			{
@@ -79,7 +73,7 @@ void CVoteKick::VoteKick(CBasePlayer* Player)
 	}
 }
 
-void CVoteKick::VoteKickHandle(int EntityIndex, P_MENU_ITEM Item)
+void CVoteKick::MenuHandle(int EntityIndex, P_MENU_ITEM Item)
 {
 	auto Player = UTIL_PlayerByIndexSafe(EntityIndex);
 
@@ -89,23 +83,22 @@ void CVoteKick::VoteKickHandle(int EntityIndex, P_MENU_ITEM Item)
 
 		if (Target)
 		{
-			gVoteKick.VoteKickPlayer(Player, Target, Item.Disabled);
+			gVoteKick.VoteKick(Player, Target);
 		}
 	}
 }
 
-void CVoteKick::VoteKickPlayer(CBasePlayer* Player, CBasePlayer* Target, bool Disabled)
+void CVoteKick::VoteKick(CBasePlayer* Player, CBasePlayer* Target)
 {
 	if (Player)
 	{
 		if (Target)
 		{
 			auto TargetIndex = Target->entindex();
+			auto PlayerIndex = Player->entindex();
 
-			if (!Disabled)
+			if (!this->m_VoteKick[PlayerIndex][TargetIndex])
 			{
-				auto PlayerIndex = Player->entindex();
-
 				this->m_VoteKick[PlayerIndex][TargetIndex] = true;
 
 				int VoteCount = 0;
@@ -135,8 +128,6 @@ void CVoteKick::VoteKickPlayer(CBasePlayer* Player, CBasePlayer* Target, bool Di
 			}
 			else
 			{
-				gVoteKick.VoteKick(Player);
-
 				gUtil.SayText(Player->edict(), TargetIndex, _T("Already voted to kick: \3%s\1..."), STRING(Target->edict()->v.netname));
 			}
 		}

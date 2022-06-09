@@ -4,10 +4,10 @@ class CVoteKick
 {
 public:
 	void		ClientDisconnected(edict_t* pEntity);
-	bool		CheckMenu(CBasePlayer* Player);
-	void		VoteKick(CBasePlayer* Player);
-	static void VoteKickHandle(int EntityIndex, P_MENU_ITEM Item);
-	void		VoteKickPlayer(CBasePlayer* Player, CBasePlayer* Target, bool Disabled);
+	bool		Check(CBasePlayer* Player);
+	void		Menu(CBasePlayer* Player);
+	static void MenuHandle(int EntityIndex, P_MENU_ITEM Item);
+	void		VoteKick(CBasePlayer* Player, CBasePlayer* Target);
 
 private:
 	bool m_VoteKick[MAX_CLIENTS + 1][MAX_CLIENTS + 1] = { false };

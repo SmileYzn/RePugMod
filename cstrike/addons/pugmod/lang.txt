@@ -622,6 +622,10 @@ bp:"O time \3%s\1 já pausaram a partida."
 en:"Unable to vote to pause the match."
 bp:"Impossível votar a pausa da partida."
 
+"MATCH IS PAUSED\n%M:%S"
+en:"MATCH IS PAUSED\n%M:%S"
+bp:"JOGO PAUSADO\n%M:%S"
+
 "\3%s\1 voted for surrender: \4%d\1 of \4%d\1 vote(s) to stop the match."
 en:"\3%s\1 voted for surrender: \4%d\1 of \4%d\1 vote(s) to stop the match."
 bp:"\3%s\1 votou para rendição: \4%d\1 de \4%d\1 voto(s) para rendição do time."

@@ -62,25 +62,22 @@ void CCaptain::Stop()
 
 void CCaptain::ClientDisconnected(edict_t * pEntity)
 {
-	if (!FNullEnt(pEntity))
+	TeamName Team = this->GetCaptain(ENTINDEX(pEntity));
+
+	if (Team != UNASSIGNED)
 	{
-		TeamName Team = this->GetCaptain(ENTINDEX(pEntity));
+		gTask.Remove(TERRORIST);
+		gTask.Remove(CT);
 
-		if (Team != UNASSIGNED)
+		if (gPlayer.GetNum(SPECTATOR) > 0)
 		{
-			gTask.Remove(TERRORIST);
-			gTask.Remove(CT);
+			this->SetCaptain(gPlayer.GetRandom(SPECTATOR), Team);
 
-			if (gPlayer.GetNum(SPECTATOR) > 0) 
-			{
-				this->SetCaptain(gPlayer.GetRandom(SPECTATOR), Team);
-
-				this->Menu(this->m_Picking);
-			}
-			else
-			{
-				this->Stop();
-			} 
+			this->Menu(this->m_Picking);
+		}
+		else
+		{
+			this->Stop();
 		}
 	}
 }
