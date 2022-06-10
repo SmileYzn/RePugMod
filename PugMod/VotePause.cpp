@@ -2,6 +2,14 @@
 
 CVotePause gVotePause;
 
+void CVotePause::Clear()
+{
+	this->m_Pause = UNASSIGNED;
+
+	memset(this->m_Votes, 0, sizeof(this->m_Votes));
+	memset(this->m_Count, 0, sizeof(this->m_Count));
+}
+
 void CVotePause::ClientDisconnected(int EntityIndex)
 {
 	memset(this->m_Votes[EntityIndex], false, sizeof(this->m_Votes[EntityIndex]));

@@ -3,6 +3,7 @@
 class CVotePause
 {
 public:
+	void Clear();
 	void ClientDisconnected(int EntityIndex);
 	bool Check(CBasePlayer* Player);
 	int GetVoteCount(TeamName Team);

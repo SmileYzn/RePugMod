@@ -83,6 +83,7 @@ void CPugMod::SetState(int State)
 		case PUG_STATE_FIRST_HALF:
 			{
 				gReady.Unload();
+				gVotePause.Clear();
 
 				memset(this->m_Round, 0, sizeof(this->m_Round));
 				memset(this->m_Score, 0, sizeof(this->m_Score));
