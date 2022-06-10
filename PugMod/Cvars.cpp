@@ -76,6 +76,9 @@ void CCvars::Load()
 	// Time in seconds to pause match while vote pause is running (0 to disable vote pause)
 	this->m_VotePauseTime = this->Register("pug_vote_pause_time", "60");
 
+	// Pause count limit of team per half
+	this->m_VotePauseLimit = this->Register("pug_vote_pause_limit", "2");
+
 	// Ready system type (1 Ready System, 0 Timer Counter)
 	this->m_ReadyType = this->Register("pug_ready_type", "1");
 
@@ -207,14 +210,19 @@ cvar_t* CCvars::GetVoteTeamType()
 	return this->m_VoteTeamType;
 }
 
-cvar_t * CCvars::GetVotePercentage()
+cvar_t* CCvars::GetVotePercentage()
 {
 	return this->m_VotePercentage;
 }
 
-cvar_t * CCvars::GetVotePauseTime()
+cvar_t* CCvars::GetVotePauseTime()
 {
 	return this->m_VotePauseTime;
+}
+
+cvar_t* CCvars::GetVotePauseLimit()
+{
+	return this->m_VotePauseLimit;
 }
 
 cvar_t* CCvars::GetReadyType()

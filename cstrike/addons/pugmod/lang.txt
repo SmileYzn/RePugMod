@@ -610,6 +610,10 @@ bp:"A partida será pausada por \4%d\1 segundos no próximo round."
 en:"You already voted for a timeout."
 bp:"Você já votou para pausar a partida."
 
+"The \3%s\1 team can't pause the game more than %d times."
+en:"The \3%s\1 team can't pause the game more than %d times."
+bp:"O time \3%s\1 não pode pausar o jogo mais de %d vezes."
+
 "Unable to pause the match while is in freezetime period."
 en:"Unable to pause the match while is in freezetime period."
 bp:"Impossível pausar enquanto estiver no período freezetime."

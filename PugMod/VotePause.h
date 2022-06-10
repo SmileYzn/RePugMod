@@ -14,6 +14,7 @@ public:
 private:
 	bool m_Votes[MAX_CLIENTS + 1][SPECTATOR + 1] = { false };
 	TeamName m_Pause = UNASSIGNED;
+	int m_Count[SPECTATOR + 1][PUG_STATE_END+1] = { 0 };
 };
 
 extern CVotePause gVotePause;
