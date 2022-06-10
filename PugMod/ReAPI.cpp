@@ -122,21 +122,28 @@ void ReAPI_ClientConnected(IRehldsHook_ClientConnected* chain, IGameClient* clie
 
 void ReAPI_SV_DropClient(IRehldsHook_SV_DropClient* chain, IGameClient* client, bool crash, const char* Reason)
 {
-	auto pEenity = client->GetEdict();
+	auto pEntity = client->GetEdict();
 
-	if (!FNullEnt(pEenity))
+	if (!FNullEnt(pEntity))
 	{
-		gCaptain.ClientDisconnected(pEenity);
+		auto EntityIndex = ENTINDEX(pEntity);
 
-		gVoteMenu.ClientDisconnected(pEenity);
+		if (EntityIndex)
+		{
+			gCaptain.ClientDisconnected(EntityIndex);
 
-		gVoteKick.ClientDisconnected(pEenity);
+			gVoteKick.ClientDisconnected(EntityIndex);
 
-		gVotePause.ClientDisconnected(pEenity);
+			gVoteLevel.ClientDisconnected(EntityIndex);
 
-		gAntiRetry.ClientDisconnected(pEenity, crash, Reason);
+			gVotePause.ClientDisconnected(EntityIndex);
 
-		gPugMod.ClientDisconnected(pEenity);
+			gVoteStop.ClientDisconnected(EntityIndex);
+
+			gAntiRetry.ClientDisconnected(pEntity, Reason);
+
+			gPugMod.ClientDisconnected(EntityIndex);
+		}
 	}
 
 	chain->callNext(client, crash, Reason);

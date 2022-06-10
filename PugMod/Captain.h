@@ -6,7 +6,7 @@ public:
 	void Clear();
 	void Init();
 	void Stop();
-	void ClientDisconnected(edict_t* pEntity);
+	void ClientDisconnected(int EntityIndex);
 
 	void SetCaptain(CBasePlayer* Player, TeamName Team);
 	TeamName GetCaptain(int EntityIndex);

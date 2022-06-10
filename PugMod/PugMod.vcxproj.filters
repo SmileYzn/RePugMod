@@ -43,14 +43,8 @@
     <Filter Include="PugMod\Util">
       <UniqueIdentifier>{0a36a541-a863-467a-a700-06465ac258c0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="PugMod\VoteMap">
-      <UniqueIdentifier>{43c80a26-7b53-48c0-bb2a-825569f8bfb0}</UniqueIdentifier>
-    </Filter>
     <Filter Include="PugMod\Task">
       <UniqueIdentifier>{28ec7102-2eb0-471f-bd69-1f87e8e0f867}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="PugMod\VoteTeam">
-      <UniqueIdentifier>{1aa212a3-d4dd-4626-b268-e40bc1e8d94b}</UniqueIdentifier>
     </Filter>
     <Filter Include="PugMod\Stats">
       <UniqueIdentifier>{dec1ea54-d576-47c7-9aad-16b77bab4e54}</UniqueIdentifier>
@@ -63,9 +57,6 @@
     </Filter>
     <Filter Include="PugMod\AntiFlood">
       <UniqueIdentifier>{279db37e-5238-4709-9422-1b51a4367585}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="PugMod\VoteMenu">
-      <UniqueIdentifier>{3f3fbea4-7cfb-45ba-bafe-7a20f5e446e7}</UniqueIdentifier>
     </Filter>
     <Filter Include="PugMod\Cvars">
       <UniqueIdentifier>{12e2ecbd-3bd0-49b5-a618-dabd7b6bc316}</UniqueIdentifier>
@@ -82,11 +73,29 @@
     <Filter Include="PugMod\Time">
       <UniqueIdentifier>{2271a969-8816-4f8c-9395-c9518cde3552}</UniqueIdentifier>
     </Filter>
-    <Filter Include="PugMod\VoteKick">
+    <Filter Include="PugMod\Vote">
+      <UniqueIdentifier>{8dbdd4ae-0e0c-4dad-9ca3-c5323f7f42bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PugMod\Vote\VoteKick">
       <UniqueIdentifier>{2de4fbef-174d-4f2a-af74-3ae8e6c2c50b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="PugMod\VotePause">
+    <Filter Include="PugMod\Vote\VoteMenu">
+      <UniqueIdentifier>{3f3fbea4-7cfb-45ba-bafe-7a20f5e446e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PugMod\Vote\VotePause">
       <UniqueIdentifier>{362359b8-6461-43dd-be2b-ef6ee2cc1955}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PugMod\Vote\VoteStop">
+      <UniqueIdentifier>{805b7598-e835-42ca-83db-93f23f806899}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PugMod\Vote\VoteTeam">
+      <UniqueIdentifier>{1aa212a3-d4dd-4626-b268-e40bc1e8d94b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PugMod\Vote\VoteLevel">
+      <UniqueIdentifier>{f0878290-44a3-40c2-8892-12d8cb3680da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PugMod\Vote\VoteMap">
+      <UniqueIdentifier>{43c80a26-7b53-48c0-bb2a-825569f8bfb0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -124,13 +133,13 @@
       <Filter>PugMod\Menu</Filter>
     </ClInclude>
     <ClInclude Include="VoteMap.h">
-      <Filter>PugMod\VoteMap</Filter>
+      <Filter>PugMod\Vote\VoteMap</Filter>
     </ClInclude>
     <ClInclude Include="Task.h">
       <Filter>PugMod\Task</Filter>
     </ClInclude>
     <ClInclude Include="VoteTeam.h">
-      <Filter>PugMod\VoteTeam</Filter>
+      <Filter>PugMod\Vote\VoteTeam</Filter>
     </ClInclude>
     <ClInclude Include="Stats.h">
       <Filter>PugMod\Stats</Filter>
@@ -145,7 +154,7 @@
       <Filter>PugMod\AntiFlood</Filter>
     </ClInclude>
     <ClInclude Include="VoteMenu.h">
-      <Filter>PugMod\VoteMenu</Filter>
+      <Filter>PugMod\Vote\VoteMenu</Filter>
     </ClInclude>
     <ClInclude Include="Cvars.h">
       <Filter>PugMod\Cvars</Filter>
@@ -163,10 +172,16 @@
       <Filter>PugMod\Time</Filter>
     </ClInclude>
     <ClInclude Include="VoteKick.h">
-      <Filter>PugMod\VoteKick</Filter>
+      <Filter>PugMod\Vote\VoteKick</Filter>
     </ClInclude>
     <ClInclude Include="VotePause.h">
-      <Filter>PugMod\VotePause</Filter>
+      <Filter>PugMod\Vote\VotePause</Filter>
+    </ClInclude>
+    <ClInclude Include="VoteStop.h">
+      <Filter>PugMod\Vote\VoteStop</Filter>
+    </ClInclude>
+    <ClInclude Include="VoteLevel.h">
+      <Filter>PugMod\Vote\VoteLevel</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -204,13 +219,13 @@
       <Filter>PugMod\Menu</Filter>
     </ClCompile>
     <ClCompile Include="VoteMap.cpp">
-      <Filter>PugMod\VoteMap</Filter>
+      <Filter>PugMod\Vote\VoteMap</Filter>
     </ClCompile>
     <ClCompile Include="Task.cpp">
       <Filter>PugMod\Task</Filter>
     </ClCompile>
     <ClCompile Include="VoteTeam.cpp">
-      <Filter>PugMod\VoteTeam</Filter>
+      <Filter>PugMod\Vote\VoteTeam</Filter>
     </ClCompile>
     <ClCompile Include="Stats.cpp">
       <Filter>PugMod\Stats</Filter>
@@ -225,7 +240,7 @@
       <Filter>PugMod\AntiFlood</Filter>
     </ClCompile>
     <ClCompile Include="VoteMenu.cpp">
-      <Filter>PugMod\VoteMenu</Filter>
+      <Filter>PugMod\Vote\VoteMenu</Filter>
     </ClCompile>
     <ClCompile Include="Cvars.cpp">
       <Filter>PugMod\Cvars</Filter>
@@ -243,10 +258,16 @@
       <Filter>PugMod\Time</Filter>
     </ClCompile>
     <ClCompile Include="VoteKick.cpp">
-      <Filter>PugMod\VoteKick</Filter>
+      <Filter>PugMod\Vote\VoteKick</Filter>
     </ClCompile>
     <ClCompile Include="VotePause.cpp">
-      <Filter>PugMod\VotePause</Filter>
+      <Filter>PugMod\Vote\VotePause</Filter>
+    </ClCompile>
+    <ClCompile Include="VoteStop.cpp">
+      <Filter>PugMod\Vote\VoteStop</Filter>
+    </ClCompile>
+    <ClCompile Include="VoteLevel.cpp">
+      <Filter>PugMod\Vote\VoteLevel</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

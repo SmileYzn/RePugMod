@@ -3,16 +3,17 @@
 class CVotePause
 {
 public:
-	void ClientDisconnected(edict_t* pEntity);
+	void ClientDisconnected(int EntityIndex);
 	bool Check(CBasePlayer* Player);
+	int GetVoteCount(TeamName Team);
 	void VotePause(CBasePlayer* Player);
 	void RoundRestart();
 	void RoundStart();
 	static void VotePauseTimer();
 
 private:
-	bool m_VotedPause[MAX_CLIENTS + 1][SPECTATOR + 1] = { false };
-	TeamName m_PausedTeam = UNASSIGNED;
+	bool m_Votes[MAX_CLIENTS + 1][SPECTATOR + 1] = { false };
+	TeamName m_Pause = UNASSIGNED;
 };
 
 extern CVotePause gVotePause;

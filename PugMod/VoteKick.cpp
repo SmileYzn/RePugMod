@@ -2,10 +2,8 @@
 
 CVoteKick gVoteKick;
 
-void CVoteKick::ClientDisconnected(edict_t* pEntity)
+void CVoteKick::ClientDisconnected(int EntityIndex)
 {
-	auto EntityIndex = ENTINDEX(pEntity);
-
 	for (int i = 1; i <= gpGlobals->maxClients; ++i)
 	{
 		this->m_VoteKick[i][EntityIndex] = false;
@@ -17,14 +15,16 @@ bool CVoteKick::Check(CBasePlayer* Player)
 {
 	if (Player->m_iTeam == TERRORIST || Player->m_iTeam == CT)
 	{
-		int State = gPugMod.GetState();
-
-		if (State >= PUG_STATE_WARMUP && State <= PUG_STATE_END)
+		if (gPugMod.GetState() > PUG_STATE_DEAD)
 		{
-			return !gTask.Exists(PUG_TASK_EXEC);
+			if (!gTask.Exists(PUG_TASK_EXEC) && !gTask.Exists(PUG_TASK_VOTE))
+			{
+				if (gPlayer.GetNum() > (gCvars.GetPlayersMin()->value / 2))
+				{
+					return true;
+				}
+			}
 		}
-
-		gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("Unable to use this command now."));
 	}
 
 	return false;
@@ -46,6 +46,10 @@ void CVoteKick::Menu(CBasePlayer* Player)
 		{
 			gMenu[PlayerIndex].Create(_T("Vote Kick"), true, (void*)this->MenuHandle);
 
+			char Text[128] = { 0 };
+
+			int VotesNeed = (gPlayer.GetNum(Player->m_iTeam) - 1);
+
 			for (int i = 0; i < Num; i++)
 			{
 				auto Target = Players[i];
@@ -58,7 +62,9 @@ void CVoteKick::Menu(CBasePlayer* Player)
 					{
 						if (!gAdmin.Check(Target))
 						{
-							gMenu[PlayerIndex].AddItem(TargetIndex, STRING(Target->edict()->v.netname), this->m_VoteKick[PlayerIndex][TargetIndex]);
+							snprintf(Text, sizeof(Text), "%s \\y\\R%2.0f%%", STRING(Target->edict()->v.netname),(float)((this->GetVoteCount(TargetIndex)*100)/VotesNeed));
+
+							gMenu[PlayerIndex].AddItem(TargetIndex, Text, this->m_VoteKick[PlayerIndex][TargetIndex]);
 						}
 					}
 				}
@@ -70,6 +76,10 @@ void CVoteKick::Menu(CBasePlayer* Player)
 		{
 			gUtil.SayText(Player->edict(), PlayerIndex, _T("Need \3%d\1 players to use vote kick."), NeedPlayers);
 		}
+	}
+	else
+	{
+		gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("Unable to use this command now."));
 	}
 }
 
@@ -88,6 +98,21 @@ void CVoteKick::MenuHandle(int EntityIndex, P_MENU_ITEM Item)
 	}
 }
 
+int CVoteKick::GetVoteCount(int EntityIndex)
+{
+	int VoteCount = 0;
+
+	for (int i = 1; i <= gpGlobals->maxClients; ++i)
+	{
+		if (this->m_VoteKick[i][EntityIndex])
+		{
+			VoteCount++;
+		}
+	}
+
+	return VoteCount;
+}
+
 void CVoteKick::VoteKick(CBasePlayer* Player, CBasePlayer* Target)
 {
 	if (Player)
@@ -101,16 +126,7 @@ void CVoteKick::VoteKick(CBasePlayer* Player, CBasePlayer* Target)
 			{
 				this->m_VoteKick[PlayerIndex][TargetIndex] = true;
 
-				int VoteCount = 0;
-
-				for (int i = 1; i <= gpGlobals->maxClients; ++i)
-				{
-					if (this->m_VoteKick[i][Target->entindex()])
-					{
-						VoteCount++;
-					}
-				}
-
+				int VoteCount = this->GetVoteCount(TargetIndex);
 				int VotesNeed = (gPlayer.GetNum(Player->m_iTeam) - 1);
 				int VotesLack = (VotesNeed - VoteCount);
 

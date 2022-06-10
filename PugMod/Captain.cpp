@@ -60,9 +60,9 @@ void CCaptain::Stop()
 	gPugMod.NextState(3.0f);
 }
 
-void CCaptain::ClientDisconnected(edict_t * pEntity)
+void CCaptain::ClientDisconnected(int EntityIndex)
 {
-	TeamName Team = this->GetCaptain(ENTINDEX(pEntity));
+	TeamName Team = this->GetCaptain(EntityIndex);
 
 	if (Team != UNASSIGNED)
 	{

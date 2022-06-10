@@ -25,7 +25,7 @@ void CAntiRetry::ClientConnected(edict_t * pEntity)
 	}
 }
 
-void CAntiRetry::ClientDisconnected(edict_t* pEntity, bool crash, const char* Reason)
+void CAntiRetry::ClientDisconnected(edict_t* pEntity, const char* Reason)
 {
 	if (FStrEq(Reason, "Client sent 'drop'") || FStrEq(Reason, "Timed out"))
 	{

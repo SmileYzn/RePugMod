@@ -2,28 +2,43 @@
 
 CVotePause gVotePause;
 
-void CVotePause::ClientDisconnected(edict_t* pEntity)
+void CVotePause::ClientDisconnected(int EntityIndex)
 {
-	auto EntityIndex = ENTINDEX(pEntity);
-
-	memset(this->m_VotedPause[EntityIndex], false, sizeof(this->m_VotedPause[EntityIndex]));
+	memset(this->m_Votes[EntityIndex], false, sizeof(this->m_Votes[EntityIndex]));
 }
 
 bool CVotePause::Check(CBasePlayer* Player)
 {
 	if (Player->m_iTeam == TERRORIST || Player->m_iTeam == CT)
 	{
-		int State = gPugMod.GetState();
-
-		if (State == PUG_STATE_FIRST_HALF || State == PUG_STATE_SECOND_HALF || State == PUG_STATE_OVERTIME)
+		if (gPugMod.IsLive())
 		{
-			return !gTask.Exists(PUG_TASK_EXEC);
+			if (gCvars.GetVotePauseTime()->value > 0)
+			{
+				if (!gTask.Exists(PUG_TASK_EXEC) && !gTask.Exists(PUG_TASK_VOTE))
+				{
+					return true;
+				}
+			}
 		}
-
-		gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("Unable to use this command now."));
 	}
 
 	return false;
+}
+
+int CVotePause::GetVoteCount(TeamName Team)
+{
+	int VoteCount = 0;
+
+	for (int i = 1; i <= gpGlobals->maxClients; ++i)
+	{
+		if (this->m_Votes[i][Team])
+		{
+			VoteCount++;
+		}
+	}
+
+	return VoteCount;
 }
 
 void CVotePause::VotePause(CBasePlayer* Player)
@@ -36,26 +51,17 @@ void CVotePause::VotePause(CBasePlayer* Player)
 			{
 				if (gCvars.GetVotePauseTime()->value)
 				{
-					if (this->m_PausedTeam == UNASSIGNED)
+					if (this->m_Pause == UNASSIGNED)
 					{
 						if (!CSGameRules()->IsFreezePeriod())
 						{
 							auto PlayerIndex = Player->entindex();
 
-							if (!this->m_VotedPause[PlayerIndex][Player->m_iTeam])
+							if (!this->m_Votes[PlayerIndex][Player->m_iTeam])
 							{
-								this->m_VotedPause[PlayerIndex][Player->m_iTeam] = true;
+								this->m_Votes[PlayerIndex][Player->m_iTeam] = true;
 
-								int VoteCount = 0;
-
-								for (int i = 1; i <= gpGlobals->maxClients; ++i)
-								{
-									if (this->m_VotedPause[i][Player->m_iTeam])
-									{
-										VoteCount++;
-									}
-								}
-
+								int VoteCount = this->GetVoteCount(Player->m_iTeam);
 								int VotesNeed = (int)(gPlayer.GetNum(Player->m_iTeam) * gCvars.GetVotePercentage()->value);
 								int VotesLack = (VotesNeed - VoteCount);
 								
@@ -66,9 +72,9 @@ void CVotePause::VotePause(CBasePlayer* Player)
 								}
 								else
 								{
-									this->m_PausedTeam = Player->m_iTeam;
+									this->m_Pause = Player->m_iTeam;
 
-									gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("The \3%s\1 team paused the game."), PUG_MOD_TEAM_STR[this->m_PausedTeam]);
+									gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("The \3%s\1 team paused the game."), PUG_MOD_TEAM_STR[this->m_Pause]);
 
 									gUtil.SayText(NULL, PlayerIndex, _T("Match will pause for \4%d\1 seconds on next round."), (int)gCvars.GetVotePauseTime()->value);
 								}
@@ -85,7 +91,7 @@ void CVotePause::VotePause(CBasePlayer* Player)
 					}
 					else
 					{
-						gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("The \3%s\1 team already paused the game."), PUG_MOD_TEAM_STR[this->m_PausedTeam]);
+						gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("The \3%s\1 team already paused the game."), PUG_MOD_TEAM_STR[this->m_Pause]);
 					}
 				}
 				else
@@ -98,6 +104,10 @@ void CVotePause::VotePause(CBasePlayer* Player)
 				gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("Unable to use this command now."));
 			}
 		}
+		else
+		{
+			gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("Unable to use this command now."));
+		}
 	}
 }
 
@@ -107,7 +117,7 @@ void CVotePause::RoundRestart()
 	{
 		if (gCvars.GetVotePauseTime()->value > 0)
 		{
-			if (this->m_PausedTeam != UNASSIGNED)
+			if (this->m_Pause != UNASSIGNED)
 			{
 				gUtil.SetRoundTime((int)gCvars.GetVotePauseTime()->value, true);
 
@@ -119,11 +129,11 @@ void CVotePause::RoundRestart()
 
 void CVotePause::RoundStart()
 {
-	if (this->m_PausedTeam != UNASSIGNED)
+	if (this->m_Pause != UNASSIGNED)
 	{
-		this->m_PausedTeam = UNASSIGNED;
+		this->m_Pause = UNASSIGNED;
 
-		memset(this->m_VotedPause, false, sizeof(this->m_VotedPause));
+		memset(this->m_Votes, false, sizeof(this->m_Votes));
 	}
 }
 
