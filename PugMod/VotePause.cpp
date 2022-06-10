@@ -61,9 +61,11 @@ void CVotePause::VotePause(CBasePlayer* Player)
 			{
 				if (gCvars.GetVotePauseTime()->value)
 				{
-					if (this->GetPauseTeam() == UNASSIGNED)
+					TeamName PauseTeam = this->GetPauseTeam();
+
+					if (PauseTeam == UNASSIGNED || PauseTeam == Player->m_iTeam)
 					{
-						if (!CSGameRules()->IsFreezePeriod())
+						if (PauseTeam == Player->m_iTeam || !CSGameRules()->IsFreezePeriod())
 						{
 							auto VotePauseLimit = gCvars.GetVotePauseLimit()->value;
 
@@ -145,6 +147,8 @@ void CVotePause::RoundRestart()
 		{
 			if (this->GetPauseTeam() != UNASSIGNED)
 			{
+				memset(this->m_Votes, false, sizeof(this->m_Votes));
+
 				gUtil.SetRoundTime((int)gCvars.GetVotePauseTime()->value, true);
 
 				gTask.Create(PUG_TASK_PAUS, 0.5, true, (void*)this->VotePauseTimer);
@@ -158,8 +162,6 @@ void CVotePause::RoundStart()
 	if (this->GetPauseTeam() != UNASSIGNED)
 	{
 		this->m_Pause = UNASSIGNED;
-
-		memset(this->m_Votes, false, sizeof(this->m_Votes));
 	}
 }
 
