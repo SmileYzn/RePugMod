@@ -97,6 +97,9 @@
     <Filter Include="PugMod\Vote\VoteMap">
       <UniqueIdentifier>{43c80a26-7b53-48c0-bb2a-825569f8bfb0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="PugMod\Commands">
+      <UniqueIdentifier>{2eb07e52-312f-438d-9dfe-88187b94e9a5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ReGameDLL.h">
@@ -183,6 +186,9 @@
     <ClInclude Include="VoteLevel.h">
       <Filter>PugMod\Vote\VoteLevel</Filter>
     </ClInclude>
+    <ClInclude Include="Commands.h">
+      <Filter>PugMod\Commands</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ReGameDLL.cpp">
@@ -268,6 +274,9 @@
     </ClCompile>
     <ClCompile Include="VoteLevel.cpp">
       <Filter>PugMod\Vote\VoteLevel</Filter>
+    </ClCompile>
+    <ClCompile Include="Commands.cpp">
+      <Filter>PugMod\Commands</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

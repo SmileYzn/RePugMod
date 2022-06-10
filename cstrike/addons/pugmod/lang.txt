@@ -130,61 +130,7 @@ bp:"Trocando os times automaticamente."
 en:"Server is full and spectators are not allowed."
 bp:"Servidor cheio e espectadores não são permitidos."
 
-".help"
-en:".help"
-bp:".help"
 
-"!help"
-en:"!help"
-bp:"!help"
-
-".status"
-en:".status"
-bp:".status"
-
-".score"
-en:".score"
-bp:".score"
-
-".ready"
-en:".ready"
-bp:".ready"
-
-".notready"
-en:".notready"
-bp:".notready"
-
-".vote"
-en:".vote"
-bp:".vote"
-
-"!menu"
-en:"!menu"
-bp:"!menu"
-
-"!msg"
-en:"!msg"
-bp:"!msg"
-
-"!rcon"
-en:"!rcon"
-bp:"!rcon"
-
-".hp"
-en:".hp"
-bp:".hp"
-
-".dmg"
-en:".dmg"
-bp:".dmg"
-
-".rdmg"
-en:".rdmg"
-bp:".rdmg"
-
-".sum"
-en:".sum"
-bp:".sum"
 
 "Auto Team Select is not allowed."
 en:"Auto Team Select is not allowed."

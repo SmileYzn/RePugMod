@@ -4,7 +4,7 @@ CAntiFlood gAntiFlood;
 
 bool CAntiFlood::ClientCommand(CBasePlayer* Player, const char* pcmd, const char* parg1)
 {
-	if (_stricmp(pcmd, "say") == 0 || _stricmp(pcmd, "say_team") == 0)
+	if (Q_stricmp(pcmd, "say") == 0 || Q_stricmp(pcmd, "say_team") == 0)
 	{
 		float MaxChat = gCvars.GetFloodTime()->value;
 

@@ -75,7 +75,6 @@ public:
 
 	void ClientConnected(edict_t* pEntity);
 	void ClientDisconnected(int EntityIndex);
-	bool ClientCommand(CBasePlayer* Player, const char* pcmd, const char* parg1);
 	bool ClientAddAccount(CBasePlayer* Player, int amount, RewardType type, bool bTrackChange);
 	bool ClientHasRestrictItem(CBasePlayer* Player, ItemID item, ItemRestType type);
 	bool ClientJoinTeam(CBasePlayer* Player, int NewTeam);

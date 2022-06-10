@@ -50,6 +50,7 @@
 #include "Cvars.h"
 #include "Translate.h"
 #include "TimeFormat.h"
+#include "Commands.h"
 #include "AntiFlood.h"
 #include "AntiRetry.h"
 #include "Player.h"

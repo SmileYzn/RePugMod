@@ -165,7 +165,7 @@ void ReGameDLL_InternalCommand(IReGameHook_InternalCommand* chain, edict_t* pEnt
 			return;
 		}
 
-		if (gPugMod.ClientCommand(Player, pcmd, parg1))
+		if (gCommands.ClientCommand(Player, pcmd, parg1))
 		{
 			return;
 		}

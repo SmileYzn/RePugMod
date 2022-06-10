@@ -22,6 +22,18 @@ void CAdmin::Load()
 	File.close();
 }
 
+bool CAdmin::Check(int EntityIndex)
+{
+	auto pEntity = INDEXENT(EntityIndex);
+
+	if (!FNullEnt(pEntity))
+	{
+		return this->Check(pEntity);
+	}
+
+	return false;
+}
+
 bool CAdmin::Check(edict_t* pEntity)
 {
 	const char* Auth = GETPLAYERAUTHID(pEntity);
@@ -135,26 +147,29 @@ void CAdmin::MenuHandle(int EntityIndex, P_MENU_ITEM Item)
 
 void CAdmin::MenuKick(int EntityIndex)
 {
-	gMenu[EntityIndex].Create(_T("Kick Player"), true, (void*)this->MenuKickHandle);
-
-	CBasePlayer* Players[MAX_CLIENTS] = { NULL };
-
-	auto Num = gPlayer.GetList(Players, false);
-
-	for (int i = 0; i < Num; i++)
+	if (this->Check(EntityIndex))
 	{
-		auto Player = Players[i];
+		gMenu[EntityIndex].Create(_T("Kick Player"), true, (void*)this->MenuKickHandle);
 
-		if (Player)
+		CBasePlayer* Players[MAX_CLIENTS] = { NULL };
+
+		auto Num = gPlayer.GetList(Players, false);
+
+		for (int i = 0; i < Num; i++)
 		{
-			if (!gAdmin.Check(Player))
+			auto Player = Players[i];
+
+			if (Player)
 			{
-				gMenu[EntityIndex].AddItem(Player->entindex(), STRING(Player->edict()->v.netname));
+				if (!gAdmin.Check(Player))
+				{
+					gMenu[EntityIndex].AddItem(Player->entindex(), STRING(Player->edict()->v.netname));
+				}
 			}
 		}
-	}
 
-	gMenu[EntityIndex].Show(EntityIndex);
+		gMenu[EntityIndex].Show(EntityIndex);
+	}
 }
 
 void CAdmin::MenuKickHandle(int EntityIndex, P_MENU_ITEM Item)
@@ -176,26 +191,29 @@ void CAdmin::MenuKickHandle(int EntityIndex, P_MENU_ITEM Item)
 
 void CAdmin::MenuBan(int EntityIndex)
 {
-	gMenu[EntityIndex].Create(_T("Ban Player"), true, (void*)this->MenuBanHandle);
-
-	CBasePlayer* Players[MAX_CLIENTS] = { NULL };
-
-	auto Num = gPlayer.GetList(Players, false);
-
-	for (int i = 0; i < Num; i++)
+	if (this->Check(EntityIndex))
 	{
-		auto Player = Players[i];
+		gMenu[EntityIndex].Create(_T("Ban Player"), true, (void*)this->MenuBanHandle);
 
-		if (Player)
+		CBasePlayer* Players[MAX_CLIENTS] = { NULL };
+
+		auto Num = gPlayer.GetList(Players, false);
+
+		for (int i = 0; i < Num; i++)
 		{
-			if (!gAdmin.Check(Player))
+			auto Player = Players[i];
+
+			if (Player)
 			{
-				gMenu[EntityIndex].AddItem(Player->entindex(), STRING(Player->edict()->v.netname));
+				if (!gAdmin.Check(Player))
+				{
+					gMenu[EntityIndex].AddItem(Player->entindex(), STRING(Player->edict()->v.netname));
+				}
 			}
 		}
+
+		gMenu[EntityIndex].Show(EntityIndex);
 	}
-	
-	gMenu[EntityIndex].Show(EntityIndex);
 }
 
 void CAdmin::MenuBanHandle(int EntityIndex, P_MENU_ITEM Item)
@@ -256,26 +274,29 @@ void CAdmin::MenuBanHandleExtra(int EntityIndex, P_MENU_ITEM Item)
 
 void CAdmin::MenuSlap(int EntityIndex)
 {
-	gMenu[EntityIndex].Create(_T("Slap Player"), true, (void*)this->MenuSlapHandle);
-
-	CBasePlayer* Players[MAX_CLIENTS] = { NULL };
-
-	auto Num = gPlayer.GetList(Players, false);
-
-	for (int i = 0; i < Num; i++)
+	if (this->Check(EntityIndex))
 	{
-		auto Player = Players[i];
+		gMenu[EntityIndex].Create(_T("Slap Player"), true, (void*)this->MenuSlapHandle);
 
-		if (Player)
+		CBasePlayer* Players[MAX_CLIENTS] = { NULL };
+
+		auto Num = gPlayer.GetList(Players, false);
+
+		for (int i = 0; i < Num; i++)
 		{
-			if (!gAdmin.Check(Player))
+			auto Player = Players[i];
+
+			if (Player)
 			{
-				gMenu[EntityIndex].AddItem(Player->entindex(), STRING(Player->edict()->v.netname), !Player->IsAlive());
+				if (!gAdmin.Check(Player))
+				{
+					gMenu[EntityIndex].AddItem(Player->entindex(), STRING(Player->edict()->v.netname), !Player->IsAlive());
+				}
 			}
 		}
-	}
 
-	gMenu[EntityIndex].Show(EntityIndex);
+		gMenu[EntityIndex].Show(EntityIndex);
+	}
 }
 
 void CAdmin::MenuSlapHandle(int EntityIndex, P_MENU_ITEM Item)
@@ -297,29 +318,32 @@ void CAdmin::MenuSlapHandle(int EntityIndex, P_MENU_ITEM Item)
 
 void CAdmin::MenuTeam(int EntityIndex)
 {
-	gMenu[EntityIndex].Create(_T("Team Player"), true, (void*)this->MenuTeamHandle);
-
-	CBasePlayer* Players[MAX_CLIENTS] = { NULL };
-
-	auto Num = gPlayer.GetList(Players, false);
-
-	for (int i = 0; i < Num; i++)
+	if (this->Check(EntityIndex))
 	{
-		auto Player = Players[i];
+		gMenu[EntityIndex].Create(_T("Team Player"), true, (void*)this->MenuTeamHandle);
 
-		if (Player)
+		CBasePlayer* Players[MAX_CLIENTS] = { NULL };
+
+		auto Num = gPlayer.GetList(Players, false);
+
+		for (int i = 0; i < Num; i++)
 		{
-			if (Player->m_iTeam != UNASSIGNED)
+			auto Player = Players[i];
+
+			if (Player)
 			{
-				if (!gAdmin.Check(Player))
+				if (Player->m_iTeam != UNASSIGNED)
 				{
-					gMenu[EntityIndex].AddItem(Player->entindex(), STRING(Player->edict()->v.netname));
+					if (!gAdmin.Check(Player))
+					{
+						gMenu[EntityIndex].AddItem(Player->entindex(), STRING(Player->edict()->v.netname));
+					}
 				}
 			}
 		}
-	}
 
-	gMenu[EntityIndex].Show(EntityIndex);
+		gMenu[EntityIndex].Show(EntityIndex);
+	}
 }
 
 void CAdmin::MenuTeamHandle(int EntityIndex, P_MENU_ITEM Item)
@@ -376,11 +400,14 @@ void CAdmin::MenuTeamHandleExtra(int EntityIndex, P_MENU_ITEM Item)
 
 void CAdmin::MenuMap(int EntityIndex)
 {
-	gMenu[EntityIndex].Create(_T("Change Map"), true, (void*)this->MenuMapHandle);
+	if (this->Check(EntityIndex))
+	{
+		gMenu[EntityIndex].Create(_T("Change Map"), true, (void*)this->MenuMapHandle);
 
-	gMenu[EntityIndex].AddList(gUtil.LoadMapList(VOTE_MAP_FILE, true));
+		gMenu[EntityIndex].AddList(gUtil.LoadMapList(VOTE_MAP_FILE, true));
 
-	gMenu[EntityIndex].Show(EntityIndex);
+		gMenu[EntityIndex].Show(EntityIndex);
+	}
 }
 
 void CAdmin::MenuMapHandle(int EntityIndex, P_MENU_ITEM Item)
@@ -397,23 +424,26 @@ void CAdmin::MenuMapHandle(int EntityIndex, P_MENU_ITEM Item)
 
 void CAdmin::MenuControl(int EntityIndex)
 {
-	gMenu[EntityIndex].Create(_T("Control Pug Mod"), true, (void*)gAdmin.MenuControlHandle);
+	if (this->Check(EntityIndex))
+	{
+		gMenu[EntityIndex].Create(_T("Control Pug Mod"), true, (void*)gAdmin.MenuControlHandle);
 
-	int State = gPugMod.GetState();
+		int State = gPugMod.GetState();
 
-	gMenu[EntityIndex].AddItem(0, _T("Run Vote Map"), (State == PUG_STATE_DEAD || State == PUG_STATE_START || State == PUG_STATE_END));
+		gMenu[EntityIndex].AddItem(0, _T("Run Vote Map"), (State == PUG_STATE_DEAD || State == PUG_STATE_START || State == PUG_STATE_END));
 
-	gMenu[EntityIndex].AddItem(1, _T("Run Vote Teams"), (State != PUG_STATE_WARMUP));
+		gMenu[EntityIndex].AddItem(1, _T("Run Vote Teams"), (State != PUG_STATE_WARMUP));
 
-	gMenu[EntityIndex].AddItem(2, (State == PUG_STATE_HALFTIME) ? _T("Continue Match") : _T("Start Match"), (State != PUG_STATE_WARMUP && State != PUG_STATE_HALFTIME));
+		gMenu[EntityIndex].AddItem(2, (State == PUG_STATE_HALFTIME) ? _T("Continue Match") : _T("Start Match"), (State != PUG_STATE_WARMUP && State != PUG_STATE_HALFTIME));
 
-	gMenu[EntityIndex].AddItem(3, _T("Stop Match"), (State == PUG_STATE_DEAD || State == PUG_STATE_WARMUP || State == PUG_STATE_START || State == PUG_STATE_END));
+		gMenu[EntityIndex].AddItem(3, _T("Stop Match"), (State == PUG_STATE_DEAD || State == PUG_STATE_WARMUP || State == PUG_STATE_START || State == PUG_STATE_END));
 
-	gMenu[EntityIndex].AddItem(4, _T("Restart Period"), (State != PUG_STATE_FIRST_HALF && State != PUG_STATE_SECOND_HALF && State != PUG_STATE_OVERTIME));
+		gMenu[EntityIndex].AddItem(4, _T("Restart Period"), (State != PUG_STATE_FIRST_HALF && State != PUG_STATE_SECOND_HALF && State != PUG_STATE_OVERTIME));
 
-	gMenu[EntityIndex].AddItem(5, _T("Toggle Ready System"), (State != PUG_STATE_WARMUP));
+		gMenu[EntityIndex].AddItem(5, _T("Toggle Ready System"), (State != PUG_STATE_WARMUP));
 
-	gMenu[EntityIndex].Show(EntityIndex);
+		gMenu[EntityIndex].Show(EntityIndex);
+	}
 }
 
 void CAdmin::MenuControlHandle(int EntityIndex, P_MENU_ITEM Item)

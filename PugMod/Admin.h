@@ -6,6 +6,7 @@ class CAdmin
 {
 public:
 	void Load();
+	bool Check(int EntityIndex);
 	bool Check(edict_t* pEntity);
 	bool Check(CBasePlayer* Player);
 	bool Check(const char* Auth);

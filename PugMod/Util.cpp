@@ -170,18 +170,15 @@ void CUtil::SayText(edict_t* pEntity, int Sender, const char* Format, ...)
 			Sender = abs(Sender) + 32;
 		}
 
-		if (pEntity)
+		if (!FNullEnt(pEntity))
 		{
-			if (GET_PRIVATE(pEntity))
+			if (!(pEntity->v.flags & FL_FAKECLIENT))
 			{
-				if (!(pEntity->v.flags & FL_FAKECLIENT))
-				{
-					MESSAGE_BEGIN(MSG_ONE, iMsgSayText, NULL, pEntity);
-					WRITE_BYTE(Sender ? Sender : ENTINDEX(pEntity));
-					WRITE_STRING("%s");
-					WRITE_STRING(SayText);
-					MESSAGE_END();
-				}
+				MESSAGE_BEGIN(MSG_ONE, iMsgSayText, nullptr, pEntity);
+				WRITE_BYTE(Sender ? Sender : ENTINDEX(pEntity));
+				WRITE_STRING("%s");
+				WRITE_STRING(SayText);
+				MESSAGE_END();
 			}
 		}
 		else
@@ -190,11 +187,11 @@ void CUtil::SayText(edict_t* pEntity, int Sender, const char* Format, ...)
 			{
 				edict_t *pTempEntity = INDEXENT(i);
 
-				if (GET_PRIVATE(pTempEntity))
+				if (!FNullEnt(pEntity))
 				{
 					if (!(pTempEntity->v.flags & FL_FAKECLIENT))
 					{
-						MESSAGE_BEGIN(MSG_ONE, iMsgSayText, NULL, pTempEntity);
+						MESSAGE_BEGIN(MSG_ONE, iMsgSayText, nullptr, pTempEntity);
 						WRITE_BYTE(Sender ? Sender : i);
 						WRITE_STRING("%s");
 						WRITE_STRING(SayText);
@@ -383,7 +380,7 @@ std::vector<std::string> CUtil::LoadMapList(const char * Path, bool AllowCurrent
 		{
 			if (AllowCurrentMap == false)
 			{
-				if (_stricmp(STRING(gpGlobals->mapname), Map.c_str()) == 0)
+				if (Q_stricmp(STRING(gpGlobals->mapname), Map.c_str()) == 0)
 				{
 					continue;
 				}

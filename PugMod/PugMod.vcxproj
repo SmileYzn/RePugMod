@@ -99,6 +99,7 @@
     <ClInclude Include="AntiFlood.h" />
     <ClInclude Include="AntiRetry.h" />
     <ClInclude Include="Captain.h" />
+    <ClInclude Include="Commands.h" />
     <ClInclude Include="Cvars.h" />
     <ClInclude Include="VoteKick.h" />
     <ClInclude Include="KnifeRound.h" />
@@ -129,6 +130,7 @@
     <ClCompile Include="AntiFlood.cpp" />
     <ClCompile Include="AntiRetry.cpp" />
     <ClCompile Include="Captain.cpp" />
+    <ClCompile Include="Commands.cpp" />
     <ClCompile Include="Cvars.cpp" />
     <ClCompile Include="VoteKick.cpp" />
     <ClCompile Include="KnifeRound.cpp" />
