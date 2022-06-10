@@ -7,6 +7,7 @@ public:
 	bool Check(CBasePlayer* Player);
 	int GetVoteCount(TeamName Team);
 	void VotePause(CBasePlayer* Player);
+	TeamName GetPauseTeam();
 	void RoundRestart();
 	void RoundStart();
 	static void VotePauseTimer();

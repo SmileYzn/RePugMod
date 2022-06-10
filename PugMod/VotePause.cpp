@@ -53,7 +53,7 @@ void CVotePause::VotePause(CBasePlayer* Player)
 			{
 				if (gCvars.GetVotePauseTime()->value)
 				{
-					if (this->m_Pause == UNASSIGNED)
+					if (this->GetPauseTeam() == UNASSIGNED)
 					{
 						if (!CSGameRules()->IsFreezePeriod())
 						{
@@ -124,13 +124,18 @@ void CVotePause::VotePause(CBasePlayer* Player)
 	}
 }
 
+TeamName CVotePause::GetPauseTeam()
+{
+	return this->m_Pause;
+}
+
 void CVotePause::RoundRestart()
 {
 	if (gPugMod.IsLive())
 	{
 		if (gCvars.GetVotePauseTime()->value > 0)
 		{
-			if (this->m_Pause != UNASSIGNED)
+			if (this->GetPauseTeam() != UNASSIGNED)
 			{
 				gUtil.SetRoundTime((int)gCvars.GetVotePauseTime()->value, true);
 
@@ -142,7 +147,7 @@ void CVotePause::RoundRestart()
 
 void CVotePause::RoundStart()
 {
-	if (this->m_Pause != UNASSIGNED)
+	if (this->GetPauseTeam() != UNASSIGNED)
 	{
 		this->m_Pause = UNASSIGNED;
 
@@ -164,9 +169,9 @@ void CVotePause::VotePauseTimer()
 			{
 				char Time[32] = { 0 };
 
-				if (strftime(Time, sizeof(Time), _T("MATCH IS PAUSED\n%M:%S"), tm_info) > 0)
+				if (strftime(Time, sizeof(Time), "%M:%S", tm_info) > 0)
 				{
-					gUtil.HudMessage(NULL, gUtil.HudParam(0, 255, 0, -1.0, 0.2, 0, 0.6, 0.6), Time);
+					gUtil.HudMessage(NULL, gUtil.HudParam(0, 255, 0, -1.0, 0.2, 0, 0.6, 0.6), _T("%s PAUSED MATCH\n%s"), PUG_MOD_TEAM_STR[gVotePause.GetPauseTeam()], Time);
 				}
 			}
 		}
