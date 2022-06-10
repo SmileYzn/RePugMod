@@ -606,6 +606,10 @@ bp:"O time \3%s\1 pausou a partida."
 en:"Match will pause for \4%d\1 seconds on next round."
 bp:"A partida será pausada por \4%d\1 segundos no próximo round."
 
+"The \3%s\1 team extended the paused of game."
+en:"The \3%s\1 team extended the paused of game."
+bp:"Os \3%s\1 etenderam a pausa da partida."
+
 "You already voted for a timeout."
 en:"You already voted for a timeout."
 bp:"Você já votou para pausar a partida."
@@ -626,9 +630,9 @@ bp:"O time \3%s\1 já pausaram a partida."
 en:"Unable to vote to pause the match."
 bp:"Impossível votar a pausa da partida."
 
-"%s PAUSED MATCH\n%s"
-en:"%s PAUSED MATCH\n%s"
-bp:"%s PAUSOU A PARTIDA\n%s"
+"%s\nPaused Match\n%s"
+en:"%s\nPaused Match\n%s"
+bp:"%s\nPausou a Partida\n%s"
 
 "\3%s\1 voted for surrender: \4%d\1 of \4%d\1 vote(s) to stop the match."
 en:"\3%s\1 voted for surrender: \4%d\1 of \4%d\1 vote(s) to stop the match."

@@ -63,9 +63,9 @@ void CVotePause::VotePause(CBasePlayer* Player)
 				{
 					TeamName PauseTeam = this->GetPauseTeam();
 
-					if (PauseTeam == UNASSIGNED || PauseTeam == Player->m_iTeam)
+					if (PauseTeam == Player->m_iTeam || PauseTeam == UNASSIGNED)
 					{
-						if (PauseTeam == Player->m_iTeam || !CSGameRules()->IsFreezePeriod())
+						if (PauseTeam == Player->m_iTeam || (PauseTeam == UNASSIGNED && !CSGameRules()->IsFreezePeriod()))
 						{
 							auto VotePauseLimit = gCvars.GetVotePauseLimit()->value;
 
@@ -92,9 +92,18 @@ void CVotePause::VotePause(CBasePlayer* Player)
 
 										this->m_Count[Player->m_iTeam][State]++;
 
-										gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("The \3%s\1 team paused the game."), PUG_MOD_TEAM_STR[Player->m_iTeam]);
+										if (!CSGameRules()->IsFreezePeriod())
+										{
+											gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("The \3%s\1 team paused the game."), PUG_MOD_TEAM_STR[Player->m_iTeam]);
 
-										gUtil.SayText(NULL, PlayerIndex, _T("Match will pause for \4%d\1 seconds on next round."), (int)gCvars.GetVotePauseTime()->value);
+											gUtil.SayText(NULL, PlayerIndex, _T("Match will pause for \4%d\1 seconds on next round."), (int)gCvars.GetVotePauseTime()->value);
+										}
+										else
+										{
+											this->RoundRestart();
+
+											gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("The \3%s\1 team extended the paused of game."), PUG_MOD_TEAM_STR[Player->m_iTeam]);
+										}
 									}
 								}
 								else
@@ -181,7 +190,7 @@ void CVotePause::VotePauseTimer()
 
 				if (strftime(Time, sizeof(Time), "%M:%S", tm_info) > 0)
 				{
-					gUtil.HudMessage(NULL, gUtil.HudParam(0, 255, 0, -1.0, 0.2, 0, 0.6, 0.6), _T("%s PAUSED MATCH\n%s"), PUG_MOD_TEAM_STR[gVotePause.GetPauseTeam()], Time);
+					gUtil.HudMessage(NULL, gUtil.HudParam(0, 255, 0, -1.0, 0.2, 0, 0.6, 0.6), _T("%s\nPaused Match\n%s"), PUG_MOD_TEAM_STR[gVotePause.GetPauseTeam()], Time);
 				}
 			}
 		}

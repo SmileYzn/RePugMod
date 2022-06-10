@@ -415,9 +415,31 @@ void CUtil::SetRoundTime(int Time, bool FreezePeriod)
 
 	if (iMsgRoundTime || (iMsgRoundTime = GET_USER_MSG_ID(PLID, "RoundTime", NULL)))
 	{
-		MESSAGE_BEGIN(MSG_ALL, iMsgRoundTime);
-		WRITE_SHORT(Time);
-		MESSAGE_END();
+		CBasePlayer* Players[MAX_CLIENTS] = { NULL };
+
+		auto Num = gPlayer.GetList(Players, false);
+
+		for (int i = 0; i < Num; i++)
+		{
+			auto Player = Players[i];
+
+			if (Player)
+			{
+				if (Player->pev)
+				{
+
+				}
+				if (!Player->IsDormant())
+				{
+					if (!Player->IsBot())
+					{
+						MESSAGE_BEGIN(MSG_ONE, iMsgRoundTime, nullptr, Player->pev);
+						WRITE_SHORT(Time);
+						MESSAGE_END();
+					}
+				}
+			}
+		}
 	}
 }
 
