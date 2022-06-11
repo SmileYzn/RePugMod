@@ -170,7 +170,7 @@ void CUtil::SayText(edict_t* pEntity, int Sender, const char* Format, ...)
 			Sender = abs(Sender) + 32;
 		}
 
-		if (!FNullEnt(pEntity))
+		if (pEntity && !FNullEnt(pEntity))
 		{
 			if (!(pEntity->v.flags & FL_FAKECLIENT))
 			{
@@ -187,7 +187,7 @@ void CUtil::SayText(edict_t* pEntity, int Sender, const char* Format, ...)
 			{
 				edict_t *pTempEntity = INDEXENT(i);
 
-				if (!FNullEnt(pEntity))
+				if (!FNullEnt(pTempEntity))
 				{
 					if (!(pTempEntity->v.flags & FL_FAKECLIENT))
 					{
