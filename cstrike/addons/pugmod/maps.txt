@@ -11,7 +11,6 @@ de_cpl_fire
 de_hell
 de_russka
 de_cbble
-de_cpl_fire
 de_aztec
 de_blue
 de_storm

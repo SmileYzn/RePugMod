@@ -370,7 +370,7 @@ std::vector<std::string> CUtil::LoadMapList(const char * Path, bool AllowCurrent
 {
 	std::ifstream File(Path, std::ifstream::in);
 
-	std::vector<std::string> MapList;
+	std::vector<std::string> List;
 
 	std::string Map;
 
@@ -378,21 +378,26 @@ std::vector<std::string> CUtil::LoadMapList(const char * Path, bool AllowCurrent
 	{
 		if (IS_MAP_VALID((char*)Map.c_str()))
 		{
-			if (AllowCurrentMap == false)
+			if (std::find(List.begin(), List.end(), Map) == List.end())
 			{
-				if (Q_stricmp(STRING(gpGlobals->mapname), Map.c_str()) == 0)
-				{
-					continue;
-				}
+				List.push_back(Map);
 			}
+		}
+	}
 
-			MapList.push_back(Map);
+	if (AllowCurrentMap == false)
+	{
+		auto it = std::find(List.begin(), List.end(), STRING(gpGlobals->mapname));
+
+		if (it != List.end())
+		{
+			List.erase(it);
 		}
 	}
 
 	File.close();
 
-	return MapList;
+	return List;
 }
 
 void CUtil::SetRoundTime(int Time, bool FreezePeriod)
