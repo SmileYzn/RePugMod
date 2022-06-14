@@ -17,7 +17,13 @@ bool CVoteRestart::Check(CBasePlayer* Player)
 			{
 				if (!gTask.Exists(PUG_TASK_EXEC) && !gTask.Exists(PUG_TASK_VOTE))
 				{
-					return true;
+					if (g_pGameRules)
+					{
+						if (!CSGameRules()->IsFreezePeriod())
+						{
+							return true;
+						}
+					}
 				}
 			}
 		}
@@ -59,11 +65,11 @@ void CVoteRestart::VoteRestart(CBasePlayer* Player)
 				int VoteCount = this->GetVoteCount();
 				int VotesNeed = (int)(gPlayer.GetNum() * gCvars.GetVotePercentage()->value);
 				int VotesLack = (VotesNeed - VoteCount);
-
+				
 				if (VotesLack)
 				{
-					gUtil.SayText(NULL, PlayerIndex, "\3%s\1 from \3%s\1 voted to restart \4%s\1 period: \4%d\1 of \4%d\1 vote(s) to restart period.", STRING(Player->edict()->v.netname), PUG_MOD_TEAM_STR[Player->m_iTeam], StateName, VoteCount, VotesNeed);
-					gUtil.SayText(NULL, PlayerIndex, "Say \3.vote\1 for a restart \3%s\1 period.", StateName);
+					gUtil.SayText(NULL, PlayerIndex, _T("\3%s\1 voted to restart \4%s\1: \4%d\1 of \4%d\1 vote(s) to restart period."), STRING(Player->edict()->v.netname), StateName, VoteCount, VotesNeed);
+					gUtil.SayText(NULL, PlayerIndex, _T("Say \3.vote\1 to vote for restart \3%s\1."), StateName);
 				}
 				else
 				{
@@ -71,19 +77,19 @@ void CVoteRestart::VoteRestart(CBasePlayer* Player)
 					
 					memset(this->m_Votes, false, sizeof(this->m_Votes));
 
-					gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, "The \4%s\1 period will be restarted: Get Ready!.", StateName);
+					gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("The \4%s\1 period will be restarted: Get Ready!"), StateName);
 
 					gPugMod.RestarPeriod(NULL);
 				}
 			}
 			else
 			{
-				gUtil.SayText(Player->edict(), PlayerIndex, "You already voted for restart \4%s\1 period.", StateName);
+				gUtil.SayText(Player->edict(), PlayerIndex, _T("You already voted for restart \4%s\1 period."), StateName);
 			}
 		}
 		else
 		{
-			gUtil.SayText(Player->edict(), PlayerIndex, "Can't restart  \4%s\1 period more than \4%d\1 time(s).", StateName, Limit);
+			gUtil.SayText(Player->edict(), PlayerIndex, _T("Can't restart \4%s\1 period more than \4%d\1 time(s)."), StateName, Limit);
 		}
 	}
 	else

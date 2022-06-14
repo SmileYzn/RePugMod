@@ -7,6 +7,7 @@ public:
 	void ClientDisconnected(int EntityIndex);
 	bool Check(CBasePlayer* Player);
 	int GetVoteCount(TeamName Team);
+	int GetPauseCount();
 	void VotePause(CBasePlayer* Player);
 	TeamName GetPauseTeam();
 	void RoundRestart();
