@@ -2,21 +2,25 @@
 
 CVoteMap gVoteMap;
 
-void CVoteMap::Init()
+void CVoteMap::Load()
 {
 	this->m_Data.clear();
+	this->m_Maps.clear();
 
-	auto ItemList = gUtil.LoadMapList(VOTE_MAP_FILE, gCvars.GetVoteMapSelf()->value ? true : false);
+	this->m_Maps = gUtil.LoadMapList(VOTE_MAP_FILE, gCvars.GetVoteMapSelf()->value ? true : false);
 
 	int ItemIndex = 0;
 
-	for (auto MapName : ItemList)
+	for (auto MapName : this->m_Maps)
 	{
 		this->m_Data.insert(std::make_pair(ItemIndex, P_VOTE_MAP_ITEM(ItemIndex, 0, MapName)));
 
 		ItemIndex++;
 	}
+}
 
+void CVoteMap::Init()
+{
 	CBasePlayer* Players[MAX_CLIENTS] = { NULL };
 
 	auto Num = gPlayer.GetList(Players, true);
@@ -31,7 +35,7 @@ void CVoteMap::Init()
 
 			gMenu[EntityIndex].Create(_T("Vote Map:"), false, (void*)this->MenuHandle);
 
-			gMenu[EntityIndex].AddList(ItemList);
+			gMenu[EntityIndex].AddList(this->m_Maps);
 
 			gMenu[EntityIndex].Show(EntityIndex);
 		}
@@ -186,19 +190,20 @@ P_VOTE_MAP_ITEM CVoteMap::GetWinner()
 	return this->m_Data.at(Winner);
 }
 
-int CVoteMap::RandomMap()
+void CVoteMap::RandomMap()
 {
-	std::srand(std::time(0));
+	if (!this->m_Data.empty())
+	{
+		std::srand(std::time(0));
 
-	auto MapList = gUtil.LoadMapList(VOTE_MAP_FILE, false);
+		auto it = this->m_Data.begin();
 
-	int Random = (std::rand() % MapList.size());
+		std::advance(it, std::rand() % this->m_Data.size());
 
-	this->AddVote(Random, 1);
+		this->AddVote(it->first, MAX_CLIENTS);
 
-	gTask.Create(PUG_TASK_EXEC, 5.0f, false, (void*)gVoteMap.Changelevel);
+		gTask.Create(PUG_TASK_EXEC, 5.0f, false, (void*)gVoteMap.Changelevel);
 
-	gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("Changing map to \4%s\1..."), MapList[Random].c_str());
-
-	return Random;
+		gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("Changing map to \4%s\1..."), it->second.Name.c_str());
+	}
 }

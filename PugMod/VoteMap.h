@@ -14,6 +14,7 @@ struct P_VOTE_MAP_ITEM
 class CVoteMap
 {
 public:
+	void Load();
 	void Init();
 
 	void AddVote(int Item, int Vote);
@@ -26,9 +27,10 @@ public:
 
 	int GetCount();
 	P_VOTE_MAP_ITEM GetWinner();
-	int RandomMap();
+	void RandomMap();
 
 private:
+	std::vector<std::string> m_Maps;
 	std::map<int, P_VOTE_MAP_ITEM> m_Data;
 };
 
