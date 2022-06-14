@@ -140,7 +140,7 @@ void CVotePause::VotePause(CBasePlayer* Player)
 						}
 						else
 						{
-							gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("The \3%s\1 can't pause game: \4%d\1 of \4%d\1 times allowed in %s."), PUG_MOD_TEAM_STR[Player->m_iTeam], this->m_Count[Player->m_iTeam][State], (int)VotePauseLimit, gPugMod.GetStateName());
+							gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("The \3%s\1 can't pause game: \4%d\1 of \4%d\1 times allowed in \4%s\1."), PUG_MOD_TEAM_STR[Player->m_iTeam], this->m_Count[Player->m_iTeam][State], (int)VotePauseLimit, gPugMod.GetStateName());
 						}
 					}
 					else
