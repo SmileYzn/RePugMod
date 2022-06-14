@@ -560,9 +560,9 @@ bp:"Os \3%s\1 etenderam a pausa da partida."
 en:"You already voted for a timeout."
 bp:"Você já votou para pausar a partida."
 
-"The \3%s\1 team can't pause the game more than \4%d\1 times."
-en:"The \3%s\1 team can't pause the game more than \4%d\1 times."
-bp:"O time \3%s\1 não pode pausar o jogo mais de \4%d\1 vezes."
+"The \3%s\1 can't pause game: \4%d\1 of \4%d\1 times allowed in \4%s\1."
+en:"The \3%s\1 can't pause game: \4%d\1 of \4%d\1 times allowed in \4%s\1."
+bp:"Os \3%s\1 não podem mais pausar: \4%d\1 de \4%d\1 pausas no período \4%s\1."
 
 "Unable to pause the match while is in freezetime period."
 en:"Unable to pause the match while is in freezetime period."

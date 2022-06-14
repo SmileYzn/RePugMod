@@ -78,6 +78,9 @@ void CCvars::Load()
 
 	// Pause count limit of team per half
 	this->m_VotePauseLimit = this->Register("pug_vote_pause_limit", "2");
+	
+	// Allow match pause during freezetime
+	this->m_VotePauseFreezetime = this->Register("pug_vote_pause_freezetime", "1");
 
 	// Limit period restarts per half
 	this->m_VoteRestartLimit = this->Register("pug_vote_restart_limit", "1");
@@ -226,6 +229,11 @@ cvar_t* CCvars::GetVotePauseTime()
 cvar_t* CCvars::GetVotePauseLimit()
 {
 	return this->m_VotePauseLimit;
+}
+
+cvar_t* CCvars::GetVotePauseFreezetime()
+{
+	return this->m_VotePauseFreezetime;
 }
 
 cvar_t* CCvars::GetVoteRestartLimit()

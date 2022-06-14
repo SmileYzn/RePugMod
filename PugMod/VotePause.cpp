@@ -73,62 +73,74 @@ void CVotePause::VotePause(CBasePlayer* Player)
 				{
 					TeamName PauseTeam = this->GetPauseTeam();
 
-					if (PauseTeam == Player->m_iTeam || PauseTeam == UNASSIGNED)
+					if (PauseTeam == UNASSIGNED || PauseTeam == Player->m_iTeam)
 					{
-						if (PauseTeam == Player->m_iTeam || (PauseTeam == UNASSIGNED && !CSGameRules()->IsFreezePeriod()))
+						if (CSGameRules()->IsFreezePeriod())
 						{
-							auto VotePauseLimit = gCvars.GetVotePauseLimit()->value;
-
-							if (this->m_Count[Player->m_iTeam][State] < (int)VotePauseLimit)
+							if (PauseTeam != Player->m_iTeam)
 							{
-								auto PlayerIndex = Player->entindex();
-
-								if (!this->m_Votes[PlayerIndex][Player->m_iTeam])
+								if (!gCvars.GetVotePauseFreezetime()->value)
 								{
-									this->m_Votes[PlayerIndex][Player->m_iTeam] = true;
+									gUtil.SayText(Player->edict(), Player->entindex(), _T("Unable to pause the match while is in freezetime period."));
+									return;
+								}
+							}
+						}
 
-									int VoteCount = this->GetVoteCount(Player->m_iTeam);
-									int VotesNeed = (int)(gPlayer.GetNum(Player->m_iTeam) * gCvars.GetVotePercentage()->value);
-									int VotesLack = (VotesNeed - VoteCount);
+						auto VotePauseLimit = gCvars.GetVotePauseLimit()->value;
 
-									if (VotesLack)
-									{
-										gUtil.SayText(NULL, PlayerIndex, _T("\3%s\1 from voted for a timeout: \4%d\1 of \4%d\1 vote(s) to run timeout."), STRING(Player->edict()->v.netname), VoteCount, VotesNeed);
-										gUtil.SayText(NULL, PlayerIndex, _T("Say \3.vote\1 for a timeout."));
-									}
-									else
-									{
-										this->m_Pause = Player->m_iTeam;
+						if (this->m_Count[Player->m_iTeam][State] < (int)VotePauseLimit)
+						{
+							auto PlayerIndex = Player->entindex();
 
-										this->m_Count[Player->m_iTeam][State]++;
+							if (!this->m_Votes[PlayerIndex][Player->m_iTeam])
+							{
+								this->m_Votes[PlayerIndex][Player->m_iTeam] = true;
 
-										if (!CSGameRules()->IsFreezePeriod())
-										{
-											gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("The \3%s\1 team paused the game."), PUG_MOD_TEAM_STR[Player->m_iTeam]);
+								int VoteCount = this->GetVoteCount(Player->m_iTeam);
+								int VotesNeed = (int)(gPlayer.GetNum(Player->m_iTeam) * gCvars.GetVotePercentage()->value);
+								int VotesLack = (VotesNeed - VoteCount);
 
-											gUtil.SayText(NULL, PlayerIndex, _T("Match will pause for \4%d\1 seconds on next round."), (int)gCvars.GetVotePauseTime()->value);
-										}
-										else
-										{
-											this->RoundRestart();
-
-											gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("The \3%s\1 team extended the paused of game."), PUG_MOD_TEAM_STR[Player->m_iTeam]);
-										}
-									}
+								if (VotesLack)
+								{
+									gUtil.SayText(NULL, PlayerIndex, _T("\3%s\1 from voted for a timeout: \4%d\1 of \4%d\1 vote(s) to run timeout."), STRING(Player->edict()->v.netname), VoteCount, VotesNeed);
+									gUtil.SayText(NULL, PlayerIndex, _T("Say \3.vote\1 for a timeout."));
 								}
 								else
 								{
-									gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("You already voted for a timeout."));
+									this->m_Pause = Player->m_iTeam;
+
+									this->m_Count[Player->m_iTeam][State]++;
+
+									if (!CSGameRules()->IsFreezePeriod())
+									{
+										gUtil.SayText(NULL, PlayerIndex, _T("The \3%s\1 team paused the game."), PUG_MOD_TEAM_STR[Player->m_iTeam]);
+
+										gUtil.SayText(NULL, PlayerIndex, _T("Match will pause for \4%d\1 seconds on next round."), (int)gCvars.GetVotePauseTime()->value);
+									}
+									else
+									{
+										this->RoundRestart();
+
+										if (PauseTeam == Player->m_iTeam)
+										{
+											gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("The \3%s\1 team extended the paused of game."), PUG_MOD_TEAM_STR[Player->m_iTeam]);
+										}
+										else
+										{
+											gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("The \3%s\1 team paused the game."), PUG_MOD_TEAM_STR[Player->m_iTeam]);
+										}
+									}
 								}
 							}
 							else
 							{
-								gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("The \3%s\1 team can't pause the game more than \4%d\1 times."), PUG_MOD_TEAM_STR[Player->m_iTeam], (int)VotePauseLimit);
+								gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("You already voted for a timeout."));
 							}
 						}
 						else
 						{
-							gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("Unable to pause the match while is in freezetime period."));
+							gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("The \3%s\1 can't pause game: \4%d\1 of \4%d\1 times allowed in %s."), PUG_MOD_TEAM_STR[Player->m_iTeam], this->m_Count[Player->m_iTeam][State], (int)VotePauseLimit, gPugMod.GetStateName());
 						}
 					}
 					else
