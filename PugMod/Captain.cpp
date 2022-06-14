@@ -148,20 +148,17 @@ void CCaptain::GetPlayer(CBasePlayer* Player, CBasePlayer* Target)
 
 bool CCaptain::CheckPlayerCount()
 {
-	if (g_pGameRules)
+	int InGame, NumTerrorist, NumCT, NumSpectator;
+
+	gPlayer.GetNum(true, InGame, NumTerrorist, NumCT, NumSpectator);
+
+	if (NumSpectator)
 	{
-		int InGame, NumTerrorist, NumCT, NumSpectator;
+		int PlayersMin = (int)(gCvars.GetPlayersMin()->value / 2);
 
-		gPlayer.GetNum(true, InGame, NumTerrorist, NumCT, NumSpectator);
-
-		if (NumSpectator)
+		if (NumTerrorist < PlayersMin || NumCT < PlayersMin)
 		{
-			int PlayersMin = (int)(gCvars.GetPlayersMin()->value / 2);
-
-			if (NumTerrorist < PlayersMin || NumCT < PlayersMin)
-			{
-				return true;
-			}
+			return true;
 		}
 	}
 
