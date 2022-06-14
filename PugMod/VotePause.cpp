@@ -80,7 +80,7 @@ void CVotePause::VotePause(CBasePlayer* Player)
 									int VoteCount = this->GetVoteCount(Player->m_iTeam);
 									int VotesNeed = (int)(gPlayer.GetNum(Player->m_iTeam) * gCvars.GetVotePercentage()->value);
 									int VotesLack = (VotesNeed - VoteCount);
-
+									
 									if (VotesLack)
 									{
 										gUtil.SayText(NULL, PlayerIndex, _T("\3%s\1 from voted for a timeout: \4%d\1 of \4%d\1 vote(s) to run timeout."), STRING(Player->edict()->v.netname), VoteCount, VotesNeed);

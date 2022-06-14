@@ -14,9 +14,11 @@ void CVoteMenu::Menu(CBasePlayer* Player)
 
 		gMenu[EntityIndex].AddItem(1, _T("Vote Map"), !gVoteLevel.Check(Player));
 
-		gMenu[EntityIndex].AddItem(2, _T("Vote Pause"), !gVotePause.Check(Player));
+		gMenu[EntityIndex].AddItem(2, _T("Vote Restart"), !gVoteRestart.Check(Player));
 
-		gMenu[EntityIndex].AddItem(3, _T("Vote Stop"), !gVoteStop.Check(Player));
+		gMenu[EntityIndex].AddItem(3, _T("Vote Pause"), !gVotePause.Check(Player));
+
+		gMenu[EntityIndex].AddItem(4, _T("Vote Stop"), !gVoteStop.Check(Player));
 
 		gMenu[EntityIndex].Show(EntityIndex);
 	}
@@ -42,10 +44,15 @@ void CVoteMenu::MenuHandle(int EntityIndex, P_MENU_ITEM Item)
 			}
 			case 2:
 			{
-				gVotePause.VotePause(Player);
+				gVoteRestart.VoteRestart(Player);
 				break;
 			}
 			case 3:
+			{
+				gVotePause.VotePause(Player);
+				break;
+			}
+			case 4:
 			{
 				gVoteStop.VoteStop(Player);
 				break;

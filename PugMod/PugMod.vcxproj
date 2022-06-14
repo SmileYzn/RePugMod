@@ -122,6 +122,7 @@
     <ClInclude Include="VoteMap.h" />
     <ClInclude Include="VoteMenu.h" />
     <ClInclude Include="VotePause.h" />
+    <ClInclude Include="VoteRestart.h" />
     <ClInclude Include="VoteStop.h" />
     <ClInclude Include="VoteTeam.h" />
   </ItemGroup>
@@ -156,6 +157,7 @@
     <ClCompile Include="VoteMap.cpp" />
     <ClCompile Include="VoteMenu.cpp" />
     <ClCompile Include="VotePause.cpp" />
+    <ClCompile Include="VoteRestart.cpp" />
     <ClCompile Include="VoteStop.cpp" />
     <ClCompile Include="VoteTeam.cpp" />
   </ItemGroup>

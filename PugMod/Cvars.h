@@ -25,6 +25,7 @@ public:
 	cvar_t* GetVotePercentage();
 	cvar_t* GetVotePauseTime();
 	cvar_t* GetVotePauseLimit();
+	cvar_t* GetVoteRestartLimit();
 	cvar_t* GetReadyType();
 	cvar_t* GetReadyTime();
 	cvar_t* GetShowScoreType();
@@ -56,6 +57,7 @@ private:
 	cvar_t* m_VotePercentage;
 	cvar_t* m_VotePauseTime;
 	cvar_t* m_VotePauseLimit;
+	cvar_t* m_VoteRestartLimit;
 	cvar_t* m_ReadyType;
 	cvar_t* m_ReadyTime;
 	cvar_t* m_ShowScoreType;

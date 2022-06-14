@@ -79,6 +79,9 @@ void CCvars::Load()
 	// Pause count limit of team per half
 	this->m_VotePauseLimit = this->Register("pug_vote_pause_limit", "2");
 
+	// Limit period restarts per half
+	this->m_VoteRestartLimit = this->Register("pug_vote_restart_limit", "1");
+
 	// Ready system type (1 Ready System, 0 Timer Counter)
 	this->m_ReadyType = this->Register("pug_ready_type", "1");
 
@@ -223,6 +226,11 @@ cvar_t* CCvars::GetVotePauseTime()
 cvar_t* CCvars::GetVotePauseLimit()
 {
 	return this->m_VotePauseLimit;
+}
+
+cvar_t* CCvars::GetVoteRestartLimit()
+{
+	return this->m_VoteRestartLimit;
 }
 
 cvar_t* CCvars::GetReadyType()

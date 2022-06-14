@@ -100,6 +100,9 @@
     <Filter Include="PugMod\Commands">
       <UniqueIdentifier>{2eb07e52-312f-438d-9dfe-88187b94e9a5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="PugMod\Vote\VoteRestart">
+      <UniqueIdentifier>{ae504c4e-11ca-441f-a0b3-499fd50041f7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ReGameDLL.h">
@@ -189,6 +192,9 @@
     <ClInclude Include="Commands.h">
       <Filter>PugMod\Commands</Filter>
     </ClInclude>
+    <ClInclude Include="VoteRestart.h">
+      <Filter>PugMod\Vote\VoteRestart</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ReGameDLL.cpp">
@@ -277,6 +283,9 @@
     </ClCompile>
     <ClCompile Include="Commands.cpp">
       <Filter>PugMod\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="VoteRestart.cpp">
+      <Filter>PugMod\Vote\VoteRestart</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
