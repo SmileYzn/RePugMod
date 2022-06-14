@@ -194,7 +194,9 @@ int CVoteMap::RandomMap()
 
 	int Random = (std::rand() % MapList.size());
 
-	gTask.Create(PUG_TASK_EXEC, 5.0f, false, (void*)SERVER_COMMAND, gUtil.VarArgs("changelevel %s\n", MapList[Random].c_str()));
+	this->AddVote(Random, 1);
+
+	gTask.Create(PUG_TASK_EXEC, 5.0f, false, (void*)gVoteMap.Changelevel);
 
 	gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("Changing map to \4%s\1..."), MapList[Random].c_str());
 
