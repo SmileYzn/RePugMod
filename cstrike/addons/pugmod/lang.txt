@@ -252,6 +252,14 @@ bp:"\3Command Enviado\1: %s"
 en:"Usage: !send \3<Server Command>\1"
 bp:"Uso: !send \3<Comando do Servidor>\1"
 
+"\3%s\1 change team sides manually."
+en:"\3%s\1 change team sides manually."
+bp:"\3%s\1 trocou os lados dos times manualmente."
+
+"Can only swap teams during \4%s\1 period."
+en:"Can only swap teams during \4%s\1 period."
+bp:"A troca de times manual só funciona no período \4%s\1 period."
+
 "Wait %d seconds before retry."
 en:"Wait %d seconds before retry."
 bp:"Aguarde %d segundos antes de entrar novamente."

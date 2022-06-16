@@ -89,6 +89,8 @@ void CAdmin::Menu(CBasePlayer* Player)
 
 		gMenu[EntityIndex].AddItem(7, _T("Send Command"));
 
+		gMenu[EntityIndex].AddItem(8, _T("Swap Teams"));
+
 		gMenu[EntityIndex].Show(EntityIndex);
 	}
 }
@@ -139,6 +141,11 @@ void CAdmin::MenuHandle(int EntityIndex, P_MENU_ITEM Item)
 			case 7:
 			{
 				gUtil.ClientCommand(Player->edict(), "messagemode !rcon");
+				break;
+			}
+			case 8:
+			{
+				gAdmin.SwapTeams(Player);
 				break;
 			}
 		}
@@ -525,6 +532,28 @@ void CAdmin::Rcon(CBasePlayer* Player, const char* Args)
 		else
 		{
 			gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("Usage: !send \3<Server Command>\1"));
+		}
+	}
+}
+
+void CAdmin::SwapTeams(CBasePlayer* Player)
+{
+	if (this->Check(Player->edict()))
+	{
+		if (gPugMod.GetState() == PUG_STATE_WARMUP)
+		{
+			if (g_pGameRules)
+			{
+				CSGameRules()->SwapAllPlayers();
+
+				CSGameRules()->RestartRound();
+			}
+
+			gUtil.SayText(NULL, Player->entindex(), _T("\3%s\1 change team sides manually."), STRING(Player->edict()->v.netname));
+		}
+		else
+		{
+			gUtil.SayText(Player->edict(), Player->entindex(), _T("Can only swap teams during \4%s\1 period."), PUG_MOD_STATES_STR[PUG_STATE_WARMUP]);
 		}
 	}
 }

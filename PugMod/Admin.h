@@ -36,6 +36,7 @@ public:
 
 	void Chat(CBasePlayer* Player, const char* Args);
 	void Rcon(CBasePlayer* Player, const char* Args);
+	void SwapTeams(CBasePlayer* Player);
 
 private:
 	std::map<std::string, std::string> m_Data;
