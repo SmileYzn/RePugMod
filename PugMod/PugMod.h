@@ -76,7 +76,7 @@ public:
 	void Scores(CBasePlayer* Player);
 	void ViewScores(CBasePlayer* Player);
 
-	static void LO3(int Delay);
+	static void LO3(const char* Time);
 	static void SwapTeams();
 
 	void SwapScores();

@@ -6,6 +6,7 @@
 #define PUG_TASK_NEXT 103
 #define PUG_TASK_LO3R 104
 #define PUG_TASK_PAUS 105
+#define PUG_TASK_CMAP 106
 
 typedef struct
 {
@@ -14,7 +15,7 @@ typedef struct
 	float EndTime;
 	bool  Loop;
 	void* FunctionCallback;
-	void* FunctionParameter;
+	char  FunctionParameter[128];
 } P_TASK_INFO, * LP_TASK_INFO;
 
 class CTask
@@ -24,10 +25,11 @@ public:
 
 	void Clear();
 	void Create(int Index, float Time, bool Loop, void* FunctionCallback);
-	void Create(int Index, float Time, bool Loop, void* FunctionCallback, void* FunctionParameter);
+	void Create(int Index, float Time, bool Loop, void* FunctionCallback, const char* FunctionParameter);
 	bool Exists(int Index);
 	void Remove(int Index);
 	float Timeleft(int Index);
+	P_TASK_INFO GetInfo(int Index);
 	void Think();
 
 private:

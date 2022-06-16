@@ -445,3 +445,43 @@ void CUtil::SetRoundTime(int Time, bool FreezePeriod)
 	}
 }
 
+void CUtil::ChangelevelDelay(float Delay,const char* MapName)
+{
+	if (MapName)
+	{
+		char Map[64] = { 0 };
+
+		strncpy(Map, MapName, sizeof(Map));
+
+		if (IS_MAP_VALID(Map))
+		{
+			if (Delay > 0.0f)
+			{
+				if (!gTask.Exists(PUG_TASK_CMAP))
+				{
+					gTask.Create(PUG_TASK_CMAP, Delay, false, (void*)this->Changelevel, Map);
+				}
+			}
+			else
+			{
+				this->Changelevel(Map);
+			}
+		}
+	}
+}
+
+void CUtil::Changelevel(const char* MapName)
+{
+	if (MapName)
+	{
+		char Map[64] = { 0 };
+
+		strncpy(Map, MapName, sizeof(Map));
+
+		if (IS_MAP_VALID(Map))
+		{
+			gUtil.ServerCommand("changelevel %s", Map);
+		}
+	}
+}
+

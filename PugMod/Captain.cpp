@@ -175,6 +175,16 @@ bool CCaptain::GetPicking(int EntityIndex)
 	return false;
 }
 
+int CCaptain::GetCaptainPicking()
+{
+	if (this->m_Picking == TERRORIST || this->m_Picking == CT)
+	{
+		return this->m_Captain[this->m_Picking];
+	}
+
+	return -1;
+}
+
 void CCaptain::Menu(TeamName Team)
 {
 	auto Player = UTIL_PlayerByIndexSafe(this->m_Captain[Team]);
@@ -207,7 +217,7 @@ void CCaptain::Menu(TeamName Team)
 
 			gMenu[EntityIndex].Show(EntityIndex);
 
-			gTask.Create(Team, 10.0f, false, (void*)this->GetRandomPlayer, (void*)EntityIndex);
+			gTask.Create(Team, 10.0f, false, (void*)this->GetRandomPlayer);
 		}
 	}
 }
@@ -227,9 +237,9 @@ void CCaptain::MenuHandle(int EntityIndex, P_MENU_ITEM Item)
 	}
 }
 
-void CCaptain::GetRandomPlayer(int EntityIndex)
+void CCaptain::GetRandomPlayer()
 {
-	auto Player = UTIL_PlayerByIndexSafe(EntityIndex);
+	auto Player = UTIL_PlayerByIndexSafe(gCaptain.GetCaptainPicking());
 
 	if (Player)
 	{
@@ -237,6 +247,8 @@ void CCaptain::GetRandomPlayer(int EntityIndex)
 		{
 			if (Player->has_disconnected == false)
 			{
+				int EntityIndex = Player->entindex();
+
 				if (gCaptain.GetPicking(EntityIndex))
 				{
 					gMenu[EntityIndex].Hide(EntityIndex);

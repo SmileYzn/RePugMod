@@ -90,7 +90,7 @@ void CPugMod::SetState(int State)
 
 				if (this->CheckBalanceTeams())
 				{
-					this->LO3(3);
+					this->LO3("3");
 
 					gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("%s started: \3Good Luck & Have Fun!"), this->GetStateName());
 				}
@@ -129,7 +129,7 @@ void CPugMod::SetState(int State)
 
 				if (this->CheckBalanceTeams())
 				{
-					this->LO3(3);
+					this->LO3("3");
 
 					gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("%s started: \3Good Luck & Have Fun!"), this->GetStateName());
 				}
@@ -576,18 +576,24 @@ void CPugMod::ViewScores(CBasePlayer* Player)
 	}
 }
 
-void CPugMod::LO3(int Delay)
+void CPugMod::LO3(const char* Time)
 {
-	if (Delay >= 1 && Delay <= 3) 
+	auto Delay = std::atof(Time);
+
+	if (Delay >= 1.0f && Delay <= 3.0f)
 	{
 		if (g_pGameRules)
 		{
 			CSGameRules()->m_bGameStarted = true;
 		}
 
-		CVAR_SET_FLOAT("sv_restart", (float)Delay);
+		CVAR_SET_STRING("sv_restart", Time);
 
-		gTask.Create(PUG_TASK_LO3R, (float)Delay + 1.0f, false, (void*)gPugMod.LO3, (void*)(Delay - 1));
+		char Parameter[8] = { 0 };
+
+		snprintf(Parameter, sizeof(Parameter), "%d", (int)(Delay - 1.0f));
+
+		gTask.Create(PUG_TASK_LO3R, (Delay + 1.0f), false, (void*)gPugMod.LO3, Parameter);
 	}
 	else
 	{

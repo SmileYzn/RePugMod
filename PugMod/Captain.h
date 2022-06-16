@@ -13,11 +13,12 @@ public:
 	void GetPlayer(CBasePlayer* Player, CBasePlayer* Target);
 	bool CheckPlayerCount();
 	bool GetPicking(int EntityIndex);
+	int GetCaptainPicking();
 
 	void Menu(TeamName Team);
 
 	static void MenuHandle(int EntityIndex, P_MENU_ITEM Item);
-	static void GetRandomPlayer(int EntityIndex);
+	static void GetRandomPlayer();
 	static void List();
 private:
 	int      m_Captain[SPECTATOR + 1] = { 0 };

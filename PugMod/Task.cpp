@@ -17,7 +17,7 @@ void CTask::Create(int Index, float Time, bool Loop, void* FunctionCallback)
 	this->Create(Index, Time, Loop, FunctionCallback, NULL);
 }
 
-void CTask::Create(int Index, float Time, bool Loop, void* FunctionCallback, void* FunctionParameter)
+void CTask::Create(int Index, float Time, bool Loop, void* FunctionCallback, const char* FunctionParameter)
 {
 	if (FunctionCallback)
 	{
@@ -30,7 +30,11 @@ void CTask::Create(int Index, float Time, bool Loop, void* FunctionCallback, voi
 			Task.EndTime = gpGlobals->time + Time;
 			Task.Loop = Loop;
 			Task.FunctionCallback = FunctionCallback;
-			Task.FunctionParameter = FunctionParameter;
+
+			if (FunctionParameter)
+			{
+				memcpy(Task.FunctionParameter, FunctionParameter, sizeof(Task.FunctionParameter));
+			}
 
 			this->m_Data.insert(std::make_pair(Task.Index, Task));
 		}
@@ -61,6 +65,18 @@ float CTask::Timeleft(int Index)
 	return 0.0f;
 }
 
+P_TASK_INFO CTask::GetInfo(int Index)
+{
+	auto it = this->m_Data.find(Index);
+
+	if (it != this->m_Data.end())
+	{
+		return it->second;
+	}
+
+	return P_TASK_INFO();
+}
+
 void CTask::Think()
 {
 	P_TASK_INFO Task = { 0 };
@@ -84,7 +100,7 @@ void CTask::Think()
 
 			if (Task.FunctionCallback)
 			{
-				((void(*)(void*))Task.FunctionCallback)(Task.FunctionParameter);
+				((void(*)(const char*))Task.FunctionCallback)(Task.FunctionParameter);
 			}
 		}
 		else

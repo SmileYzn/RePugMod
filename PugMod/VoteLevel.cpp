@@ -99,7 +99,7 @@ void CVoteLevel::VoteLevel(CBasePlayer* Player, int MapIndex, bool Disabled)
 		}
 		else
 		{
-			gTask.Create(PUG_TASK_EXEC, 5.0f, false, (void*)SERVER_COMMAND, gUtil.VarArgs("changelevel %s\n", this->m_Maps[MapIndex].c_str()));
+			gUtil.ChangelevelDelay(5.0f, this->m_Maps[MapIndex].c_str());
 
 			gUtil.SayText(NULL, PlayerIndex, _T("Changing map to \4%s\1..."), this->m_Maps[MapIndex].c_str());
 		}
