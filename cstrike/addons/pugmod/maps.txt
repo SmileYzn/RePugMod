@@ -7,10 +7,11 @@ de_train
 de_lite
 de_cpl_fire
 de_aztec
-de_hell
+de_cpl_mill
 de_dust
 de_russka
 de_cbble
+de_hell
 de_blue
 de_storm
 de_cevo_concrete2
