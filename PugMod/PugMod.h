@@ -24,12 +24,20 @@ const char PUG_MOD_STATES_STR[][32] =
 	"Finished"
 };
 
-const char PUG_MOD_TEAM_STR[][24] =
+const char PUG_MOD_TEAM_STR[][21] =
 {
 	"Unnasigned",
 	"Terrorists",
 	"Counter-Terrorists",
 	"Spectators"
+};
+
+const char PUG_MOD_TEAM_STR_SHORT[][6] =
+{
+	"NONE",
+	"TR",
+	"CT",
+	"SPEC"
 };
 
 class CPugMod

@@ -170,7 +170,7 @@ void CAdmin::MenuKick(int EntityIndex)
 			{
 				if (!gAdmin.Check(Player))
 				{
-					gMenu[EntityIndex].AddItem(Player->entindex(), STRING(Player->edict()->v.netname));
+					gMenu[EntityIndex].AddItem(Player->entindex(), gUtil.VarArgs("%s \\R\\y%s", STRING(Player->edict()->v.netname), PUG_MOD_TEAM_STR_SHORT[Player->m_iTeam]));
 				}
 			}
 		}
@@ -214,7 +214,7 @@ void CAdmin::MenuBan(int EntityIndex)
 			{
 				if (!gAdmin.Check(Player))
 				{
-					gMenu[EntityIndex].AddItem(Player->entindex(), STRING(Player->edict()->v.netname));
+					gMenu[EntityIndex].AddItem(Player->entindex(), gUtil.VarArgs("%s \\R\\y%s", STRING(Player->edict()->v.netname), PUG_MOD_TEAM_STR_SHORT[Player->m_iTeam]));
 				}
 			}
 		}
@@ -297,7 +297,7 @@ void CAdmin::MenuSlap(int EntityIndex)
 			{
 				if (!gAdmin.Check(Player))
 				{
-					gMenu[EntityIndex].AddItem(Player->entindex(), STRING(Player->edict()->v.netname), !Player->IsAlive());
+					gMenu[EntityIndex].AddItem(Player->entindex(), gUtil.VarArgs("%s \\R\\y%s", STRING(Player->edict()->v.netname), PUG_MOD_TEAM_STR_SHORT[Player->m_iTeam]), !Player->IsAlive());
 				}
 			}
 		}
@@ -343,7 +343,7 @@ void CAdmin::MenuTeam(int EntityIndex)
 				{
 					if (!gAdmin.Check(Player))
 					{
-						gMenu[EntityIndex].AddItem(Player->entindex(), STRING(Player->edict()->v.netname));
+						gMenu[EntityIndex].AddItem(Player->entindex(), gUtil.VarArgs("%s \\R\\y%s", STRING(Player->edict()->v.netname), PUG_MOD_TEAM_STR_SHORT[Player->m_iTeam]));
 					}
 				}
 			}
