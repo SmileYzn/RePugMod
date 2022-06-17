@@ -149,8 +149,6 @@ CGameRules *ReGameDLL_InstallGameRules(IReGameHook_InstallGameRules *chain)
 
 bool ReGameDLL_CBasePlayer_GetIntoGame(IReGameHook_CBasePlayer_GetIntoGame* chain, CBasePlayer* Player)
 {
-	gPugMod.ClientGetIntoGame(Player);
-
 	bool ret = chain->callNext(Player);
 
 	gReady.ClientGetIntoGame(Player);

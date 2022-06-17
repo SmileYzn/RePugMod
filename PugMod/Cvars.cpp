@@ -61,11 +61,14 @@ void CCvars::Load()
 	// Active vote map in current map (Not used in configuration files)
 	this->m_VoteMap = this->Register("pug_vote_map", "0");
 
-	// Active vote map in pug (0 Disable, 1 Enable, 2 Random map)
+	// Type of vote map in pug (0 Disable, 1 Enable, 2 Random map)
 	this->m_VoteMapType = this->Register("pug_vote_map_type", "1");
 
-	// Allow current map in map vote session
+	// Allow current map in map list vote session
 	this->m_VoteMapSelf = this->Register("pug_vote_map_self", "0");
+
+	// Run votemap after match end
+	this->m_VoteMapEnd = this->Register("pug_vote_map_end", "0");
 
 	// The teams method for assign teams (-1 Vote, 0 Leaders, 1 Random, 2 None, 3 Skill Balanced, 4 Swap Teams, 5 Knife Round)
 	this->m_VoteTeamType = this->Register("pug_vote_team_type", "-1");
@@ -88,7 +91,7 @@ void CCvars::Load()
 	// Ready system type (1 Ready System, 0 Timer Counter)
 	this->m_ReadyType = this->Register("pug_ready_type", "1");
 
-	// Time limit to start match
+	// Time limit to start match in ready timer system
 	this->m_ReadyTime = this->Register("pug_ready_timer", "60.0");
 
 	// How PUG display scores in scoreboard (0 Reset in each restart, 1 maintain team scores, 2 maintain team scores + player scores)
@@ -101,7 +104,7 @@ void CCvars::Load()
 	this->m_StatsRoundEnd = this->Register("pug_stats_round_end", "1");
 
 	// Anti Reconnect time in seconds (0 Disable)
-	this->m_ReconnectDelay = this->Register("pug_reconnect_delay", "15.0");
+	this->m_ReconnectDelay = this->Register("pug_reconnect_delay", "20.0");
 
 	// Time to ban a player after try to drop or reconnect from a live game (0 Disable, time in minutes)
 	this->m_ReconnectBanTime = this->Register("pug_reconnect_ban_time", "0");
@@ -209,6 +212,11 @@ cvar_t* CCvars::GetVoteMapType()
 cvar_t* CCvars::GetVoteMapSelf()
 {
 	return this->m_VoteMapSelf;
+}
+
+cvar_t* CCvars::GetVoteMapEnd()
+{
+	return this->m_VoteMapEnd;
 }
 
 cvar_t* CCvars::GetVoteTeamType()
