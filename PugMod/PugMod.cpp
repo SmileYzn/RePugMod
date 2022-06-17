@@ -657,6 +657,15 @@ void CPugMod::ClientDisconnected(int EntityIndex)
 	}
 }
 
+void CPugMod::ClientGetIntoGame(CBasePlayer* Player)
+{
+	if (!Player->IsBot())
+	{
+		gUtil.SayText(Player->edict(), PRINT_TEAM_RED, _T("%s Build %s (\3%s\1)"), Plugin_info.name, Plugin_info.date, Plugin_info.author);
+		gUtil.SayText(Player->edict(), PRINT_TEAM_RED, _T("Say \4.help\1 to view command list."));
+	}
+}
+
 bool CPugMod::ClientAddAccount(CBasePlayer* Player, int amount, RewardType type, bool bTrackChange)
 {
 	if (type == RT_PLAYER_BOUGHT_SOMETHING)
@@ -692,11 +701,8 @@ bool CPugMod::ClientJoinTeam(CBasePlayer* Player, int NewTeam)
 {
 	if (Player->m_iTeam == UNASSIGNED)
 	{
-		gPlayer.TeamInfo(Player->edict(), 33 + 1, "TERRORIST");
-		gPlayer.TeamInfo(Player->edict(), 33 + 2, "CT");
-
-		gUtil.SayText(Player->edict(), PRINT_TEAM_RED, _T("%s Build %s (\3%s\1)"), Plugin_info.name, Plugin_info.date, Plugin_info.author);
-		gUtil.SayText(Player->edict(), PRINT_TEAM_RED, _T("Say \4.help\1 to view command list."));
+		gPlayer.TeamInfo(Player->edict(), MAX_CLIENTS + 1 + TERRORIST, "TERRORIST");
+		gPlayer.TeamInfo(Player->edict(), MAX_CLIENTS + 1 + CT, "CT");
 	}
 
 	if (NewTeam == 5)

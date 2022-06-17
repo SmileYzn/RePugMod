@@ -83,6 +83,7 @@ public:
 
 	void ClientConnected(edict_t* pEntity);
 	void ClientDisconnected(int EntityIndex);
+	void ClientGetIntoGame(CBasePlayer* Player);
 	bool ClientAddAccount(CBasePlayer* Player, int amount, RewardType type, bool bTrackChange);
 	bool ClientHasRestrictItem(CBasePlayer* Player, ItemID item, ItemRestType type);
 	bool ClientJoinTeam(CBasePlayer* Player, int NewTeam);
