@@ -8,8 +8,9 @@ extern CGameRules			*g_pGameRules;
 extern bool ReGameDLL_Init();
 extern bool ReGameDLL_Stop();
 
-extern CGameRules *ReGameDLL_InstallGameRules(IReGameHook_InstallGameRules *chain);
-extern bool ReGameDLL_CBasePlayer_GetIntoGame(IReGameHook_CBasePlayer_GetIntoGame* chain, CBasePlayer * Player);
+extern CGameRules *ReGameDLL_InstallGameRules(IReGameHook_InstallGameRules* chain);
+extern bool ReGameDLL_CBasePlayer_GetIntoGame(IReGameHook_CBasePlayer_GetIntoGame* chain, CBasePlayer* Player);
+extern BOOL ReGameDLL_HandleMenu_ChooseTeam(IReGameHook_HandleMenu_ChooseTeam* chain, CBasePlayer* Player, int Slot);
 extern void ReGameDLL_InternalCommand(IReGameHook_InternalCommand* chain, edict_t* pEntity, const char* pcmd, const char* parg1);
 extern void ReGameDLL_CBasePlayer_AddAccount(IReGameHook_CBasePlayer_AddAccount *chain, CBasePlayer* pthis, int amount, RewardType type, bool bTrackChange);
 extern bool ReGameDLL_CBasePlayer_HasRestrictItem(IReGameHook_CBasePlayer_HasRestrictItem* chain, CBasePlayer* pthis, ItemID item, ItemRestType type);

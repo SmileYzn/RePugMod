@@ -15,29 +15,16 @@ bool CCommands::ClientCommand(CBasePlayer* Player, const char* pcmd, const char*
 			}
 		}
 	}
-	else if (Q_stricmp(pcmd, "jointeam") == 0)
-	{
-		if (gPugMod.ClientJoinTeam(Player, atoi(parg1)))
-		{
-			return true;
-		}
-	}
 	else if (Q_stricmp(pcmd, "menuselect") == 0)
 	{
-		int Key = atoi(parg1);
-
-		if (Player->m_iMenu == Menu_OFF)
+		if (parg1)
 		{
-			if (gMenu[Player->entindex()].Handle(Player->entindex(), Key))
+			if (Player->m_iMenu == Menu_OFF)
 			{
-				return true;
-			}
-		}
-		else if (Player->m_iMenu == Menu_ChooseTeam || Player->m_iMenu == Menu_IGChooseTeam)
-		{
-			if (gPugMod.ClientJoinTeam(Player, Key))
-			{
-				return true;
+				if (gMenu[Player->entindex()].Handle(Player->entindex(), atoi(parg1)))
+				{
+					return true;
+				}
 			}
 		}
 	}

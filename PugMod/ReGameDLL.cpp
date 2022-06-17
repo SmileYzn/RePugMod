@@ -83,6 +83,8 @@ bool ReGameDLL_Init()
 
 	g_ReGameHookchains->CBasePlayer_GetIntoGame()->registerHook(ReGameDLL_CBasePlayer_GetIntoGame);
 
+	g_ReGameHookchains->HandleMenu_ChooseTeam()->registerHook(ReGameDLL_HandleMenu_ChooseTeam);
+
 	g_ReGameHookchains->InternalCommand()->registerHook(ReGameDLL_InternalCommand);
 
 	g_ReGameHookchains->CBasePlayer_AddAccount()->registerHook(ReGameDLL_CBasePlayer_AddAccount);
@@ -107,6 +109,8 @@ bool ReGameDLL_Stop()
 	g_ReGameHookchains->InstallGameRules()->unregisterHook(ReGameDLL_InstallGameRules);
 
 	g_ReGameHookchains->CBasePlayer_GetIntoGame()->unregisterHook(ReGameDLL_CBasePlayer_GetIntoGame);
+	
+	g_ReGameHookchains->HandleMenu_ChooseTeam()->unregisterHook(ReGameDLL_HandleMenu_ChooseTeam);
 
 	g_ReGameHookchains->InternalCommand()->unregisterHook(ReGameDLL_InternalCommand);
 
@@ -152,6 +156,16 @@ bool ReGameDLL_CBasePlayer_GetIntoGame(IReGameHook_CBasePlayer_GetIntoGame* chai
 	gStats.ClientGetIntoGame(Player);
 
 	return ret;
+}
+
+BOOL ReGameDLL_HandleMenu_ChooseTeam(IReGameHook_HandleMenu_ChooseTeam* chain, CBasePlayer* Player, int Slot)
+{
+	if (gPugMod.ClientJoinTeam(Player, Slot))
+	{
+		Slot = 0;
+	}
+
+	return chain->callNext(Player, Slot);
 }
 
 void ReGameDLL_InternalCommand(IReGameHook_InternalCommand* chain, edict_t* pEntity, const char* pcmd, const char* parg1)
