@@ -21,6 +21,8 @@ void CVoteMap::Load()
 
 void CVoteMap::Init()
 {
+	this->Load();
+
 	CBasePlayer* Players[MAX_CLIENTS] = { NULL };
 
 	auto Num = gPlayer.GetList(Players, true);
@@ -56,6 +58,8 @@ void CVoteMap::AddVote(int Item, int Vote)
 	{
 		it->second.Votes += Vote;
 	}
+
+	this->List();
 }
 
 auto CVoteMap::GetVote()
@@ -101,33 +105,45 @@ void CVoteMap::Stop()
 		}
 	}
 
-	gTask.Remove(PUG_TASK_LIST);
-
 	gTask.Remove(PUG_TASK_VOTE);
 
 	auto Winner = gVoteMap.GetWinner();
 
 	if (Winner.Votes > 0)
 	{
-		gTask.Create(PUG_TASK_EXEC, 5.0f, false, (void*)gVoteMap.Changelevel);
+		gUtil.ChangelevelDelay(5.0, Winner.Name.c_str());
 
 		gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("Changing map to \4%s\1..."), Winner.Name.c_str());
 	}
 	else
 	{
+		gTask.Remove(PUG_TASK_LIST);
+
 		gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("The map choice has failed: \3No votes."));
 
-		gVoteMap.RandomMap();
+		gTask.Create(PUG_TASK_NEXT, 5.0f, false, (void*)gVoteMap.Fail);
 	}
 }
 
-void CVoteMap::Changelevel()
+void CVoteMap::Fail()
 {
-	auto Winner = gVoteMap.GetWinner();
-
-	if (Winner.Name.length() > 0)
+	switch ((int)gCvars.GetVoteMapFailType()->value)
 	{
-		gUtil.ServerCommand("changelevel %s", Winner.Name.c_str());
+		case 1:
+		{
+			gVoteMap.Init();
+			break;
+		}
+		case 2:
+		{
+			gVoteMap.RandomMap();
+			break;
+		}
+		default:
+		{
+			gPugMod.NextState(0.0f);
+			break;
+		}
 	}
 }
 
@@ -148,7 +164,16 @@ void CVoteMap::List()
 		}
 	}
 
-	gUtil.HudMessage(NULL, gUtil.HudParam(0, 255, 0, 0.23, 0.02, 0, 0.0, 0.53, 0.0, 0.0, 1), _T("Choose the map (%d):"), (int)gTask.Timeleft(PUG_TASK_VOTE));
+	auto TimeLeft = gTask.Timeleft(PUG_TASK_VOTE);
+
+	if (TimeLeft > 0)
+	{
+		gUtil.HudMessage(NULL, gUtil.HudParam(0, 255, 0, 0.23, 0.02, 0, 0.0, 0.53, 0.0, 0.0, 1), _T("Choose the map (%.0f):"), TimeLeft);
+	}
+	else
+	{
+		gUtil.HudMessage(NULL, gUtil.HudParam(0, 255, 0, 0.23, 0.02, 0, 0.0, 0.53, 0.0, 0.0, 1), _T("Choose the map:"));
+	}
 
 	gUtil.HudMessage(NULL, gUtil.HudParam(255, 255, 225, 0.23, 0.02, 0, 0.0, 0.53, 0.0, 0.0, 2), "\n%s", VoteList.length() ? VoteList.c_str() : _T("No Votes."));
 }
@@ -200,9 +225,7 @@ void CVoteMap::RandomMap()
 
 		std::advance(it, std::rand() % this->m_Data.size());
 
-		this->AddVote(it->first, MAX_CLIENTS);
-
-		gTask.Create(PUG_TASK_EXEC, 5.0f, false, (void*)gVoteMap.Changelevel);
+		gUtil.ChangelevelDelay(5.0f, it->second.Name.c_str());
 
 		gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("Changing map to \4%s\1..."), it->second.Name.c_str());
 	}

@@ -20,6 +20,7 @@ public:
 	cvar_t* GetVoteDelay();
 	cvar_t* GetVoteMap();
 	cvar_t* GetVoteMapType();
+	cvar_t* GetVoteMapFailType();
 	cvar_t* GetVoteMapSelf();
 	cvar_t* GetVoteMapEnd();
 	cvar_t* GetVoteTeamType();
@@ -54,6 +55,7 @@ private:
 	cvar_t* m_VoteDelay;
 	cvar_t* m_VoteMap;
 	cvar_t* m_VoteMapType;
+	cvar_t* m_VoteMapFailType;
 	cvar_t* m_VoteMapSelf;
 	cvar_t* m_VoteMapEnd;
 	cvar_t* m_VoteTeamType;

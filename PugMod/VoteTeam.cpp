@@ -51,6 +51,8 @@ void CVoteTeam::AddVote(int Item, int Vote)
 	{
 		it->second.Votes += Vote;
 	}
+
+	this->List();
 }
 
 auto CVoteTeam::GetVote()

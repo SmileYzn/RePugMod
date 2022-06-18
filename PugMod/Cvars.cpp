@@ -64,6 +64,9 @@ void CCvars::Load()
 	// Type of vote map in pug (0 Disable, 1 Enable, 2 Random map)
 	this->m_VoteMapType = this->Register("pug_vote_map_type", "1");
 
+	// What will happen if vote map fail (0 Continue match, 1 Restart vote map, 2 Choose a random map)
+	this->m_VoteMapFailType = this->Register("pug_vote_map_fail_type", "0");
+
 	// Allow current map in map list vote session
 	this->m_VoteMapSelf = this->Register("pug_vote_map_self", "0");
 
@@ -207,6 +210,11 @@ cvar_t* CCvars::GetVoteMap()
 cvar_t* CCvars::GetVoteMapType()
 {
 	return this->m_VoteMapType;
+}
+
+cvar_t* CCvars::GetVoteMapFailType()
+{
+	return this->m_VoteMapFailType;
 }
 
 cvar_t* CCvars::GetVoteMapSelf()
