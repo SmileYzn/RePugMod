@@ -4,14 +4,14 @@ CCommands gCommands;
 
 enum ConsoleCmd_ : std::uint32_t
 {
-	ConsoleCmd_AdminMenu    = Hash::GetConst( "pug_admin_menu" ),
-	ConsoleCmd_Kick_Menu    = Hash::GetConst( "pug_kick_menu" ),
-	ConsoleCmd_Ban_Menu     = Hash::GetConst( "pug_ban_menu" ),
-	ConsoleCmd_Slap_Menu    = Hash::GetConst( "pug_slap_menu" ),
-	ConsoleCmd_Team_Menu    = Hash::GetConst( "pug_team_menu" ),
-	ConsoleCmd_Map_Menu     = Hash::GetConst( "pug_map_menu" ),
-	ConsoleCmd_Control_Menu = Hash::GetConst( "pug_control_menu" ),
-	ConsoleCmd_Msg          = Hash::GetConst( "pug_msg" ),
+	ConsoleCmd_AdminMenu   = Hash::GetConst( "pug_admin_menu" ),
+	ConsoleCmd_KickMenu    = Hash::GetConst( "pug_kick_menu" ),
+	ConsoleCmd_BanMenu     = Hash::GetConst( "pug_ban_menu" ),
+	ConsoleCmd_SlapMenu    = Hash::GetConst( "pug_slap_menu" ),
+	ConsoleCmd_TeamMenu    = Hash::GetConst( "pug_team_menu" ),
+	ConsoleCmd_MapMenu     = Hash::GetConst( "pug_map_menu" ),
+	ConsoleCmd_ControlMenu = Hash::GetConst( "pug_control_menu" ),
+	ConsoleCmd_Msg         = Hash::GetConst( "pug_msg" ),
 };
 
 enum ServerCmd_ : std::uint32_t
@@ -190,14 +190,14 @@ bool CCommands::ClientCommand( CBasePlayer* Player, const char* pcmd, const char
 		{
 			switch ( CommandHash )
 			{
-				case ConsoleCmd_AdminMenu:    gAdmin.Menu( Player ); break;
-				case ConsoleCmd_Kick_Menu:    gAdmin.MenuKick( Player->entindex( ) ); break;
-				case ConsoleCmd_Ban_Menu:     gAdmin.MenuBan( Player->entindex( ) ); break;
-				case ConsoleCmd_Slap_Menu:    gAdmin.MenuSlap( Player->entindex( ) ); break;
-				case ConsoleCmd_Team_Menu:    gAdmin.MenuTeam( Player->entindex( ) ); break;
-				case ConsoleCmd_Map_Menu:     gAdmin.MenuMap( Player->entindex( ) ); break;
-				case ConsoleCmd_Control_Menu: gAdmin.MenuControl( Player->entindex( ) ); break;
-				case ConsoleCmd_Msg:          gAdmin.Chat( Player, CMD_ARGS( ) ); break;
+				case ConsoleCmd_AdminMenu:   gAdmin.Menu( Player ); break;
+				case ConsoleCmd_KickMenu:    gAdmin.MenuKick( Player->entindex( ) ); break;
+				case ConsoleCmd_BanMenu:     gAdmin.MenuBan( Player->entindex( ) ); break;
+				case ConsoleCmd_SlapMenu:    gAdmin.MenuSlap( Player->entindex( ) ); break;
+				case ConsoleCmd_TeamMenu:    gAdmin.MenuTeam( Player->entindex( ) ); break;
+				case ConsoleCmd_MapMenu:     gAdmin.MenuMap( Player->entindex( ) ); break;
+				case ConsoleCmd_ControlMenu: gAdmin.MenuControl( Player->entindex( ) ); break;
+				case ConsoleCmd_Msg:         gAdmin.Chat( Player, CMD_ARGS( ) ); break;
 
 				default: return false;
 			}
