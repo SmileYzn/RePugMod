@@ -2,151 +2,208 @@
 
 CCommands gCommands;
 
-bool CCommands::ClientCommand(CBasePlayer* Player, const char* pcmd, const char* parg1)
+enum ConsoleCmd_ : std::uint32_t
 {
-	if (Q_stricmp(pcmd, "say") == 0 || Q_stricmp(pcmd, "say_team") == 0)
+	ConsoleCmd_AdminMenu    = Hash::GetConst( "pug_admin_menu" ),
+	ConsoleCmd_Kick_Menu    = Hash::GetConst( "pug_kick_menu" ),
+	ConsoleCmd_Ban_Menu     = Hash::GetConst( "pug_ban_menu" ),
+	ConsoleCmd_Slap_Menu    = Hash::GetConst( "pug_slap_menu" ),
+	ConsoleCmd_Team_Menu    = Hash::GetConst( "pug_team_menu" ),
+	ConsoleCmd_Map_Menu     = Hash::GetConst( "pug_map_menu" ),
+	ConsoleCmd_Control_Menu = Hash::GetConst( "pug_control_menu" ),
+	ConsoleCmd_Msg          = Hash::GetConst( "pug_msg" ),
+};
+
+enum ServerCmd_ : std::uint32_t
+{
+	ServerCmd_MenuSelect = Hash::GetConst( "menuselect" ),
+	ServerCmd_Say        = Hash::GetConst( "say" ),
+	ServerCmd_SayTeam    = Hash::GetConst( "say_team" ),
+
+	ServerCmd_Menu       = Hash::GetConst( "!menu" ),
+	ServerCmd_Kick       = Hash::GetConst( "!kick" ),
+	ServerCmd_Ban        = Hash::GetConst( "!ban" ),
+	ServerCmd_Slap       = Hash::GetConst( "!slap" ),
+	ServerCmd_Team       = Hash::GetConst( "!team" ),
+	ServerCmd_Map        = Hash::GetConst( "!map" ),
+	ServerCmd_Control    = Hash::GetConst( "!control" ),
+	ServerCmd_Msg        = Hash::GetConst( "!msg" ),
+	ServerCmd_Rcon       = Hash::GetConst( "!rcon" ),
+	ServerCmd_Help       = Hash::GetConst( "!help" )
+};
+
+enum ClientCmd_ : std::uint32_t
+{
+	ClientCmd_Help      = Hash::GetConst( ".help" ),
+	ClientCmd_Status    = Hash::GetConst( ".status" ),
+	ClientCmd_Score     = Hash::GetConst( ".score" ),
+	ClientCmd_Ready     = Hash::GetConst( ".ready" ),
+	ClientCmd_NotReady  = Hash::GetConst( ".notready" ),
+	ClientCmd_Vote      = Hash::GetConst( ".vote" ),
+	ClientCmd_VoteKick  = Hash::GetConst( ".votekick" ),
+	ClientCmd_VoteMap   = Hash::GetConst( ".votemap" ),
+	ClientCmd_VotePause = Hash::GetConst( ".votepause" ),
+	ClientCmd_Surrender = Hash::GetConst( ".surrender" ),
+	ClientCmd_Hp        = Hash::GetConst( ".hp" ),
+	ClientCmd_Dmg       = Hash::GetConst( ".dmg" ),
+	ClientCmd_Rdmg      = Hash::GetConst( ".rdmg" ),
+	ClientCmd_Sum       = Hash::GetConst( ".sum" )
+};
+
+bool CCommands::ClientCommand( CBasePlayer* Player, const char* pcmd, const char* parg1 )
+{
+	//
+	// skip invalid command
+	//
+	if ( !pcmd )
 	{
-		if (parg1[0] == '.' || parg1[0] == '!')
-		{
-			if (CMD_ARGS())
-			{
-				gUtil.ClientCommand(Player->edict(), "%s", CMD_ARGS());
-				return true;
-			}
-		}
+		return false;
 	}
-	else if (Q_stricmp(pcmd, "menuselect") == 0)
+
+	//
+	// skip empty command
+	//
+	if ( pcmd[ 0u ] == '\0' )
 	{
-		if (parg1)
+		return false;
+	}
+
+	//
+	// get command hash
+	//
+	const auto CommandHash{ Hash::Get( pcmd ) };
+
+	//
+	// handle menu select
+	//
+	if ( CommandHash == ServerCmd_MenuSelect )
+	{
+		if ( parg1 )
 		{
-			if (Player->m_iMenu == Menu_OFF)
+			if ( Player->m_iMenu == Menu_OFF )
 			{
-				if (gMenu[Player->entindex()].Handle(Player->entindex(), atoi(parg1)))
+				if ( gMenu[ Player->entindex( ) ].Handle( Player->entindex( ), atoi( parg1 ) ) )
 				{
 					return true;
 				}
 			}
 		}
+
+		return false;
 	}
-	else if (Q_stricmp(pcmd, "!menu") == 0 || Q_stricmp(pcmd, "pug_admin_menu") == 0)
+
+	//
+	// handle 'say' or 'say_team'
+	//
+	if ( CommandHash == ServerCmd_Say ||
+		 CommandHash == ServerCmd_SayTeam )
 	{
-		gAdmin.Menu(Player);
-		return true;
+		if ( parg1 )
+		{
+			const bool HasServerCommand { parg1[ 0u ] == '!' };
+			const bool HasClientCommand { parg1[ 0u ] == '.' };
+			const bool HasConsoleCommand{ parg1[ 0u ] == 'p' };
+
+			if ( HasServerCommand ||
+				 HasClientCommand ||
+				 HasConsoleCommand )
+			{
+				if ( auto pCmdArgs{ CMD_ARGS( ) } )
+				{
+					//
+					// handle the command recursively
+					//
+					gUtil.ClientCommand( Player->edict( ), "%s", pCmdArgs );
+
+					return true;
+				}
+			}
+		}
 	}
-	else if (Q_stricmp(pcmd, "!kick") == 0 || Q_stricmp(pcmd, "pug_kick_menu") == 0)
+
+	//
+	// handle a possible server, client or console command
+	// peek at the first character for a short optimization
+	//
+	else
 	{
-		gAdmin.MenuKick(Player->entindex());
-		return true;
-	}
-	else if (Q_stricmp(pcmd, "!ban") == 0 || Q_stricmp(pcmd, "pug_ban_menu") == 0)
-	{
-		gAdmin.MenuBan(Player->entindex());
-		return true;
-	}
-	else if (Q_stricmp(pcmd, "!slap") == 0 || Q_stricmp(pcmd, "pug_slap_menu") == 0)
-	{
-		gAdmin.MenuSlap(Player->entindex());
-		return true;
-	}
-	else if (Q_stricmp(pcmd, "!team") == 0 || Q_stricmp(pcmd, "pug_team_menu") == 0)
-	{
-		gAdmin.MenuTeam(Player->entindex());
-		return true;
-	}
-	else if (Q_stricmp(pcmd, "!map") == 0 || Q_stricmp(pcmd, "pug_map_menu") == 0)
-	{
-		gAdmin.MenuMap(Player->entindex());
-		return true;
-	}
-	else if (Q_stricmp(pcmd, "!control") == 0 || Q_stricmp(pcmd, "pug_control_menu") == 0)
-	{
-		gAdmin.MenuControl(Player->entindex());
-		return true;
-	}
-	else if (Q_stricmp(pcmd, "!msg") == 0 || Q_stricmp(pcmd, "pug_msg") == 0)
-	{
-		gAdmin.Chat(Player, CMD_ARGS());
-		return true;
-	}
-	else if (Q_stricmp(pcmd, "!rcon") == 0 || Q_stricmp(pcmd, "pug_rcon") == 0)
-	{
-		gAdmin.Rcon(Player, CMD_ARGS());
-		return true;
-	}
-	else if (Q_stricmp(pcmd, "!help") == 0 || Q_stricmp(pcmd, "pug_help") == 0)
-	{
-		gPugMod.Help(Player, true);
-		return true;
-	}
-	else if (Q_stricmp(pcmd, ".help") == 0)
-	{
-		gPugMod.Help(Player, false);
-		return true;
-	}
-	else if (Q_stricmp(pcmd, ".status") == 0)
-	{
-		gPugMod.Status(Player);
-		return true;
-	}
-	else if (Q_stricmp(pcmd, ".score") == 0)
-	{
-		gPugMod.Scores(Player);
-		return true;
-	}
-	else if (Q_stricmp(pcmd, ".ready") == 0)
-	{
-		gReady.Ready(Player);
-		return true;
-	}
-	else if (Q_stricmp(pcmd, ".notready") == 0)
-	{
-		gReady.NotReady(Player);
-		return true;
-	}
-	else if (Q_stricmp(pcmd, ".vote") == 0)
-	{
-		gVoteMenu.Menu(Player);
-		return true;
-	}
-	else if (Q_stricmp(pcmd, ".votekick") == 0)
-	{
-		gVoteKick.Menu(Player);
-		return true;
-	}
-	else if (Q_stricmp(pcmd, ".votemap") == 0)
-	{
-		gVoteLevel.Menu(Player);
-		return true;
-	}
-	else if (Q_stricmp(pcmd, ".votepause") == 0)
-	{
-		gVotePause.VotePause(Player);
-		return true;
-	}
-	else if (Q_stricmp(pcmd, ".surrender") == 0)
-	{
-		gVoteStop.VoteStop(Player);
-		return true;
-	}
-	else if (Q_stricmp(pcmd, ".hp") == 0)
-	{
-		gStats.HP(Player);
-		return true;
-	}
-	else if (Q_stricmp(pcmd, ".dmg") == 0)
-	{
-		gStats.Damage(Player);
-		return true;
-	}
-	else if (Q_stricmp(pcmd, ".rdmg") == 0)
-	{
-		gStats.Received(Player);
-		return true;
-	}
-	else if (Q_stricmp(pcmd, ".sum") == 0)
-	{
-		gStats.Summary(Player);
-		return true;
+		//
+		// is server command
+		//
+		if ( pcmd[ 0u ] == '!' )
+		{
+			switch ( CommandHash )
+			{
+				case ServerCmd_Menu:    gAdmin.Menu( Player ); break;
+				case ServerCmd_Kick:    gAdmin.MenuKick( Player->entindex( ) ); break;
+				case ServerCmd_Ban:     gAdmin.MenuBan( Player->entindex( ) ); break;
+				case ServerCmd_Slap:    gAdmin.MenuSlap( Player->entindex( ) ); break;
+				case ServerCmd_Team:    gAdmin.MenuTeam( Player->entindex( ) ); break;
+				case ServerCmd_Map:     gAdmin.MenuMap( Player->entindex( ) ); break;
+				case ServerCmd_Control: gAdmin.MenuControl( Player->entindex( ) ); break;
+				case ServerCmd_Msg:     gAdmin.Chat( Player, CMD_ARGS( ) ); break;
+				case ServerCmd_Rcon:    gAdmin.Rcon( Player, CMD_ARGS( ) ); break;
+
+				case ServerCmd_Help:    gPugMod.Help( Player, true ); break;
+
+				default: return false;
+			}
+
+			return true;
+		}
+
+		//
+		// is client command
+		//
+		if ( pcmd[ 0u ] == '.' )
+		{
+			switch ( CommandHash )
+			{
+				case ClientCmd_Help:      gPugMod.Help( Player, false ); break;
+				case ClientCmd_Status:    gPugMod.Status( Player ); break;
+				case ClientCmd_Score:     gPugMod.Scores( Player ); break;
+
+				case ClientCmd_Ready:     gReady.Ready( Player ); break;
+				case ClientCmd_NotReady:  gReady.NotReady( Player ); break;
+
+				case ClientCmd_Vote:      gVoteMenu.Menu( Player ); break;
+				case ClientCmd_VoteKick:  gVoteKick.Menu( Player ); break;
+				case ClientCmd_VoteMap:   gVoteLevel.Menu( Player ); break;
+				case ClientCmd_VotePause: gVotePause.VotePause( Player ); break;
+				case ClientCmd_Surrender: gVoteStop.VoteStop( Player ); break;
+
+				case ClientCmd_Hp:        gStats.HP( Player ); break;
+				case ClientCmd_Dmg:       gStats.Damage( Player ); break;
+				case ClientCmd_Rdmg:      gStats.Received( Player ); break;
+				case ClientCmd_Sum:       gStats.Summary( Player ); break;
+
+				default: return false;
+			}
+
+			return true;
+		}
+
+		//
+		// is console command
+		//
+		if ( pcmd[ 0u ] == 'p' )
+		{
+			switch ( CommandHash )
+			{
+				case ConsoleCmd_AdminMenu:    gAdmin.Menu( Player ); break;
+				case ConsoleCmd_Kick_Menu:    gAdmin.MenuKick( Player->entindex( ) ); break;
+				case ConsoleCmd_Ban_Menu:     gAdmin.MenuBan( Player->entindex( ) ); break;
+				case ConsoleCmd_Slap_Menu:    gAdmin.MenuSlap( Player->entindex( ) ); break;
+				case ConsoleCmd_Team_Menu:    gAdmin.MenuTeam( Player->entindex( ) ); break;
+				case ConsoleCmd_Map_Menu:     gAdmin.MenuMap( Player->entindex( ) ); break;
+				case ConsoleCmd_Control_Menu: gAdmin.MenuControl( Player->entindex( ) ); break;
+				case ConsoleCmd_Msg:          gAdmin.Chat( Player, CMD_ARGS( ) ); break;
+
+				default: return false;
+			}
+
+			return true;
+		}
 	}
 
 	return false;
