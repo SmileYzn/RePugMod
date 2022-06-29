@@ -2,78 +2,432 @@
 
 CStats gStats;
 
-void CStats::ClientGetIntoGame(CBasePlayer* Player)
+void CStats::Clear()
+{
+	memset(this->m_Data, 0, sizeof(this->m_Data));
+
+	memset(this->m_RoundHits, 0, sizeof(this->m_RoundHits));
+
+	memset(this->m_RoundDamage, 0, sizeof(this->m_RoundDamage));
+
+	memset(this->m_RoundDamageSelf, 0, sizeof(this->m_RoundDamageSelf));
+
+	memset(this->m_RoundDamageTeam, 0, sizeof(this->m_RoundDamageTeam));
+
+	memset(this->m_RoundFrags, 0, sizeof(this->m_RoundFrags));
+
+	memset(this->m_RoundVersus, 0, sizeof(this->m_RoundVersus));
+
+	this->m_RoundBombPlanter = -1;
+
+	this->m_RoundBombDefuser = -1;
+}
+
+void CStats::GetIntoGame(CBasePlayer* Player)
+{
+	if (Player->edict())
+	{
+		this->m_Data[Player->entindex()].Init(STRING(Player->edict()->v.netname));
+	}
+}
+
+void CStats::Disconnected(edict_t* pEdict)
+{
+	if (!FNullEnt(pEdict))
+	{
+		this->m_Data[ENTINDEX(pEdict)].Clear();
+	}
+}
+
+void CStats::AddAccount(CBasePlayer* Player, int amount, RewardType type, bool bTrackChange)
 {
 	if (gPugMod.IsLive())
 	{
-		auto EntityIndex = Player->entindex();
-
-		for (int i = 1; i <= gpGlobals->maxClients; ++i)
+		if (Player)
 		{
-			this->m_Stats[EntityIndex][i][PUG_STATS_HIT] = 0;
-			this->m_Stats[EntityIndex][i][PUG_STATS_DMG] = 0;
+			if (type >= RT_NONE && type <= RT_VIP_RESCUED_MYSELF)
+			{
+				this->m_Data[Player->entindex()].Money[type] += amount;
+			}
 		}
 	}
 }
 
-void CStats::RoundStart()
+void CStats::TakeDamage(CBasePlayer* Player, entvars_t* pevInflictor, entvars_t* pevAttacker, float& flDamage, int bitsDamageType)
 {
 	if (gPugMod.IsLive())
 	{
-		for (int i = 1; i <= gpGlobals->maxClients; ++i)
+		if (Player)
 		{
-			for (int j = 1; j <= gpGlobals->maxClients; ++j)
+			if (pevAttacker)
 			{
-				this->m_Stats[i][j][PUG_STATS_HIT] = 0;
-				this->m_Stats[i][j][PUG_STATS_DMG] = 0;
+				auto Attacker = UTIL_PlayerByIndexSafe(ENTINDEX(pevAttacker));
+
+				if (Attacker)
+				{
+					if (Player->entindex() != Attacker->entindex())
+					{
+						if (CSGameRules()->FPlayerCanTakeDamage(Player, Attacker))
+						{
+							auto AttackerIndex = Attacker->entindex();
+
+							this->m_Data[AttackerIndex].Hits++;
+
+							this->m_Data[AttackerIndex].Damage += Player->m_lastDamageAmount;
+
+							auto VictimIndex = Player->entindex();
+
+							this->m_Data[VictimIndex].DamageReceive += Player->m_lastDamageAmount;
+
+							this->m_Data[AttackerIndex].HitBox[Player->m_LastHitGroup]++;
+
+							this->m_Data[AttackerIndex].HitBoxDamage[Player->m_LastHitGroup] += Player->m_lastDamageAmount;
+
+							this->m_RoundHits[AttackerIndex][Player->entindex()]++;
+
+							this->m_RoundDamage[AttackerIndex][Player->entindex()] += Player->m_lastDamageAmount;
+
+							this->m_RoundDamageSelf[AttackerIndex] += Player->m_lastDamageAmount;
+
+							this->m_RoundDamageTeam[Attacker->m_iTeam] += Player->m_lastDamageAmount;
+
+							auto ItemIndex = this->GetActiveWeapon(Attacker, true);
+
+							if (ItemIndex)
+							{
+								this->m_Data[AttackerIndex].WeaponStats[ItemIndex][WEAPON_HIT]++;
+
+								this->m_Data[AttackerIndex].WeaponStats[ItemIndex][WEAPON_DAMAGE] += Player->m_lastDamageAmount;
+							}
+						}
+					}
+				}
 			}
 		}
+	}
+}
+
+void CStats::Killed(CBasePlayer* Player, entvars_t* pevAttacker, int iGib)
+{
+	if (gPugMod.IsLive())
+	{
+		if (Player)
+		{
+			if (!Player->m_bKilledByBomb)
+			{
+				auto Killer = UTIL_PlayerByIndexSafe(ENTINDEX(pevAttacker));
+
+				if (Killer)
+				{
+					if (Killer->IsPlayer())
+					{
+						auto VictimIndex = Player->entindex();
+
+						auto KillerIndex = Killer->entindex();
+
+						if (VictimIndex != KillerIndex)
+						{
+							this->m_Data[VictimIndex].Deaths++;
+
+							this->m_Data[KillerIndex].Frags++;
+
+							this->m_RoundFrags[KillerIndex]++;
+
+							if (Player->m_bHeadshotKilled)
+							{
+								this->m_Data[KillerIndex].Headshot++;
+							}
+
+							auto ItemIndex = this->GetActiveWeapon(Killer, true);
+
+							if (ItemIndex)
+							{
+								this->m_Data[KillerIndex].WeaponStats[ItemIndex][WEAPON_KILL]++;
+
+								this->m_Data[VictimIndex].WeaponStats[ItemIndex][WEAPON_DEATH]++;
+
+								if (Player->m_bHeadshotKilled)
+								{
+									this->m_Data[KillerIndex].WeaponStats[ItemIndex][WEAPON_HEADSHOT]++;
+								}
+
+								if (ItemIndex != WEAPON_AWP)
+								{
+									if (Player->m_iLastClientHealth >= 100)
+									{
+										if (Player->m_lastDamageAmount >= 100)
+										{
+											this->m_Data[KillerIndex].HackStats[HACK_ONEHIT]++;
+										}
+									}
+								}
+
+								if (ItemIndex == WEAPON_AWP || ItemIndex == WEAPON_SCOUT || ItemIndex == WEAPON_G3SG1 || ItemIndex == WEAPON_SG550)
+								{
+									if (Killer->m_iClientFOV == DEFAULT_FOV)
+									{
+										this->m_Data[KillerIndex].HackStats[HACK_NOSCOP]++;
+									}
+								}
+
+								if (ItemIndex != WEAPON_HEGRENADE)
+								{
+									if (!Killer->m_izSBarState[SBAR_ID_TARGETTYPE])
+									{
+										if (!Killer->IsObserver())
+										{
+											this->m_Data[KillerIndex].HackStats[HACK_VISION]++;
+										}
+									}
+								}
+							}
+
+							int NumAliveTR, NumAliveCT = 0;
+
+							gPlayer.GetNum(NumAliveTR, NumAliveCT);
+
+							for (int i = 1; i <= gpGlobals->maxClients; ++i)
+							{
+								auto Temp = UTIL_PlayerByIndexSafe(i);
+
+								if (Temp)
+								{
+									if (Temp->m_iTeam == TERRORIST || Temp->m_iTeam == CT)
+									{
+										auto TempIndex = Temp->entindex();
+
+										if (TempIndex != Killer->entindex())
+										{
+											if (this->m_RoundDamage[TempIndex][VictimIndex] >= MANAGER_ASSISTANCE_DMG)
+											{
+												this->m_Data[TempIndex].Assists++;
+											}
+										}
+
+										if (!this->m_RoundVersus[TempIndex])
+										{
+											if (Temp->m_iTeam == TERRORIST)
+											{
+												if (NumAliveTR == 1)
+												{
+													this->m_RoundVersus[TempIndex] = NumAliveCT;
+												}
+											}
+											else if (Temp->m_iTeam == CT)
+											{
+												if (NumAliveCT == 1)
+												{
+													this->m_RoundVersus[TempIndex] = NumAliveTR;
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+void CStats::SetAnimation(CBasePlayer* Player, PLAYER_ANIM playerAnim)
+{
+	if (gPugMod.IsLive())
+	{
+		if (Player)
+		{
+			if (playerAnim == PLAYER_ATTACK1 || playerAnim == PLAYER_ATTACK2)
+			{
+				auto ItemIndex = this->GetActiveWeapon(Player, false);
+
+				if (ItemIndex)
+				{
+					auto EntIndex = Player->entindex();
+
+					this->m_Data[EntIndex].Shots++;
+
+					this->m_Data[EntIndex].WeaponStats[ItemIndex][WEAPON_SHOT]++;
+				}
+			}
+		}
+	}
+}
+
+void CStats::PlantBomb(entvars_t* pevOwner, bool Planted)
+{
+	if (gPugMod.IsLive())
+	{
+		auto Player = UTIL_PlayerByIndexSafe(ENTINDEX(pevOwner));
+
+		if (Player)
+		{
+			auto EntIndex = Player->entindex();
+
+			if (Planted)
+			{
+				this->m_RoundBombPlanter = EntIndex;
+
+				this->m_Data[EntIndex].BombStats[BOMB_PLANTED]++;
+			}
+			else
+			{
+				this->m_RoundBombPlanter = -1;
+
+				this->m_Data[EntIndex].BombStats[BOMB_PLANTING]++;
+			}
+		}
+	}
+}
+
+void CStats::DefuseBombStart(CBasePlayer* Player)
+{
+	if (gPugMod.IsLive())
+	{
+		if (Player)
+		{
+			auto EntIndex = Player->entindex();
+
+			this->m_Data[EntIndex].BombStats[BOMB_DEFUSING]++;
+		}
+	}
+}
+
+void CStats::DefuseBombEnd(CBasePlayer* Player, bool Defused)
+{
+	if (gPugMod.IsLive())
+	{
+		if (Player)
+		{
+			if (Defused)
+			{
+				auto EntIndex = Player->entindex();
+
+				this->m_Data[EntIndex].BombStats[BOMB_DEFUSED]++;
+
+				this->m_RoundBombDefuser = EntIndex;
+			}
+		}
+	}
+}
+
+void CStats::ExplodeBomb(CGrenade* pThis, TraceResult* ptr, int bitsDamageType)
+{
+	if (gPugMod.IsLive())
+	{
+		if (this->m_RoundBombPlanter != -1)
+		{
+			auto Player = UTIL_PlayerByIndexSafe(this->m_RoundBombPlanter);
+
+			if (Player)
+			{
+				auto EntIndex = Player->entindex();
+
+				this->m_Data[EntIndex].BombStats[BOMB_EXPLODED]++;
+			}
+		}
+	}
+}
+
+void CStats::RoundFreezeEnd()
+{
+	if (gPugMod.IsLive())
+	{
+		memset(this->m_RoundHits, 0, sizeof(this->m_RoundHits));
+
+		memset(this->m_RoundDamage, 0, sizeof(this->m_RoundDamage));
+
+		memset(this->m_RoundDamageSelf, 0, sizeof(this->m_RoundDamageSelf));
+
+		memset(this->m_RoundDamageTeam, 0, sizeof(this->m_RoundDamageTeam));
+
+		memset(this->m_RoundFrags, 0, sizeof(this->m_RoundFrags));
+
+		memset(this->m_RoundVersus, 0, sizeof(this->m_RoundVersus));
+
+		this->m_RoundBombPlanter = -1;
+
+		this->m_RoundBombDefuser = -1;
 	}
 }
 
 void CStats::RoundEnd(int winStatus, ScenarioEventEndRound event, float tmDelay)
 {
-	if (winStatus != WINSTATUS_NONE)
+	if (gPugMod.IsLive())
 	{
-		if (gCvars.GetStatsRoundEnd()->value)
+		if (winStatus == WINSTATUS_TERRORISTS || winStatus == WINSTATUS_CTS)
 		{
-			if (gPugMod.IsLive())
+			if (event == ROUND_BOMB_DEFUSED)
 			{
-				CBasePlayer* Players[MAX_CLIENTS] = { NULL };
-
-				auto Num = gPlayer.GetList(Players, true);
-
-				for (int i = 0; i < Num; i++)
+				if (this->m_RoundBombDefuser != -1)
 				{
-					auto Player = Players[i];
+					auto Defuser = UTIL_PlayerByIndexSafe(this->m_RoundBombDefuser);
 
-					if (Player)
+					if (Defuser)
 					{
-						if (!Player->IsBot())
-						{
-							auto PlayerIndex = Player->entindex();
+						auto DefuserIndex = Defuser->entindex();
 
-							for (int j = 0; j < Num; j++)
+						this->m_Data[DefuserIndex].RoundWinShare += MANAGER_RWS_C4_DEFUSED;
+					}
+				}
+			}
+			else if (event == ROUND_TARGET_BOMB)
+			{
+				if (this->m_RoundBombPlanter != -1)
+				{
+					auto Planter = UTIL_PlayerByIndexSafe(this->m_RoundBombPlanter);
+
+					if (Planter)
+					{
+						auto PlanterIndex = Planter->entindex();
+
+						this->m_Data[PlanterIndex].RoundWinShare += MANAGER_RWS_C4_EXPLODE;
+					}
+				}
+			}
+
+			TeamName Winner = (winStatus == WINSTATUS_TERRORISTS) ? TERRORIST : CT;
+
+			for (int i = 1; i <= gpGlobals->maxClients; ++i)
+			{
+				auto Temp = UTIL_PlayerByIndexSafe(i);
+
+				if (Temp)
+				{
+					auto TempIndex = Temp->entindex();
+
+					this->m_Data[TempIndex].Rounds[ROUND_PLAY]++;
+
+					if (this->m_RoundFrags[TempIndex] > 0)
+					{
+						this->m_Data[TempIndex].KillStreak[this->m_RoundFrags[TempIndex]]++;
+					}
+
+					if (Temp->m_iTeam == Winner)
+					{
+						this->m_Data[TempIndex].Rounds[(Temp->m_iTeam == TERRORIST) ? ROUND_WIN_TR : ROUND_WIN_CT]++;
+
+						if (this->m_RoundVersus[TempIndex] > 0)
+						{
+							this->m_Data[TempIndex].Versus[this->m_RoundVersus[TempIndex]]++;
+						}
+
+						if (this->m_RoundDamageSelf[TempIndex] > 0)
+						{
+							float RoundWinShare = (float)((float)this->m_RoundDamageSelf[TempIndex] / (float)this->m_RoundDamageTeam[Winner]);
+
+							if (event == ROUND_BOMB_DEFUSED || event == ROUND_TARGET_BOMB)
 							{
-								auto TargetIndex = Players[j]->entindex();
-
-								if (this->m_Stats[PlayerIndex][TargetIndex][PUG_STATS_HIT] || this->m_Stats[TargetIndex][PlayerIndex][PUG_STATS_HIT])
-								{
-									gUtil.ClientPrint
-									(
-										Players[i]->edict(),
-										PRINT_CONSOLE,
-										_T("(%d dmg / %d hits) to (%d dmg / %d hits) from %s (%d HP)"),
-										this->m_Stats[PlayerIndex][TargetIndex][PUG_STATS_DMG],
-										this->m_Stats[PlayerIndex][TargetIndex][PUG_STATS_HIT],
-										this->m_Stats[TargetIndex][PlayerIndex][PUG_STATS_DMG],
-										this->m_Stats[TargetIndex][PlayerIndex][PUG_STATS_HIT],
-										STRING(Players[j]->edict()->v.netname),
-										Players[j]->IsAlive() ? (int)Players[j]->edict()->v.health : 0
-									);
-								}
+								RoundWinShare = (MANAGER_RWS_MAP_TARGET * RoundWinShare);
 							}
+
+							this->m_Data[TempIndex].RoundWinShare += RoundWinShare;
 						}
+					}
+					else
+					{
+						this->m_Data[TempIndex].Rounds[(Temp->m_iTeam == TERRORIST) ? ROUND_LOSE_TR : ROUND_LOSE_CT]++;
 					}
 				}
 			}
@@ -81,266 +435,40 @@ void CStats::RoundEnd(int winStatus, ScenarioEventEndRound event, float tmDelay)
 	}
 }
 
-void CStats::CBasePlayer_TakeDamage(CBasePlayer* pthis, entvars_t* pevInflictor, entvars_t* pevAttacker, float & flDamage, int bitsDamageType)
+int CStats::GetRoundHits(int AttackerIndex, int TargetIndex)
 {
-	if (g_pGameRules)
-	{
-		if (gPugMod.IsLive())
-		{
-			auto pEdict = ENT(pevAttacker);
+	return this->m_RoundHits[AttackerIndex][TargetIndex];
+}
 
-			if (pEdict)
+int CStats::GetRoundDamage(int AttackerIndex, int TargetIndex)
+{
+	return this->m_RoundDamage[AttackerIndex][TargetIndex];
+}
+
+int CStats::GetActiveWeapon(CBasePlayer* Player, bool AllowKnife)
+{
+	if (Player->m_pActiveItem)
+	{
+		if (Player->m_pActiveItem->IsWeapon())
+		{
+			auto ItemSlot = Player->m_pActiveItem->iItemSlot();
+
+			if (ItemSlot == PRIMARY_WEAPON_SLOT || ItemSlot == PISTOL_SLOT || ItemSlot == KNIFE_SLOT || ItemSlot == GRENADE_SLOT)
 			{
-				auto pAttacker = (CBaseEntity*)GET_PRIVATE(pEdict);
+				auto ItemIndex = Player->m_pActiveItem->m_iId;
 
-				if (pAttacker)
+				if (ItemIndex != WEAPON_SMOKEGRENADE && ItemIndex != WEAPON_FLASHBANG)
 				{
-					int AttackerIndex = pAttacker->entindex();
-
-					if (AttackerIndex >= 1 && AttackerIndex <= gpGlobals->maxClients)
+					if (!AllowKnife && ItemIndex == WEAPON_KNIFE)
 					{
-						int VictimIndex = pthis->entindex();
-
-						if (AttackerIndex != VictimIndex)
-						{
-							if (CSGameRules()->FPlayerCanTakeDamage(pthis, pAttacker))
-							{
-								this->m_Stats[AttackerIndex][VictimIndex][PUG_STATS_HIT]++;
-
-								this->m_Stats[AttackerIndex][VictimIndex][PUG_STATS_DMG] += (int)flDamage;
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-}
-
-bool CStats::HP(CBasePlayer* Player)
-{
-	if (g_pGameRules)
-	{
-		if (gPugMod.IsLive())
-		{
-			if (!Player->IsAlive() || CSGameRules()->m_bRoundTerminating || CSGameRules()->IsFreezePeriod())
-			{	
-				if (Player->m_iTeam == TERRORIST || Player->m_iTeam == CT)
-				{
-					auto StatsCount = 0;
-
-					CBasePlayer* Players[MAX_CLIENTS] = { NULL };
-
-					auto Num = gPlayer.GetList(Players, true);
-
-					for (int i = 0; i < Num; i++)
-					{
-						auto Target = Players[i];
-
-						if (Target)
-						{
-							if (Player->m_iTeam != Target->m_iTeam)
-							{
-								if (Target->IsAlive())
-								{
-									StatsCount++;
-
-									gUtil.SayText
-									(
-										Player->edict(),
-										Target->entindex(),
-										_T("\3%s\1 with %d HP (%d AP)"),
-										STRING(Target->edict()->v.netname),
-										(int)Target->edict()->v.health,
-										(int)Target->edict()->v.armorvalue
-									);
-								}
-							}
-						}
+						return WEAPON_NONE;
 					}
 
-					if (!StatsCount)
-					{
-						gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("No one is alive."));
-					}
-
-					return true;
+					return ItemIndex;
 				}
 			}
 		}
 	}
 
-	gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("Unable to use this command now."));
-
-	return false;
-}
-
-bool CStats::Damage(CBasePlayer * Player)
-{
-	if (g_pGameRules)
-	{
-		if (gPugMod.IsLive())
-		{
-			if (!Player->IsAlive() || CSGameRules()->m_bRoundTerminating || CSGameRules()->IsFreezePeriod())
-			{
-				if (Player->m_iTeam == TERRORIST || Player->m_iTeam == CT)
-				{
-					auto StatsCount = 0;
-
-					auto PlayerIndex = Player->entindex();
-
-					CBasePlayer* Players[MAX_CLIENTS] = { NULL };
-
-					auto Num = gPlayer.GetList(Players, true);
-
-					for (int i = 0; i < Num; i++)
-					{
-						auto TargetIndex = Players[i]->entindex();
-
-						if (this->m_Stats[PlayerIndex][TargetIndex][PUG_STATS_HIT])
-						{
-							StatsCount++;
-
-							gUtil.SayText
-							(
-								Player->edict(),
-								TargetIndex,
-								_T("Hit \3%s\1 %d time(s) (Damage %d)"),
-								STRING(Players[i]->edict()->v.netname),
-								this->m_Stats[PlayerIndex][TargetIndex][PUG_STATS_HIT],
-								this->m_Stats[PlayerIndex][TargetIndex][PUG_STATS_DMG]
-							);
-						}
-					}
-
-					if (!StatsCount)
-					{
-						gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("You do not hit anyone in this round."));
-					}
-
-					return true;
-				}
-			}
-		}
-	}
-
-	gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("Unable to use this command now."));
-
-	return false;
-}
-
-bool CStats::Received(CBasePlayer * Player)
-{
-	if (g_pGameRules)
-	{
-		if (gPugMod.IsLive())
-		{
-			if (!Player->IsAlive() || CSGameRules()->m_bRoundTerminating || CSGameRules()->IsFreezePeriod())
-			{
-				if (Player->m_iTeam == TERRORIST || Player->m_iTeam == CT)
-				{
-					auto StatsCount = 0;
-
-					auto PlayerIndex = Player->entindex();
-
-					CBasePlayer* Players[MAX_CLIENTS] = { NULL };
-
-					auto Num = gPlayer.GetList(Players, true);
-
-					for (int i = 0; i < Num; i++)
-					{
-						auto TargetIndex = Players[i]->entindex();
-
-						if (this->m_Stats[TargetIndex][PlayerIndex][PUG_STATS_HIT])
-						{
-							StatsCount++;
-
-							gUtil.SayText
-							(
-								Player->edict(),
-								TargetIndex,
-								_T("Hit by \3%s\1 %d time(s) (Damage %d)"),
-								STRING(Players[i]->edict()->v.netname),
-								this->m_Stats[TargetIndex][PlayerIndex][PUG_STATS_HIT],
-								this->m_Stats[TargetIndex][PlayerIndex][PUG_STATS_DMG]
-							);
-						}
-					}
-
-					if (!StatsCount)
-					{
-						gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("You were not reached in this round."));
-					}
-
-					return true;
-				}
-			}
-		}
-	}
-
-	gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("Unable to use this command now."));
-
-	return false;
-}
-
-bool CStats::Summary(CBasePlayer* Player)
-{
-	if (g_pGameRules)
-	{
-		if (gPugMod.IsLive())
-		{
-			if (!Player->IsAlive() || CSGameRules()->m_bRoundTerminating || CSGameRules()->IsFreezePeriod())
-			{
-				if (Player->m_iTeam == TERRORIST || Player->m_iTeam == CT)
-				{
-					auto StatsCount = 0;
-
-					auto PlayerIndex = Player->entindex();
-
-					CBasePlayer* Players[MAX_CLIENTS] = { NULL };
-
-					auto Num = gPlayer.GetList(Players, true);
-
-					for (int i = 0; i < Num; i++)
-					{
-						auto Target = Players[i];
-
-						if (Target)
-						{
-							auto TargetIndex = Target->entindex();
-
-							if (this->m_Stats[PlayerIndex][TargetIndex][PUG_STATS_HIT] || this->m_Stats[TargetIndex][PlayerIndex][PUG_STATS_HIT])
-							{
-								StatsCount++;
-
-								gUtil.SayText
-								(
-									Player->edict(),
-									TargetIndex,
-									_T("(%d dmg / %d hits) to (%d dmg / %d hits) from \3%s\1 (%d HP)"),
-									this->m_Stats[PlayerIndex][TargetIndex][PUG_STATS_DMG],
-									this->m_Stats[PlayerIndex][TargetIndex][PUG_STATS_HIT],
-									this->m_Stats[TargetIndex][PlayerIndex][PUG_STATS_DMG],
-									this->m_Stats[TargetIndex][PlayerIndex][PUG_STATS_HIT],
-									STRING(Target->edict()->v.netname),
-									Target->IsAlive() ? (int)Target->edict()->v.health : 0
-								);
-							}
-						}
-					}
-
-					if (!StatsCount)
-					{
-						gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("No stats in this round."));
-					}
-
-					return true;
-				}
-			}
-		}
-	}
-
-	gUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("Unable to use this command now."));
-
-	return false;
+	return WEAPON_NONE;
 }
