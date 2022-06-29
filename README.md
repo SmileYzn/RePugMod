@@ -63,5 +63,5 @@ I think i can help community to have more clean servers that want to play a comp
 
 <h3>I need Help!</h3>
 <p>Visit your <a href="https://github.com/SmileYzn/RePugMod/wiki">wiki</a> to know what more you can do with Pug Mod</p>
-<p><a href="https://discord.gg/hUTkyjdkpV" target="_new">Discord Server</a></p>
+<p><a href="https://discord.gg/jFxKr9RSRc" target="_new">Discord Server</a></p>
 <p>Before open an issue, make sure that you have updated ReHLDS with ReGameDLL_CS</p>
