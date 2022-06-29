@@ -8,10 +8,11 @@ public:
 	int GetList(CBasePlayer* pPlayers[MAX_CLIENTS], bool InGameOnly);
 	int GetList(CBasePlayer* pPlayers[MAX_CLIENTS], TeamName Team);
 
-	int GetNum(bool CountBots, int &InGame, int &NumTerrorist, int &NumCT, int &NumSpectator);
+	int GetNum(bool CountBots, int &InGame, int &NumTerrorist, int &NumCT, int& NumSpectator);
 	int GetNum();
 	int GetNum(TeamName Team);
 	int GetNum(bool CountBots);
+	int GetNum(int& NumAliveTerrorists, int& NumAliveCT);
 
 	CBasePlayer* GetRandom(TeamName Team);
 

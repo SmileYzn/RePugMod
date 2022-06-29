@@ -82,33 +82,30 @@ int CPlayer::GetNum(bool CountBots, int & InGame, int & NumTerrorist, int & NumC
 
 		if (Player)
 		{
-			if (!FNullEnt(Player->edict()))
+			if (CountBots == false)
 			{
-				if (CountBots == false)
+				if (Player->IsBot())
 				{
-					if (Player->IsBot())
-					{
-						continue;
-					}
+					continue;
 				}
+			}
 
-				switch (Player->m_iTeam)
+			switch (Player->m_iTeam)
+			{
+				case TERRORIST:
 				{
-					case TERRORIST:
-					{
-						NumTerrorist++;
-						break;
-					}
-					case CT:
-					{
-						NumCT++;
-						break;
-					}
-					case SPECTATOR:
-					{
-						NumSpectator++;
-						break;
-					}
+					NumTerrorist++;
+					break;
+				}
+				case CT:
+				{
+					NumCT++;
+					break;
+				}
+				case SPECTATOR:
+				{
+					NumSpectator++;
+					break;
 				}
 			}
 		}
@@ -160,6 +157,33 @@ int CPlayer::GetNum(bool CountBots)
 	this->GetNum(CountBots, InGame, NumTerrorist, NumCT, NumSpectator);
 
 	return InGame;
+}
+
+int CPlayer::GetNum(int& NumAliveTerrorists, int& NumAliveCT)
+{
+	NumAliveTerrorists, NumAliveCT = 0;
+
+	for (int i = 1; i <= gpGlobals->maxClients; ++i)
+	{
+		auto Player = UTIL_PlayerByIndexSafe(i);
+
+		if (Player)
+		{
+			if (Player->IsAlive())
+			{
+				if (Player->m_iTeam == TERRORIST)
+				{
+					NumAliveTerrorists++;
+				}
+				else if (Player->m_iTeam == CT)
+				{
+					NumAliveCT++;
+				}
+			}
+		}
+	}
+
+	return (NumAliveTerrorists + NumAliveCT);
 }
 
 CBasePlayer* CPlayer::GetRandom(TeamName Team)

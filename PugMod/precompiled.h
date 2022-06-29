@@ -55,6 +55,7 @@
 #include "AntiFlood.h"
 #include "AntiRetry.h"
 #include "Player.h"
+#include "PlayerStats.h"
 #include "Menu.h"
 #include "Task.h"
 #include "PugMod.h"
@@ -71,3 +72,4 @@
 #include "Captain.h"
 #include "KnifeRound.h"
 #include "Stats.h"
+#include "StatsCmd.h"

@@ -101,6 +101,8 @@
     <ClInclude Include="Captain.h" />
     <ClInclude Include="Commands.h" />
     <ClInclude Include="Cvars.h" />
+    <ClInclude Include="PlayerStats.h" />
+    <ClInclude Include="StatsCmd.h" />
     <ClInclude Include="VoteKick.h" />
     <ClInclude Include="KnifeRound.h" />
     <ClInclude Include="Menu.h" />
@@ -133,6 +135,8 @@
     <ClCompile Include="Captain.cpp" />
     <ClCompile Include="Commands.cpp" />
     <ClCompile Include="Cvars.cpp" />
+    <ClCompile Include="PlayerStats.cpp" />
+    <ClCompile Include="StatsCmd.cpp" />
     <ClCompile Include="VoteKick.cpp" />
     <ClCompile Include="KnifeRound.cpp" />
     <ClCompile Include="Menu.cpp" />

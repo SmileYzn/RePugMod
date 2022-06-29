@@ -102,11 +102,8 @@ bool CCommands::ClientCommand( CBasePlayer* Player, const char* pcmd, const char
 		{
 			const bool HasServerCommand { parg1[ 0u ] == '!' };
 			const bool HasClientCommand { parg1[ 0u ] == '.' };
-			const bool HasConsoleCommand{ parg1[ 0u ] == 'p' };
 
-			if ( HasServerCommand ||
-				 HasClientCommand ||
-				 HasConsoleCommand )
+			if ( HasServerCommand || HasClientCommand )
 			{
 				if ( auto pCmdArgs{ CMD_ARGS( ) } )
 				{
@@ -172,10 +169,10 @@ bool CCommands::ClientCommand( CBasePlayer* Player, const char* pcmd, const char
 				case ClientCmd_VotePause: gVotePause.VotePause( Player ); break;
 				case ClientCmd_Surrender: gVoteStop.VoteStop( Player ); break;
 
-				case ClientCmd_Hp:        gStats.HP( Player ); break;
-				case ClientCmd_Dmg:       gStats.Damage( Player ); break;
-				case ClientCmd_Rdmg:      gStats.Received( Player ); break;
-				case ClientCmd_Sum:       gStats.Summary( Player ); break;
+				case ClientCmd_Hp:        gStatsCmd.HP( Player ); break;
+				case ClientCmd_Dmg:       gStatsCmd.Damage( Player ); break;
+				case ClientCmd_Rdmg:      gStatsCmd.Received( Player ); break;
+				case ClientCmd_Sum:       gStatsCmd.Summary( Player ); break;
 
 				default: return false;
 			}

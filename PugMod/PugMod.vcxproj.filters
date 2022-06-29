@@ -103,6 +103,12 @@
     <Filter Include="PugMod\Vote\VoteRestart">
       <UniqueIdentifier>{ae504c4e-11ca-441f-a0b3-499fd50041f7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="PugMod\PlayerStats">
+      <UniqueIdentifier>{bc425a46-0eb1-407a-a28f-bf42da624afb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PugMod\StatsCmd">
+      <UniqueIdentifier>{4539f00d-e16c-4311-8584-feb7413ab4de}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ReGameDLL.h">
@@ -195,6 +201,12 @@
     <ClInclude Include="VoteRestart.h">
       <Filter>PugMod\Vote\VoteRestart</Filter>
     </ClInclude>
+    <ClInclude Include="PlayerStats.h">
+      <Filter>PugMod\PlayerStats</Filter>
+    </ClInclude>
+    <ClInclude Include="StatsCmd.h">
+      <Filter>PugMod\StatsCmd</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ReGameDLL.cpp">
@@ -286,6 +298,12 @@
     </ClCompile>
     <ClCompile Include="VoteRestart.cpp">
       <Filter>PugMod\Vote\VoteRestart</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerStats.cpp">
+      <Filter>PugMod\PlayerStats</Filter>
+    </ClCompile>
+    <ClCompile Include="StatsCmd.cpp">
+      <Filter>PugMod\StatsCmd</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
