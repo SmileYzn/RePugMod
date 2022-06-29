@@ -109,8 +109,6 @@ void CPugMod::SetState(int State)
 			}
 		case PUG_STATE_HALFTIME:
 			{
-				this->SaveScores();
-
 				gTask.Create(PUG_TASK_EXEC, 5.0f, false, (void*)this->SwapTeams);
 
 				gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("%s started, get ready!"), this->GetStateName());
@@ -294,28 +292,6 @@ bool CPugMod::CheckBalanceTeams()
 	}
 
 	return true;
-}
-
-void CPugMod::SaveScores()
-{
-	if ((int)gCvars.GetShowScoreType()->value == 2)
-	{
-		CBasePlayer* Players[MAX_CLIENTS] = { NULL };
-
-		auto Num = gPlayer.GetList(Players, true);
-
-		for (int i = 0; i < Num; i++)
-		{
-			auto Player = Players[i];
-
-			if (Player)
-			{
-				this->m_Frags[Player->entindex()] = Player->edict()->v.frags;
-
-				this->m_Death[Player->entindex()] = Player->m_iDeaths;
-			}
-		}
-	}
 }
 
 bool CPugMod::StartVoteMap(CBasePlayer* Player)
@@ -658,9 +634,6 @@ void CPugMod::ClientConnected(edict_t* pEntity)
 
 void CPugMod::ClientDisconnected(int EntityIndex)
 {
-	this->m_Frags[EntityIndex] = 0;
-	this->m_Death[EntityIndex] = 0;
-
 	if (this->m_State >= PUG_STATE_FIRST_HALF && this->m_State <= PUG_STATE_OVERTIME)
 	{
 		if (gPlayer.GetNum() < (gCvars.GetPlayersMin()->value / 2))
@@ -849,13 +822,14 @@ void CPugMod::RoundRestart()
 {
 	if (g_pGameRules)
 	{
-		if (this->m_State >= PUG_STATE_HALFTIME && this->m_State <= PUG_STATE_OVERTIME)
+		if (this->m_State >= PUG_STATE_HALFTIME && this->m_State <= PUG_STATE_END)
 		{
 			if (gCvars.GetShowScoreType()->value > 0)
 			{
 				if (!CSGameRules()->m_bCompleteReset)
 				{
 					CSGameRules()->m_iNumCTWins = this->GetScores(CT);
+
 					CSGameRules()->m_iNumTerroristWins = this->GetScores(TERRORIST);
 
 					CSGameRules()->UpdateTeamScores();
@@ -872,13 +846,13 @@ void CPugMod::RoundRestart()
 
 							if (Player)
 							{
-								auto EntityIndex = Player->entindex();
+								auto Stats = gStats.GetData(Player->entindex());
 
-								if (this->m_Frags[EntityIndex] > 0 || this->m_Death[EntityIndex] > 0)
+								if (Stats.Frags || Stats.Deaths)
 								{
-									Player->m_iDeaths = this->m_Death[EntityIndex];
+									Player->m_iDeaths = Stats.Deaths;
 
-									Player->edict()->v.frags = this->m_Frags[EntityIndex];
+									Player->edict()->v.frags = Stats.Frags;
 								}
 
 								Player->AddPoints(0, TRUE);

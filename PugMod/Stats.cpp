@@ -445,6 +445,11 @@ int CStats::GetRoundDamage(int AttackerIndex, int TargetIndex)
 	return this->m_RoundDamage[AttackerIndex][TargetIndex];
 }
 
+CPlayerStats CStats::GetData(int EntityIndex)
+{
+	return this->m_Data[EntityIndex];
+}
+
 int CStats::GetActiveWeapon(CBasePlayer* Player, bool AllowKnife)
 {
 	if (Player->m_pActiveItem)

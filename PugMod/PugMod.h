@@ -56,7 +56,6 @@ public:
 	static void RunState();
 
 	bool CheckBalanceTeams();
-	void SaveScores();
 
 	bool StartVoteMap(CBasePlayer* Player);
 	bool StartVoteTeam(CBasePlayer* Player);
@@ -95,9 +94,6 @@ private:
 	int m_State = PUG_STATE_DEAD;
 	int m_Round[PUG_STATE_END + 1] = { 0 };
 	int m_Score[PUG_STATE_END + 1][SPECTATOR + 1] = { 0 };
-
-	int m_Frags[MAX_CLIENTS + 1] = { 0 };
-	int m_Death[MAX_CLIENTS + 1] = { 0 };
 };
 
 extern CPugMod gPugMod;

@@ -26,6 +26,8 @@ public:
 	int GetRoundHits(int AttackerIndex, int TargetIndex);
 	int GetRoundDamage(int AttackerIndex, int TargetIndex);
 
+	CPlayerStats GetData(int EntityIndex);
+
 private:
 	int GetActiveWeapon(CBasePlayer* Player, bool AllowKnife);
 
