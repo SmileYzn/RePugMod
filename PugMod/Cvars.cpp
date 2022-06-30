@@ -49,7 +49,7 @@ void CCvars::Load()
 	// Play Overtime (0 Sudden Death, 1 Force Overtime, 2 End Tied)
 	this->m_PlayRoundsOvertimeType = this->Register("pug_play_overtime", "1");
 
-	// Swap teams before overtime starts
+	// Swap teams before overtime start or restart
 	this->m_PlayRoundsOvertimeSwap = this->Register("pug_play_overtime_swap", "0");
 
 	// Check players count before start pug and start warmup if is incorrect
