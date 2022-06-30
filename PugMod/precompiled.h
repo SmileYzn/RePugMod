@@ -25,8 +25,8 @@
 #include <array>
 #include <iterator>
 
-//
-#include <nlohmann/json.hpp>
+// nlohmann.json
+#include "json.hpp"
 
 // CSSDK
 #include <extdll.h>

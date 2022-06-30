@@ -207,6 +207,9 @@
     <ClInclude Include="StatsCmd.h">
       <Filter>PugMod\StatsCmd</Filter>
     </ClInclude>
+    <ClInclude Include="json.hpp">
+      <Filter>PugMod</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ReGameDLL.cpp">
@@ -310,6 +313,5 @@
     <None Include="MetaMod.def">
       <Filter>MetaMod</Filter>
     </None>
-    <None Include="packages.config" />
   </ItemGroup>
 </Project>

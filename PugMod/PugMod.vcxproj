@@ -97,7 +97,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="MetaMod.def" />
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Admin.h" />
@@ -106,6 +105,7 @@
     <ClInclude Include="Captain.h" />
     <ClInclude Include="Commands.h" />
     <ClInclude Include="Cvars.h" />
+    <ClInclude Include="json.hpp" />
     <ClInclude Include="PlayerStats.h" />
     <ClInclude Include="StatsCmd.h" />
     <ClInclude Include="VoteKick.h" />
@@ -171,13 +171,5 @@
     <ClCompile Include="VoteTeam.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
-  <ImportGroup Label="ExtensionTargets">
-    <Import Project="..\packages\nlohmann.json.3.10.5\build\native\nlohmann.json.targets" Condition="Exists('..\packages\nlohmann.json.3.10.5\build\native\nlohmann.json.targets')" />
-  </ImportGroup>
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>Este projeto faz referência a pacotes do NuGet que não estão presentes neste computador. Use a Restauração de Pacotes do NuGet para baixá-los.  Para obter mais informações, consulte http://go.microsoft.com/fwlink/?LinkID=322105. O arquivo ausente é {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\nlohmann.json.3.10.5\build\native\nlohmann.json.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\nlohmann.json.3.10.5\build\native\nlohmann.json.targets'))" />
-  </Target>
+  <ImportGroup Label="ExtensionTargets" />
 </Project>
