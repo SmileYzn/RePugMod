@@ -592,7 +592,7 @@ void CPugMod::LO3(const char* Time)
 
 void CPugMod::SwapTeams()
 {
-	if (gPugMod.GetRound() == (int)gCvars.GetPlayRounds()->value)
+	if (gPugMod.GetRound() >= (int)gCvars.GetPlayRounds()->value)
 	{
 		if (gPugMod.GetScores(TERRORIST) == gPugMod.GetScores(CT))
 		{
