@@ -25,6 +25,9 @@
 #include <array>
 #include <iterator>
 
+//
+#include <nlohmann/json.hpp>
+
 // CSSDK
 #include <extdll.h>
 #include <eiface.h>

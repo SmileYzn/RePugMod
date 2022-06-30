@@ -145,6 +145,8 @@ void ReAPI_SV_DropClient(IRehldsHook_SV_DropClient* chain, IGameClient* client, 
 			gAntiRetry.ClientDisconnected(pEntity, Reason);
 
 			gPugMod.ClientDisconnected(EntityIndex);
+
+			gStats.Disconnected(pEntity);
 		}
 	}
 

@@ -66,10 +66,9 @@ enum HackStatsGroup
 class CPlayerStats
 {
 public:
-	void Init(const char* IndexKey);
 	void Clear();
+	bool Store(edict_t* pEdict);
 
-	char Index[35] = { 0 };
 	int Frags = 0;												// Ok
 	int Assists = 0;											// Ok
 	int Deaths = 0;												// Ok

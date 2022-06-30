@@ -33,6 +33,8 @@ private:
 
 	CPlayerStats m_Data[MAX_CLIENTS + 1];
 
+	std::map<std::string, CPlayerStats> m_Stats;
+
 	int m_RoundHits[MAX_CLIENTS + 1][MAX_CLIENTS + 1] = { 0 };
 	int m_RoundDamage[MAX_CLIENTS + 1][MAX_CLIENTS + 1] = { 0 };
 	int m_RoundDamageSelf[MAX_CLIENTS + 1];

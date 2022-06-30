@@ -26,6 +26,7 @@ public:
 	void Hide(int EntityIndex);
 
 	bool Handle(int EntityIndex, int Key);
+
 private:
 	void Display(int EntityIndex, int Page);
 	void ShowMenu(int EntityIndex, int Slots, int Time, std::string MenuText);

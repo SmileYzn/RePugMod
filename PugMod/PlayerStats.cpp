@@ -2,8 +2,6 @@
 
 void CPlayerStats::Clear()
 {
-	memset(this->Index, 0, sizeof(this->Index));
-
 	this->Frags = 0;
 
 	this->Assists = 0;
@@ -43,9 +41,9 @@ void CPlayerStats::Clear()
 	memset(this->HackStats, 0, sizeof(this->HackStats));
 }
 
-void CPlayerStats::Init(const char* IndexKey)
+bool CPlayerStats::Store(edict_t* pEdict)
 {
-	this->Clear();
 
-	strncpy(this->Index, IndexKey, sizeof(this->Index));
+
+	return false;
 }

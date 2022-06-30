@@ -310,5 +310,6 @@
     <None Include="MetaMod.def">
       <Filter>MetaMod</Filter>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

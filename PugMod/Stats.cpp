@@ -4,6 +4,8 @@ CStats gStats;
 
 void CStats::Clear()
 {
+	this->m_Stats.clear();
+
 	memset(this->m_Data, 0, sizeof(this->m_Data));
 
 	memset(this->m_RoundHits, 0, sizeof(this->m_RoundHits));
@@ -27,7 +29,18 @@ void CStats::GetIntoGame(CBasePlayer* Player)
 {
 	if (Player->edict())
 	{
-		this->m_Data[Player->entindex()].Init(STRING(Player->edict()->v.netname));
+		int EntityIndex = Player->entindex();
+
+		this->m_Data[EntityIndex].Clear();
+
+		auto it = this->m_Stats.find(STRING(Player->edict()->v.netname));
+
+		if (it != this->m_Stats.end())
+		{
+			this->m_Data[EntityIndex] = it->second;
+			
+			this->m_Stats.erase(it);
+		}
 	}
 }
 
@@ -35,7 +48,14 @@ void CStats::Disconnected(edict_t* pEdict)
 {
 	if (!FNullEnt(pEdict))
 	{
-		this->m_Data[ENTINDEX(pEdict)].Clear();
+		int EntityIndex = ENTINDEX(pEdict);
+
+		if (this->m_Data[EntityIndex].Rounds[ROUND_PLAY] > 0)
+		{
+			this->m_Stats.insert(std::make_pair(STRING(pEdict->v.netname), this->m_Data[EntityIndex]));
+
+			this->m_Data[EntityIndex].Clear();
+		}
 	}
 }
 
