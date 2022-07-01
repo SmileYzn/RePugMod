@@ -237,7 +237,7 @@ void CPugMod::RunState()
 			{
 				Next = PUG_STATE_HALFTIME;
 
-				if (gPugMod.GetOvertimeWinner() != UNASSIGNED)
+				if (gPugMod.GetOvertimeWinner())
 				{
 					Next = PUG_STATE_END;
 				}
@@ -469,25 +469,23 @@ TeamName CPugMod::GetWinner()
 	return UNASSIGNED;
 }
 
-TeamName CPugMod::GetOvertimeWinner()
+bool CPugMod::GetOvertimeWinner()
 {
-	int PlayRounds = ((int)gCvars.GetPlayRounds()->value / 2);
+	float Test = ((float)this->m_Round[PUG_STATE_OVERTIME] / gCvars.GetPlayRoundsOvertime()->value);
 
-	int PlayRoundsOT = (int)gCvars.GetPlayRoundsOvertime()->value;
+	float Overtimes = 0.0f;
 
-	for (int Team = TERRORIST; Team <= CT; Team++)
+	float Ratio = std::modf(Test, &Overtimes);
+
+	if (Ratio > 0.5f)
 	{
-		int Score = (this->GetScores(Team) - PlayRounds);
-
-		Score %= (PlayRoundsOT * 2);
-
-		if (Score > PlayRoundsOT)
+		if (abs(this->m_Score[PUG_STATE_OVERTIME][TERRORIST] - this->m_Score[PUG_STATE_OVERTIME][CT]) > 2)
 		{
-			return (TeamName)Team;
+			return true;
 		}
 	}
 
-	return UNASSIGNED;
+	return false;
 }
 
 void CPugMod::Help(CBasePlayer * Player,bool AdminHelp)
@@ -805,11 +803,11 @@ void CPugMod::RoundEnd(int winStatus, ScenarioEventEndRound event, float tmDelay
 			}
 			else if (this->m_State == PUG_STATE_OVERTIME)
 			{
-				if (this->GetOvertimeWinner() != UNASSIGNED)
+				if (this->GetOvertimeWinner())
 				{
 					this->NextState(tmDelay);
 				}
-				else if ((this->GetRound() % (int)gCvars.GetPlayRoundsOvertime()->value) == 0)
+				else if ((this->GetRound() % (int)(gCvars.GetPlayRoundsOvertime()->value / 2.0f)) == 0)
 				{
 					this->NextState(tmDelay);
 				}
@@ -853,9 +851,9 @@ void CPugMod::RoundRestart()
 									Player->m_iDeaths = Stats.Deaths;
 
 									Player->edict()->v.frags = Stats.Frags;
-								}
 
-								Player->AddPoints(0, TRUE);
+									Player->AddPoints(0, TRUE);
+								}
 							}
 						}
 					}

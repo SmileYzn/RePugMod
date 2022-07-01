@@ -43,8 +43,8 @@ void CCvars::Load()
 	// Rounds to play before start overtime
 	this->m_PlayRounds = this->Register("pug_play_rounds", "30");
 
-	// Win difference (rounds) to determine a winner in overtime
-	this->m_PlayRoundsOvertime = this->Register("pug_play_overtime_rounds", "3");
+	// Rounds to play while in overtime
+	this->m_PlayRoundsOvertime = this->Register("pug_play_overtime_rounds", "6");
 
 	// Play Overtime (0 Sudden Death, 1 Force Overtime, 2 End Tied)
 	this->m_PlayRoundsOvertimeType = this->Register("pug_play_overtime", "1");

@@ -68,7 +68,7 @@ public:
 	int GetScores(int Team);
 
 	TeamName GetWinner();
-	TeamName GetOvertimeWinner();
+	bool GetOvertimeWinner();
 
 	void Help(CBasePlayer* Player,bool AdminHelp);
 	void Status(CBasePlayer* Player);
@@ -92,6 +92,7 @@ public:
 
 private:
 	int m_State = PUG_STATE_DEAD;
+
 	int m_Round[PUG_STATE_END + 1] = { 0 };
 	int m_Score[PUG_STATE_END + 1][SPECTATOR + 1] = { 0 };
 };
