@@ -471,19 +471,28 @@ TeamName CPugMod::GetWinner()
 
 TeamName CPugMod::GetOvertimeWinner()
 {
-	int PlayRounds = ((int)gCvars.GetPlayRounds()->value / 2);
+	int OvertimeRoundsPlayed = gPugMod.GetRound() - (int)gCvars.GetPlayRounds()->value;
 
-	int PlayRoundsOT = (int)gCvars.GetPlayRoundsOvertime()->value;
+	int FinishedHalves = OvertimeRoundsPlayed / (int)gCvars.GetPlayRoundsOvertime()->value;
 
-	for (int Team = TERRORIST; Team <= CT; Team++)
+	int FinishedOvertimes = FinishedHalves / 2;
+
+	int OvertimeScoreCT = this->GetScores(CT) - (int)gCvars.GetPlayRounds()->value / 2;
+	int OvertimeScoreT = this->GetScores(TERRORIST) - (int)gCvars.GetPlayRounds()->value / 2;
+
+	int CurrentOvertimeScoreCT = OvertimeScoreCT - (FinishedOvertimes * (int)gCvars.GetPlayRoundsOvertime()->value);
+	int CurrentOvertimeScoreT = OvertimeScoreT - (FinishedOvertimes * (int)gCvars.GetPlayRoundsOvertime()->value);
+
+	if (CurrentOvertimeScoreCT != CurrentOvertimeScoreT)
 	{
-		int Score = (this->GetScores(Team) - PlayRounds);
-
-		Score %= (PlayRoundsOT * 2);
-
-		if (Score > PlayRoundsOT)
+		if (FinishedHalves > 0 && FinishedHalves % 2 == 0 && OvertimeRoundsPlayed % ((int)gCvars.GetPlayRoundsOvertime()->value * 2) == 0)
 		{
-			return (TeamName)Team;
+			return CurrentOvertimeScoreCT > CurrentOvertimeScoreT ? CT : TERRORIST;
+		}
+		else
+		{
+			if (CurrentOvertimeScoreCT > (int)gCvars.GetPlayRoundsOvertime()->value) return CT;
+			if (CurrentOvertimeScoreT > (int)gCvars.GetPlayRoundsOvertime()->value) return TERRORIST;
 		}
 	}
 
@@ -592,10 +601,16 @@ void CPugMod::LO3(const char* Time)
 
 void CPugMod::SwapTeams()
 {
-	int OvertimePlayedRounds = gPugMod.GetRound() - (int)gCvars.GetPlayRounds()->value;
-
-	if (!gCvars.GetPlayRoundsOvertimeSwap()->value || OvertimePlayedRounds % ((int)gCvars.GetPlayRoundsOvertime()->value * 2) == 0)
-		return;
+	if (gPugMod.GetRound() >= (int)gCvars.GetPlayRounds()->value)
+	{
+		if (gPugMod.GetScores(TERRORIST) == gPugMod.GetScores(CT))
+		{
+			if (!gCvars.GetPlayRoundsOvertimeSwap()->value)
+			{
+				return;
+			}
+		}
+	}
 
 	gPugMod.SwapScores();
 
