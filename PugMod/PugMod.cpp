@@ -477,54 +477,26 @@ TeamName CPugMod::GetOvertimeWinner()
 
 	int FinishedOvertimes = FinishedHalves / 2;
 
-	/*
-		[PUG] Current Round : 36, OvertimeRoundsPlayed : 6, FinishedHalves : 2, FinisheOvertimes : 1
-		[PUG] Score : -1, OvertimeRounds : 3
-		[PUG] Current Round : 36, OvertimeRoundsPlayed : 6, FinishedHalves : 2, FinisheOvertimes : 1
-		[PUG] Score : 1, OvertimeRounds : 3
-	*/
-
 	int OvertimeScoreCT = this->GetScores(CT) - (int)gCvars.GetPlayRounds()->value / 2;
 	int OvertimeScoreT = this->GetScores(TERRORIST) - (int)gCvars.GetPlayRounds()->value / 2;
 
 	int CurrentOvertimeScoreCT = OvertimeScoreCT - (FinishedOvertimes * (int)gCvars.GetPlayRoundsOvertime()->value);
 	int CurrentOvertimeScoreT = OvertimeScoreT - (FinishedOvertimes * (int)gCvars.GetPlayRoundsOvertime()->value);
 
-	gUtil.ServerPrint("Current Round: %i, OvertimeRoundsPlayed: %i, FinishedHalves: %i, FinisheOvertimes: %i", gPugMod.GetRound(), OvertimeRoundsPlayed, FinishedHalves, FinishedOvertimes);
-	gUtil.ServerPrint("CurrentScoreCT: %i - CurrentScoreTR: %i, Win Target: %i", CurrentOvertimeScoreCT, CurrentOvertimeScoreT, ((int)gCvars.GetPlayRoundsOvertime()->value + 1));
-
 	if (CurrentOvertimeScoreCT != CurrentOvertimeScoreT)
 	{
 		if (FinishedHalves > 0 && FinishedHalves % 2 == 0 && OvertimeRoundsPlayed % ((int)gCvars.GetPlayRoundsOvertime()->value * 2) == 0)
 		{
-			gUtil.ServerPrint("Entrou no FinishedHalves");
 			return CurrentOvertimeScoreCT > CurrentOvertimeScoreT ? CT : TERRORIST;
 		}
 		else
 		{
-			gUtil.ServerPrint("Entrou no Else");
-			gUtil.ServerPrint("CurrentOvertimeScoreCT (%i) > CvarOvertime (%i)", CurrentOvertimeScoreCT, (int)gCvars.GetPlayRoundsOvertime()->value);
-			gUtil.ServerPrint("CurrentOvertimeScoreT (%i) > CvarOvertime (%i)", CurrentOvertimeScoreT, (int)gCvars.GetPlayRoundsOvertime()->value);
 			if (CurrentOvertimeScoreCT > (int)gCvars.GetPlayRoundsOvertime()->value) return CT;
 			if (CurrentOvertimeScoreT > (int)gCvars.GetPlayRoundsOvertime()->value) return TERRORIST;
 		}
 	}
 
 	return UNASSIGNED;
-
-	/*
-	for (int Team = TERRORIST; Team <= CT; Team++)
-	{
-		int Score = this->GetScores(Team) - ((int)gCvars.GetPlayRounds()->value / 2 + (FinishedOvertimes * (int)gCvars.GetPlayRoundsOvertime()->value));
-		gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, "Current Round: %i, OvertimeRoundsPlayed: %i, FinishedHalves: %i, FinisheOvertimes: %i", gPugMod.GetRound(), OvertimeRoundsPlayed, FinishedHalves, FinishedOvertimes);
-		gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, "Score: %i, OvertimeRounds: %i", Score, (int)gCvars.GetPlayRoundsOvertime()->value);
-
-		if (Score > (int)gCvars.GetPlayRoundsOvertime()->value || (FinishedHalves > 0 && FinishedHalves % 2 == 0 && Score > 0))
-		{
-			return (TeamName)Team;
-		}
-	}
-	*/
 }
 
 void CPugMod::Help(CBasePlayer * Player,bool AdminHelp)
@@ -629,10 +601,16 @@ void CPugMod::LO3(const char* Time)
 
 void CPugMod::SwapTeams()
 {
-	int OvertimePlayedRounds = gPugMod.GetRound() - (int)gCvars.GetPlayRounds()->value;
-
-	if (OvertimePlayedRounds % ((int)gCvars.GetPlayRoundsOvertime()->value * 2) == 0) 
-		return
+	if (gPugMod.GetRound() >= (int)gCvars.GetPlayRounds()->value)
+	{
+		if (gPugMod.GetScores(TERRORIST) == gPugMod.GetScores(CT))
+		{
+			if (!gCvars.GetPlayRoundsOvertimeSwap()->value)
+			{
+				return;
+			}
+		}
+	}
 
 	gPugMod.SwapScores();
 
