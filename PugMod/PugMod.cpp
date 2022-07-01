@@ -475,6 +475,8 @@ TeamName CPugMod::GetOvertimeWinner()
 
 	int FinishedHalves = OvertimeRoundsPlayed / (int)gCvars.GetPlayRoundsOvertime()->value;
 
+	int FinishedOvertimes = FinishedHalves / 2;
+
 	int OvertimeScoreCT = this->GetScores(CT) - (int)gCvars.GetPlayRounds()->value / 2;
 	int OvertimeScoreT = this->GetScores(TERRORIST) - (int)gCvars.GetPlayRounds()->value / 2;
 
