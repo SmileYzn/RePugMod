@@ -604,7 +604,7 @@ void CPugMod::SwapTeams()
 {
 	int OvertimeRounds = gPugMod.GetRound() - (int)gCvars.GetPlayRounds()->value;
 
-	if (OvertimeRounds >= 0 && OvertimeRounds % (int)gCvars.GetPlayRoundsOvertime()->value == 0)
+	if (OvertimeRounds >= 0 && OvertimeRounds % (int)gCvars.GetPlayRoundsOvertime()->value == 0 && !gCvars.GetPlayRoundsOvertimeSwap()->value)
 	{
 		return;
 	}
