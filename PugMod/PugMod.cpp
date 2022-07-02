@@ -471,25 +471,25 @@ TeamName CPugMod::GetWinner()
 
 bool CPugMod::GetOvertimeWinner()
 {
-	int OvertimeHalfRounds = ((int)gCvars.GetPlayRoundsOvertime()->value / 2);
-	int FinishedHalves = this->m_Round[PUG_STATE_OVERTIME] / OvertimeHalfRounds;
-
-	int FinishedOvertimes = FinishedHalves / 2;
-
-	int OvertimeScoreCT = this->GetScores(CT) - (int)gCvars.GetPlayRounds()->value / 2;
-	int OvertimeScoreT = this->GetScores(TERRORIST) - (int)gCvars.GetPlayRounds()->value / 2;
-
-	int CurrentOvertimeScoreCT = OvertimeScoreCT - (FinishedOvertimes * OvertimeHalfRounds);
-	int CurrentOvertimeScoreT = OvertimeScoreT - (FinishedOvertimes * OvertimeHalfRounds);
-
-	if (CurrentOvertimeScoreCT != CurrentOvertimeScoreT)
+	if (this->GetScores(CT) != this->GetScores(TERRORIST))
 	{
+		int OvertimeHalfRounds = ((int)gCvars.GetPlayRoundsOvertime()->value / 2);
+		int FinishedHalves = this->m_Round[PUG_STATE_OVERTIME] / OvertimeHalfRounds;
+
+		int FinishedOvertimes = FinishedHalves / 2;
+
 		if (FinishedHalves > 0 && FinishedHalves % 2 == 0 && this->m_Round[PUG_STATE_OVERTIME] % (OvertimeHalfRounds * 2) == 0)
 		{
 			return true;
 		}
 		else
 		{
+			int OvertimeScoreCT = this->GetScores(CT) - (int)gCvars.GetPlayRounds()->value / 2;
+			int OvertimeScoreT = this->GetScores(TERRORIST) - (int)gCvars.GetPlayRounds()->value / 2;
+
+			int CurrentOvertimeScoreCT = OvertimeScoreCT - (FinishedOvertimes * OvertimeHalfRounds);
+			int CurrentOvertimeScoreT = OvertimeScoreT - (FinishedOvertimes * OvertimeHalfRounds);
+
 			if (CurrentOvertimeScoreCT > OvertimeHalfRounds ||
 				CurrentOvertimeScoreT > OvertimeHalfRounds) return true;
 		}
