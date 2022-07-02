@@ -811,13 +811,11 @@ void CPugMod::RoundEnd(int winStatus, ScenarioEventEndRound event, float tmDelay
 			}
 			else if (this->m_State == PUG_STATE_OVERTIME)
 			{
-				int OvertimeRounds = gPugMod.GetRound() - (int)gCvars.GetPlayRounds()->value;
-
 				if (this->GetOvertimeWinner())
 				{
 					this->NextState(tmDelay);
 				}
-				else if (OvertimeRounds >= 0 && OvertimeRounds % ((int)gCvars.GetPlayRoundsOvertime()->value / 2) == 0)
+				else if (this->m_Round[this->m_State] >= 0 && this->m_Round[this->m_State] % ((int)gCvars.GetPlayRoundsOvertime()->value / 2) == 0)
 				{
 					this->NextState(tmDelay);
 				}
