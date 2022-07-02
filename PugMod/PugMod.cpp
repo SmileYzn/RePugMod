@@ -471,21 +471,33 @@ TeamName CPugMod::GetWinner()
 
 bool CPugMod::GetOvertimeWinner()
 {
-	float Test = ((float)this->m_Round[PUG_STATE_OVERTIME] / gCvars.GetPlayRoundsOvertime()->value);
+	int OvertimeHalfRounds = ((int)gCvars.GetPlayRoundsOvertime()->value / 2);
+	int FinishedHalves = this->m_Round[PUG_STATE_OVERTIME] / OvertimeHalfRounds;
 
-	float Overtimes = 0.0f;
+	int FinishedOvertimes = FinishedHalves / 2;
 
-	float Ratio = std::modf(Test, &Overtimes);
+	int OvertimeScoreCT = this->GetScores(CT) - (int)gCvars.GetPlayRounds()->value / 2;
+	int OvertimeScoreT = this->GetScores(TERRORIST) - (int)gCvars.GetPlayRounds()->value / 2;
 
-	if (Ratio > 0.5f)
+	int CurrentOvertimeScoreCT = OvertimeScoreCT - (FinishedOvertimes * OvertimeHalfRounds);
+	int CurrentOvertimeScoreT = OvertimeScoreT - (FinishedOvertimes * OvertimeHalfRounds);
+
+	if (CurrentOvertimeScoreCT != CurrentOvertimeScoreT)
 	{
-		if (abs(this->m_Score[PUG_STATE_OVERTIME][TERRORIST] - this->m_Score[PUG_STATE_OVERTIME][CT]) > 2)
+		if (FinishedHalves > 0 && FinishedHalves % 2 == 0 && this->m_Round[PUG_STATE_OVERTIME] % (OvertimeHalfRounds * 2) == 0)
 		{
 			return true;
+		}
+		else
+		{
+			if (CurrentOvertimeScoreCT > OvertimeHalfRounds ||
+				CurrentOvertimeScoreT > OvertimeHalfRounds) return true;
 		}
 	}
 
 	return false;
+
+
 }
 
 void CPugMod::Help(CBasePlayer* Player, bool AdminHelp)
