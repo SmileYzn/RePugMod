@@ -471,11 +471,11 @@ TeamName CPugMod::GetWinner()
 
 bool CPugMod::GetOvertimeWinner()
 {
-	float Test = ((float)this->m_Round[PUG_STATE_OVERTIME] / gCvars.GetPlayRoundsOvertime()->value);
+	float OvertimeState = ((float)this->m_Round[PUG_STATE_OVERTIME] / gCvars.GetPlayRoundsOvertime()->value);
 
-	float Overtimes = 0.0f;
+	float TotalPlayed = 0.0f;
 
-	float Ratio = std::modf(Test, &Overtimes);
+	float Ratio = std::modf(OvertimeState, &TotalPlayed);
 
 	if (Ratio > 0.5f)
 	{
