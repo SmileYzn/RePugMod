@@ -220,14 +220,13 @@ void CPugMod::RunState()
 			{
 				Next = PUG_STATE_END;
 
-				if (gPugMod.GetScores(TERRORIST) == (int)gCvars.GetPlayRounds()->value / 2)
+				int HalfRounds = (int)gCvars.GetPlayRounds()->value / 2;
+
+				if (gPugMod.GetScores(TERRORIST) == HalfRounds && gPugMod.GetScores(CT) == HalfRounds)
 				{
-					if (gPugMod.GetScores(CT) == (int)gCvars.GetPlayRounds()->value / 2)
+					if (gCvars.GetPlayRoundsOvertimeType()->value == 1.0f)
 					{
-						if ((int)gCvars.GetPlayRoundsOvertimeType()->value == 1)
-						{
-							Next = PUG_STATE_HALFTIME;
-						}
+						Next = PUG_STATE_HALFTIME;
 					}
 				}
 
@@ -795,9 +794,15 @@ void CPugMod::RoundEnd(int winStatus, ScenarioEventEndRound event, float tmDelay
 				}
 				else if ((this->GetScores(TERRORIST) == Half) && (this->GetScores(CT) == Half))
 				{
-					if (gCvars.GetPlayRoundsOvertimeType()->value == 1)
+					float OvertimeType = gCvars.GetPlayRoundsOvertimeType()->value;
+
+					if (OvertimeType == 1.0f || OvertimeType == 2.0f)
 					{
 						this->NextState(tmDelay);
+					}
+					else if (OvertimeType == 3.0f)
+					{
+						gVoteOvertime.Init();
 					}
 				}
 			}

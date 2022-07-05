@@ -711,3 +711,35 @@ bp:"voto"
 "votes"
 en:"votes"
 bp:"votos"
+
+"Play overtime"
+en:"Play overtime"
+bp:"Jogar overtime"
+
+"Play sudden death round"
+en:"Play sudden death round"
+bp:"Jogar round morte súbita"
+
+"End match with tied scores"
+en:"End match with tied scores"
+bp:"Finalizar partida com placar empatado"
+
+"Match is tied, what you want to do?"
+en:"Match is tied, what you want to do?"
+bp:"O Playar está empatado, o que você deseja fazer?"
+
+"Overtime vote started."
+en:"Overtime vote started."
+bp:"Escolha do Overtime iniciada."
+
+"Match will continue in: \3Sudden Death Round."
+en:"Match will continue in: \3Sudden Death Round."
+bp:"A partida vai continuar em: \3Round morte súbita."
+
+"The choice of overtime failed: \3No votes."
+en:"The choice of overtime failed: \3No votes."
+bp:"A escolha do overtime falhou: \3Nenhum voto."
+
+"Play Overtime (%d):"
+en:"Play Overtime (%d):"
+bp:"Jogar Overtime (%d):"
