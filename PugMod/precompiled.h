@@ -72,6 +72,7 @@
 #include "VotePause.h"
 #include "VoteRestart.h"
 #include "VoteStop.h"
+#include "VoteOvertime.h"
 #include "Captain.h"
 #include "KnifeRound.h"
 #include "Stats.h"
