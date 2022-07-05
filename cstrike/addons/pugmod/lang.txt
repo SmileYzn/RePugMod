@@ -104,11 +104,11 @@ bp:"Impossível usar esse comando agora."
 
 "Game Over! The \3%s\1 have won the game: %d-%d"
 en:"Game Over! The \3%s\1 have won the game: %d-%d"
-bp:"Fim de Jogo! Os ^3%s^1 venceram: %d-%d"
+bp:"Fim de Jogo! Os \3%s\1 venceram: %d-%d"
 
 "The \3%s\1 are winning: %d-%d"
 en:"The \3%s\1 are winning: %d-%d"
-bp:"Os ^3%s^1 estão vencendo: %d-%d"
+bp:"Os \3%s\1 estão vencendo: %d-%d"
 
 "Game Over! Score is tied: %d-%d"
 en:"Game Over! Score is tied: %d-%d"
