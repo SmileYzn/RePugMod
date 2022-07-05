@@ -4,7 +4,7 @@ CPugMod gPugMod;
 
 void CPugMod::Load()
 {
-	this->SetState(PUG_STATE_DEAD); 
+	this->SetState(PUG_STATE_DEAD);
 
 	this->NextState(gCvars.GetAutoStartDelay()->value);
 }
@@ -42,118 +42,118 @@ void CPugMod::SetState(int State)
 
 	switch (this->m_State)
 	{
-		case PUG_STATE_WARMUP:
+	case PUG_STATE_WARMUP:
+	{
+		gReady.Load();
+
+		gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("%s started, get ready!"), this->GetStateName());
+		break;
+	}
+	case PUG_STATE_START:
+	{
+		gReady.Unload();
+
+		if (gCvars.GetVoteMap()->value && gCvars.GetVoteMapType()->value)
+		{
+			gCvars.GetVoteMap()->value = 0;
+
+			if (gCvars.GetVoteMapType()->value == 1)
 			{
-				gReady.Load();
-
-				gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("%s started, get ready!"), this->GetStateName());
-				break;
+				gVoteMap.Init();
 			}
-		case PUG_STATE_START:
+			else if (gCvars.GetVoteMapType()->value == 2)
 			{
-				gReady.Unload();
-
-				if (gCvars.GetVoteMap()->value && gCvars.GetVoteMapType()->value)
-				{
-					gCvars.GetVoteMap()->value = 0;
-
-					if (gCvars.GetVoteMapType()->value == 1)
-					{
-						gVoteMap.Init();
-					}
-					else if (gCvars.GetVoteMapType()->value == 2)
-					{
-						gVoteMap.RandomMap();
-					}
-				}
-				else
-				{
-					if (gCvars.GetVoteTeamType()->value == -1.0f)
-					{
-						gVoteTeam.Init();
-					}
-					else
-					{
-						gVoteTeam.SetMode((int)gCvars.GetVoteTeamType()->value);
-					}
-				}
-
-				break;
+				gVoteMap.RandomMap();
 			}
-		case PUG_STATE_FIRST_HALF:
+		}
+		else
+		{
+			if (gCvars.GetVoteTeamType()->value == -1.0f)
 			{
-				gReady.Unload();
-
-				gVotePause.Clear();
-
-				gStats.Clear();
-
-				memset(this->m_Round, 0, sizeof(this->m_Round));
-
-				memset(this->m_Score, 0, sizeof(this->m_Score));
-
-				if (this->CheckBalanceTeams())
-				{
-					this->LO3("3");
-
-					gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("%s started: \3Good Luck & Have Fun!"), this->GetStateName());
-				}
-				else
-				{
-					gUtil.SayText(0, PRINT_TEAM_RED, _T("Failed to start match: \3Not enough players.\1"));
-
-					this->SetState(PUG_STATE_WARMUP);
-				}
-
-				break;
+				gVoteTeam.Init();
 			}
-		case PUG_STATE_HALFTIME:
+			else
 			{
-				gTask.Create(PUG_TASK_EXEC, 5.0f, false, (void*)this->SwapTeams);
-
-				gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("%s started, get ready!"), this->GetStateName());
-
-				if (gPlayer.GetNum() >= (int)gCvars.GetPlayersMin()->value)
-				{
-					this->NextState(7.0f);
-				}
-				else
-				{
-					gReady.Load();
-				}
-
-				break;
+				gVoteTeam.SetMode((int)gCvars.GetVoteTeamType()->value);
 			}
-		case PUG_STATE_SECOND_HALF:
-		case PUG_STATE_OVERTIME:
-			{
-				gReady.Unload();
+		}
 
-				if (this->CheckBalanceTeams())
-				{
-					this->LO3("3");
+		break;
+	}
+	case PUG_STATE_FIRST_HALF:
+	{
+		gReady.Unload();
 
-					gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("%s started: \3Good Luck & Have Fun!"), this->GetStateName());
-				}
-				else
-				{
-					gUtil.SayText(0, PRINT_TEAM_RED, _T("Failed to continue match: \3Not enough players.\1"));
+		gVotePause.Clear();
 
-					this->SetState(PUG_STATE_HALFTIME);
-				}
+		gStats.Clear();
 
-				break;
-			}
-		case PUG_STATE_END:
-			{
-				this->ViewScores(NULL);
+		memset(this->m_Round, 0, sizeof(this->m_Round));
 
-				gCvars.GetVoteMap()->value = 1;
+		memset(this->m_Score, 0, sizeof(this->m_Score));
 
-				this->NextState(5.0f);
-				
-				break;
-			}
+		if (this->CheckBalanceTeams())
+		{
+			this->LO3("3");
+
+			gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("%s started: \3Good Luck & Have Fun!"), this->GetStateName());
+		}
+		else
+		{
+			gUtil.SayText(0, PRINT_TEAM_RED, _T("Failed to start match: \3Not enough players.\1"));
+
+			this->SetState(PUG_STATE_WARMUP);
+		}
+
+		break;
+	}
+	case PUG_STATE_HALFTIME:
+	{
+		gTask.Create(PUG_TASK_EXEC, 5.0f, false, (void*)this->SwapTeams);
+
+		gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("%s started, get ready!"), this->GetStateName());
+
+		if (gPlayer.GetNum() >= (int)gCvars.GetPlayersMin()->value)
+		{
+			this->NextState(7.0f);
+		}
+		else
+		{
+			gReady.Load();
+		}
+
+		break;
+	}
+	case PUG_STATE_SECOND_HALF:
+	case PUG_STATE_OVERTIME:
+	{
+		gReady.Unload();
+
+		if (this->CheckBalanceTeams())
+		{
+			this->LO3("3");
+
+			gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("%s started: \3Good Luck & Have Fun!"), this->GetStateName());
+		}
+		else
+		{
+			gUtil.SayText(0, PRINT_TEAM_RED, _T("Failed to continue match: \3Not enough players.\1"));
+
+			this->SetState(PUG_STATE_HALFTIME);
+		}
+
+		break;
+	}
+	case PUG_STATE_END:
+	{
+		this->ViewScores(NULL);
+
+		gCvars.GetVoteMap()->value = 1;
+
+		this->NextState(5.0f);
+
+		break;
+	}
 	}
 
 	if (gCvars.GetConfig(this->m_State))
@@ -183,80 +183,80 @@ void CPugMod::RunState()
 
 	switch (gPugMod.GetState())
 	{
-		case PUG_STATE_DEAD:
+	case PUG_STATE_DEAD:
+	{
+		Next = PUG_STATE_WARMUP;
+		break;
+	}
+	case PUG_STATE_WARMUP:
+	{
+		Next = PUG_STATE_START;
+		break;
+	}
+	case PUG_STATE_START:
+	{
+		Next = PUG_STATE_FIRST_HALF;
+		break;
+	}
+	case PUG_STATE_FIRST_HALF:
+	{
+		Next = PUG_STATE_HALFTIME;
+		break;
+	}
+	case PUG_STATE_HALFTIME:
+	{
+		if (gPugMod.GetRound() < (int)gCvars.GetPlayRounds()->value)
+		{
+			Next = PUG_STATE_SECOND_HALF;
+		}
+		else
+		{
+			Next = PUG_STATE_OVERTIME;
+		}
+
+		break;
+	}
+	case PUG_STATE_SECOND_HALF:
+	{
+		Next = PUG_STATE_END;
+
+		int HalfRounds = (int)gCvars.GetPlayRounds()->value / 2;
+
+		if (gPugMod.GetScores(TERRORIST) == HalfRounds && gPugMod.GetScores(CT) == HalfRounds)
+		{
+			if (gCvars.GetPlayRoundsOvertimeType()->value == 1.0f)
 			{
-				Next = PUG_STATE_WARMUP;
-				break;
+				Next = PUG_STATE_HALFTIME;
 			}
-		case PUG_STATE_WARMUP:
+		}
+
+		break;
+	}
+	case PUG_STATE_OVERTIME:
+	{
+		Next = PUG_STATE_HALFTIME;
+
+		if (gPugMod.GetOvertimeWinner())
+		{
+			Next = PUG_STATE_END;
+		}
+
+		break;
+	}
+	case PUG_STATE_END:
+	{
+		Next = PUG_STATE_WARMUP;
+
+		if (gCvars.GetVoteMapEnd()->value)
+		{
+			if (gCvars.GetVoteMapType()->value == 1.0f)
 			{
 				Next = PUG_STATE_START;
-				break;
 			}
-		case PUG_STATE_START:
-			{
-				Next = PUG_STATE_FIRST_HALF;
-				break;
-			}
-		case PUG_STATE_FIRST_HALF:
-			{
-				Next = PUG_STATE_HALFTIME;
-				break;
-			}
-		case PUG_STATE_HALFTIME:
-			{
-				if (gPugMod.GetRound() < (int)gCvars.GetPlayRounds()->value)
-				{
-					Next = PUG_STATE_SECOND_HALF;
-				}
-				else
-				{
-					Next = PUG_STATE_OVERTIME;
-				}
+		}
 
-				break;
-			}
-		case PUG_STATE_SECOND_HALF:
-			{
-				Next = PUG_STATE_END;
-
-				int HalfRounds = (int)gCvars.GetPlayRounds()->value / 2;
-
-				if (gPugMod.GetScores(TERRORIST) == HalfRounds && gPugMod.GetScores(CT) == HalfRounds)
-				{
-					if (gCvars.GetPlayRoundsOvertimeType()->value == 1.0f)
-					{
-						Next = PUG_STATE_HALFTIME;
-					}
-				}
-
-				break;
-			}
-		case PUG_STATE_OVERTIME:
-			{
-				Next = PUG_STATE_HALFTIME;
-
-				if (gPugMod.GetOvertimeWinner())
-				{
-					Next = PUG_STATE_END;
-				}
-
-				break;
-			}
-		case PUG_STATE_END:
-			{
-				Next = PUG_STATE_WARMUP;
-
-				if (gCvars.GetVoteMapEnd()->value)
-				{
-					if (gCvars.GetVoteMapType()->value == 1.0f)
-					{
-						Next = PUG_STATE_START;
-					}
-				}
-
-				break;
-			}
+		break;
+	}
 	}
 
 	gPugMod.SetState(Next);
@@ -299,7 +299,7 @@ bool CPugMod::StartVoteMap(CBasePlayer* Player)
 	{
 		gReady.Unload();
 
-		gUtil.SayText(NULL, Player->entindex(), _T("\3%s\1 started Vote Map."),STRING(Player->edict()->v.netname));
+		gUtil.SayText(NULL, Player->entindex(), _T("\3%s\1 started Vote Map."), STRING(Player->edict()->v.netname));
 
 		gVoteMap.Init();
 
@@ -470,24 +470,36 @@ TeamName CPugMod::GetWinner()
 
 bool CPugMod::GetOvertimeWinner()
 {
-	float OvertimeState = ((float)this->m_Round[PUG_STATE_OVERTIME] / gCvars.GetPlayRoundsOvertime()->value);
-
-	float TotalPlayed = 0.0f;
-
-	float Ratio = std::modf(OvertimeState, &TotalPlayed);
-
-	if (Ratio > 0.5f)
+	if (this->GetScores(CT) != this->GetScores(TERRORIST))
 	{
-		if (abs(this->m_Score[PUG_STATE_OVERTIME][TERRORIST] - this->m_Score[PUG_STATE_OVERTIME][CT]) > 2)
+		int OvertimeHalfRounds = ((int)gCvars.GetPlayRoundsOvertime()->value / 2);
+		int FinishedHalves = this->m_Round[PUG_STATE_OVERTIME] / OvertimeHalfRounds;
+
+		int FinishedOvertimes = FinishedHalves / 2;
+
+		if (FinishedHalves > 0 && FinishedHalves % 2 == 0 && this->m_Round[PUG_STATE_OVERTIME] % (OvertimeHalfRounds * 2) == 0)
 		{
 			return true;
+		}
+		else
+		{
+			int OvertimeScoreCT = this->GetScores(CT) - (int)gCvars.GetPlayRounds()->value / 2;
+			int OvertimeScoreT = this->GetScores(TERRORIST) - (int)gCvars.GetPlayRounds()->value / 2;
+
+			int CurrentOvertimeScoreCT = OvertimeScoreCT - (FinishedOvertimes * OvertimeHalfRounds);
+			int CurrentOvertimeScoreT = OvertimeScoreT - (FinishedOvertimes * OvertimeHalfRounds);
+
+			if (CurrentOvertimeScoreCT > OvertimeHalfRounds ||
+				CurrentOvertimeScoreT > OvertimeHalfRounds) return true;
 		}
 	}
 
 	return false;
+
+
 }
 
-void CPugMod::Help(CBasePlayer * Player,bool AdminHelp)
+void CPugMod::Help(CBasePlayer* Player, bool AdminHelp)
 {
 	if (!AdminHelp)
 	{
@@ -589,15 +601,11 @@ void CPugMod::LO3(const char* Time)
 
 void CPugMod::SwapTeams()
 {
-	if (gPugMod.GetRound() >= (int)gCvars.GetPlayRounds()->value)
+	int OvertimeRounds = gPugMod.GetRound() - (int)gCvars.GetPlayRounds()->value;
+
+	if (OvertimeRounds >= 0 && OvertimeRounds % (int)gCvars.GetPlayRoundsOvertime()->value == 0 && !gCvars.GetPlayRoundsOvertimeSwap()->value)
 	{
-		if (gPugMod.GetScores(TERRORIST) == gPugMod.GetScores(CT))
-		{
-			if (!gCvars.GetPlayRoundsOvertimeSwap()->value)
-			{
-				return;
-			}
-		}
+		return;
 	}
 
 	gPugMod.SwapScores();
@@ -708,7 +716,7 @@ bool CPugMod::ClientJoinTeam(CBasePlayer* Player, int NewTeam)
 
 	if (Player->m_iTeam == UNASSIGNED || Player->m_iTeam == SPECTATOR)
 	{
-		if (this->m_State == PUG_STATE_START) 
+		if (this->m_State == PUG_STATE_START)
 		{
 			if (NewTeam != 6)
 			{
@@ -729,7 +737,7 @@ bool CPugMod::ClientJoinTeam(CBasePlayer* Player, int NewTeam)
 
 	if (NewTeam == 6)
 	{
-		if (!CVAR_GET_FLOAT("allow_spectators")) 
+		if (!CVAR_GET_FLOAT("allow_spectators"))
 		{
 			if (!gAdmin.Check(Player))
 			{
@@ -812,7 +820,7 @@ void CPugMod::RoundEnd(int winStatus, ScenarioEventEndRound event, float tmDelay
 				{
 					this->NextState(tmDelay);
 				}
-				else if ((this->GetRound() % (int)(gCvars.GetPlayRoundsOvertime()->value / 2.0f)) == 0)
+				else if (this->m_Round[this->m_State] >= 0 && this->m_Round[this->m_State] % ((int)gCvars.GetPlayRoundsOvertime()->value / 2) == 0)
 				{
 					this->NextState(tmDelay);
 				}
