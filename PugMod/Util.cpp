@@ -61,6 +61,7 @@ void CUtil::ServerCommand(const char* Format, ...)
 	Buffer[Length] = 0;
 
 	SERVER_COMMAND(Buffer);
+	SERVER_EXECUTE();
 }
 
 void CUtil::ServerCommandStatic(char* Command)
@@ -68,6 +69,7 @@ void CUtil::ServerCommandStatic(char* Command)
 	if (Command)
 	{
 		SERVER_COMMAND(Command);
+		SERVER_EXECUTE();
 	}
 }
 
