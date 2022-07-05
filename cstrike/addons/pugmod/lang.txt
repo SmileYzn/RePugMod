@@ -726,7 +726,7 @@ bp:"Finalizar partida com placar empatado"
 
 "Match is tied, what you want to do?"
 en:"Match is tied, what you want to do?"
-bp:"O Playar está empatado, o que você deseja fazer?"
+bp:"O Placar está empatado, o que você deseja fazer?"
 
 "Overtime vote started."
 en:"Overtime vote started."
