@@ -6,9 +6,9 @@ void CVoteOvertime::Init()
 {
 	this->m_Data.clear();
 
-	this->m_Data.insert(std::make_pair(0, P_VOTE_OT_ITEM(0, 0, ("Play overtime"))));
-	this->m_Data.insert(std::make_pair(1, P_VOTE_OT_ITEM(1, 0, ("Play sudden death round"))));
-	this->m_Data.insert(std::make_pair(2, P_VOTE_OT_ITEM(2, 0, ("End with tied scores"))));
+	this->m_Data.insert(std::make_pair(0, P_VOTE_OT_ITEM(0, 0, _T("Play overtime"))));
+	this->m_Data.insert(std::make_pair(1, P_VOTE_OT_ITEM(1, 0, _T("Play sudden death round"))));
+	this->m_Data.insert(std::make_pair(2, P_VOTE_OT_ITEM(2, 0, _T("End match with tied scores"))));
 
 	CBasePlayer* Players[MAX_CLIENTS] = { NULL };
 
@@ -22,7 +22,7 @@ void CVoteOvertime::Init()
 		{
 			auto EntityIndex = Player->entindex();
 
-			gMenu[EntityIndex].Create(("Match end tied, what you want to do?"), false, (void*)this->MenuHandle);
+			gMenu[EntityIndex].Create(_T("Match is tied, what you want to do?"), false, (void*)this->MenuHandle);
 
 			for (auto const& [Key, Item] : this->m_Data)
 			{
@@ -33,11 +33,19 @@ void CVoteOvertime::Init()
 		}
 	}
 
-	gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, ("Overtime vote started."));
+	if (g_pGameRules)
+	{
+		if (CSGameRules()->m_bRoundTerminating)
+		{
+			CSGameRules()->m_flRestartRoundTime = gpGlobals->time + gCvars.GetVoteDelay()->value;
+		}
+	}
 
-	gTask.Create(PUG_TASK_VOTE, gCvars.GetVoteDelay()->value, false, (void*)this->Stop);
+	gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("Overtime vote started."));
 
 	gTask.Create(PUG_TASK_LIST, 0.5f, true, (void*)this->List);
+
+	gTask.Create(PUG_TASK_VOTE, gCvars.GetVoteDelay()->value, false, (void*)this->Stop);
 }
 
 void CVoteOvertime::AddVote(int Item, int Vote)
@@ -107,25 +115,24 @@ void CVoteOvertime::Stop()
 		{
 			case 0:
 			{
-				break; // Play overtime
+				gPugMod.SetState(PUG_STATE_OVERTIME);
+				break;
 			}
 			case 1:
 			{
-				break; // Play sudden death round
+				gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("Match will continue in: \3Sudden Death Round."));
+				break;
 			}
 			case 2:
 			{
-				break; // End timed match
+				gPugMod.SetState(PUG_STATE_END);
+				break;
 			}
 		}
-
-		gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, ("The choice of overtime success: \3%d."), Winner.Index);
 	}
 	else
 	{
-		// What to do here.
-
-		gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, ("The choice of overtime failed: \3No votes."));
+		gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("The choice of overtime failed: \3No votes."));
 	}
 }
 
