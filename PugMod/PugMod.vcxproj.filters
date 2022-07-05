@@ -109,6 +109,9 @@
     <Filter Include="PugMod\StatsCmd">
       <UniqueIdentifier>{4539f00d-e16c-4311-8584-feb7413ab4de}</UniqueIdentifier>
     </Filter>
+    <Filter Include="PugMod\Vote\VoteOvertime">
+      <UniqueIdentifier>{371bd1bd-df6e-46a7-8aba-cbc64d9eb475}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ReGameDLL.h">
@@ -210,6 +213,9 @@
     <ClInclude Include="json.hpp">
       <Filter>PugMod</Filter>
     </ClInclude>
+    <ClInclude Include="VoteOvertime.h">
+      <Filter>PugMod\Vote\VoteOvertime</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ReGameDLL.cpp">
@@ -307,6 +313,9 @@
     </ClCompile>
     <ClCompile Include="StatsCmd.cpp">
       <Filter>PugMod\StatsCmd</Filter>
+    </ClCompile>
+    <ClCompile Include="VoteOvertime.cpp">
+      <Filter>PugMod\Vote\VoteOvertime</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -128,6 +128,7 @@
     <ClInclude Include="VoteLevel.h" />
     <ClInclude Include="VoteMap.h" />
     <ClInclude Include="VoteMenu.h" />
+    <ClInclude Include="VoteOvertime.h" />
     <ClInclude Include="VotePause.h" />
     <ClInclude Include="VoteRestart.h" />
     <ClInclude Include="VoteStop.h" />
@@ -165,6 +166,7 @@
     <ClCompile Include="VoteLevel.cpp" />
     <ClCompile Include="VoteMap.cpp" />
     <ClCompile Include="VoteMenu.cpp" />
+    <ClCompile Include="VoteOvertime.cpp" />
     <ClCompile Include="VotePause.cpp" />
     <ClCompile Include="VoteRestart.cpp" />
     <ClCompile Include="VoteStop.cpp" />
