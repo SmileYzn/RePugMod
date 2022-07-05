@@ -1,0 +1,34 @@
+name: Makefile CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+      
+    - name: Install build dependencies
+      run: sudo apt-get install -qq -y build-essential g++ gcc-multilib g++-multilib
+      
+    - name: Run build
+      working-directory: ./PugMod
+      run: make
+    
+    - name: Move files
+      run: |
+        mkdir -p publish/addons/pugmod/dlls
+        mv ./PugMod/Release/pugmod_mm.so publish/addons/pugmod/dlls
+        cp -ar cstrike/. publish
+
+    - name: Deploy artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: linux
+        path: publish/*
