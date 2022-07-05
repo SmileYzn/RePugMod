@@ -615,7 +615,7 @@ void CPugMod::SwapTeams()
 		CSGameRules()->SwapAllPlayers();
 	}
 
-	gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, "Changing teams automatically.");
+	gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("Changing teams automatically."));
 }
 
 void CPugMod::SwapScores()
