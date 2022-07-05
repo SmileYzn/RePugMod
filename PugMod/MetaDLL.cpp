@@ -39,8 +39,6 @@ void DLL_POST_ServerActivate(edict_t* pEdictList, int edictCount, int clientMax)
 
 	gCvars.Load();
 
-	gTranslate.Load();
-
 	gAdmin.Load();
 
 	gCaptain.Clear();
@@ -48,6 +46,8 @@ void DLL_POST_ServerActivate(edict_t* pEdictList, int edictCount, int clientMax)
 	gVoteMap.Load();
 
 	gPugMod.Load();
+
+	gTranslate.Load();
 
 	RETURN_META(MRES_IGNORED);
 }
