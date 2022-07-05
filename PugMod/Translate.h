@@ -9,6 +9,8 @@ class CTranslate
 public:
 	void Load();
 
+	void ReplaceAll(std::string& String, const std::string& From, const std::string& To);
+
 	const char* Get(const char* Text);
 
 private:
