@@ -210,9 +210,6 @@
     <ClInclude Include="StatsCmd.h">
       <Filter>PugMod\StatsCmd</Filter>
     </ClInclude>
-    <ClInclude Include="json.hpp">
-      <Filter>PugMod</Filter>
-    </ClInclude>
     <ClInclude Include="VoteOvertime.h">
       <Filter>PugMod\Vote\VoteOvertime</Filter>
     </ClInclude>
