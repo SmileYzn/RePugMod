@@ -26,8 +26,6 @@ void CKnifeRound::Stop(bool ChangeTeams)
 {
 	this->m_Running = false;
 
-	// TO DO:
-	// Check votes, always is changing teams automatically.
 	if (ChangeTeams)
 	{
 		if ((this->GetVote(this->GetWinner()) < (gPlayer.GetNum(this->GetWinner()) / 2)))
