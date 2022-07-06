@@ -341,14 +341,7 @@ bool CPugMod::StartMatch(CBasePlayer* Player)
 	{
 		gUtil.SayText(NULL, Player->entindex(), _T("\3%s\1 started match."), STRING(Player->edict()->v.netname));
 
-		if (this->m_State == PUG_STATE_HALFTIME)
-		{
-			this->NextState(1.0);
-		}
-		else
-		{
-			this->SetState(PUG_STATE_FIRST_HALF);
-		}
+		this->NextState(1.0);
 
 		return true;
 	}
