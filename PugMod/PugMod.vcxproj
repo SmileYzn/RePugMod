@@ -105,7 +105,6 @@
     <ClInclude Include="Captain.h" />
     <ClInclude Include="Commands.h" />
     <ClInclude Include="Cvars.h" />
-    <ClInclude Include="json.hpp" />
     <ClInclude Include="PlayerStats.h" />
     <ClInclude Include="StatsCmd.h" />
     <ClInclude Include="VoteKick.h" />
