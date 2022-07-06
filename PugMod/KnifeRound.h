@@ -3,7 +3,7 @@
 class CKnifeRound
 {
 public:
-	void Init();
+	void Init(bool ForceKnifeRound = false);
 	void Stop(bool ChangeTeams);
 
 	bool ClientHasRestrictItem(CBasePlayer* Player, ItemID item, ItemRestType type);
