@@ -4,9 +4,7 @@ CKnifeRound gKnifeRound;
 
 void CKnifeRound::Init(bool ForceKnifeRound)
 {
-	// TO DO:
-	// Add Cvar condition to run Knife round, or ForceKnifeRound by vote menu
-	if (ForceKnifeRound) 
+	if (gCvars.GetPlayKnifeRound()->value == 1 || ForceKnifeRound) 
 	{
 		this->m_Running = true;
 

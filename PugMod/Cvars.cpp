@@ -40,6 +40,9 @@ void CCvars::Load()
 	// Maximum of players allowed in game
 	this->m_PlayersMax = this->Register("pug_players_max", "10");
 
+	// Start knife round before match to choose sides
+	this->m_PlayKnifeRound = this->Register("pug_play_knife_round", "1");
+
 	// Rounds to play before start overtime
 	this->m_PlayRounds = this->Register("pug_play_rounds", "30");
 
@@ -170,6 +173,11 @@ cvar_t* CCvars::GetPlayersMin()
 cvar_t* CCvars::GetPlayersMax()
 {
 	return this->m_PlayersMax;
+}
+
+cvar_t* CCvars::GetPlayKnifeRound()
+{
+	return this->m_PlayKnifeRound;
 }
 
 cvar_t* CCvars::GetPlayRounds()
