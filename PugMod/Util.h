@@ -51,9 +51,7 @@ class CUtil
 {
 public:
 	char* VarArgs(const char* Format, ...);
-	void ServerPrint(const char* Format, ...);
 	void ServerCommand(const char* Format, ...);
-	static void ServerCommandStatic(char* Command);
 	void ClientCommand(edict_t* pEntity, const char* Format, ...);
 	void ClientPrint(edict_t* pEntity, int msg_dest, const char* Format, ...);
 	void SayText(edict_t* pEntity, int Sender, const char* Format, ...);
@@ -66,7 +64,6 @@ public:
 	void SetRoundTime(int Time, bool FreezePeriod);
 	void ChangelevelDelay(float Delay,const char* MapName);
 	static void Changelevel(const char* MapName);
-
 };
 
 extern CUtil gUtil;

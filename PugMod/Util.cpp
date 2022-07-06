@@ -17,29 +17,6 @@ char* CUtil::VarArgs(const char* Format, ...)
 	return VarArgs;
 }
 
-void CUtil::ServerPrint(const char* Format, ...)
-{
-	va_list argList;
-
-	va_start(argList, Format);
-
-	char Buffer[255] = { 0 };
-
-	int Length = vsnprintf(Buffer, sizeof(Buffer), Format, argList);
-
-	va_end(argList);
-
-	if (Length > 254)
-	{
-		Length = 254;
-	}
-
-	Buffer[Length++] = '\n';
-	Buffer[Length] = 0;
-
-	SERVER_PRINT(Buffer);
-}
-
 void CUtil::ServerCommand(const char* Format, ...)
 {
 	va_list argList;
@@ -62,15 +39,6 @@ void CUtil::ServerCommand(const char* Format, ...)
 
 	SERVER_COMMAND(Buffer);
 	SERVER_EXECUTE();
-}
-
-void CUtil::ServerCommandStatic(char* Command)
-{
-	if (Command)
-	{
-		SERVER_COMMAND(Command);
-		SERVER_EXECUTE();
-	}
 }
 
 void CUtil::ClientCommand(edict_t* pEntity, const char* Format, ...)
