@@ -2,15 +2,24 @@
 
 CKnifeRound gKnifeRound;
 
-void CKnifeRound::Init()
+void CKnifeRound::Init(bool ForceKnifeRound)
 {
-	this->m_Running = true;
+	if (gCvars.GetPlayKnifeRound()->value == 1 || ForceKnifeRound) 
+	{
+		this->m_Running = true;
 
-	this->m_Winner = UNASSIGNED;
+		this->m_Winner = UNASSIGNED;
 
-	memset(this->m_Votes, 0, sizeof(this->m_Votes));
+		memset(this->m_Votes, 0, sizeof(this->m_Votes));
 
-	gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("Knife Round Starting: \4Get Ready!!"));
+		CVAR_SET_STRING("sv_restart", "3");
+
+		gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("Knife Round Starting: \4Get Ready!!"));
+	}
+	else
+	{
+		gPugMod.NextState(3.0f);
+	}
 }
 
 void CKnifeRound::Stop(bool ChangeTeams)
@@ -35,6 +44,8 @@ void CKnifeRound::Stop(bool ChangeTeams)
 	}
 
 	gPugMod.RestarPeriod(NULL);
+
+	gPugMod.NextState(3.0f);
 }
 
 bool CKnifeRound::ClientHasRestrictItem(CBasePlayer* Player, ItemID item, ItemRestType type)

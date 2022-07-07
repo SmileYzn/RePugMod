@@ -190,14 +190,14 @@ void CVoteTeam::SetMode(int GameMode)
 
 			gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("Mixing teams now."));
 
-			gPugMod.NextState(3.0f);
+			gKnifeRound.Init();
 			break;
 		}
 		case 2: // Same Teams
 		{
 			gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("The teams will remain the same."));
 
-			gPugMod.NextState(3.0f);
+			gKnifeRound.Init();
 			break;
 		}
 		case 3: // Skill Balanced
@@ -206,7 +206,7 @@ void CVoteTeam::SetMode(int GameMode)
 
 			gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("Balancing teams by skills."));
 
-			gPugMod.NextState(3.0f);
+			gKnifeRound.Init();
 			break;
 		}
 		case 4: // Swap Teams
@@ -218,14 +218,14 @@ void CVoteTeam::SetMode(int GameMode)
 
 			gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("Swaping teams now."));
 
-			gPugMod.NextState(3.0f);
+			gKnifeRound.Init();
 			break;
 		}
 		case 5: // Knife Round
 		{
-			gKnifeRound.Init();
-
-			gPugMod.NextState(3.0f);
+			gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("The teams will remain the same."));
+			
+			gKnifeRound.Init(true);
 			break;
 		}
 	}

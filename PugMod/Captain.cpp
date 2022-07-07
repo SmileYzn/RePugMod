@@ -57,7 +57,7 @@ void CCaptain::Stop()
 {
 	this->Clear();
 
-	gPugMod.NextState(3.0f);
+	gKnifeRound.Init(true);
 }
 
 void CCaptain::ClientDisconnected(int EntityIndex)

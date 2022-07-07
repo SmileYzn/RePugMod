@@ -12,6 +12,7 @@ public:
 	cvar_t* GetAutoStartDelay();
 	cvar_t* GetPlayersMin();
 	cvar_t* GetPlayersMax();
+	cvar_t* GetPlayKnifeRound();
 	cvar_t* GetPlayRounds();
 	cvar_t* GetPlayRoundsOvertime();
 	cvar_t* GetPlayRoundsOvertimeType();
@@ -47,6 +48,7 @@ private:
 	cvar_t* m_AutoStartDelay;
 	cvar_t* m_PlayersMin;
 	cvar_t* m_PlayersMax;
+	cvar_t* m_PlayKnifeRound;
 	cvar_t* m_PlayRounds;
 	cvar_t* m_PlayRoundsOvertime;
 	cvar_t* m_PlayRoundsOvertimeType;
