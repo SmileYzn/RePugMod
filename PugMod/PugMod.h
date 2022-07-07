@@ -67,6 +67,8 @@ public:
 	int GetRound();
 	int GetScores(int Team);
 
+	void ResetScores();
+
 	TeamName GetWinner();
 	bool GetOvertimeWinner();
 

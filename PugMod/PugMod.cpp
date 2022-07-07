@@ -86,15 +86,11 @@ void CPugMod::SetState(int State)
 
 				gVotePause.Clear();
 
-				gStats.Clear();
-
-				memset(this->m_Round, 0, sizeof(this->m_Round));
-
-				memset(this->m_Score, 0, sizeof(this->m_Score));
+				this->ResetScores();
 
 				if (this->CheckBalanceTeams())
 				{
-					this->LO3("3");
+					this->LO3("1");
 
 					gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("%s started: \3Good Luck & Have Fun!"), this->GetStateName());
 				}
@@ -131,7 +127,7 @@ void CPugMod::SetState(int State)
 
 				if (this->CheckBalanceTeams())
 				{
-					this->LO3("3");
+					this->LO3("1");
 
 					gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("%s started: \3Good Luck & Have Fun!"), this->GetStateName());
 				}
@@ -158,9 +154,11 @@ void CPugMod::SetState(int State)
 
 	if (gCvars.GetConfig(this->m_State))
 	{
-		if (gCvars.GetConfig(this->m_State)->string)
+		const char* File = gCvars.GetConfig(this->m_State)->string;
+
+		if (File)
 		{
-			gUtil.ServerCommand("exec cstrike/addons/pugmod/cfg/%s\n", gCvars.GetConfig(this->m_State)->string);
+			gUtil.ServerCommand("exec cstrike/addons/pugmod/cfg/%s\n", File);
 		}
 	}
 }
@@ -341,15 +339,8 @@ bool CPugMod::StartMatch(CBasePlayer* Player)
 	{
 		gUtil.SayText(NULL, Player->entindex(), _T("\3%s\1 started match."), STRING(Player->edict()->v.netname));
 
-		if (this->m_State == PUG_STATE_HALFTIME)
-		{
-			this->NextState(1.0);
-		}
-		else
-		{
-			this->SetState(PUG_STATE_FIRST_HALF);
-		}
-
+		this->NextState(1.0);
+		
 		return true;
 	}
 	else
@@ -456,6 +447,15 @@ int CPugMod::GetScores(int Team)
 	}
 
 	return Score;
+}
+
+void CPugMod::ResetScores()
+{
+	memset(this->m_Round, 0, sizeof(this->m_Round));
+
+	memset(this->m_Score, 0, sizeof(this->m_Score));
+
+	gStats.Clear();
 }
 
 TeamName CPugMod::GetWinner()
@@ -575,14 +575,15 @@ void CPugMod::LO3(const char* Time)
 
 		CVAR_SET_STRING("sv_restart", Time);
 
-		char Parameter[8] = { 0 };
-
-		snprintf(Parameter, sizeof(Parameter), "%d", (int)(Delay - 1.0f));
-
-		gTask.Create(PUG_TASK_LO3R, (Delay + 1.0f), false, (void*)gPugMod.LO3, Parameter);
+		gTask.Create(PUG_TASK_LO3R, (Delay + 1.0f), false, (void*)gPugMod.LO3, gUtil.VarArgs("%d", (int)(Delay + 1.0f)));
 	}
 	else
 	{
+		if (gPugMod.GetState() == PUG_STATE_FIRST_HALF)
+		{
+
+		}
+
 		gUtil.HudMessage(NULL, gUtil.HudParam(0, 255, 0, -1.0, 0.2, 0, 10.0, 10.0), _T("--- MATCH IS LIVE ---"));
 	}
 }
@@ -607,7 +608,7 @@ void CPugMod::SwapTeams()
 		CSGameRules()->SwapAllPlayers();
 	}
 
-	gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, "Changing teams automatically.");
+	gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("Changing teams automatically."));
 }
 
 void CPugMod::SwapScores()
