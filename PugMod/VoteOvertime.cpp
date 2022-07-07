@@ -37,7 +37,7 @@ void CVoteOvertime::Init()
 	{
 		if (CSGameRules()->m_bRoundTerminating)
 		{
-			CSGameRules()->m_flRestartRoundTime = gpGlobals->time + gCvars.GetVoteDelay()->value;
+			CSGameRules()->m_flRestartRoundTime = (gpGlobals->time + gCvars.GetVoteDelay()->value);
 		}
 	}
 

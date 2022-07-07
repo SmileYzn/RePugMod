@@ -243,7 +243,7 @@ bool ReGameDLL_CBasePlayer_HasRestrictItem(IReGameHook_CBasePlayer_HasRestrictIt
 
 void ReGameDLL_CSGameRules_GiveC4(IReGameHook_CSGameRules_GiveC4* chain)
 {
-	if (gKnifeRound.GiveC4() == false)
+	if (!gKnifeRound.IsRunning())
 	{
 		chain->callNext();
 	}
@@ -299,8 +299,6 @@ void ReGameDLL_CBasePlayer_SetAnimation(IReGameHook_CBasePlayer_SetAnimation* ch
 void ReGameDLL_CSGameRules_RestartRound(IReGameHook_CSGameRules_RestartRound * chain)
 {
 	chain->callNext();
-
-	gKnifeRound.RoundRestart();
 
 	gPugMod.RoundRestart();
 
