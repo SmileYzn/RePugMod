@@ -38,7 +38,6 @@ void CUtil::ServerCommand(const char* Format, ...)
 	Buffer[Length] = 0;
 
 	SERVER_COMMAND(Buffer);
-	SERVER_EXECUTE();
 }
 
 void CUtil::ClientCommand(edict_t* pEntity, const char* Format, ...)
