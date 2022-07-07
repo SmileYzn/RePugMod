@@ -375,7 +375,7 @@ void CUtil::SetRoundTime(int Time, bool FreezePeriod)
 	{
 		if (!CSGameRules()->m_bCompleteReset)
 		{
-			CSGameRules()->m_bFreezePeriod = true;
+			CSGameRules()->m_bFreezePeriod = FreezePeriod;
 			CSGameRules()->m_iRoundTimeSecs = Time;
 			CSGameRules()->m_iIntroRoundTime = Time;
 			CSGameRules()->m_fRoundStartTime = gpGlobals->time;
