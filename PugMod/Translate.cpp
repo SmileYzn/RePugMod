@@ -14,6 +14,8 @@ void CTranslate::Load()
 
 	if (gCvars.GetLanguage()->string)
 	{
+		SERVER_EXECUTE();
+
 		Language = gCvars.GetLanguage()->string;
 	}
 
