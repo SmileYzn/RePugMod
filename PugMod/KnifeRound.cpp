@@ -55,61 +55,60 @@ bool CKnifeRound::ClientHasRestrictItem(CBasePlayer* Player, ItemID item, ItemRe
 	return false;
 }
 
-bool CKnifeRound::GiveC4()
+bool CKnifeRound::IsRunning()
 {
 	return this->m_Running;
 }
 
-void CKnifeRound::RoundRestart()
+void CKnifeRound::StartVote(TeamName Winner)
 {
 	if (this->m_Running)
 	{
-		if (g_pGameRules)
+		if (Winner != UNASSIGNED)
 		{
-			if (CSGameRules()->m_bCompleteReset == false)
+			this->m_Winner = Winner;
+
+			CBasePlayer* Players[MAX_CLIENTS] = { NULL };
+
+			int Num = gPlayer.GetList(Players, this->m_Winner);
+
+			for (int i = 0; i < Num; i++)
 			{
-				if (this->m_Winner != UNASSIGNED)
+				auto Player = Players[i];
+
+				if (Player)
 				{
-					CBasePlayer* Players[MAX_CLIENTS] = { NULL };
-
-					int Num = gPlayer.GetList(Players, this->m_Winner);
-
-					for (int i = 0; i < Num; i++)
+					if (!Player->IsBot())
 					{
-						auto Player = Players[i];
+						auto EntityIndex = Player->entindex();
 
-						if (Player)
-						{
-							if (!Player->IsBot())
-							{
-								auto EntityIndex = Player->entindex();
+						gMenu[EntityIndex].Create(_T("Select Starting Side:"), false, (void*)this->MenuHandle);
 
-								gMenu[EntityIndex].Create(_T("Select Starting Side:"), false, (void*)this->MenuHandle);
+						gMenu[EntityIndex].AddItem(1, _T("Terrorists"));
+						gMenu[EntityIndex].AddItem(2, _T("Counter-Terrorists"));
 
-								gMenu[EntityIndex].AddItem(1, _T("Terrorists"));
-								gMenu[EntityIndex].AddItem(2, _T("Counter-Terrorists"));
-
-								gMenu[EntityIndex].Show(EntityIndex);
-							}
-							else
-							{
-								this->AddVote((Player->m_iTeam == TERRORIST ? CT : TERRORIST));
-							}
-						}
-					}
-
-					if ((gKnifeRound.GetVote(TERRORIST) + gKnifeRound.GetVote(CT)) >= gPlayer.GetNum(gKnifeRound.GetWinner()))
-					{
-						gKnifeRound.VoteEnd();
+						gMenu[EntityIndex].Show(EntityIndex);
 					}
 					else
 					{
-						gTask.Create(PUG_TASK_VOTE, gCvars.GetVoteDelay()->value, false, (void*)this->VoteEnd);
-
-						gTask.Create(PUG_TASK_LIST, 0.5f, true, (void*)this->List);
+						this->AddVote((Player->m_iTeam == TERRORIST ? CT : TERRORIST));
 					}
 				}
 			}
+
+			if (g_pGameRules)
+			{
+				if (CSGameRules()->m_bRoundTerminating)
+				{
+					CSGameRules()->m_flRestartRoundTime = (gpGlobals->time + gCvars.GetVoteDelay()->value);
+				}
+			}
+
+			gTask.Create(PUG_TASK_VOTE, gCvars.GetVoteDelay()->value, false, (void*)this->VoteEnd);
+
+			gTask.Create(PUG_TASK_LIST, 0.5f, true, (void*)this->List);
+
+			gUtil.SayText(NULL, (Winner == TERRORIST) ? PRINT_TEAM_RED : PRINT_TEAM_BLUE, _T("\3%s\1 Won: The \3%s\1 team will decide the starting side."), PUG_MOD_TEAM_STR[Winner], PUG_MOD_TEAM_STR[Winner]);
 		}
 	}
 }
@@ -122,20 +121,14 @@ void CKnifeRound::RoundEnd(int winStatus, ScenarioEventEndRound event, float tmD
 		{
 			if (winStatus == WINSTATUS_TERRORISTS && event == ROUND_TERRORISTS_WIN)
 			{
-				this->m_Winner = TERRORIST;
-
-				gUtil.SayText(NULL, PRINT_TEAM_RED, _T("\3%s\1 Won: The \3%s\1 team will decide the starting side."), PUG_MOD_TEAM_STR[this->m_Winner], PUG_MOD_TEAM_STR[this->m_Winner]);
+				this->StartVote(TERRORIST);
 			}
 			else if (winStatus == WINSTATUS_CTS && event == ROUND_CTS_WIN)
 			{
-				this->m_Winner = CT;
-
-				gUtil.SayText(NULL, PRINT_TEAM_BLUE, _T("\3%s\1 Won: The \3%s\1 team will decide the starting side."), PUG_MOD_TEAM_STR[this->m_Winner], PUG_MOD_TEAM_STR[this->m_Winner]);
+				this->StartVote(CT);
 			}
 			else
 			{
-				this->m_Winner = UNASSIGNED;
-
 				gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("Knife Round Failed: \3No clear winner by extermination."));
 
 				if (!gCvars.GetKnifeRoundEndType()->value)

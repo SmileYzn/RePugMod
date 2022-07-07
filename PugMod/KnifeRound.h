@@ -7,9 +7,9 @@ public:
 	void Stop(bool ChangeTeams);
 
 	bool ClientHasRestrictItem(CBasePlayer* Player, ItemID item, ItemRestType type);
-	bool GiveC4();
+	bool IsRunning();
 
-	void RoundRestart();
+	void StartVote(TeamName Winner);
 	void RoundEnd(int winStatus, ScenarioEventEndRound event, float tmDelay);
 
 	static void List();
