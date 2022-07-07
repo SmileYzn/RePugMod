@@ -86,8 +86,6 @@ void CPugMod::SetState(int State)
 
 				gVotePause.Clear();
 
-				this->ResetScores();
-
 				if (this->CheckBalanceTeams())
 				{
 					this->LO3("1");
@@ -451,11 +449,14 @@ int CPugMod::GetScores(int Team)
 
 void CPugMod::ResetScores()
 {
-	memset(this->m_Round, 0, sizeof(this->m_Round));
+	if (this->m_State == PUG_STATE_FIRST_HALF)
+	{
+		memset(this->m_Round, 0, sizeof(this->m_Round));
 
-	memset(this->m_Score, 0, sizeof(this->m_Score));
+		memset(this->m_Score, 0, sizeof(this->m_Score));
 
-	gStats.Clear();
+		gStats.Clear();
+	}
 }
 
 TeamName CPugMod::GetWinner()
@@ -579,10 +580,7 @@ void CPugMod::LO3(const char* Time)
 	}
 	else
 	{
-		if (gPugMod.GetState() == PUG_STATE_FIRST_HALF)
-		{
-
-		}
+		gPugMod.ResetScores();
 
 		gUtil.HudMessage(NULL, gUtil.HudParam(0, 255, 0, -1.0, 0.2, 0, 10.0, 10.0), _T("--- MATCH IS LIVE ---"));
 	}
