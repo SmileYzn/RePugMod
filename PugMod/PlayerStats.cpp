@@ -43,7 +43,5 @@ void CPlayerStats::Clear()
 
 bool CPlayerStats::Store(edict_t* pEdict)
 {
-
-
 	return false;
 }
