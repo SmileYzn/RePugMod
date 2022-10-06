@@ -13,7 +13,7 @@ OPT_FLAGS = -O3 -s -msse3 -flto -funroll-loops -fomit-frame-pointer -fno-stack-p
 
 INCLUDE = -I. -I$(CSSDK)/common -I$(CSSDK)/dlls -I$(CSSDK)/engine -I$(CSSDK)/game_shared -I$(CSSDK)/pm_shared -I$(CSSDK)/public -I$(METAMOD)
 
-CFLAGS = $(OPT_FLAGS) -g -DNDEBUG -Dlinux -D__linux__ -D__USE_GNU -std=c++17 -m32 -shared
+CFLAGS = $(OPT_FLAGS) -g -DNDEBUG -Dlinux -D__linux__ -D__USE_GNU -std=c++17 -m32 -static-libstdc++
 
 BIN_DIR = Release
 
