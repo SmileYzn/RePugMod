@@ -119,15 +119,17 @@ void CReady::List()
 	{
 		int Needed = ((int)gCvars.GetPlayersMin()->value - gPlayer.GetNum());
 
+		time_t CurrentTime = time(NULL);
+
 		if (Needed)
 		{
-			gReady.SetSystemTime(time(NULL));
+			gReady.SetSystemTime(CurrentTime);
 
 			gUtil.HudMessage(NULL, gUtil.HudParam(0, 255, 0, -1.0, 0.2, 0, 0.53, 0.53), "%s\n%d %s", _T("Warmup"), Needed, _T("Player(s) Left"));
 		}
 		else
 		{
-			time_t RemainTime = (time_t)((int)gCvars.GetReadyTime()->value - (time(NULL) - gReady.GetSystemTime()));
+			time_t RemainTime = (time_t)((time_t)gCvars.GetReadyTime()->value - (CurrentTime - gReady.GetSystemTime()));
 
 			if (RemainTime > 0)
 			{
