@@ -27,9 +27,9 @@ void CVoteTeam::Init()
 
 			gMenu[EntityIndex].Create(_T("Game Mode:"), false, (void*)this->MenuHandle);
 
-			for (auto const& [Key, Item] : this->m_Data)
+			for (auto const& Item : this->m_Data)
 			{
-				gMenu[EntityIndex].AddItem(Key, Item.Name);
+				gMenu[EntityIndex].AddItem(Item.first, Item.second.Name);
 			}
 
 			gMenu[EntityIndex].Show(EntityIndex);
@@ -120,15 +120,15 @@ void CVoteTeam::List()
 {
 	std::string VoteList;
 
-	for (auto const& [Key, Item] : gVoteTeam.GetVote())
+	for (auto const& Item : gVoteTeam.GetVote())
 	{
-		if (Item.Votes > 0)
+		if (Item.second.Votes > 0)
 		{
-			VoteList += Item.Name;
+			VoteList += Item.second.Name;
 			VoteList += " - ";
-			VoteList += std::to_string(Item.Votes);
+			VoteList += std::to_string(Item.second.Votes);
 			VoteList += " ";
-			VoteList += (Item.Votes > 1) ? _T("votes") : _T("vote");
+			VoteList += (Item.second.Votes > 1) ? _T("votes") : _T("vote");
 			VoteList += "\n";
 		}
 	}
@@ -142,9 +142,9 @@ int CVoteTeam::GetCount()
 {
 	int Count = 0;
 
-	for (auto const& [Key, Item] : this->m_Data)
+	for (auto const& Item : this->m_Data)
 	{
-		Count += Item.Votes;
+		Count += Item.second.Votes;
 	}
 
 	return Count;
@@ -155,19 +155,19 @@ P_VOTE_TEAM_ITEM CVoteTeam::GetWinner()
 	int Winner = 0;
 	int WinnerVotes = 0;
 
-	for (auto const& [Key, Item] : this->m_Data)
+	for (auto const& Item : this->m_Data)
 	{
-		if (Item.Votes > WinnerVotes)
+		if (Item.second.Votes > WinnerVotes)
 		{
-			Winner = Key;
-			WinnerVotes = Item.Votes;
+			Winner = Item.first;
+			WinnerVotes = Item.second.Votes;
 		}
-		else if (Item.Votes == WinnerVotes)
+		else if (Item.second.Votes == WinnerVotes)
 		{
 			if (RANDOM_LONG(0, 1))
 			{
-				Winner = Key;
-				WinnerVotes = Item.Votes;
+				Winner = Item.first;
+				WinnerVotes = Item.second.Votes;
 			}
 		}
 	}

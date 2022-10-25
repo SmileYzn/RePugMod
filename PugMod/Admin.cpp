@@ -239,22 +239,18 @@ void CAdmin::MenuBanHandle(int EntityIndex, P_MENU_ITEM Item)
 
 			gMenu[EntityIndex].Create(Title, true, (void*)gAdmin.MenuBanHandleExtra);
 
-			std::string BanTimes("0 5 10 15 30 45 60 120");
+			char* BanTime = strtok("0 5 10 15 30 45 60 120", " ");
 
 			if (gCvars.GetBanTimes()->string)
 			{
-				BanTimes = gCvars.GetBanTimes()->string;
+				BanTime = strtok(gCvars.GetBanTimes()->string, " ");
 			}
 
-			std::stringstream BanStream(BanTimes);
-
-			std::vector<int> BanTimeList;
-
-			std::copy(std::istream_iterator<int>(BanStream), std::istream_iterator<int>(), std::back_inserter(BanTimeList));
-
-			for (auto const& Time : BanTimeList)
+			while (BanTime != NULL)
 			{
-				gMenu[EntityIndex].AddItem(Target->entindex(), gTimeFormat.GetTimeLength(Time, TimeUnitType::TIMEUNIT_MINUTES), false, Time);
+				gMenu[EntityIndex].AddItem(Target->entindex(), gTimeFormat.GetTimeLength(atoi(BanTime), TimeUnitType::TIMEUNIT_MINUTES), false, atoi(BanTime));
+				//
+				BanTime = strtok(NULL, " ");
 			}
 		}
 	}

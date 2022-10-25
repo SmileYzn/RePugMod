@@ -24,9 +24,9 @@ void CVoteOvertime::Init()
 
 			gMenu[EntityIndex].Create(_T("Match is tied, what you want to do?"), false, (void*)this->MenuHandle);
 
-			for (auto const& [Key, Item] : this->m_Data)
+			for (auto const& Item : this->m_Data)
 			{
-				gMenu[EntityIndex].AddItem(Key, Item.Name);
+				gMenu[EntityIndex].AddItem(Item.first, Item.second.Name);
 			}
 
 			gMenu[EntityIndex].Show(EntityIndex);
@@ -140,15 +140,15 @@ void CVoteOvertime::List()
 {
 	std::string VoteList;
 
-	for (auto const& [Key, Item] : gVoteOvertime.GetVote())
+	for (auto const& Item : gVoteOvertime.GetVote())
 	{
-		if (Item.Votes > 0)
+		if (Item.second.Votes > 0)
 		{
-			VoteList += Item.Name;
+			VoteList += Item.second.Name;
 			VoteList += " - ";
-			VoteList += std::to_string(Item.Votes);
+			VoteList += std::to_string(Item.second.Votes);
 			VoteList += " ";
-			VoteList += (Item.Votes > 1) ? _T("votes") : _T("vote");
+			VoteList += (Item.second.Votes > 1) ? _T("votes") : _T("vote");
 			VoteList += "\n";
 		}
 	}
@@ -162,9 +162,9 @@ int CVoteOvertime::GetCount()
 {
 	int Count = 0;
 
-	for (auto const& [Key, Item] : this->m_Data)
+	for (auto const& Item : this->m_Data)
 	{
-		Count += Item.Votes;
+		Count += Item.second.Votes;
 	}
 
 	return Count;
@@ -175,19 +175,19 @@ P_VOTE_OT_ITEM CVoteOvertime::GetWinner()
 	int Winner = 0;
 	int WinnerVotes = 0;
 
-	for (auto const& [Key, Item] : this->m_Data)
+	for (auto const& Item : this->m_Data)
 	{
-		if (Item.Votes > WinnerVotes)
+		if (Item.second.Votes > WinnerVotes)
 		{
-			Winner = Key;
-			WinnerVotes = Item.Votes;
+			Winner = Item.first;
+			WinnerVotes = Item.second.Votes;
 		}
-		else if (Item.Votes == WinnerVotes)
+		else if (Item.second.Votes == WinnerVotes)
 		{
 			if (RANDOM_LONG(0, 1))
 			{
-				Winner = Key;
-				WinnerVotes = Item.Votes;
+				Winner = Item.first;
+				WinnerVotes = Item.second.Votes;
 			}
 		}
 	}
