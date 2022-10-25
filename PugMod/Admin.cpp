@@ -239,17 +239,23 @@ void CAdmin::MenuBanHandle(int EntityIndex, P_MENU_ITEM Item)
 
 			gMenu[EntityIndex].Create(Title, true, (void*)gAdmin.MenuBanHandleExtra);
 
-			char* BanTime = strtok("0 5 10 15 30 45 60 120", " ");
+			char* BanTime = NULL;
 
 			if (gCvars.GetBanTimes()->string)
 			{
 				BanTime = strtok(gCvars.GetBanTimes()->string, " ");
 			}
+			else
+			{
+				char TimeString[32] = "0 5 10 15 30 45 60 120";
+
+				char* BanTime = strtok(TimesString, " ");
+			}
 
 			while (BanTime != NULL)
 			{
 				gMenu[EntityIndex].AddItem(Target->entindex(), gTimeFormat.GetTimeLength(atoi(BanTime), TimeUnitType::TIMEUNIT_MINUTES), false, atoi(BanTime));
-				//
+
 				BanTime = strtok(NULL, " ");
 			}
 		}
