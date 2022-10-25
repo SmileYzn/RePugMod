@@ -27,7 +27,7 @@ int CPlayer::GetList(CBasePlayer* Players[MAX_CLIENTS], bool InGameOnly)
 
 		if (Player)
 		{
-			if (!FNullEnt(Player->edict()))
+			if (!FNullEnt(Player->edict()) && GETPLAYERUSERID(Player->edict()) > 0)
 			{
 				if (InGameOnly)
 				{
@@ -59,7 +59,7 @@ int CPlayer::GetList(CBasePlayer* Players[MAX_CLIENTS], TeamName Team)
 
 		if (Player)
 		{
-			if (!FNullEnt(Player->edict()))
+			if (!FNullEnt(Player->edict()) && GETPLAYERUSERID(Player->edict()) > 0)
 			{
 				if (Player->m_iTeam == Team)
 				{
@@ -82,16 +82,18 @@ int CPlayer::GetNum(bool CountBots, int & InGame, int & NumTerrorist, int & NumC
 
 		if (Player)
 		{
-			if (CountBots == false)
+			if (!FNullEnt(Player->edict()) && GETPLAYERUSERID(Player->edict()) > 0)
 			{
-				if (Player->IsBot())
+				if (CountBots == false)
 				{
-					continue;
+					if (Player->IsBot())
+					{
+						continue;
+					}
 				}
-			}
 
-			switch (Player->m_iTeam)
-			{
+				switch (Player->m_iTeam)
+				{
 				case TERRORIST:
 				{
 					NumTerrorist++;
@@ -106,6 +108,7 @@ int CPlayer::GetNum(bool CountBots, int & InGame, int & NumTerrorist, int & NumC
 				{
 					NumSpectator++;
 					break;
+				}
 				}
 			}
 		}
@@ -169,15 +172,18 @@ int CPlayer::GetNum(int& NumAliveTerrorists, int& NumAliveCT)
 
 		if (Player)
 		{
-			if (Player->IsAlive())
+			if (!FNullEnt(Player->edict()) && GETPLAYERUSERID(Player->edict()) > 0)
 			{
-				if (Player->m_iTeam == TERRORIST)
+				if (Player->IsAlive())
 				{
-					NumAliveTerrorists++;
-				}
-				else if (Player->m_iTeam == CT)
-				{
-					NumAliveCT++;
+					if (Player->m_iTeam == TERRORIST)
+					{
+						NumAliveTerrorists++;
+					}
+					else if (Player->m_iTeam == CT)
+					{
+						NumAliveCT++;
+					}
 				}
 			}
 		}
@@ -235,7 +241,7 @@ void CPlayer::DropClient(int EntityIndex, const char* Format, ...)
 
 			if (Player)
 			{
-				if(Player->edict())
+				if (!FNullEnt(Player->edict()) && GETPLAYERUSERID(Player->edict()) > 0)
 				{
 					if (strlen(Buffer) > 0)
 					{
@@ -258,7 +264,7 @@ void CPlayer::BanClient(int EntityIndex, int Time, bool Kick)
 
 	if (Player)
 	{
-		if (Player->edict())
+		if (!FNullEnt(Player->edict()) && GETPLAYERUSERID(Player->edict()) > 0)
 		{
 			if (Kick)
 			{

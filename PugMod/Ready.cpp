@@ -63,13 +63,18 @@ void CReady::ClientGetIntoGame(CBasePlayer* Player)
 	}
 }
 
+void CReady::ClientDisconnected(int EntityIndex)
+{
+	this->m_Ready[EntityIndex] = 0;
+}
+
 void CReady::List()
 {
 	if (gCvars.GetReadyType()->value)
 	{
 		std::string PlayerList[2];
 
-		int  PlayerCount[2] = { 0 };
+		int PlayerCount[2] = { 0 };
 
 		CBasePlayer* Players[MAX_CLIENTS] = { NULL };
 

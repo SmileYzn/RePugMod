@@ -8,6 +8,7 @@ public:
 	void Toggle(CBasePlayer* Player);
 
 	void ClientGetIntoGame(CBasePlayer* Player);
+	void ClientDisconnected(int EntityIndex);
 
 	static void List();
 
