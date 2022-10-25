@@ -123,7 +123,7 @@ void CReady::List()
 		{
 			gReady.SetSystemTime(time(NULL));
 
-			gUtil.HudMessage(NULL, gUtil.HudParam(0, 255, 0, -1.0, 0.2, 0, 0.53, 0.53), _T("Warmup\n%d Player(s) Left"), Needed);
+			gUtil.HudMessage(NULL, gUtil.HudParam(0, 255, 0, -1.0, 0.2, 0, 0.53, 0.53), "%s\n%d %s", _T("Warmup"), Needed, _T("Player(s) Left"));
 		}
 		else
 		{
@@ -160,7 +160,7 @@ void CReady::Ready(CBasePlayer* Player)
 	{
 		auto EntityIndex = Player->entindex();
 
-		if (!this->m_Ready[EntityIndex])
+		if (!this->m_Ready[EntityIndex] && gCvars.GetReadyType()->value)
 		{
 			if (Player->m_iTeam == TERRORIST || Player->m_iTeam == CT)
 			{
@@ -182,7 +182,7 @@ void CReady::NotReady(CBasePlayer* Player)
 	{
 		auto EntityIndex = Player->entindex();
 
-		if (this->m_Ready[EntityIndex])
+		if (this->m_Ready[EntityIndex] && gCvars.GetReadyType()->value)
 		{
 			if (Player->m_iTeam == TERRORIST || Player->m_iTeam == CT)
 			{

@@ -356,9 +356,9 @@ bp:"Aquecendo (%d de %d):"
 en:"Ready (%d of %d):"
 bp:"Prontos (%d de %d):"
 
-"Warmup\n%d Player(s) Left"
-en:"Warmup\n%d Player(s) Left"
-bp:"Aquecimento\n%d Jogadores(s) Para Entrar"
+"Player(s) Left"
+en:"Player(s) Left"
+bp:"Jogadores(s) Para Entrar"
 
 "Starting Match\n%M:%S"
 en:"Starting Match\n%M:%S"
