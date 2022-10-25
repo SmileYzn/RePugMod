@@ -241,15 +241,17 @@ void CAdmin::MenuBanHandle(int EntityIndex, P_MENU_ITEM Item)
 
 			char* BanTime = NULL;
 
+			const char Token[2] = " ";
+
 			if (gCvars.GetBanTimes()->string)
 			{
-				BanTime = strtok(gCvars.GetBanTimes()->string, " ");
+				BanTime = strtok(gCvars.GetBanTimes()->string, Token);
 			}
 			else
 			{
-				char TimeString[32] = "0 5 10 15 30 45 60 120";
-
-				char* BanTime = strtok(TimesString, " ");
+				char Temp[32] = "0 5 10 15 30 45 60 120";
+				
+				BanTime = strtok(Temp, Token);
 			}
 
 			while (BanTime != NULL)
