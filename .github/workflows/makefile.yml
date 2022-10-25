@@ -27,11 +27,11 @@ jobs:
 
     - name: Install Intel One API
       run: |
-        sudo apt-get install -y intel-oneapi-common-vars
-        sudo apt-get install -y intel-oneapi-compiler-fortran
-        sudo apt-get install -y intel-oneapi-mkl
-        sudo apt-get install -y intel-oneapi-mpi
-        sudo apt-get install -y intel-oneapi-mpi-devel
+        sudo apt-get install -qq -y intel-oneapi-common-vars
+        sudo apt-get install -qq -y intel-oneapi-compiler-fortran
+        sudo apt-get install -qq -y intel-oneapi-mkl
+        sudo apt-get install -qq -y intel-oneapi-mpi
+        sudo apt-get install -qq -y intel-oneapi-mpi-devel
 
     - name: Run build
       working-directory: ./PugMod
