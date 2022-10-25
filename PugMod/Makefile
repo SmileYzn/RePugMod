@@ -7,7 +7,7 @@ COMPILER = g++
 
 OBJECTS = *.cpp
 
-LINK = 
+LINK = -nostartfiles
 
 OPT_FLAGS = -g0 -O3 -s -msse3 -flto -fno-stack-protector
 
