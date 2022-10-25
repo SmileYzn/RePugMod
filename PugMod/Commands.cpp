@@ -17,12 +17,9 @@ bool CCommands::ClientCommand(CBasePlayer* Player, const char* pcmd, const char*
 			{
 				if (auto pCmdArgs{ CMD_ARGS() })
 				{
-					if (auto pCmdArgs{ CMD_ARGS() })
-					{
-						gUtil.ClientCommand(Player->edict(), "%s", pCmdArgs);
+					gUtil.ClientCommand(Player->edict(), "%s", pCmdArgs);
 
-						return true;
-					}
+					return true;
 				}
 			}
 		}
