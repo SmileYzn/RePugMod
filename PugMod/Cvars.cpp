@@ -264,7 +264,7 @@ cvar_t* CCvars::GetReadyType()
 
 cvar_t* CCvars::GetReadyTime()
 {
-	return this->m_ReadyType;
+	return this->m_ReadyTime;
 }
 
 cvar_t* CCvars::GetShowScoreType()
