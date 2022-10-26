@@ -752,25 +752,31 @@ void CPugMod::RoundEnd(int winStatus, ScenarioEventEndRound event, float tmDelay
 	{
 		if (winStatus != WINSTATUS_NONE)
 		{
-			if (winStatus == WINSTATUS_TERRORISTS)
+			if (g_pGameRules)
 			{
-				this->m_Round[this->m_State]++;
+				if (CSGameRules()->m_bGameStarted && !CSGameRules()->m_bCompleteReset && !CSGameRules()->m_bFreezePeriod)
+				{
+					if (winStatus == WINSTATUS_TERRORISTS)
+					{
+						this->m_Round[this->m_State]++;
 
-				this->m_Score[this->m_State][TERRORIST]++;
+						this->m_Score[this->m_State][TERRORIST]++;
 
-				gUtil.ClientPrint(NULL, PRINT_CONSOLE, _T("* Round %d won by: %s"), this->GetRound(), PUG_MOD_TEAM_STR[TERRORIST]);
-			}
-			else if (winStatus == WINSTATUS_CTS)
-			{
-				this->m_Round[this->m_State]++;
+						gUtil.ClientPrint(NULL, PRINT_CONSOLE, _T("* Round %d won by: %s"), this->GetRound(), PUG_MOD_TEAM_STR[TERRORIST]);
+					}
+					else if (winStatus == WINSTATUS_CTS)
+					{
+						this->m_Round[this->m_State]++;
 
-				this->m_Score[this->m_State][CT]++;
+						this->m_Score[this->m_State][CT]++;
 
-				gUtil.ClientPrint(NULL, PRINT_CONSOLE, _T("* Round %d won by: %s"), this->GetRound(), PUG_MOD_TEAM_STR[CT]);
-			}
-			else if (winStatus == WINSTATUS_DRAW)
-			{
-				gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("Round %d draw: No clear winner."), this->GetRound());
+						gUtil.ClientPrint(NULL, PRINT_CONSOLE, _T("* Round %d won by: %s"), this->GetRound(), PUG_MOD_TEAM_STR[CT]);
+					}
+					else if (winStatus == WINSTATUS_DRAW)
+					{
+						gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("Round %d draw: No clear winner."), this->GetRound());
+					}
+				}
 			}
 
 			if (this->m_State == PUG_STATE_FIRST_HALF)
