@@ -7,9 +7,9 @@ COMPILER = g++
 
 OBJECTS = *.cpp
 
-LINK = -static-libgcc -static-libstdc++
+LINK = 
 
-OPT_FLAGS = -g0 -O3 -s -msse3 -flto -funroll-loops -fomit-frame-pointer -fno-stack-protector
+OPT_FLAGS = -g0 -Wl -O3 --strip-all -msse3 -flto -funroll-loops -fomit-frame-pointer -fno-stack-protector
 
 INCLUDE = -I. -I$(CSSDK)/common -I$(CSSDK)/dlls -I$(CSSDK)/engine -I$(CSSDK)/game_shared -I$(CSSDK)/pm_shared -I$(CSSDK)/public -I$(METAMOD)
 
