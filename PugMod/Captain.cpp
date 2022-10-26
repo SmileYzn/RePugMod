@@ -18,7 +18,7 @@ void CCaptain::Init()
 {
 	this->Clear();
 
-	if (gPlayer.GetNum() >= (int)(gCvars.GetPlayersMin()->value / 2))
+	if (gPlayer.GetNum() > 5)
 	{
 		CBasePlayer* Players[MAX_CLIENTS] = { NULL };
 
