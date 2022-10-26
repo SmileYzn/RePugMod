@@ -26,7 +26,9 @@ char* CPugMod::GetStateName()
 {
 	static char Name[32] = { 0 };
 
-	strcpy(Name, _T(PUG_MOD_STATES_STR[this->m_State]));
+	strcpy(Name, PUG_MOD_STATES_STR[this->m_State]);
+
+	strcpy(Name, _T(Name));
 
 	return Name;
 }

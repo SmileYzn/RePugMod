@@ -59,9 +59,9 @@ void CTranslate::ReplaceAll(std::string& String, const std::string& From, const 
 	}
 }
 
-const char* CTranslate::Get(const char* Text)
+const char* CTranslate::Get(char* Text)
 {
-	if (Text)
+	if (Text && Text[0u] != '\0')
 	{
 		auto it = this->m_Data.find(Text);
 
@@ -72,8 +72,6 @@ const char* CTranslate::Get(const char* Text)
 				return it->second.c_str();
 			}
 		}
-
-		gUtil.ServerCommand("echo String not Found: %s");
 	}
 
 	return Text;

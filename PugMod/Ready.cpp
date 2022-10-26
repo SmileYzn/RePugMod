@@ -148,7 +148,7 @@ void CReady::List()
 			{
 				gReady.Unload();
 
-				gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("All playres are in teams and ready!"));
+				gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("All players are in teams and ready!"));
 
 				gPugMod.NextState(0);
 			}

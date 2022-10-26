@@ -11,7 +11,7 @@ public:
 
 	void ReplaceAll(std::string& String, const std::string& From, const std::string& To);
 
-	const char* Get(const char* Text);
+	const char* Get(char* Text);
 
 private:
 	std::map<std::string, std::string> m_Data;
