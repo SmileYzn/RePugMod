@@ -7,13 +7,13 @@ COMPILER = g++
 
 OBJECTS = *.cpp
 
-LINK =
+LINK = -static-libstdc++
 
-OPT_FLAGS = -g0 -Wl -O3 --strip-all -msse3 -flto -funroll-loops -fomit-frame-pointer -fno-stack-protector
+OPT_FLAGS = -g0 -O3 -s -msse3 -flto -funroll-loops -fomit-frame-pointer -fno-stack-protector
 
 INCLUDE = -I. -I$(CSSDK)/common -I$(CSSDK)/dlls -I$(CSSDK)/engine -I$(CSSDK)/game_shared -I$(CSSDK)/pm_shared -I$(CSSDK)/public -I$(METAMOD)
 
-CFLAGS = $(OPT_FLAGS) -g -DNDEBUG -Dlinux -D__linux__ -D__USE_GNU -std=gnu++14 -m32 -shared
+CFLAGS = $(OPT_FLAGS) -g -DNDEBUG -Dlinux -D__linux__ -D__USE_GNU -std=gnu++14 -m32 -msse -msse2 -msse3 -mssse3 -mmmx -shared
 
 BIN_DIR = Release
 
