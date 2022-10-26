@@ -240,7 +240,7 @@ bp:"\3(%s)\1: %s"
 
 "Usage: !msg \3<Text Message>\1"
 en:"Usage: !msg \3<Text Message>\1"
-bp:""
+bp:"Uso: !msg \3<Mensagem>\1"
 
 "\3Command Send\1: %s"
 en:"\3Command Send\1: %s"
@@ -358,9 +358,9 @@ bp:"Prontos (%d de %d):"
 en:"Player(s) Left"
 bp:"Jogadores(s) Para Entrar"
 
-"Starting Match: %M:%S"
-en:"Starting Match: %M:%S"
-bp:"Iniciando Partida: %M:%S"
+"Starting Match"
+en:"Starting Match"
+bp:"Iniciando Partida"
 
 "All playres are in teams and ready"
 en:"All playres are in teams and ready"
