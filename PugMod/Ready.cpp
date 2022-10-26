@@ -139,9 +139,9 @@ void CReady::List()
 				{
 					char Time[32] = { 0 };
 
-					strftime(Time, sizeof(Time), _T("Starting Match\n%M:%S"), tm_info);
+					strftime(Time, sizeof(Time), "%M:%S", tm_info);
 
-					gUtil.HudMessage(NULL, gUtil.HudParam(0, 255, 0, -1.0, 0.2, 0, 0.53, 0.53), Time);
+					gUtil.HudMessage(NULL, gUtil.HudParam(0, 255, 0, -1.0, 0.2, 0, 0.53, 0.53), "%s\n%s", _T("Starting Match"), Time);
 				}
 			}
 			else

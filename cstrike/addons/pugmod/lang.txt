@@ -318,9 +318,9 @@ bp:"O Round Faca Falhou: \3Nenhum vencedor por eliminação."
 en:"Starting Side (%d):"
 bp:"Time Inicial (%d):"
 
-"No votes."
-en:"No votes."
-bp:"Nenhum Voto."
+"No votes"
+en:"No votes"
+bp:"Nenhum Voto"
 
 "Say \4.ready\1 to continue."
 en:"Say \4.ready\1 to continue."
@@ -358,9 +358,9 @@ bp:"Prontos (%d de %d):"
 en:"Player(s) Left"
 bp:"Jogadores(s) Para Entrar"
 
-"Starting Match\n%M:%S"
-en:"Starting Match\n%M:%S"
-bp:"Iniciando Partida em\n%M:%S
+"Starting Match: %M:%S"
+en:"Starting Match: %M:%S"
+bp:"Iniciando Partida: %M:%S"
 
 "All playres are in teams and ready"
 en:"All playres are in teams and ready"
@@ -426,9 +426,13 @@ bp:"A escolha do mapa falhou: \3Nenhum voto."
 en:"Changing map to \4%s\1..."
 bp:"O próxmio mapa será \4%s\1..."
 
-"Choose the map (%d):"
-en:"Choose the map (%d):"
-bp:"Escolha do mapa (%d):"
+"Choose the map (%.0f):"
+en:"Choose the map (%.0f):"
+bp:"Escolha do mapa (%.0f):"
+
+"Choose the map:"
+en:"Choose the map:"
+bp:"Escolha do mapa:"
 
 "Leaders Sorted"
 en:"Leaders Sorted"

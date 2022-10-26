@@ -72,6 +72,8 @@ const char* CTranslate::Get(const char* Text)
 				return it->second.c_str();
 			}
 		}
+
+		gUtil.ServerCommand("echo String not Found: %s");
 	}
 
 	return Text;
