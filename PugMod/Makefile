@@ -7,7 +7,7 @@ COMPILER = g++
 
 OBJECTS = *.cpp
 
-LINK = 
+LINK =
 
 OPT_FLAGS = -g0 -Wl -O3 --strip-all -msse3 -flto -funroll-loops -fomit-frame-pointer -fno-stack-protector
 
