@@ -130,8 +130,6 @@ bp:"Trocando os times automaticamente."
 en:"Server is full and spectators are not allowed."
 bp:"Servidor cheio e espectadores não são permitidos."
 
-
-
 "Auto Team Select is not allowed."
 en:"Auto Team Select is not allowed."
 bp:"A Auto Seleção não é permitida."
