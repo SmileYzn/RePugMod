@@ -618,7 +618,7 @@ void CPugMod::SwapScores()
 
 void CPugMod::ClientConnected(edict_t* pEntity)
 {
-	if (gPlayer.GetNum() >= (int)gCvars.GetPlayersMax()->value)
+	if (gPlayer.GetNum(true) >= (int)gCvars.GetPlayersMax()->value)
 	{
 		if (!CVAR_GET_FLOAT("allow_spectators"))
 		{
