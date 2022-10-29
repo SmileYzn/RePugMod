@@ -2,7 +2,7 @@
 
 CPlayer gPlayer;
 
-void CPlayer::TeamInfo(edict_t* pEntity, int playerIndex, const char *pszTeamName)
+void CPlayer::TeamInfo(edict_t* pEntity, int playerIndex, const char* pszTeamName)
 {
 	static int iMsgTeamInfo;
 
@@ -72,7 +72,7 @@ int CPlayer::GetList(CBasePlayer* Players[MAX_CLIENTS], TeamName Team)
 	return Num;
 }
 
-int CPlayer::GetNum(bool CountBots, int & InGame, int & NumTerrorist, int & NumCT, int & NumSpectator)
+int CPlayer::GetNum(bool CountBots, int& InGame, int& NumTerrorist, int& NumCT, int& NumSpectator)
 {
 	InGame, NumTerrorist = NumCT = NumSpectator = 0;
 
@@ -136,18 +136,18 @@ int CPlayer::GetNum(TeamName Team)
 
 	switch (Team)
 	{
-		case TERRORIST:
-		{
-			return NumTerrorist;
-		}
-		case CT:
-		{
-			return NumCT;
-		}
-		case SPECTATOR:
-		{
-			return NumSpectator;
-		}
+	case TERRORIST:
+	{
+		return NumTerrorist;
+	}
+	case CT:
+	{
+		return NumCT;
+	}
+	case SPECTATOR:
+	{
+		return NumSpectator;
+	}
 	}
 
 	return InGame;
@@ -241,18 +241,20 @@ void CPlayer::DropClient(int EntityIndex, const char* Format, ...)
 
 			if (Player)
 			{
-				if (!FNullEnt(Player->edict()) && GETPLAYERUSERID(Player->edict()) > 0)
+				int UserIndex = GETPLAYERUSERID(Player->edict());
+
+				if (!FNullEnt(Player->edict()) && UserIndex > 0)
 				{
 					if (strlen(Buffer) > 0)
 					{
-						gUtil.ServerCommand("kick #%d %s", GETPLAYERUSERID(Player->edict()),Buffer);
+						gUtil.ServerCommand("kick #%d %s", UserIndex, Buffer);
 					}
 					else
 					{
-						gUtil.ServerCommand("kick #%d", GETPLAYERUSERID(Player->edict()));
+						gUtil.ServerCommand("kick #%d", UserIndex);
 					}
 				}
-				
+
 			}
 		}
 	}
@@ -264,15 +266,17 @@ void CPlayer::BanClient(int EntityIndex, int Time, bool Kick)
 
 	if (Player)
 	{
-		if (!FNullEnt(Player->edict()) && GETPLAYERUSERID(Player->edict()) > 0)
+		int UserIndex = GETPLAYERUSERID(Player->edict());
+
+		if (!FNullEnt(Player->edict()) && UserIndex > 0)
 		{
 			if (Kick)
 			{
-				gUtil.ServerCommand("banid %d #%d kick", Time, GETPLAYERUSERID(Player->edict()));
+				gUtil.ServerCommand("banid %d #%d kick", Time, UserIndex);
 			}
 			else
 			{
-				gUtil.ServerCommand("banid %d #%d", Time, GETPLAYERUSERID(Player->edict()));
+				gUtil.ServerCommand("banid %d #%d", Time, UserIndex);
 			}
 
 			gUtil.ServerCommand("writeid;writeip");
