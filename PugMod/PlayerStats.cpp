@@ -40,8 +40,3 @@ void CPlayerStats::Clear()
 
 	memset(this->HackStats, 0, sizeof(this->HackStats));
 }
-
-bool CPlayerStats::Store(edict_t* pEdict)
-{
-	return false;
-}
