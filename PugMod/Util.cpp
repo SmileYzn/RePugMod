@@ -128,7 +128,7 @@ void CUtil::SayText(edict_t* pEntity, int Sender, const char* Format, ...)
 
 		char SayText[191] = { 0 };
 
-		snprintf(SayText, sizeof(SayText), "\4[%s]\1 %s", Plugin_info.logtag, Buffer);
+		snprintf(SayText, sizeof(SayText), "\4[%s]\1 %s", Plugin_info.url, Buffer);
 
 		if (Sender < PRINT_TEAM_BLUE || Sender > gpGlobals->maxClients)
 		{
