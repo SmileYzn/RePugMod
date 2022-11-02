@@ -123,6 +123,9 @@ void CCvars::Load()
 
 	// Allowed ban times in minutes (0 To ban permanently)
 	this->m_BanTimes = this->Register("pug_ban_times", "0 5 10 15 30 45 60 120");
+
+	// Log stats at match end
+	this->m_LogStats = this->Register("pug_log_stats", "0");
 }
 
 cvar_t* CCvars::Register(const char* Name, const char* Value)
@@ -134,7 +137,7 @@ cvar_t* CCvars::Register(const char* Name, const char* Value)
 	if (Pointer == NULL)
 	{
 		// Make structure data
-		cvar_t Register = { Name, (char*)Value, FCVAR_SERVER | FCVAR_SPONLY };
+		cvar_t Register = { Name, (char*)Value, FCVAR_SERVER | FCVAR_PROTECTED | FCVAR_SPONLY | FCVAR_UNLOGGED};
 
 		// Register the variable
 		CVAR_REGISTER(&Register);
@@ -309,5 +312,10 @@ cvar_t* CCvars::GetHelpFilePlayer()
 
 cvar_t* CCvars::GetBanTimes()
 {
-	return m_BanTimes;
+	return this->m_BanTimes;
+}
+
+cvar_t* CCvars::GetLogStats()
+{
+	return this->m_LogStats;
 }
