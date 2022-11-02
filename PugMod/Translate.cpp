@@ -57,7 +57,7 @@ void CTranslate::ReplaceAll(std::string& String, const std::string& From, const 
 	}
 }
 
-const char* CTranslate::Get(char* Text)
+const char* CTranslate::Get(const char* Text)
 {
 	if (Text)
 	{
