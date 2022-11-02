@@ -20,6 +20,7 @@ void CTranslate::Load()
 	}
 
 	gUtil.ServerCommand("echo Server Language: %s", Language.c_str());
+	gUtil.ServerCommand("say Server Language: %s", Language.c_str());
 
 	while (std::getline(File, Line))
 	{
