@@ -74,7 +74,5 @@ const char* CTranslate::Get(const char* Text)
 		}
 	}
 
-	ALERT(at_logged, "Translation '%s' Not Found\n", Text);
-
 	return Text;
 }
