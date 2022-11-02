@@ -19,9 +19,6 @@ void CTranslate::Load()
 		Language = gCvars.GetLanguage()->string;
 	}
 
-	
-	ALERT(at_logged,"Server Language: %s\n", Language.c_str());
-
 	while (std::getline(File, Line))
 	{
 		if (Line.length() > 0)
@@ -76,6 +73,8 @@ const char* CTranslate::Get(const char* Text)
 			}
 		}
 	}
+
+	ALERT(at_logged, "Translation '%s' Not Found\n", Text);
 
 	return Text;
 }
