@@ -19,8 +19,8 @@ void CTranslate::Load()
 		Language = gCvars.GetLanguage()->string;
 	}
 
-	gUtil.ServerCommand("echo Server Language: %s", Language.c_str());
-	gUtil.ServerCommand("say Server Language: %s", Language.c_str());
+	
+	ALERT(at_logged,"Server Language: %s\n", Language.c_str());
 
 	while (std::getline(File, Line))
 	{
