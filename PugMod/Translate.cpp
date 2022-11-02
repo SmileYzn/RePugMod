@@ -14,8 +14,6 @@ void CTranslate::Load()
 
 	if (gCvars.GetLanguage()->string)
 	{
-		SERVER_EXECUTE();
-
 		Language = gCvars.GetLanguage()->string;
 	}
 
@@ -61,7 +59,7 @@ void CTranslate::ReplaceAll(std::string& String, const std::string& From, const 
 
 const char* CTranslate::Get(char* Text)
 {
-	if (Text && Text[0u] != '\0')
+	if (Text)
 	{
 		auto it = this->m_Data.find(Text);
 

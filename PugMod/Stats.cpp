@@ -507,11 +507,10 @@ void CStats::LogStats()
 		ALERT
 		(
 			at_logged,
-			"[Match][%s][%s][%l][%d][%d][%d][%d]\n",
+			"[Match][%s][%s][%d][%d][%d][%d]\n",
 			CVAR_GET_STRING("hostname"),
 			CVAR_GET_STRING("net_address"),
 			static_cast<long long>(std::time(NULL)),
-			gPugMod.GetRound(),
 			gPugMod.GetScores(TERRORIST),
 			gPugMod.GetScores(CT)
 		);
