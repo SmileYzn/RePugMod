@@ -17,27 +17,40 @@ char* CUtil::VarArgs(const char* Format, ...)
 	return VarArgs;
 }
 
+void CUtil::ServerPrint(const char* Format, ...)
+{
+	va_list argptr;
+
+	static char string[255] = { 0 };
+
+	va_start(argptr, Format);
+
+	vsnprintf(string, sizeof(string) - 1, Format, argptr);
+
+	string[sizeof(string) - 1] = '\0';
+
+	string[sizeof(string) - 2] = '\n';
+
+	va_end(argptr);
+
+	SERVER_PRINT(string);
+}
+
 void CUtil::ServerCommand(const char* Format, ...)
 {
-	va_list argList;
+	va_list argptr;
 
-	va_start(argList, Format);
+	static char string[255] = { 0 };
 
-	char Buffer[255] = { 0 };
+	va_start(argptr, Format);
 
-	int Length = vsnprintf(Buffer, sizeof(Buffer), Format, argList);
+	vsnprintf(string, sizeof(string) - 1, Format, argptr);
 
-	va_end(argList);
+	string[sizeof(string) - 1] = '\0';
 
-	if (Length > 254)
-	{
-		Length = 254;
-	}
+	va_end(argptr);
 
-	Buffer[Length++] = '\n';
-	Buffer[Length] = 0;
-
-	SERVER_COMMAND(Buffer);
+	SERVER_COMMAND(string);
 }
 
 void CUtil::ClientCommand(edict_t* pEntity, const char* Format, ...)
