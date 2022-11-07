@@ -136,11 +136,16 @@ cvar_t* CCvars::Register(const char* Name, const char* Value)
 	// If not exists
 	if (Pointer == NULL)
 	{
-		// Make structure data
+		// Variable Data
 		static cvar_t VariableData;
 
+		// Set name
 		VariableData.name = Name;
+
+		// Set value
 		VariableData.string = (char*)Value;
+
+		// Set flags
 		VariableData.flags = (FCVAR_SERVER | FCVAR_PROTECTED | FCVAR_SPONLY | FCVAR_UNLOGGED);
 
 		// Register the variable
