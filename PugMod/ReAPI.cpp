@@ -125,7 +125,7 @@ void ReAPI_ClientConnected(IRehldsHook_ClientConnected* chain, IGameClient* clie
 
 	gAntiRetry.ClientConnected(client->GetEdict());
 
-	gPlayerApi.ClientConnected(client->GetEdict());
+	gWebapi.ClientConnected(client->GetEdict());
 }
 
 void ReAPI_SV_DropClient(IRehldsHook_SV_DropClient* chain, IGameClient* client, bool crash, const char* Reason)

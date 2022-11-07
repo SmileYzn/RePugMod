@@ -115,7 +115,7 @@
     <Filter Include="LibCurl">
       <UniqueIdentifier>{453374e0-00a8-45b9-bd15-b8f620a66e92}</UniqueIdentifier>
     </Filter>
-    <Filter Include="PugMod\PlayerApi">
+    <Filter Include="PugMod\WebApi">
       <UniqueIdentifier>{d7347562-a14e-4466-a637-421e9082a334}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -222,8 +222,8 @@
     <ClInclude Include="LibCurl.h">
       <Filter>LibCurl</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerApi.h">
-      <Filter>PugMod\PlayerApi</Filter>
+    <ClInclude Include="WebApi.h">
+      <Filter>PugMod\WebApi</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -329,8 +329,8 @@
     <ClCompile Include="LibCurl.cpp">
       <Filter>LibCurl</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerApi.cpp">
-      <Filter>PugMod\PlayerApi</Filter>
+    <ClCompile Include="WebApi.cpp">
+      <Filter>PugMod\WebApi</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
