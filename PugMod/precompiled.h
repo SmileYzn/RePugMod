@@ -74,7 +74,6 @@
 #include "AntiRetry.h"
 #include "Player.h"
 #include "PlayerStats.h"
-#include "PlayerApi.h"
 #include "Menu.h"
 #include "Task.h"
 #include "PugMod.h"
@@ -93,3 +92,4 @@
 #include "KnifeRound.h"
 #include "Stats.h"
 #include "StatsCmd.h"
+#include "WebApi.h"

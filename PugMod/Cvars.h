@@ -40,6 +40,7 @@ public:
 	cvar_t* GetHelpFileAdmin();
 	cvar_t* GetHelpFilePlayer();
 	cvar_t* GetBanTimes();
+	cvar_t* GetWebApiUrl();
 
 private:
 	cvar_t* m_Config[8];
@@ -75,6 +76,7 @@ private:
 	cvar_t* m_HelpFileAdmin;
 	cvar_t* m_HelpFilePlayer;
 	cvar_t* m_BanTimes;
+	cvar_t* m_WebApiUrl;
 };
 
 extern CCvars gCvars;
