@@ -137,10 +137,14 @@ cvar_t* CCvars::Register(const char* Name, const char* Value)
 	if (Pointer == NULL)
 	{
 		// Make structure data
-		cvar_t Register = { Name, (char*)Value, FCVAR_SERVER | FCVAR_PROTECTED | FCVAR_SPONLY | FCVAR_UNLOGGED};
+		static cvar_t VariableData;
+
+		VariableData.name = Name;
+		VariableData.string = (char*)Value;
+		VariableData.flags = (FCVAR_SERVER | FCVAR_PROTECTED | FCVAR_SPONLY | FCVAR_UNLOGGED);
 
 		// Register the variable
-		CVAR_REGISTER(&Register);
+		CVAR_REGISTER(&VariableData);
 
 		// Return created pointer
 		return CVAR_GET_POINTER(Name);
