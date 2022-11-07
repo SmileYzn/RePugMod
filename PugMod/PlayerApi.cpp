@@ -4,22 +4,22 @@ CPlayerApi gPlayerApi;
 
 void CPlayerApi::ClientConnected(edict_t* pEntity)
 {
-	if (pEntity)
-	{
-		const char* PlayerAuthId = GETPLAYERAUTHID(pEntity);
+	//if (pEntity)
+	//{
+	//	const char* PlayerAuthId = GETPLAYERAUTHID(pEntity);
 
-		if (PlayerAuthId)
-		{
-			const char* url = gUtil.VarArgs("", PlayerAuthId);
+	//	if (PlayerAuthId)
+	//	{
+	//		const char* url = gUtil.VarArgs("", PlayerAuthId);
 
-			if (url)
-			{
-				gLibCurl.Get(url, this->RequestCallback, ENTINDEX(pEntity));
-			}
-		}
-	}
+	//		if (url)
+	//		{
+	//			gLibCurl.Get(url, this->RequestCallback, ENTINDEX(pEntity));
+	//		}
+	//	}
+	//}
 }
-
+/*
 void CPlayerApi::RequestCallback(CURL* ch, size_t Size, const char* Memory, int EntityIndex)
 {
 	auto pEntity = INDEXENT(EntityIndex);
@@ -54,4 +54,4 @@ void CPlayerApi::RequestCallback(CURL* ch, size_t Size, const char* Memory, int 
 
 		gPlayer.DropClient(EntityIndex, "Register at PugBR.net to play in this server...");
 	}
-}
+}*/
