@@ -90,6 +90,8 @@ bool ReAPI_Init()
 
 	g_RehldsHookchains->SV_DropClient()->registerHook(ReAPI_SV_DropClient);
 
+	gLibCurl.Init();
+
 	return true;
 }
 
@@ -101,6 +103,8 @@ bool ReAPI_Stop()
 
 	g_RehldsHookchains->SV_DropClient()->unregisterHook(ReAPI_SV_DropClient);
 
+	gLibCurl.Stop();
+
 	return true;
 }
 
@@ -109,6 +113,8 @@ void ReAPI_SV_Frame(IRehldsHook_SV_Frame* chain)
 	chain->callNext();
 
 	gTask.Think();
+
+	gLibCurl.Frame();
 }
 
 void ReAPI_ClientConnected(IRehldsHook_ClientConnected* chain, IGameClient* client)
@@ -119,7 +125,7 @@ void ReAPI_ClientConnected(IRehldsHook_ClientConnected* chain, IGameClient* clie
 
 	gAntiRetry.ClientConnected(client->GetEdict());
 
-	gStats.Disconnected(client->GetEdict());
+	gPlayerApi.ClientConnected(client->GetEdict());
 }
 
 void ReAPI_SV_DropClient(IRehldsHook_SV_DropClient* chain, IGameClient* client, bool crash, const char* Reason)

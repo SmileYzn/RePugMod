@@ -31,6 +31,9 @@
 #include <array>
 #include <iterator>
 
+// JSON HPP
+#include "include/json.hpp"
+
 // cURL sources
 #ifndef CURL_STATICLIB
 #define CURL_STATICLIB
@@ -71,6 +74,7 @@
 #include "AntiRetry.h"
 #include "Player.h"
 #include "PlayerStats.h"
+#include "PlayerApi.h"
 #include "Menu.h"
 #include "Task.h"
 #include "PugMod.h"

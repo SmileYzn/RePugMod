@@ -112,8 +112,11 @@
     <Filter Include="PugMod\Vote\VoteOvertime">
       <UniqueIdentifier>{371bd1bd-df6e-46a7-8aba-cbc64d9eb475}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ModCurl">
+    <Filter Include="LibCurl">
       <UniqueIdentifier>{453374e0-00a8-45b9-bd15-b8f620a66e92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PugMod\PlayerApi">
+      <UniqueIdentifier>{d7347562-a14e-4466-a637-421e9082a334}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -217,7 +220,10 @@
       <Filter>PugMod\Vote\VoteOvertime</Filter>
     </ClInclude>
     <ClInclude Include="LibCurl.h">
-      <Filter>ModCurl</Filter>
+      <Filter>LibCurl</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerApi.h">
+      <Filter>PugMod\PlayerApi</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -321,7 +327,10 @@
       <Filter>PugMod\Vote\VoteOvertime</Filter>
     </ClCompile>
     <ClCompile Include="LibCurl.cpp">
-      <Filter>ModCurl</Filter>
+      <Filter>LibCurl</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerApi.cpp">
+      <Filter>PugMod\PlayerApi</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

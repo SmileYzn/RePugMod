@@ -5,6 +5,7 @@ struct P_CURL_MOD_MEMORY
 	char* Memory;
 	size_t Size;
 	void* Callback;
+	int CallbackData;
 };
 
 class CLibCurl
@@ -15,7 +16,7 @@ public:
 
 	void Frame();
 
-	void Get(const char* url, void* FunctionCallback);
+	void Get(const char* url, void* FunctionCallback, int CallbackData);
 
 	static size_t WriteMemoryCallback(void* contents, size_t size, size_t nmemb, void* userp);
 

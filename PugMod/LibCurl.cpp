@@ -46,7 +46,7 @@ void CLibCurl::Frame()
 					{
 						if (this->m_Data[Index].Callback)
 						{
-							((void(*)(CURL*, size_t, const char*))this->m_Data[Index].Callback)(MsgInfo->easy_handle, this->m_Data[Index].Size, this->m_Data[Index].Memory);
+							((void(*)(CURL*, size_t, const char*, int))this->m_Data[Index].Callback)(MsgInfo->easy_handle, this->m_Data[Index].Size, this->m_Data[Index].Memory, this->m_Data[Index].CallbackData);
 						}
 
 						this->m_Data.erase(Index);
@@ -57,11 +57,12 @@ void CLibCurl::Frame()
 					curl_easy_cleanup(MsgInfo->easy_handle);
 				}
 			}
-		} while (HandleCount);
+		}
+		while (HandleCount);
 	}
 }
 
-void CLibCurl::Get(const char* url, void* FunctionCallback)
+void CLibCurl::Get(const char* url, void* FunctionCallback, int CallbackData)
 {
 	if (this->m_MultiHandle)
 	{
@@ -75,7 +76,11 @@ void CLibCurl::Get(const char* url, void* FunctionCallback)
 
 				this->m_Data[this->m_RequestIndex].Callback = FunctionCallback;
 
+				this->m_Data[this->m_RequestIndex].CallbackData = CallbackData;
+
 				curl_easy_setopt(ch, CURLOPT_URL, url);
+
+				curl_easy_setopt(ch, CURLOPT_TIMEOUT, 5L);
 
 				curl_easy_setopt(ch, CURLOPT_WRITEFUNCTION, this->WriteMemoryCallback);
 

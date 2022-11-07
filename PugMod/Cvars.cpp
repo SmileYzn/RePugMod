@@ -123,6 +123,9 @@ void CCvars::Load()
 
 	// Allowed ban times in minutes (0 To ban permanently)
 	this->m_BanTimes = this->Register("pug_ban_times", "0 5 10 15 30 45 60 120");
+
+	// URL to pugmod api
+
 }
 
 cvar_t* CCvars::Register(const char* Name, const char* Value)
