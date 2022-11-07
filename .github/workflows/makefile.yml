@@ -14,8 +14,14 @@ jobs:
     steps:
     - uses: actions/checkout@v3
       
+    - name: Add i386 architecture
+      run: sudo dpkg --add-architecture i386
+      
+    - name: Update repository
+      run: sudo apt-get update
+      
     - name: Install build dependencies
-      run: sudo apt-get install -qq -y build-essential g++ gcc-multilib g++-multilib libcurl4-openssl-dev:i386 zlib1g-dev:i386 libssl-dev:i386
+      run: sudo apt-get install -qq -y build-essential g++ gcc-multilib g++-multilib libcurl4-openssl-dev:i386 zlib1g-dev:i386 libssl-dev:i386      
 
     - name: Run build
       working-directory: ./PugMod
