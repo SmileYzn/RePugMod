@@ -19,38 +19,48 @@ char* CUtil::VarArgs(const char* Format, ...)
 
 void CUtil::ServerPrint(const char* Format, ...)
 {
-	va_list argptr;
+	va_list argList;
 
-	static char string[255] = { 0 };
+	va_start(argList, Format);
 
-	va_start(argptr, Format);
+	char Buffer[255] = { 0 };
 
-	vsnprintf(string, sizeof(string) - 1, Format, argptr);
+	int Length = vsnprintf(Buffer, sizeof(Buffer), Format, argList);
 
-	string[sizeof(string) - 1] = '\0';
+	va_end(argList);
 
-	string[sizeof(string) - 2] = '\n';
+	if (Length > 254)
+	{
+		Length = 254;
+	}
 
-	va_end(argptr);
+	Buffer[Length++] = '\n';
+	Buffer[Length] = 0;
 
-	SERVER_PRINT(string);
+	SERVER_PRINT(Buffer);
 }
 
 void CUtil::ServerCommand(const char* Format, ...)
 {
-	va_list argptr;
+	va_list argList;
 
-	static char string[255] = { 0 };
+	va_start(argList, Format);
 
-	va_start(argptr, Format);
+	char Buffer[255] = { 0 };
 
-	vsnprintf(string, sizeof(string) - 1, Format, argptr);
+	int Length = vsnprintf(Buffer, sizeof(Buffer), Format, argList);
 
-	string[sizeof(string) - 1] = '\0';
+	va_end(argList);
 
-	va_end(argptr);
+	if (Length > 254)
+	{
+		Length = 254;
+	}
 
-	SERVER_COMMAND(string);
+	Buffer[Length++] = '\n';
+	Buffer[Length] = 0;
+
+	SERVER_COMMAND(Buffer);
 }
 
 void CUtil::ClientCommand(edict_t* pEntity, const char* Format, ...)
