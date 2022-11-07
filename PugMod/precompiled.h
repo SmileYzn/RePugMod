@@ -15,6 +15,13 @@
 #define _close						close
 #define _acces						access
 #define _vsnwprintf					vswprintf
+#else
+// cURL Library windows library
+#pragma comment(lib,"ws2_32.lib")
+#pragma comment(lib,"wldap32.lib")
+#pragma comment(lib,"advapi32.lib")
+#pragma comment(lib,"crypt32.lib")
+#pragma comment(lib,"normaliz.lib")
 #endif
 
 // System Includes
@@ -23,6 +30,14 @@
 #include <map>
 #include <array>
 #include <iterator>
+
+// cURL sources
+#ifndef CURL_STATICLIB
+#define CURL_STATICLIB
+#endif
+
+// cURL sources
+#include <curl/curl.h>
 
 // CSSDK
 #include <extdll.h>
@@ -47,6 +62,7 @@
 
 // PugMod
 #include "Util.h"
+#include "LibCurl.h"
 #include "Cvars.h"
 #include "Translate.h"
 #include "TimeFormat.h"
