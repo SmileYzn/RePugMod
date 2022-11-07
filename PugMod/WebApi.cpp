@@ -16,7 +16,7 @@ void CWebApi::ClientConnected(edict_t* pEntity)
 
 				if (url)
 				{
-					gLibCurl.Get(url, this->RequestCallback, ENTINDEX(pEntity));
+					gLibCurl.Get(url, (void*)this->RequestCallback, ENTINDEX(pEntity));
 				}
 			}
 		}
