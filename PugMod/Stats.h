@@ -28,8 +28,6 @@ public:
 
 	CPlayerStats GetData(int EntityIndex);
 
-	void LogStats();
-
 private:
 	int GetActiveWeapon(CBasePlayer* Player, bool AllowKnife);
 

@@ -149,8 +149,6 @@ void CPugMod::SetState(int State)
 				gCvars.GetVoteMap()->value = 1;
 
 				this->NextState(5.0f);
-
-				gStats.LogStats();
 				
 				break;
 			}

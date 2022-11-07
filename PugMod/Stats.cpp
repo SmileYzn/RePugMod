@@ -497,198 +497,198 @@ int CStats::GetActiveWeapon(CBasePlayer* Player, bool AllowKnife)
 
 	return WEAPON_NONE;
 }
-
-void CStats::LogStats()
-{
-	if (gCvars.GetLogStats())
-	{
-		//
-		// Log Match Stats
-		ALERT
-		(
-			at_logged,
-			"[Match][%s][%s][%d][%d][%d][%d]\n",
-			CVAR_GET_STRING("hostname"),
-			CVAR_GET_STRING("net_address"),
-			static_cast<long long>(std::time(NULL)),
-			gPugMod.GetScores(TERRORIST),
-			gPugMod.GetScores(CT)
-		);
-		//
-		// Set all player stats to map container
-		for (int i = 1; i <= gpGlobals->maxClients; ++i)
-		{
-			auto Temp = UTIL_PlayerByIndexSafe(i);
-
-			if (Temp)
-			{
-				this->Disconnected(Temp->edict());
-			}
-		}
-		//
-		// Log stats of all players
-		for (auto const& Player : this->m_Stats)
-		{
-			//
-			// Log Player Stats
-			ALERT
-			(
-				at_logged,
-				"[Player][%s][%d][%d][%d][%d][%d][%d][%d][%d][%f][%f][%f]\n",
-				Player.first.c_str(),
-				Player.second.Frags,
-				Player.second.Assists,
-				Player.second.Deaths,
-				Player.second.Headshot,
-				Player.second.Shots,
-				Player.second.Hits,
-				Player.second.Damage,
-				Player.second.DamageReceive,
-				Player.second.JoinTime,
-				Player.second.GameTime,
-				Player.second.RoundWinShare
-			);
-			//
-			// Log Round Stats
-			ALERT
-			(
-				at_logged,
-				"[Round][%s][%d][%d][%d][%d][%d]\n",
-				Player.first.c_str(),
-				Player.second.Rounds[ROUND_PLAY],
-				Player.second.Rounds[ROUND_WIN_TR],
-				Player.second.Rounds[ROUND_LOSE_TR],
-				Player.second.Rounds[ROUND_WIN_CT],
-				Player.second.Rounds[ROUND_LOSE_CT]
-			);
-			//
-			// Log Bomb Stats
-			ALERT
-			(
-				at_logged,
-				"[Bomb][%s][%d][%d][%d][%d][%d]\n",
-				Player.first.c_str(),
-				Player.second.BombStats[BOMB_PLANTING],
-				Player.second.BombStats[BOMB_PLANTED],
-				Player.second.BombStats[BOMB_EXPLODED],
-				Player.second.BombStats[BOMB_DEFUSING],
-				Player.second.BombStats[BOMB_DEFUSED]
-			);
-			//
-			// Log HitBox Stats
-			ALERT
-			(
-				at_logged,
-				"[HitBox][%s][%d][%d][%d][%d][%d][%d][%d][%d][%d]\n",
-				Player.first.c_str(),
-				Player.second.HitBox[HITGROUP_GENERIC],
-				Player.second.HitBox[HITGROUP_HEAD],
-				Player.second.HitBox[HITGROUP_CHEST],
-				Player.second.HitBox[HITGROUP_STOMACH],
-				Player.second.HitBox[HITGROUP_LEFTARM],
-				Player.second.HitBox[HITGROUP_RIGHTARM],
-				Player.second.HitBox[HITGROUP_LEFTLEG],
-				Player.second.HitBox[HITGROUP_RIGHTLEG],
-				Player.second.HitBox[HITGROUP_SHIELD]
-			);
-			//
-			// Log HitBox Damage
-			ALERT
-			(
-				at_logged,
-				"[HitBoxDamage][%s][%d][%d][%d][%d][%d][%d][%d][%d][%d]\n",
-				Player.first.c_str(),
-				Player.second.HitBoxDamage[HITGROUP_GENERIC],
-				Player.second.HitBoxDamage[HITGROUP_HEAD],
-				Player.second.HitBoxDamage[HITGROUP_CHEST],
-				Player.second.HitBoxDamage[HITGROUP_STOMACH],
-				Player.second.HitBoxDamage[HITGROUP_LEFTARM],
-				Player.second.HitBoxDamage[HITGROUP_RIGHTARM],
-				Player.second.HitBoxDamage[HITGROUP_LEFTLEG],
-				Player.second.HitBoxDamage[HITGROUP_RIGHTLEG],
-				Player.second.HitBoxDamage[HITGROUP_SHIELD]
-			);
-			//
-			// Log Weapon Stats
-			for (int WeaponType = 0; WeaponType < MAX_WEAPONS; WeaponType++)
-			{
-				if (Player.second.WeaponStats[WeaponType][WEAPON_SHOT] > 0)
-				{
-					ALERT
-					(
-						at_logged,
-						"[Weapon][%s][%d][%d][%d][%d][%d][%d][%d]\n",
-						Player.first.c_str(),
-						WeaponType,
-						Player.second.WeaponStats[WeaponType][WEAPON_KILL],
-						Player.second.WeaponStats[WeaponType][WEAPON_DEATH],
-						Player.second.WeaponStats[WeaponType][WEAPON_HEADSHOT],
-						Player.second.WeaponStats[WeaponType][WEAPON_SHOT],
-						Player.second.WeaponStats[WeaponType][WEAPON_HIT],
-						Player.second.WeaponStats[WeaponType][WEAPON_DAMAGE]
-					);
-				}
-			}
-			//
-			// Log KillStreak
-			ALERT
-			(
-				at_logged,
-				"[KillStreak][%s][%d][%d][%d][%d][%d]\n",
-				Player.first.c_str(),
-				Player.second.KillStreak[1],
-				Player.second.KillStreak[2],
-				Player.second.KillStreak[3],
-				Player.second.KillStreak[4],
-				Player.second.KillStreak[5]
-			);
-			//
-			// Log Versus
-			ALERT
-			(
-				at_logged,
-				"[Versus][%s][%d][%d][%d][%d][%d]\n",
-				Player.first.c_str(),
-				Player.second.Versus[1],
-				Player.second.Versus[2],
-				Player.second.Versus[3],
-				Player.second.Versus[4],
-				Player.second.Versus[5]
-			);
-			//
-			// Log Money
-			ALERT
-			(
-				at_logged,
-				"[Money][%s][%d][%d][%d][%d][%d][%d][%d][%d][%d][%d][%d][%d][%d][%d][%d]\n",
-				Player.first.c_str(),
-				Player.second.Money[RT_NONE],
-				Player.second.Money[RT_ROUND_BONUS],
-				Player.second.Money[RT_PLAYER_RESET],
-				Player.second.Money[RT_PLAYER_JOIN],
-				Player.second.Money[RT_PLAYER_SPEC_JOIN],
-				Player.second.Money[RT_PLAYER_BOUGHT_SOMETHING],
-				Player.second.Money[RT_HOSTAGE_TOOK],
-				Player.second.Money[RT_HOSTAGE_RESCUED],
-				Player.second.Money[RT_HOSTAGE_DAMAGED],
-				Player.second.Money[RT_HOSTAGE_KILLED],
-				Player.second.Money[RT_TEAMMATES_KILLED],
-				Player.second.Money[RT_ENEMY_KILLED],
-				Player.second.Money[RT_INTO_GAME],
-				Player.second.Money[RT_VIP_KILLED],
-				Player.second.Money[RT_VIP_RESCUED_MYSELF]
-			);
-			//
-			// Log HackStats
-			ALERT
-			(
-				at_logged,
-				"[Hack][%s][%d][%d][%d]\n",
-				Player.first.c_str(),
-				Player.second.HackStats[HACK_VISION],
-				Player.second.HackStats[HACK_ONEHIT],
-				Player.second.HackStats[HACK_NOSCOP]
-			);
-		}
-	}
-}
+//
+//void CStats::LogStats()
+//{
+//	if (gCvars.GetLogStats())
+//	{
+//		//
+//		// Log Match Stats
+//		ALERT
+//		(
+//			at_logged,
+//			"[Match][%s][%s][%d][%d][%d][%d]\n",
+//			CVAR_GET_STRING("hostname"),
+//			CVAR_GET_STRING("net_address"),
+//			static_cast<long long>(std::time(NULL)),
+//			gPugMod.GetScores(TERRORIST),
+//			gPugMod.GetScores(CT)
+//		);
+//		//
+//		// Set all player stats to map container
+//		for (int i = 1; i <= gpGlobals->maxClients; ++i)
+//		{
+//			auto Temp = UTIL_PlayerByIndexSafe(i);
+//
+//			if (Temp)
+//			{
+//				this->Disconnected(Temp->edict());
+//			}
+//		}
+//		//
+//		// Log stats of all players
+//		for (auto const& Player : this->m_Stats)
+//		{
+//			//
+//			// Log Player Stats
+//			ALERT
+//			(
+//				at_logged,
+//				"[Player][%s][%d][%d][%d][%d][%d][%d][%d][%d][%f][%f][%f]\n",
+//				Player.first.c_str(),
+//				Player.second.Frags,
+//				Player.second.Assists,
+//				Player.second.Deaths,
+//				Player.second.Headshot,
+//				Player.second.Shots,
+//				Player.second.Hits,
+//				Player.second.Damage,
+//				Player.second.DamageReceive,
+//				Player.second.JoinTime,
+//				Player.second.GameTime,
+//				Player.second.RoundWinShare
+//			);
+//			//
+//			// Log Round Stats
+//			ALERT
+//			(
+//				at_logged,
+//				"[Round][%s][%d][%d][%d][%d][%d]\n",
+//				Player.first.c_str(),
+//				Player.second.Rounds[ROUND_PLAY],
+//				Player.second.Rounds[ROUND_WIN_TR],
+//				Player.second.Rounds[ROUND_LOSE_TR],
+//				Player.second.Rounds[ROUND_WIN_CT],
+//				Player.second.Rounds[ROUND_LOSE_CT]
+//			);
+//			//
+//			// Log Bomb Stats
+//			ALERT
+//			(
+//				at_logged,
+//				"[Bomb][%s][%d][%d][%d][%d][%d]\n",
+//				Player.first.c_str(),
+//				Player.second.BombStats[BOMB_PLANTING],
+//				Player.second.BombStats[BOMB_PLANTED],
+//				Player.second.BombStats[BOMB_EXPLODED],
+//				Player.second.BombStats[BOMB_DEFUSING],
+//				Player.second.BombStats[BOMB_DEFUSED]
+//			);
+//			//
+//			// Log HitBox Stats
+//			ALERT
+//			(
+//				at_logged,
+//				"[HitBox][%s][%d][%d][%d][%d][%d][%d][%d][%d][%d]\n",
+//				Player.first.c_str(),
+//				Player.second.HitBox[HITGROUP_GENERIC],
+//				Player.second.HitBox[HITGROUP_HEAD],
+//				Player.second.HitBox[HITGROUP_CHEST],
+//				Player.second.HitBox[HITGROUP_STOMACH],
+//				Player.second.HitBox[HITGROUP_LEFTARM],
+//				Player.second.HitBox[HITGROUP_RIGHTARM],
+//				Player.second.HitBox[HITGROUP_LEFTLEG],
+//				Player.second.HitBox[HITGROUP_RIGHTLEG],
+//				Player.second.HitBox[HITGROUP_SHIELD]
+//			);
+//			//
+//			// Log HitBox Damage
+//			ALERT
+//			(
+//				at_logged,
+//				"[HitBoxDamage][%s][%d][%d][%d][%d][%d][%d][%d][%d][%d]\n",
+//				Player.first.c_str(),
+//				Player.second.HitBoxDamage[HITGROUP_GENERIC],
+//				Player.second.HitBoxDamage[HITGROUP_HEAD],
+//				Player.second.HitBoxDamage[HITGROUP_CHEST],
+//				Player.second.HitBoxDamage[HITGROUP_STOMACH],
+//				Player.second.HitBoxDamage[HITGROUP_LEFTARM],
+//				Player.second.HitBoxDamage[HITGROUP_RIGHTARM],
+//				Player.second.HitBoxDamage[HITGROUP_LEFTLEG],
+//				Player.second.HitBoxDamage[HITGROUP_RIGHTLEG],
+//				Player.second.HitBoxDamage[HITGROUP_SHIELD]
+//			);
+//			//
+//			// Log Weapon Stats
+//			for (int WeaponType = 0; WeaponType < MAX_WEAPONS; WeaponType++)
+//			{
+//				if (Player.second.WeaponStats[WeaponType][WEAPON_SHOT] > 0)
+//				{
+//					ALERT
+//					(
+//						at_logged,
+//						"[Weapon][%s][%d][%d][%d][%d][%d][%d][%d]\n",
+//						Player.first.c_str(),
+//						WeaponType,
+//						Player.second.WeaponStats[WeaponType][WEAPON_KILL],
+//						Player.second.WeaponStats[WeaponType][WEAPON_DEATH],
+//						Player.second.WeaponStats[WeaponType][WEAPON_HEADSHOT],
+//						Player.second.WeaponStats[WeaponType][WEAPON_SHOT],
+//						Player.second.WeaponStats[WeaponType][WEAPON_HIT],
+//						Player.second.WeaponStats[WeaponType][WEAPON_DAMAGE]
+//					);
+//				}
+//			}
+//			//
+//			// Log KillStreak
+//			ALERT
+//			(
+//				at_logged,
+//				"[KillStreak][%s][%d][%d][%d][%d][%d]\n",
+//				Player.first.c_str(),
+//				Player.second.KillStreak[1],
+//				Player.second.KillStreak[2],
+//				Player.second.KillStreak[3],
+//				Player.second.KillStreak[4],
+//				Player.second.KillStreak[5]
+//			);
+//			//
+//			// Log Versus
+//			ALERT
+//			(
+//				at_logged,
+//				"[Versus][%s][%d][%d][%d][%d][%d]\n",
+//				Player.first.c_str(),
+//				Player.second.Versus[1],
+//				Player.second.Versus[2],
+//				Player.second.Versus[3],
+//				Player.second.Versus[4],
+//				Player.second.Versus[5]
+//			);
+//			//
+//			// Log Money
+//			ALERT
+//			(
+//				at_logged,
+//				"[Money][%s][%d][%d][%d][%d][%d][%d][%d][%d][%d][%d][%d][%d][%d][%d][%d]\n",
+//				Player.first.c_str(),
+//				Player.second.Money[RT_NONE],
+//				Player.second.Money[RT_ROUND_BONUS],
+//				Player.second.Money[RT_PLAYER_RESET],
+//				Player.second.Money[RT_PLAYER_JOIN],
+//				Player.second.Money[RT_PLAYER_SPEC_JOIN],
+//				Player.second.Money[RT_PLAYER_BOUGHT_SOMETHING],
+//				Player.second.Money[RT_HOSTAGE_TOOK],
+//				Player.second.Money[RT_HOSTAGE_RESCUED],
+//				Player.second.Money[RT_HOSTAGE_DAMAGED],
+//				Player.second.Money[RT_HOSTAGE_KILLED],
+//				Player.second.Money[RT_TEAMMATES_KILLED],
+//				Player.second.Money[RT_ENEMY_KILLED],
+//				Player.second.Money[RT_INTO_GAME],
+//				Player.second.Money[RT_VIP_KILLED],
+//				Player.second.Money[RT_VIP_RESCUED_MYSELF]
+//			);
+//			//
+//			// Log HackStats
+//			ALERT
+//			(
+//				at_logged,
+//				"[Hack][%s][%d][%d][%d]\n",
+//				Player.first.c_str(),
+//				Player.second.HackStats[HACK_VISION],
+//				Player.second.HackStats[HACK_ONEHIT],
+//				Player.second.HackStats[HACK_NOSCOP]
+//			);
+//		}
+//	}
+//}
