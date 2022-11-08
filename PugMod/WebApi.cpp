@@ -6,13 +6,15 @@ void CWebApi::ClientConnected(edict_t* pEntity)
 {
 	if (pEntity)
 	{
-		if (gCvars.GetWebApiUrl()->string)
+		const char* WebApiUrl = gCvars.GetWebApiUrl()->string;
+
+		if (WebApiUrl != NULL && (WebApiUrl[0] != '\0'))
 		{
 			const char* PlayerAuthId = GETPLAYERAUTHID(pEntity);
 
 			if (PlayerAuthId)
 			{
-				const char* url = gUtil.VarArgs("%s?playerAuth=%s", gCvars.GetWebApiUrl()->string, PlayerAuthId);
+				const char* url = gUtil.VarArgs("%s?playerAuth=%s", WebApiUrl, PlayerAuthId);
 
 				if (url)
 				{
@@ -39,31 +41,35 @@ void CWebApi::RequestCallback(CURL* ch, size_t Size, const char* Memory, int Ent
 				{
 					if (Memory)
 					{
-						auto PlayerData = nlohmann::json::parse(Memory);
+						auto ResultData = nlohmann::json::parse(Memory);
 
-						if (PlayerData.contains("steamid2"))
+						gUtil.ServerPrint("%s", Memory);
+
+						if (ResultData.contains("kick") && ResultData.contains("reason"))
 						{
-							auto steamid2 = PlayerData["steamid2"].get<std::string>();
+							auto KickPlayer = ResultData["kick"].get<bool>();
 
-							if (steamid2.compare(GETPLAYERAUTHID(pEntity)) == 0)
+							auto KickReason = ResultData["reason"].get<std::string>();
+
+							if (KickPlayer)
 							{
-								return;
+								if (KickReason.length())
+								{
+									gPlayer.DropClient(EntityIndex, "%s", KickReason.c_str());
+								}
+								else
+								{
+									gPlayer.DropClient(EntityIndex, _T("Plase, register to play in this server."));
+								}
 							}
+
+							return;
 						}
 					}
 				}
 			}
 		}
 
-		const char* ContactAddress = CVAR_GET_STRING("sv_contact");
-
-		if (ContactAddress)
-		{
-			gPlayer.DropClient(EntityIndex, "Register at %s to play in this server..", ContactAddress);
-		}
-		else
-		{
-			gPlayer.DropClient(EntityIndex, "Register to play in this server..");
-		}
+		gPlayer.DropClient(EntityIndex, _T("Failed to get player data, contact support team."));
 	}
 }

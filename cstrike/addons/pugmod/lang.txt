@@ -745,3 +745,11 @@ bp:"A escolha do overtime falhou: \3Nenhum voto."
 "Play Overtime (%d):"
 en:"Play Overtime (%d):"
 bp:"Jogar Overtime (%d):"
+
+"Plase, register to play in this server."
+en:"Plase, register to play in this server."
+bp:"Registre-se para jogar nesse servidor."
+
+"Failed to get player data, contact support team."
+en:"Failed to get player data, contact support team."
+bp:"Falha ao obter dados do jogador, contate o suporte."
