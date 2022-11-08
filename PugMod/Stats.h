@@ -28,6 +28,8 @@ public:
 
 	CPlayerStats GetData(int EntityIndex);
 
+	std::map<std::string, CPlayerStats> GetStats() { return this->m_Stats; };
+
 private:
 	int GetActiveWeapon(CBasePlayer* Player, bool AllowKnife);
 
