@@ -80,11 +80,12 @@ void CWebApi::SaveMatchData()
 	{
 		//
 		// Match Data
-		nlohmann::json MatchData =
+		nlohmann::json ServerData =
 		{
 			CVAR_GET_STRING("hostname"),
 			CVAR_GET_STRING("net_address"),
 			static_cast<long long>(std::time(NULL)),
+			STRING(gpGlobals->mapname),
 			gPugMod.GetScores(TERRORIST),
 			gPugMod.GetScores(CT)
 		};
@@ -244,6 +245,32 @@ void CWebApi::SaveMatchData()
 				Player.second.HackStats[HACK_ONEHIT],
 				Player.second.HackStats[HACK_NOSCOP]
 			});
+		}
+		//
+		// Store Match Data
+		nlohmann::json MatchData;
+		//
+		// PlayerData, RoundData, BombData, HitBoxData, HitBoxDamageData, WeaponStatsData, KillStreakData, VersusData, MoneyData, HackStatsData;
+		MatchData.push_back(ServerData);
+		MatchData.push_back(PlayerData);
+		MatchData.push_back(RoundData);
+		MatchData.push_back(BombData);
+		MatchData.push_back(HitBoxData);
+		MatchData.push_back(HitBoxDamageData);
+		MatchData.push_back(WeaponStatsData);
+		MatchData.push_back(VersusData);
+		MatchData.push_back(MoneyData);
+		MatchData.push_back(HackStatsData);
+		//
+		if (MatchData.size())
+		{
+			// Send data
+			const char* url = gUtil.VarArgs("%s?matchData=%s", WebApiUrl, CVAR_GET_STRING("net_address"));
+			//
+			if (url)
+			{
+				gLibCurl.PostJSON(url, MatchData.dump(), NULL, 0);
+			}
 		}
 	}
 }

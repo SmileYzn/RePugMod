@@ -96,6 +96,48 @@ void CLibCurl::Get(const char* url, void* FunctionCallback, int CallbackData)
 	}
 }
 
+void CLibCurl::PostJSON(const char* url, std::string PostData, void* FunctionCallback, int CallbackData)
+{
+	if (this->m_MultiHandle)
+	{
+		if (url)
+		{
+			CURL* ch = curl_easy_init();
+
+			if (ch)
+			{
+				this->m_Data[this->m_RequestIndex] = { 0 };
+
+				this->m_Data[this->m_RequestIndex].Callback = FunctionCallback;
+
+				this->m_Data[this->m_RequestIndex].CallbackData = CallbackData;
+
+				curl_easy_setopt(ch, CURLOPT_URL, url);
+
+				curl_easy_setopt(ch, CURLOPT_TIMEOUT, 5L);
+
+				curl_easy_setopt(ch, CURLOPT_NOPROGRESS, 1L);
+
+				curl_easy_setopt(ch, CURLOPT_POST, 1L);
+
+				curl_easy_setopt(ch, CURLOPT_POSTFIELDSIZE, (long)PostData.size());
+
+				curl_easy_setopt(ch, CURLOPT_COPYPOSTFIELDS, PostData.c_str());
+
+				curl_easy_setopt(ch, CURLOPT_WRITEFUNCTION, this->WriteMemoryCallback);
+
+				curl_easy_setopt(ch, CURLOPT_WRITEDATA, (void*)&this->m_Data[this->m_RequestIndex]);
+
+				curl_easy_setopt(ch, CURLOPT_PRIVATE, this->m_RequestIndex);
+
+				curl_multi_add_handle(this->m_MultiHandle, ch);
+
+				this->m_RequestIndex++;
+			}
+		}
+	}
+}
+
 size_t CLibCurl::WriteMemoryCallback(void* contents, size_t size, size_t nmemb, void* userp)
 {
 	size_t realsize = size * nmemb;

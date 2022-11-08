@@ -33,7 +33,9 @@ void CStats::GetIntoGame(CBasePlayer* Player)
 
 		this->m_Data[EntityIndex].Clear();
 
-		auto it = this->m_Stats.find(STRING(Player->edict()->v.netname));
+		const char* PlayerAuth = !Player->IsBot() ? GETPLAYERAUTHID(Player->edict()) : STRING(Player->edict()->v.netname);
+
+		auto it = this->m_Stats.find(PlayerAuth);
 
 		if (it != this->m_Stats.end())
 		{
@@ -52,7 +54,9 @@ void CStats::Disconnected(edict_t* pEdict)
 
 		if (this->m_Data[EntityIndex].Rounds[ROUND_PLAY] > 0)
 		{
-			this->m_Stats.insert(std::make_pair(STRING(pEdict->v.netname), this->m_Data[EntityIndex]));
+			const char* PlayerAuth = !(pEdict->v.flags & FL_FAKECLIENT) ? GETPLAYERAUTHID(pEdict) : STRING(pEdict->v.netname);
+
+			this->m_Stats.insert(std::make_pair(PlayerAuth, this->m_Data[EntityIndex]));
 
 			this->m_Data[EntityIndex].Clear();
 		}

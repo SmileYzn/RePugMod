@@ -17,6 +17,7 @@ public:
 	void Frame();
 
 	void Get(const char* url, void* FunctionCallback, int CallbackData);
+	void PostJSON(const char* url, std::string PostData, void* FunctionCallback, int CallbackData);
 
 	static size_t WriteMemoryCallback(void* contents, size_t size, size_t nmemb, void* userp);
 
