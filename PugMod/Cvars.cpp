@@ -146,7 +146,7 @@ cvar_t* CCvars::Register(const char* Name, const char* Value)
 		VariableData.string = (char*)Value;
 
 		// Set flags
-		VariableData.flags = (FCVAR_SERVER | FCVAR_PROTECTED | FCVAR_SPONLY | FCVAR_UNLOGGED);
+		VariableData.flags = (FCVAR_SERVER | FCVAR_EXTDLL | FCVAR_PROTECTED | FCVAR_SPONLY | FCVAR_UNLOGGED);
 
 		// Register the variable
 		CVAR_REGISTER(&VariableData);
