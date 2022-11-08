@@ -43,8 +43,6 @@ void CWebApi::RequestCallback(CURL* ch, size_t Size, const char* Memory, int Ent
 					{
 						auto ResultData = nlohmann::json::parse(Memory);
 
-						gUtil.ServerPrint("%s", Memory);
-
 						if (ResultData.contains("kick") && ResultData.contains("reason"))
 						{
 							auto KickPlayer = ResultData["kick"].get<bool>();
