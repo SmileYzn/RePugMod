@@ -116,7 +116,7 @@ bp:"Fim de Jogo! Placar empatado: %d-%d"
 
 "Score is tied: %d-%d"
 en:"Score is tied: %d-%d"
-bp:"Placar empetado: %d-%d"
+bp:"Placar empatado: %d-%d"
 
 "--- MATCH IS LIVE ---"
 en:"--- MATCH IS LIVE ---"
