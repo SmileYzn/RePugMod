@@ -13,7 +13,7 @@ set "copyPath2=D:\Files\Desktop\steamcmd\hlds\cstrike\addons\pugmod\dlls"
 if exist %copyPath1% (copy %outputFile% %copyPath1%)
 if exist %copyPath2% (copy %outputFile% %copyPath2%)
 
-set "hldsParam=-console -game cstrike +port 27020 +map de_dust2 +maxplayers 32 +sys_ticrate 1000 -pingboost 3 -master -bots"
+set "hldsParam=-console -game cstrike +port 27020 +map de_inferno +maxplayers 32 +sys_ticrate 1000 -pingboost 3 -master -bots +log on"
 
 set "hldsPath1=C:\Files\Desktop\steamcmd\hlds"
 set "hldsPath2=D:\Files\Desktop\steamcmd\hlds"
