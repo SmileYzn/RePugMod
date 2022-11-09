@@ -147,27 +147,23 @@ void CWebApi::SaveMatchData()
 			MatchData[AuthId]["hitbox"] =
 			{
 				{"generic",Stats.HitBox[HITGROUP_GENERIC]},
+				{"generic_dmg",Stats.HitBoxDamage[HITGROUP_GENERIC]},
 				{"head",Stats.HitBox[HITGROUP_HEAD]},
+				{"head_dmg",Stats.HitBoxDamage[HITGROUP_HEAD]},
 				{"chest",Stats.HitBox[HITGROUP_CHEST]},
+				{"chest_dmg",Stats.HitBoxDamage[HITGROUP_CHEST]},
 				{"stomach",Stats.HitBox[HITGROUP_STOMACH]},
+				{"stomach_dmg",Stats.HitBoxDamage[HITGROUP_STOMACH]},
 				{"leftarm",Stats.HitBox[HITGROUP_LEFTARM]},
+				{"leftarm_dmg",Stats.HitBoxDamage[HITGROUP_LEFTARM]},
 				{"rightarm",Stats.HitBox[HITGROUP_RIGHTARM]},
+				{"rightarm_dmg",Stats.HitBoxDamage[HITGROUP_RIGHTARM]},
 				{"leftleg",Stats.HitBox[HITGROUP_LEFTLEG]},
+				{"leftleg_dmg",Stats.HitBoxDamage[HITGROUP_LEFTLEG]},
 				{"rightleg",Stats.HitBox[HITGROUP_RIGHTLEG]},
+				{"rightleg_dmg",Stats.HitBoxDamage[HITGROUP_RIGHTLEG]},
 				{"shield",Stats.HitBox[HITGROUP_SHIELD]},
-			};
-			//
-			MatchData[AuthId]["hitbox_damage"] =
-			{
-				{"generic",Stats.HitBoxDamage[HITGROUP_GENERIC]},
-				{"head",Stats.HitBoxDamage[HITGROUP_HEAD]},
-				{"chest",Stats.HitBoxDamage[HITGROUP_CHEST]},
-				{"stomach",Stats.HitBoxDamage[HITGROUP_STOMACH]},
-				{"leftarm",Stats.HitBoxDamage[HITGROUP_LEFTARM]},
-				{"rightarm",Stats.HitBoxDamage[HITGROUP_RIGHTARM]},
-				{"leftleg",Stats.HitBoxDamage[HITGROUP_LEFTLEG]},
-				{"rightleg",Stats.HitBoxDamage[HITGROUP_RIGHTLEG]},
-				{"shield",Stats.HitBoxDamage[HITGROUP_SHIELD]},
+				{"shield_dmg",Stats.HitBoxDamage[HITGROUP_SHIELD]},
 			};
 			//
 			MatchData[AuthId]["killstreak"] =
@@ -209,9 +205,9 @@ void CWebApi::SaveMatchData()
 			//
 			MatchData[AuthId]["hack"] = 
 			{
-				{"vision", Stats.HackStats[HACK_VISION]},
-				{ "onehit",Stats.HackStats[HACK_ONEHIT] },
-				{ "noscope",Stats.HackStats[HACK_NOSCOP] },
+				{"vision",Stats.HackStats[HACK_VISION]},
+				{"onehit",Stats.HackStats[HACK_ONEHIT] },
+				{"noscope",Stats.HackStats[HACK_NOSCOP] },
 			};
 			//
 			for (int WeaponId = 1; WeaponId < MAX_WEAPONS; WeaponId++)
