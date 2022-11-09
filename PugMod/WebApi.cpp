@@ -79,17 +79,6 @@ void CWebApi::SaveMatchData()
 	if (WebApiUrl != NULL && (WebApiUrl[0] != '\0'))
 	{
 		//
-		// Match Data
-		nlohmann::json ServerData =
-		{
-			CVAR_GET_STRING("hostname"),
-			CVAR_GET_STRING("net_address"),
-			static_cast<long long>(std::time(NULL)),
-			STRING(gpGlobals->mapname),
-			gPugMod.GetScores(TERRORIST),
-			gPugMod.GetScores(CT)
-		};
-		//
 		// Save all player in stats container
 		for (int i = 1; i <= gpGlobals->maxClients; ++i)
 		{
@@ -102,169 +91,149 @@ void CWebApi::SaveMatchData()
 		}
 		//
 		// Json data for players
-		nlohmann::json PlayerData, RoundData, BombData, HitBoxData, HitBoxDamageData, WeaponStatsData, KillStreakData, VersusData, MoneyData, HackStatsData;
+		nlohmann::json MatchData;
 		//
-		// Log Player Stats
+		MatchData["server"] = 
+		{
+			{"hostname", CVAR_GET_STRING("hostname")},
+			{"address", CVAR_GET_STRING("net_address")},
+			{"time", static_cast<long long>(std::time(NULL))},
+			{"map", STRING(gpGlobals->mapname)},
+			{"score_tr", gPugMod.GetScores(TERRORIST)},
+			{"score_ct", gPugMod.GetScores(CT)},
+		};
+		//
 		for (auto const& Player : gStats.GetStats())
 		{
-			PlayerData.push_back
-			({
-				Player.first.c_str(),
-				Player.second.Frags,
-				Player.second.Assists,
-				Player.second.Deaths,
-				Player.second.Headshot,
-				Player.second.Shots,
-				Player.second.Hits,
-				Player.second.Damage,
-				Player.second.DamageReceive,
-				Player.second.JoinTime,
-				Player.second.GameTime,
-				Player.second.RoundWinShare
-			});
-			//
-			// Log Round Stats
-			RoundData.push_back
-			({
-				Player.first.c_str(),
-				Player.second.Rounds[ROUND_PLAY],
-				Player.second.Rounds[ROUND_WIN_TR],
-				Player.second.Rounds[ROUND_LOSE_TR],
-				Player.second.Rounds[ROUND_WIN_CT],
-				Player.second.Rounds[ROUND_LOSE_CT]
-			});
-			//
-			// Log Bomb Stats
-			BombData.push_back
-			({
-				Player.first.c_str(),
-				Player.second.BombStats[BOMB_PLANTING],
-				Player.second.BombStats[BOMB_PLANTED],
-				Player.second.BombStats[BOMB_EXPLODED],
-				Player.second.BombStats[BOMB_DEFUSING],
-				Player.second.BombStats[BOMB_DEFUSED]
-			});
-			//
-			// Log HitBox Stats
-			HitBoxData.push_back
-			({
-				Player.first.c_str(),
-				Player.second.HitBox[HITGROUP_GENERIC],
-				Player.second.HitBox[HITGROUP_HEAD],
-				Player.second.HitBox[HITGROUP_CHEST],
-				Player.second.HitBox[HITGROUP_STOMACH],
-				Player.second.HitBox[HITGROUP_LEFTARM],
-				Player.second.HitBox[HITGROUP_RIGHTARM],
-				Player.second.HitBox[HITGROUP_LEFTLEG],
-				Player.second.HitBox[HITGROUP_RIGHTLEG],
-				Player.second.HitBox[HITGROUP_SHIELD]
-			});
-			//
-			// Log HitBox Damage
-			HitBoxDamageData.push_back
-			({
-				Player.first.c_str(),
-				Player.second.HitBoxDamage[HITGROUP_GENERIC],
-				Player.second.HitBoxDamage[HITGROUP_HEAD],
-				Player.second.HitBoxDamage[HITGROUP_CHEST],
-				Player.second.HitBoxDamage[HITGROUP_STOMACH],
-				Player.second.HitBoxDamage[HITGROUP_LEFTARM],
-				Player.second.HitBoxDamage[HITGROUP_RIGHTARM],
-				Player.second.HitBoxDamage[HITGROUP_LEFTLEG],
-				Player.second.HitBoxDamage[HITGROUP_RIGHTLEG],
-				Player.second.HitBoxDamage[HITGROUP_SHIELD]
-			});
-			//
-			// Log Weapon Stats
-			for (int WeaponType = 0; WeaponType < MAX_WEAPONS; WeaponType++)
+			// Auth Id
+			const char* AuthId = Player.first.c_str();
+
+			// Player Stats
+			CPlayerStats Stats = Player.second;
+
+			// Stats
+			MatchData[AuthId]["stats"] = 
 			{
-				if (Player.second.WeaponStats[WeaponType][WEAPON_SHOT] > 0)
+				{"frags",Stats.Frags},
+				{"assists",Stats.Assists},
+				{"deaths",Stats.Deaths},
+				{"hs",Stats.Headshot},
+				{"shots",Stats.Shots},
+				{"hits",Stats.Hits},
+				{"damage",Stats.Damage},
+				{"damage_recv",Stats.DamageReceive},
+				{"join_time",Stats.JoinTime},
+				{"rws",Stats.RoundWinShare},
+			};
+			//
+			MatchData[AuthId]["round"] =
+			{
+				{"play",Stats.Rounds[ROUND_PLAY]},
+				{"win_tr",Stats.Rounds[ROUND_WIN_TR]},
+				{"lose_tr",Stats.Rounds[ROUND_LOSE_TR]},
+				{"win_ct",Stats.Rounds[ROUND_WIN_CT]},
+				{"lose_ct",Stats.Rounds[ROUND_LOSE_CT]},
+			};
+			//
+			MatchData[AuthId]["bomb"] =
+			{
+				{"planting", Stats.BombStats[BOMB_PLANTING]},
+				{"planted",Stats.BombStats[BOMB_PLANTED]},
+				{"explode",Stats.BombStats[BOMB_EXPLODED]},
+				{"defusing",Stats.BombStats[BOMB_DEFUSING]},
+				{"defused",Stats.BombStats[BOMB_DEFUSED]},
+			};
+			//
+			MatchData[AuthId]["hitbox"] =
+			{
+				{"generic",Stats.HitBox[HITGROUP_GENERIC]},
+				{"head",Stats.HitBox[HITGROUP_HEAD]},
+				{"chest",Stats.HitBox[HITGROUP_CHEST]},
+				{"stomach",Stats.HitBox[HITGROUP_STOMACH]},
+				{"leftarm",Stats.HitBox[HITGROUP_LEFTARM]},
+				{"rightarm",Stats.HitBox[HITGROUP_RIGHTARM]},
+				{"leftleg",Stats.HitBox[HITGROUP_LEFTLEG]},
+				{"rightleg",Stats.HitBox[HITGROUP_RIGHTLEG]},
+				{"shield",Stats.HitBox[HITGROUP_SHIELD]},
+			};
+			//
+			MatchData[AuthId]["hitbox_damage"] =
+			{
+				{"generic",Stats.HitBoxDamage[HITGROUP_GENERIC]},
+				{"head",Stats.HitBoxDamage[HITGROUP_HEAD]},
+				{"chest",Stats.HitBoxDamage[HITGROUP_CHEST]},
+				{"stomach",Stats.HitBoxDamage[HITGROUP_STOMACH]},
+				{"leftarm",Stats.HitBoxDamage[HITGROUP_LEFTARM]},
+				{"rightarm",Stats.HitBoxDamage[HITGROUP_RIGHTARM]},
+				{"leftleg",Stats.HitBoxDamage[HITGROUP_LEFTLEG]},
+				{"rightleg",Stats.HitBoxDamage[HITGROUP_RIGHTLEG]},
+				{"shield",Stats.HitBoxDamage[HITGROUP_SHIELD]},
+			};
+			//
+			MatchData[AuthId]["killstreak"] =
+			{
+				{"k1",Stats.KillStreak[1]},
+				{"k2",Stats.KillStreak[2]},
+				{"k3",Stats.KillStreak[3]},
+				{"k4",Stats.KillStreak[4]},
+				{"k5",Stats.KillStreak[5]},
+			};
+			//
+			MatchData[AuthId]["versus"] =
+			{
+				{"v1",Stats.Versus[1]},
+				{"v2",Stats.Versus[2]},
+				{"v3",Stats.Versus[3]},
+				{"v4",Stats.Versus[4]},
+				{"v5",Stats.Versus[5]},
+			};
+			//
+			MatchData[AuthId]["money"] = 
+			{
+				{"none",Stats.Money[RT_NONE]},
+				{"round_bonus",Stats.Money[RT_ROUND_BONUS]},
+				{"player_reset",Stats.Money[RT_PLAYER_RESET]},
+				{"player_join",Stats.Money[RT_PLAYER_JOIN]},
+				{"player_spec_join",Stats.Money[RT_PLAYER_SPEC_JOIN]},
+				{"player_bought_something",Stats.Money[RT_PLAYER_BOUGHT_SOMETHING]},
+				{"hostage_took",Stats.Money[RT_HOSTAGE_TOOK]},
+				{"hostage_rescued",Stats.Money[RT_HOSTAGE_RESCUED]},
+				{"hostage_damaged",Stats.Money[RT_HOSTAGE_DAMAGED]},
+				{"hostage_killed",Stats.Money[RT_HOSTAGE_KILLED]},
+				{"teammates_killed",Stats.Money[RT_TEAMMATES_KILLED]},
+				{"enemy_killed",Stats.Money[RT_ENEMY_KILLED]},
+				{"into_game",Stats.Money[RT_INTO_GAME]},
+				{"vip_killed",Stats.Money[RT_VIP_KILLED]},
+				{"vip_rescued_myself",Stats.Money[RT_VIP_RESCUED_MYSELF]},
+			};
+			//
+			MatchData[AuthId]["hack"] = 
+			{
+				{"vision", Stats.HackStats[HACK_VISION]},
+				{ "onehit",Stats.HackStats[HACK_ONEHIT] },
+				{ "noscope",Stats.HackStats[HACK_NOSCOP] },
+			};
+			//
+			for (int WeaponId = 1; WeaponId < MAX_WEAPONS; WeaponId++)
+			{
+				if (Stats.WeaponStats[WeaponId][WEAPON_SHOT] > 0)
 				{
-					WeaponStatsData.push_back
+					MatchData[AuthId]["weapon"].push_back
 					({
-						Player.first.c_str(),
-						WeaponType,
-						Player.second.WeaponStats[WeaponType][WEAPON_KILL],
-						Player.second.WeaponStats[WeaponType][WEAPON_DEATH],
-						Player.second.WeaponStats[WeaponType][WEAPON_HEADSHOT],
-						Player.second.WeaponStats[WeaponType][WEAPON_SHOT],
-						Player.second.WeaponStats[WeaponType][WEAPON_HIT],
-						Player.second.WeaponStats[WeaponType][WEAPON_DAMAGE]
+						{"weapon",WeaponId},
+						{"kills",Stats.WeaponStats[WeaponId][WEAPON_KILL]},
+						{"deaths",Stats.WeaponStats[WeaponId][WEAPON_DEATH]},
+						{"hs",Stats.WeaponStats[WeaponId][WEAPON_HEADSHOT]},
+						{"shots",Stats.WeaponStats[WeaponId][WEAPON_SHOT]},
+						{"hits",Stats.WeaponStats[WeaponId][WEAPON_HIT]},
+						{"damage",Stats.WeaponStats[WeaponId][WEAPON_DAMAGE]},
 					});
 				}
 			}
-			//
-			// Log KillStreak
-			KillStreakData.push_back
-			({
-				Player.first.c_str(),
-				Player.second.KillStreak[1],
-				Player.second.KillStreak[2],
-				Player.second.KillStreak[3],
-				Player.second.KillStreak[4],
-				Player.second.KillStreak[5]
-			});
-			//
-			// Log Versus
-			VersusData.push_back
-			({
-				Player.first.c_str(),
-				Player.second.Versus[1],
-				Player.second.Versus[2],
-				Player.second.Versus[3],
-				Player.second.Versus[4],
-				Player.second.Versus[5]
-			});
-			//
-			// Log Money
-			MoneyData.push_back
-			({
-				Player.first.c_str(),
-				Player.second.Money[RT_NONE],
-				Player.second.Money[RT_ROUND_BONUS],
-				Player.second.Money[RT_PLAYER_RESET],
-				Player.second.Money[RT_PLAYER_JOIN],
-				Player.second.Money[RT_PLAYER_SPEC_JOIN],
-				Player.second.Money[RT_PLAYER_BOUGHT_SOMETHING],
-				Player.second.Money[RT_HOSTAGE_TOOK],
-				Player.second.Money[RT_HOSTAGE_RESCUED],
-				Player.second.Money[RT_HOSTAGE_DAMAGED],
-				Player.second.Money[RT_HOSTAGE_KILLED],
-				Player.second.Money[RT_TEAMMATES_KILLED],
-				Player.second.Money[RT_ENEMY_KILLED],
-				Player.second.Money[RT_INTO_GAME],
-				Player.second.Money[RT_VIP_KILLED],
-				Player.second.Money[RT_VIP_RESCUED_MYSELF]
-			});
-			//
-			// Log HackStats
-			HackStatsData.push_back
-			({
-				Player.first.c_str(),
-				Player.second.HackStats[HACK_VISION],
-				Player.second.HackStats[HACK_ONEHIT],
-				Player.second.HackStats[HACK_NOSCOP]
-			});
 		}
-		//
-		// Store Match Data
-		nlohmann::json MatchData;
-		//
-		// PlayerData, RoundData, BombData, HitBoxData, HitBoxDamageData, WeaponStatsData, KillStreakData, VersusData, MoneyData, HackStatsData;
-		MatchData.push_back(ServerData);
-		MatchData.push_back(PlayerData);
-		MatchData.push_back(RoundData);
-		MatchData.push_back(BombData);
-		MatchData.push_back(HitBoxData);
-		MatchData.push_back(HitBoxDamageData);
-		MatchData.push_back(WeaponStatsData);
-		MatchData.push_back(VersusData);
-		MatchData.push_back(MoneyData);
-		MatchData.push_back(HackStatsData);
 		//
 		if (MatchData.size())
 		{
-			// Send data
 			const char* url = gUtil.VarArgs("%s?matchData=%s", WebApiUrl, CVAR_GET_STRING("net_address"));
 			//
 			if (url)

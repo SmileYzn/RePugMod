@@ -18,9 +18,7 @@ void CPlayerStats::Clear()
 
 	this->DamageReceive = 0;
 
-	this->JoinTime = gpGlobals->time;
-
-	this->GameTime = 0.0f;
+	this->JoinTime = 0;
 
 	memset(this->Rounds, 0, sizeof(this->Rounds));
 
@@ -30,7 +28,7 @@ void CPlayerStats::Clear()
 
 	memset(this->HitBox, 0, sizeof(this->HitBox));
 
-	memset(this->WeaponStats, 0, sizeof(this->WeaponStats));
+	memset(this->WeaponStats, {0}, sizeof(this->WeaponStats));
 
 	memset(this->KillStreak, 0, sizeof(this->KillStreak));
 

@@ -76,8 +76,7 @@ public:
 	int Hits = 0;												// Ok
 	int Damage = 0;												// Ok
 	int DamageReceive = 0;										// Ok
-	float JoinTime = 0.0f;										// Ok
-	float GameTime = 0.0f;										// To do: Add Total Game Time
+	time_t JoinTime = 0;										// Ok
 	float RoundWinShare = 0.0f;									// Ok
 	int Rounds[ROUND_LOSE_CT + 1] = { 0 };						// Ok
 	int BombStats[BOMB_DEFUSED + 1] = { 0 };					// Ok

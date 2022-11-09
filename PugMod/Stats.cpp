@@ -6,19 +6,19 @@ void CStats::Clear()
 {
 	this->m_Stats.clear();
 
-	memset(this->m_Data, 0, sizeof(this->m_Data));
+	memset(this->m_Data, { 0 }, sizeof(this->m_Data));
 
-	memset(this->m_RoundHits, 0, sizeof(this->m_RoundHits));
+	memset(this->m_RoundHits, { 0 }, sizeof(this->m_RoundHits));
 
-	memset(this->m_RoundDamage, 0, sizeof(this->m_RoundDamage));
+	memset(this->m_RoundDamage, { 0 }, sizeof(this->m_RoundDamage));
 
-	memset(this->m_RoundDamageSelf, 0, sizeof(this->m_RoundDamageSelf));
+	memset(this->m_RoundDamageSelf, { 0 }, sizeof(this->m_RoundDamageSelf));
 
-	memset(this->m_RoundDamageTeam, 0, sizeof(this->m_RoundDamageTeam));
+	memset(this->m_RoundDamageTeam, { 0 }, sizeof(this->m_RoundDamageTeam));
 
-	memset(this->m_RoundFrags, 0, sizeof(this->m_RoundFrags));
+	memset(this->m_RoundFrags, { 0 }, sizeof(this->m_RoundFrags));
 
-	memset(this->m_RoundVersus, 0, sizeof(this->m_RoundVersus));
+	memset(this->m_RoundVersus, { 0 }, sizeof(this->m_RoundVersus));
 
 	this->m_RoundBombPlanter = -1;
 
@@ -32,6 +32,8 @@ void CStats::GetIntoGame(CBasePlayer* Player)
 		int EntityIndex = Player->entindex();
 
 		this->m_Data[EntityIndex].Clear();
+
+		this->m_Data[EntityIndex].JoinTime = time(NULL);
 
 		const char* PlayerAuth = !Player->IsBot() ? GETPLAYERAUTHID(Player->edict()) : STRING(Player->edict()->v.netname);
 
@@ -262,7 +264,7 @@ void CStats::SetAnimation(CBasePlayer* Player, PLAYER_ANIM playerAnim)
 	{
 		if (Player)
 		{
-			if (playerAnim == PLAYER_ATTACK1 || playerAnim == PLAYER_ATTACK2)
+			if ((playerAnim == PLAYER_ATTACK1) || (playerAnim == PLAYER_ATTACK2))
 			{
 				auto ItemIndex = this->GetActiveWeapon(Player, false);
 
