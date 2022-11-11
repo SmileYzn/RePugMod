@@ -63,6 +63,17 @@ enum HackStatsGroup
 	HACK_NOSCOP = 4, // Ok
 };
 
+/**
+* Advanced Group
+*/
+enum AdvancedStatsGroup
+{
+	FIRST_ROUND_FRAGS = 0, // TO DO: First player that kills someone in round
+	FIRST_ROUND_DEATH = 1, // TO DO: First player that has ben killed by someone
+	TRADE_FRAGS = 2,       // TO DO: Player that kill enemy while other teammate die to give frag to him
+	TRADE_DEATH = 3,	   // TO DO: Player that was dead while other teammate kill her assasin
+};
+
 class CPlayerStats
 {
 public:
@@ -87,4 +98,5 @@ public:
 	int Versus[MAX_CLIENTS + 1] = { 0 };						// Test
 	int Money[RT_VIP_RESCUED_MYSELF + 1] = { 0 };				// OK
 	int HackStats[HACK_NOSCOP + 1] = { 0 };						// Test
+	int AdvancedStats[TRADE_DEATH + 1] = { 0 };					// To do
 };

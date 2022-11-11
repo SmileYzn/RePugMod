@@ -29,6 +29,7 @@ public:
 	CPlayerStats GetData(int EntityIndex);
 
 	std::map<std::string, CPlayerStats> GetStats() { return this->m_Stats; };
+	std::vector<int> GetRoundEndType() { return this->m_RoundEndType;  };
 
 private:
 	int GetActiveWeapon(CBasePlayer* Player, bool AllowKnife);
@@ -36,6 +37,7 @@ private:
 	CPlayerStats m_Data[MAX_CLIENTS + 1];
 
 	std::map<std::string, CPlayerStats> m_Stats;
+	std::vector<int> m_RoundEndType;
 
 	int m_RoundHits[MAX_CLIENTS + 1][MAX_CLIENTS + 1] = { 0 };
 	int m_RoundDamage[MAX_CLIENTS + 1][MAX_CLIENTS + 1] = { 0 };
@@ -45,6 +47,7 @@ private:
 	int m_RoundVersus[MAX_CLIENTS + 1] = { 0 };
 	int m_RoundBombPlanter = -1;
 	int m_RoundBombDefuser = -1;
+	bool m_RoundFirstKill = false;
 };
 
 extern CStats gStats;

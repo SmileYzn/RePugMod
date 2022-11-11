@@ -6,6 +6,8 @@ void CStats::Clear()
 {
 	this->m_Stats.clear();
 
+	this->m_RoundEndType.clear();
+
 	memset(this->m_Data, { 0 }, sizeof(this->m_Data));
 
 	memset(this->m_RoundHits, { 0 }, sizeof(this->m_RoundHits));
@@ -162,6 +164,14 @@ void CStats::Killed(CBasePlayer* Player, entvars_t* pevAttacker, int iGib)
 							if (Player->m_bHeadshotKilled)
 							{
 								this->m_Data[KillerIndex].Headshot++;
+							}
+
+							if (!this->m_RoundFirstKill)
+							{
+								this->m_Data[KillerIndex].AdvancedStats[FIRST_ROUND_FRAGS]++;
+								this->m_Data[VictimIndex].AdvancedStats[FIRST_ROUND_DEATH]++;
+
+								this->m_RoundFirstKill = true;
 							}
 
 							auto ItemIndex = this->GetActiveWeapon(Killer, true);
@@ -375,6 +385,8 @@ void CStats::RoundFreezeEnd()
 		this->m_RoundBombPlanter = -1;
 
 		this->m_RoundBombDefuser = -1;
+
+		this->m_RoundFirstKill = false;
 	}
 }
 
@@ -382,6 +394,11 @@ void CStats::RoundEnd(int winStatus, ScenarioEventEndRound event, float tmDelay)
 {
 	if (gPugMod.IsLive())
 	{
+		if (winStatus == WINSTATUS_TERRORISTS || winStatus == WINSTATUS_CTS || winStatus == WINSTATUS_DRAW)
+		{
+			this->m_RoundEndType.push_back(event);
+		}
+
 		if (winStatus == WINSTATUS_TERRORISTS || winStatus == WINSTATUS_CTS)
 		{
 			if (event == ROUND_BOMB_DEFUSED)

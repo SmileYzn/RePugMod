@@ -37,4 +37,6 @@ void CPlayerStats::Clear()
 	memset(this->Money, 0, sizeof(this->Money));
 
 	memset(this->HackStats, 0, sizeof(this->HackStats));
+
+	memset(this->AdvancedStats, 0, sizeof(this->AdvancedStats));
 }
