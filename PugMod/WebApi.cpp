@@ -101,7 +101,6 @@ void CWebApi::SaveMatchData()
 			{"map", STRING(gpGlobals->mapname)},
 			{"score_tr", gPugMod.GetScores(TERRORIST)},
 			{"score_ct", gPugMod.GetScores(CT)},
-			{"timeline", gStats.GetRoundEndType()},
 		};
 		//
 		for (auto const& Player : gStats.GetStats())

@@ -5,11 +5,28 @@
 #define MANAGER_RWS_C4_EXPLODE  0.3f	// Round Win Share: Extra amount added to player from winner team that planted the bomb and bomb explode
 #define MANAGER_RWS_C4_DEFUSED  0.3f	// Round Win Share: Extra amount added to player from winner team that defused the bomb
 
+/*
+* Round Events
+*/
+typedef struct
+{
+	int		Round;			// Round Number
+	int		RoundTime;		// Round Time;
+	int		Type;			// ROUND_NONE for player events, ScenarioEventEndRound for round events
+	int		Winner;			// Winner team of event
+	int		Loser;			// Loser team of event
+	std::string	Killer;		// Killer Auth Index
+	std::string	Victim;		// Victim Auth Index
+	bool	IsHeadShot;		// HeadShot
+	int		ItemIndex;		// Weapon
+} P_ROUND_EVENT, *LP_ROUND_EVENT;
+
 class CStats
 {
 public:
 	void Clear();
 
+	// Events
 	void GetIntoGame(CBasePlayer* Player);
 	void Disconnected(edict_t* pEdict);
 	void AddAccount(CBasePlayer* Player, int amount, RewardType type, bool bTrackChange);
@@ -23,21 +40,24 @@ public:
 	void RoundFreezeEnd();
 	void RoundEnd(int winStatus, ScenarioEventEndRound event, float tmDelay);
 
+	// Round Event
+	void AddRoundEvent(int Type, int KillerIndex, int VictimIndex, int KillerTeam, int VictimTeam, bool IsHeadShot, int ItemIndex);
+
+	// Helpers
 	int GetRoundHits(int AttackerIndex, int TargetIndex);
 	int GetRoundDamage(int AttackerIndex, int TargetIndex);
-
-	CPlayerStats GetData(int EntityIndex);
-
-	std::map<std::string, CPlayerStats> GetStats() { return this->m_Stats; };
-	std::vector<int> GetRoundEndType() { return this->m_RoundEndType;  };
-
-private:
 	int GetActiveWeapon(CBasePlayer* Player, bool AllowKnife);
 
-	CPlayerStats m_Data[MAX_CLIENTS + 1];
+	// Data
+	CPlayerStats GetData(int EntityIndex) { return this->m_Data[EntityIndex];  }
 
+	// Player Stats
+	std::map<std::string, CPlayerStats> GetStats() { return this->m_Stats; };
+
+private:
+	CPlayerStats m_Data[MAX_CLIENTS + 1];
 	std::map<std::string, CPlayerStats> m_Stats;
-	std::vector<int> m_RoundEndType;
+	std::vector<P_ROUND_EVENT> m_RoundEvent;
 
 	int m_RoundHits[MAX_CLIENTS + 1][MAX_CLIENTS + 1] = { 0 };
 	int m_RoundDamage[MAX_CLIENTS + 1][MAX_CLIENTS + 1] = { 0 };

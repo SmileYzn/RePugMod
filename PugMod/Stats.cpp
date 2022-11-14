@@ -6,7 +6,7 @@ void CStats::Clear()
 {
 	this->m_Stats.clear();
 
-	this->m_RoundEndType.clear();
+	this->m_RoundEvent.clear();
 
 	memset(this->m_Data, { 0 }, sizeof(this->m_Data));
 
@@ -37,9 +37,9 @@ void CStats::GetIntoGame(CBasePlayer* Player)
 
 		this->m_Data[EntityIndex].JoinTime = time(NULL);
 
-		const char* PlayerAuth = !Player->IsBot() ? GETPLAYERAUTHID(Player->edict()) : STRING(Player->edict()->v.netname);
+		const char* Auth = GETPLAYERAUTHID(Player->edict());
 
-		auto it = this->m_Stats.find(PlayerAuth);
+		auto it = this->m_Stats.find(Auth);
 
 		if (it != this->m_Stats.end())
 		{
@@ -58,9 +58,21 @@ void CStats::Disconnected(edict_t* pEdict)
 
 		if (this->m_Data[EntityIndex].Rounds[ROUND_PLAY] > 0)
 		{
-			const char* PlayerAuth = !(pEdict->v.flags & FL_FAKECLIENT) ? GETPLAYERAUTHID(pEdict) : STRING(pEdict->v.netname);
+			const char* Name = STRING(pEdict->v.netname);
 
-			this->m_Stats.insert(std::make_pair(PlayerAuth, this->m_Data[EntityIndex]));
+			if (Name && Name[0] != '\0')
+			{
+				this->m_Data[EntityIndex].Name = Name;
+			}
+
+			const char* Auth = GETPLAYERAUTHID(pEdict);
+
+			if (Auth && Auth[0] != '\0')
+			{
+				this->m_Data[EntityIndex].Auth = Auth;
+			}
+
+			this->m_Stats.insert(std::make_pair(Auth, this->m_Data[EntityIndex]));
 
 			this->m_Data[EntityIndex].Clear();
 		}
@@ -153,6 +165,8 @@ void CStats::Killed(CBasePlayer* Player, entvars_t* pevAttacker, int iGib)
 
 						auto KillerIndex = Killer->entindex();
 
+						auto ItemIndex = this->GetActiveWeapon(Killer, true);
+
 						if (VictimIndex != KillerIndex)
 						{
 							this->m_Data[VictimIndex].Deaths++;
@@ -173,8 +187,6 @@ void CStats::Killed(CBasePlayer* Player, entvars_t* pevAttacker, int iGib)
 
 								this->m_RoundFirstKill = true;
 							}
-
-							auto ItemIndex = this->GetActiveWeapon(Killer, true);
 
 							if (ItemIndex)
 							{
@@ -261,6 +273,8 @@ void CStats::Killed(CBasePlayer* Player, entvars_t* pevAttacker, int iGib)
 								}
 							}
 						}
+
+						this->AddRoundEvent(ROUND_NONE, KillerIndex, VictimIndex, Killer->m_iTeam, Player->m_iTeam, Player->m_bHeadshotKilled, ItemIndex);
 					}
 				}
 			}
@@ -396,11 +410,16 @@ void CStats::RoundEnd(int winStatus, ScenarioEventEndRound event, float tmDelay)
 	{
 		if (winStatus == WINSTATUS_TERRORISTS || winStatus == WINSTATUS_CTS || winStatus == WINSTATUS_DRAW)
 		{
-			this->m_RoundEndType.push_back(event);
+			TeamName Winner = (winStatus != WINSTATUS_DRAW) ? (winStatus == WINSTATUS_TERRORISTS ? TERRORIST : CT) : UNASSIGNED;
+			TeamName Losers = (winStatus != WINSTATUS_DRAW) ? (winStatus == WINSTATUS_TERRORISTS ? CT : TERRORIST) : UNASSIGNED;
+
+			this->AddRoundEvent(event, -1, -1, Winner, Losers, false, -1); // BOMB
 		}
 
 		if (winStatus == WINSTATUS_TERRORISTS || winStatus == WINSTATUS_CTS)
 		{
+			TeamName Winner = (winStatus == WINSTATUS_TERRORISTS) ? TERRORIST : CT;
+
 			if (event == ROUND_BOMB_DEFUSED)
 			{
 				if (this->m_RoundBombDefuser != -1)
@@ -429,8 +448,6 @@ void CStats::RoundEnd(int winStatus, ScenarioEventEndRound event, float tmDelay)
 					}
 				}
 			}
-
-			TeamName Winner = (winStatus == WINSTATUS_TERRORISTS) ? TERRORIST : CT;
 
 			for (int i = 1; i <= gpGlobals->maxClients; ++i)
 			{
@@ -478,6 +495,31 @@ void CStats::RoundEnd(int winStatus, ScenarioEventEndRound event, float tmDelay)
 	}
 }
 
+void CStats::AddRoundEvent(int Type, int KillerIndex, int VictimIndex, int KillerTeam, int VictimTeam, bool IsHeadShot, int ItemIndex)
+{
+	P_ROUND_EVENT Event = { 0 };
+
+	Event.Round = gPugMod.GetRound();
+
+	Event.RoundTime = g_pGameRules ? CSGameRules()->m_iRoundTimeSecs : 0;
+
+	Event.Type = Type;
+
+	Event.Killer = (KillerIndex != -1) ? this->m_Data[KillerIndex].Auth : "";
+
+	Event.Killer = (VictimIndex != -1) ? this->m_Data[VictimIndex].Auth : "";
+
+	Event.Winner = KillerTeam;
+
+	Event.Loser = VictimTeam;
+
+	Event.IsHeadShot = IsHeadShot;
+
+	Event.ItemIndex = ItemIndex;
+
+	this->m_RoundEvent.push_back(Event);
+}
+
 int CStats::GetRoundHits(int AttackerIndex, int TargetIndex)
 {
 	return this->m_RoundHits[AttackerIndex][TargetIndex];
@@ -486,11 +528,6 @@ int CStats::GetRoundHits(int AttackerIndex, int TargetIndex)
 int CStats::GetRoundDamage(int AttackerIndex, int TargetIndex)
 {
 	return this->m_RoundDamage[AttackerIndex][TargetIndex];
-}
-
-CPlayerStats CStats::GetData(int EntityIndex)
-{
-	return this->m_Data[EntityIndex];
 }
 
 int CStats::GetActiveWeapon(CBasePlayer* Player, bool AllowKnife)

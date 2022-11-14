@@ -68,16 +68,19 @@ enum HackStatsGroup
 */
 enum AdvancedStatsGroup
 {
-	FIRST_ROUND_FRAGS = 0, // TO DO: First player that kills someone in round
-	FIRST_ROUND_DEATH = 1, // TO DO: First player that has ben killed by someone
-	TRADE_FRAGS = 2,       // TO DO: Player that kill enemy while other teammate die to give frag to him
-	TRADE_DEATH = 3,	   // TO DO: Player that was dead while other teammate kill her assasin
+	FIRST_ROUND_FRAGS	= 0, // TO DO: First player that kills someone in round
+	FIRST_ROUND_DEATH	= 1, // TO DO: First player that has ben killed by someone
+	TRADE_FRAGS			= 2, // TO DO: Player that kill enemy while other teammate die to give frag to him
+	TRADE_DEATH			= 3, // TO DO: Player that was dead while other teammate kill her assasin
 };
 
 class CPlayerStats
 {
 public:
 	void Clear();
+
+	std::string Name;
+	std::string Auth;
 
 	int Frags = 0;												// Ok
 	int Assists = 0;											// Ok
