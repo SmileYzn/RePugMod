@@ -58,7 +58,7 @@ void CWebApi::RequestCallback(CURL* ch, size_t Size, const char* Memory, int Ent
 								else
 								{
 									gPlayer.DropClient(EntityIndex, _T("Plase, register to play in this server."));
-								}
+								} 
 							}
 
 							return;
@@ -82,18 +82,14 @@ void CWebApi::SaveMatchData()
 		// Save all player in stats container
 		for (int i = 1; i <= gpGlobals->maxClients; ++i)
 		{
-			auto Temp = UTIL_PlayerByIndexSafe(i);
-
-			if (Temp)
-			{
-				gStats.Disconnected(Temp->edict());
-			}
+			gStats.Disconnected(i);
 		}
 		//
 		// Json data for players
 		nlohmann::json MatchData;
 		//
-		MatchData["server"] = 
+		// Server Stats
+		MatchData["server"] +=
 		{
 			{"hostname", CVAR_GET_STRING("hostname")},
 			{"address", CVAR_GET_STRING("net_address")},
@@ -101,18 +97,40 @@ void CWebApi::SaveMatchData()
 			{"map", STRING(gpGlobals->mapname)},
 			{"score_tr", gPugMod.GetScores(TERRORIST)},
 			{"score_ct", gPugMod.GetScores(CT)},
+			{"winner", (int)gPugMod.GetWinner()},
 		};
 		//
-		for (auto const& Player : gStats.GetStats())
+		// Round events
+		for (auto Event : gStats.GetRoundEvents())
+		{
+			MatchData["rounds"] +=
+			{
+				{"round",Event.Round},
+				{"roundTime",Event.RoundTime},
+				{"type",Event.Type},
+				{"winner",Event.Winner},
+				{"loser",Event.Loser},
+				{"killer",Event.Killer}, 
+				{"victim",Event.Victim},
+				{"isHeadShot",Event.IsHeadShot},
+				{"itemIndex",Event.ItemIndex},
+			};
+		}
+		//
+		// Player stats
+		for (auto Player : gStats.GetStats())
 		{
 			// Auth Id
 			const char* AuthId = Player.first.c_str();
-
+			//
 			// Player Stats
 			CPlayerStats Stats = Player.second;
-
+			//
+			// User ID
+			MatchData["players"][AuthId]["userIndex"] = Stats.UserIndex;
+			//
 			// Stats
-			MatchData[AuthId]["stats"] = 
+			MatchData["players"][AuthId]["stats"] =
 			{
 				{"frags",Stats.Frags},
 				{"assists",Stats.Assists},
@@ -126,7 +144,8 @@ void CWebApi::SaveMatchData()
 				{"rws",Stats.RoundWinShare},
 			};
 			//
-			MatchData[AuthId]["round"] =
+			// Round Stats
+			MatchData["players"][AuthId]["round"] =
 			{
 				{"play",Stats.Rounds[ROUND_PLAY]},
 				{"win_tr",Stats.Rounds[ROUND_WIN_TR]},
@@ -135,7 +154,8 @@ void CWebApi::SaveMatchData()
 				{"lose_ct",Stats.Rounds[ROUND_LOSE_CT]},
 			};
 			//
-			MatchData[AuthId]["bomb"] =
+			// Bomb Stats
+			MatchData["players"][AuthId]["bomb"] =
 			{
 				{"planting", Stats.BombStats[BOMB_PLANTING]},
 				{"planted",Stats.BombStats[BOMB_PLANTED]},
@@ -144,7 +164,8 @@ void CWebApi::SaveMatchData()
 				{"defused",Stats.BombStats[BOMB_DEFUSED]},
 			};
 			//
-			MatchData[AuthId]["hitbox"] =
+			// Hitbox Stats
+			MatchData["players"][AuthId]["hitbox"] =
 			{
 				{"generic",Stats.HitBox[HITGROUP_GENERIC]},
 				{"generic_dmg",Stats.HitBoxDamage[HITGROUP_GENERIC]},
@@ -166,7 +187,8 @@ void CWebApi::SaveMatchData()
 				{"shield_dmg",Stats.HitBoxDamage[HITGROUP_SHIELD]},
 			};
 			//
-			MatchData[AuthId]["killstreak"] =
+			// Killstreak Stats
+			MatchData["players"][AuthId]["killstreak"] =
 			{
 				{"k1",Stats.KillStreak[1]},
 				{"k2",Stats.KillStreak[2]},
@@ -175,7 +197,8 @@ void CWebApi::SaveMatchData()
 				{"k5",Stats.KillStreak[5]},
 			};
 			//
-			MatchData[AuthId]["versus"] =
+			// Versus Stats
+			MatchData["players"][AuthId]["versus"] =
 			{
 				{"v1",Stats.Versus[1]},
 				{"v2",Stats.Versus[2]},
@@ -184,7 +207,8 @@ void CWebApi::SaveMatchData()
 				{"v5",Stats.Versus[5]},
 			};
 			//
-			MatchData[AuthId]["money"] = 
+			// Money Stats
+			MatchData["players"][AuthId]["money"] =
 			{
 				{"none",Stats.Money[RT_NONE]},
 				{"round_bonus",Stats.Money[RT_ROUND_BONUS]},
@@ -203,19 +227,30 @@ void CWebApi::SaveMatchData()
 				{"vip_rescued_myself",Stats.Money[RT_VIP_RESCUED_MYSELF]},
 			};
 			//
-			MatchData[AuthId]["hack"] = 
+			// Hack Stats
+			MatchData["players"][AuthId]["hack"] =
 			{
 				{"vision",Stats.HackStats[HACK_VISION]},
-				{"onehit",Stats.HackStats[HACK_ONEHIT] },
-				{"noscope",Stats.HackStats[HACK_NOSCOP] },
+				{"onehit",Stats.HackStats[HACK_ONEHIT]},
+				{"noscope",Stats.HackStats[HACK_NOSCOP]},
 			};
 			//
+			// Advanced Stats
+			MatchData["players"][AuthId]["advanced"] =
+			{
+				{"first_round_frags",Stats.AdvancedStats[FIRST_ROUND_FRAGS]},
+				{"first_round_deaths",Stats.AdvancedStats[FIRST_ROUND_DEATH] },
+				{"trade_frags",Stats.AdvancedStats[TRADE_FRAGS]},
+				{"trade_deaths",Stats.AdvancedStats[TRADE_DEATH]},
+			};
+			//
+			// Weapon Stats
 			for (int WeaponId = 1; WeaponId < MAX_WEAPONS; WeaponId++)
 			{
 				if (Stats.WeaponStats[WeaponId][WEAPON_SHOT] > 0)
 				{
-					MatchData[AuthId]["weapon"].push_back
-					({
+					MatchData["players"][AuthId]["weapon"] +=
+					{
 						{"weapon",WeaponId},
 						{"kills",Stats.WeaponStats[WeaponId][WEAPON_KILL]},
 						{"deaths",Stats.WeaponStats[WeaponId][WEAPON_DEATH]},
@@ -223,18 +258,21 @@ void CWebApi::SaveMatchData()
 						{"shots",Stats.WeaponStats[WeaponId][WEAPON_SHOT]},
 						{"hits",Stats.WeaponStats[WeaponId][WEAPON_HIT]},
 						{"damage",Stats.WeaponStats[WeaponId][WEAPON_DAMAGE]},
-					});
+					};
 				}
 			}
 		}
 		//
 		if (MatchData.size())
 		{
-			const char* url = gUtil.VarArgs("%s?matchData=%s", WebApiUrl, CVAR_GET_STRING("net_address"));
-			//
-			if (url)
+			if (WebApiUrl)
 			{
-				gLibCurl.PostJSON(url, MatchData.dump(), NULL, 0);
+				const char* url = gUtil.VarArgs("%s?matchData=%s", WebApiUrl, CVAR_GET_STRING("net_address"));
+				//
+				if (url)
+				{
+					gLibCurl.PostJSON(url, MatchData.dump(), NULL, 0);
+				}
 			}
 		}
 	}

@@ -79,9 +79,7 @@ class CPlayerStats
 public:
 	void Clear();
 
-	std::string Name;
-	std::string Auth;
-
+	int UserIndex = -1;
 	int Frags = 0;												// Ok
 	int Assists = 0;											// Ok
 	int Deaths = 0;												// Ok

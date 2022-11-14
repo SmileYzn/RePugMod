@@ -8,7 +8,10 @@ void CStats::Clear()
 
 	this->m_RoundEvent.clear();
 
-	memset(this->m_Data, { 0 }, sizeof(this->m_Data));
+	for (int i = 1; i <= gpGlobals->maxClients; ++i)
+	{
+		this->m_Data[i].Clear();
+	}
 
 	memset(this->m_RoundHits, { 0 }, sizeof(this->m_RoundHits));
 
@@ -35,11 +38,13 @@ void CStats::GetIntoGame(CBasePlayer* Player)
 
 		this->m_Data[EntityIndex].Clear();
 
+		this->m_Data[EntityIndex].UserIndex = GETPLAYERUSERID(Player->edict());
+
 		this->m_Data[EntityIndex].JoinTime = time(NULL);
 
-		const char* Auth = GETPLAYERAUTHID(Player->edict());
+		const char* AuthId = !Player->IsBot() ? GETPLAYERAUTHID(Player->edict()) : STRING(Player->edict()->v.netname);
 
-		auto it = this->m_Stats.find(Auth);
+		auto it = this->m_Stats.find(AuthId);
 
 		if (it != this->m_Stats.end())
 		{
@@ -50,29 +55,25 @@ void CStats::GetIntoGame(CBasePlayer* Player)
 	}
 }
 
-void CStats::Disconnected(edict_t* pEdict)
+void CStats::Disconnected(int EntityIndex)
 {
-	if (!FNullEnt(pEdict))
+	auto Player = UTIL_PlayerByIndexSafe(EntityIndex);
+
+	if (Player)
 	{
-		int EntityIndex = ENTINDEX(pEdict);
+		auto pEdict = Player->edict();
 
-		if (this->m_Data[EntityIndex].Rounds[ROUND_PLAY] > 0)
+		if (!FNullEnt(pEdict))
 		{
-			const char* Name = STRING(pEdict->v.netname);
-
-			if (Name && Name[0] != '\0')
+			if (this->m_Data[EntityIndex].Rounds[ROUND_PLAY] > 0)
 			{
-				this->m_Data[EntityIndex].Name = Name;
+				const char* AuthId = !(pEdict->v.flags & FL_FAKECLIENT) ? GETPLAYERAUTHID(pEdict) : STRING(pEdict->v.netname);
+
+				if (AuthId)
+				{
+					this->m_Stats.insert(std::make_pair(AuthId, this->m_Data[EntityIndex]));
+				}
 			}
-
-			const char* Auth = GETPLAYERAUTHID(pEdict);
-
-			if (Auth && Auth[0] != '\0')
-			{
-				this->m_Data[EntityIndex].Auth = Auth;
-			}
-
-			this->m_Stats.insert(std::make_pair(Auth, this->m_Data[EntityIndex]));
 
 			this->m_Data[EntityIndex].Clear();
 		}
@@ -133,7 +134,7 @@ void CStats::TakeDamage(CBasePlayer* Player, entvars_t* pevInflictor, entvars_t*
 
 							auto ItemIndex = this->GetActiveWeapon(Attacker, true);
 
-							if (ItemIndex)
+							if (ItemIndex != WEAPON_NONE)
 							{
 								this->m_Data[AttackerIndex].WeaponStats[ItemIndex][WEAPON_HIT]++;
 
@@ -185,10 +186,10 @@ void CStats::Killed(CBasePlayer* Player, entvars_t* pevAttacker, int iGib)
 								this->m_Data[KillerIndex].AdvancedStats[FIRST_ROUND_FRAGS]++;
 								this->m_Data[VictimIndex].AdvancedStats[FIRST_ROUND_DEATH]++;
 
-								this->m_RoundFirstKill = true;
+								this->m_RoundFirstKill = 1;
 							}
 
-							if (ItemIndex)
+							if (ItemIndex != WEAPON_NONE)
 							{
 								this->m_Data[KillerIndex].WeaponStats[ItemIndex][WEAPON_KILL]++;
 
@@ -274,7 +275,7 @@ void CStats::Killed(CBasePlayer* Player, entvars_t* pevAttacker, int iGib)
 							}
 						}
 
-						this->AddRoundEvent(ROUND_NONE, KillerIndex, VictimIndex, Killer->m_iTeam, Player->m_iTeam, Player->m_bHeadshotKilled, ItemIndex);
+						this->AddRoundEvent(ROUND_NONE, KillerIndex, VictimIndex, Killer->m_iTeam, Player->m_iTeam, Player->m_bHeadshotKilled ? 1 : 0, ItemIndex);
 					}
 				}
 			}
@@ -292,7 +293,7 @@ void CStats::SetAnimation(CBasePlayer* Player, PLAYER_ANIM playerAnim)
 			{
 				auto ItemIndex = this->GetActiveWeapon(Player, false);
 
-				if (ItemIndex)
+				if (ItemIndex != WEAPON_NONE)
 				{
 					auto EntIndex = Player->entindex();
 
@@ -400,7 +401,7 @@ void CStats::RoundFreezeEnd()
 
 		this->m_RoundBombDefuser = -1;
 
-		this->m_RoundFirstKill = false;
+		this->m_RoundFirstKill = 0;
 	}
 }
 
@@ -413,7 +414,7 @@ void CStats::RoundEnd(int winStatus, ScenarioEventEndRound event, float tmDelay)
 			TeamName Winner = (winStatus != WINSTATUS_DRAW) ? (winStatus == WINSTATUS_TERRORISTS ? TERRORIST : CT) : UNASSIGNED;
 			TeamName Losers = (winStatus != WINSTATUS_DRAW) ? (winStatus == WINSTATUS_TERRORISTS ? CT : TERRORIST) : UNASSIGNED;
 
-			this->AddRoundEvent(event, -1, -1, Winner, Losers, false, -1); // BOMB
+			this->AddRoundEvent(event, -1, -1, Winner, Losers, 0, -1);
 		}
 
 		if (winStatus == WINSTATUS_TERRORISTS || winStatus == WINSTATUS_CTS)
@@ -495,19 +496,19 @@ void CStats::RoundEnd(int winStatus, ScenarioEventEndRound event, float tmDelay)
 	}
 }
 
-void CStats::AddRoundEvent(int Type, int KillerIndex, int VictimIndex, int KillerTeam, int VictimTeam, bool IsHeadShot, int ItemIndex)
+void CStats::AddRoundEvent(int Type, int KillerIndex, int VictimIndex, int KillerTeam, int VictimTeam, int IsHeadShot, int ItemIndex)
 {
 	P_ROUND_EVENT Event = { 0 };
 
 	Event.Round = gPugMod.GetRound();
 
-	Event.RoundTime = g_pGameRules ? CSGameRules()->m_iRoundTimeSecs : 0;
+	Event.RoundTime = g_pGameRules ? CSGameRules()->GetRoundRemainingTimeReal() : 0.0f;
 
 	Event.Type = Type;
 
-	Event.Killer = (KillerIndex != -1) ? this->m_Data[KillerIndex].Auth : "";
+	Event.Killer = (KillerIndex != -1) ? this->m_Data[KillerIndex].UserIndex : -1;
 
-	Event.Killer = (VictimIndex != -1) ? this->m_Data[VictimIndex].Auth : "";
+	Event.Victim = (VictimIndex != -1) ? this->m_Data[VictimIndex].UserIndex : -1;
 
 	Event.Winner = KillerTeam;
 

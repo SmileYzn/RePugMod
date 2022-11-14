@@ -10,15 +10,16 @@
 */
 typedef struct
 {
-	int		Round;			// Round Number
-	int		RoundTime;		// Round Time;
-	int		Type;			// ROUND_NONE for player events, ScenarioEventEndRound for round events
-	int		Winner;			// Winner team of event
-	int		Loser;			// Loser team of event
-	std::string	Killer;		// Killer Auth Index
-	std::string	Victim;		// Victim Auth Index
-	bool	IsHeadShot;		// HeadShot
-	int		ItemIndex;		// Weapon
+	int Count;			// Event Index
+	int Round;			// Round Number
+	float RoundTime;	// Round Time Seconds;
+	int Type;			// ROUND_NONE for player events, ScenarioEventEndRound for round events
+	int Winner;			// Winner team of event
+	int Loser;			// Loser team of event
+	int Killer;			// Killer User Index
+	int Victim;			// Victim User Index
+	int IsHeadShot;		// HeadShot
+	int ItemIndex;		// Weapon
 } P_ROUND_EVENT, *LP_ROUND_EVENT;
 
 class CStats
@@ -28,7 +29,7 @@ public:
 
 	// Events
 	void GetIntoGame(CBasePlayer* Player);
-	void Disconnected(edict_t* pEdict);
+	void Disconnected(int EntityIndex);
 	void AddAccount(CBasePlayer* Player, int amount, RewardType type, bool bTrackChange);
 	void TakeDamage(CBasePlayer* Player, entvars_t* pevInflictor, entvars_t* pevAttacker, float& flDamage, int bitsDamageType);
 	void Killed(CBasePlayer* Player, entvars_t* pevAttacker, int iGib);
@@ -41,7 +42,7 @@ public:
 	void RoundEnd(int winStatus, ScenarioEventEndRound event, float tmDelay);
 
 	// Round Event
-	void AddRoundEvent(int Type, int KillerIndex, int VictimIndex, int KillerTeam, int VictimTeam, bool IsHeadShot, int ItemIndex);
+	void AddRoundEvent(int Type, int KillerIndex, int VictimIndex, int KillerTeam, int VictimTeam, int IsHeadShot, int ItemIndex);
 
 	// Helpers
 	int GetRoundHits(int AttackerIndex, int TargetIndex);
@@ -54,9 +55,14 @@ public:
 	// Player Stats
 	std::map<std::string, CPlayerStats> GetStats() { return this->m_Stats; };
 
+	// Round events
+	std::vector<P_ROUND_EVENT> GetRoundEvents() { return this->m_RoundEvent; };
+
 private:
 	CPlayerStats m_Data[MAX_CLIENTS + 1];
+	
 	std::map<std::string, CPlayerStats> m_Stats;
+
 	std::vector<P_ROUND_EVENT> m_RoundEvent;
 
 	int m_RoundHits[MAX_CLIENTS + 1][MAX_CLIENTS + 1] = { 0 };
@@ -67,7 +73,7 @@ private:
 	int m_RoundVersus[MAX_CLIENTS + 1] = { 0 };
 	int m_RoundBombPlanter = -1;
 	int m_RoundBombDefuser = -1;
-	bool m_RoundFirstKill = false;
+	int m_RoundFirstKill = 0;
 };
 
 extern CStats gStats;

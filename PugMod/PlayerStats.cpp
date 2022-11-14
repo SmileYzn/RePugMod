@@ -18,8 +18,6 @@ void CPlayerStats::Clear()
 
 	this->DamageReceive = 0;
 
-	this->JoinTime = 0;
-
 	memset(this->Rounds, 0, sizeof(this->Rounds));
 
 	this->RoundWinShare = 0.0f;
