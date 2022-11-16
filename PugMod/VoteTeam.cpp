@@ -255,8 +255,14 @@ void CVoteTeam::TeamsRandomize()
 		// If is not null
 		if (Player)
 		{
+			// Set flag to dead
+			Player->pev->deadflag = DEAD_DEAD;
+
 			// Set Team
 			Player->CSPlayer()->JoinTeam(Team);
+
+			// Set flag to alive
+			Player->pev->deadflag = DEAD_NO;
 
 			// Remove this entity from players count number
 			Players[Random] = Players[--Num];
@@ -327,11 +333,17 @@ void CVoteTeam::TeamsOptimize()
 				// If player skill math with sorted array position
 				if (Skills[j] == Sorted[i])
 				{
+					// Set flag to dead
+					Player->pev->deadflag = DEAD_DEAD;
+
 					// Set entity team
 					Player->CSPlayer()->JoinTeam(Team);
 
 					// Get the next team oposite from current team for next skilled player
 					Team = (TeamName)(Team % CT + TERRORIST);
+
+					// Set flag to alive
+					Player->pev->deadflag = DEAD_NO;
 				}
 			}
 		}

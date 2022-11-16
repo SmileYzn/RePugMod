@@ -320,9 +320,12 @@ void CAdmin::MenuSlapHandle(int EntityIndex, P_MENU_ITEM Item)
 
 		if (Target)
 		{
-			gUtil.SayText(NULL, EntityIndex, _T("\3%s\1 Killed \3%s\1"), STRING(Player->edict()->v.netname), STRING(Target->edict()->v.netname));
+			if (Target->IsAlive())
+			{
+				gUtil.SayText(NULL, EntityIndex, _T("\3%s\1 Killed \3%s\1"), STRING(Player->edict()->v.netname), STRING(Target->edict()->v.netname));
 
-			MDLL_ClientKill(Target->edict());
+				MDLL_ClientKill(Target->edict());
+			}
 		}
 	}
 }

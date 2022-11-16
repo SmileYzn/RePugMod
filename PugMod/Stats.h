@@ -10,7 +10,6 @@
 */
 typedef struct
 {
-	int Count;			// Event Index
 	int Round;			// Round Number
 	float RoundTime;	// Round Time Seconds;
 	int Type;			// ROUND_NONE for player events, ScenarioEventEndRound for round events
@@ -39,7 +38,7 @@ public:
 	void DefuseBombEnd(CBasePlayer* Player, bool Defused);
 	void ExplodeBomb(CGrenade* pThis, TraceResult* ptr, int bitsDamageType);
 	void RoundFreezeEnd();
-	void RoundEnd(int winStatus, ScenarioEventEndRound event, float tmDelay);
+	void RoundEnd(int winStatus, ScenarioEventEndRound eventScenario, float tmDelay);
 
 	// Round Event
 	void AddRoundEvent(int Type, int KillerIndex, int VictimIndex, int KillerTeam, int VictimTeam, int IsHeadShot, int ItemIndex);
@@ -60,9 +59,7 @@ public:
 
 private:
 	CPlayerStats m_Data[MAX_CLIENTS + 1];
-	
 	std::map<std::string, CPlayerStats> m_Stats;
-
 	std::vector<P_ROUND_EVENT> m_RoundEvent;
 
 	int m_RoundHits[MAX_CLIENTS + 1][MAX_CLIENTS + 1] = { 0 };

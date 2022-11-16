@@ -86,10 +86,10 @@ void CWebApi::SaveMatchData()
 		}
 		//
 		// Json data for players
-		nlohmann::json MatchData;
+		nlohmann::ordered_json MatchData;
 		//
 		// Server Stats
-		MatchData["server"] +=
+		MatchData["server"] =
 		{
 			{"hostname", CVAR_GET_STRING("hostname")},
 			{"address", CVAR_GET_STRING("net_address")},
@@ -103,8 +103,8 @@ void CWebApi::SaveMatchData()
 		// Round events
 		for (auto Event : gStats.GetRoundEvents())
 		{
-			MatchData["rounds"] +=
-			{
+			MatchData["rounds"][std::to_string(Event.Round)].push_back
+			({
 				{"round",Event.Round},
 				{"roundTime",Event.RoundTime},
 				{"type",Event.Type},
@@ -114,7 +114,7 @@ void CWebApi::SaveMatchData()
 				{"victim",Event.Victim},
 				{"isHeadShot",Event.IsHeadShot},
 				{"itemIndex",Event.ItemIndex},
-			};
+			});
 		}
 		//
 		// Player stats
@@ -126,12 +126,10 @@ void CWebApi::SaveMatchData()
 			// Player Stats
 			CPlayerStats Stats = Player.second;
 			//
-			// User ID
-			MatchData["players"][AuthId]["userIndex"] = Stats.UserIndex;
-			//
 			// Stats
 			MatchData["players"][AuthId]["stats"] =
 			{
+				{"userIndex",Stats.UserIndex},
 				{"frags",Stats.Frags},
 				{"assists",Stats.Assists},
 				{"deaths",Stats.Deaths},

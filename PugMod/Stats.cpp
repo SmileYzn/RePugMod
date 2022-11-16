@@ -28,6 +28,8 @@ void CStats::Clear()
 	this->m_RoundBombPlanter = -1;
 
 	this->m_RoundBombDefuser = -1;
+
+	this->m_RoundFirstKill = 0;
 }
 
 void CStats::GetIntoGame(CBasePlayer* Player)
@@ -355,6 +357,8 @@ void CStats::DefuseBombEnd(CBasePlayer* Player, bool Defused)
 			{
 				auto EntIndex = Player->entindex();
 
+				this->m_Data[EntIndex].Frags += 3;
+
 				this->m_Data[EntIndex].BombStats[BOMB_DEFUSED]++;
 
 				this->m_RoundBombDefuser = EntIndex;
@@ -374,6 +378,8 @@ void CStats::ExplodeBomb(CGrenade* pThis, TraceResult* ptr, int bitsDamageType)
 			if (Player)
 			{
 				auto EntIndex = Player->entindex();
+
+				this->m_Data[EntIndex].Frags += 3;
 
 				this->m_Data[EntIndex].BombStats[BOMB_EXPLODED]++;
 			}
@@ -405,23 +411,18 @@ void CStats::RoundFreezeEnd()
 	}
 }
 
-void CStats::RoundEnd(int winStatus, ScenarioEventEndRound event, float tmDelay)
+void CStats::RoundEnd(int winStatus, ScenarioEventEndRound eventScenario, float tmDelay)
 {
 	if (gPugMod.IsLive())
 	{
-		if (winStatus == WINSTATUS_TERRORISTS || winStatus == WINSTATUS_CTS || winStatus == WINSTATUS_DRAW)
-		{
-			TeamName Winner = (winStatus != WINSTATUS_DRAW) ? (winStatus == WINSTATUS_TERRORISTS ? TERRORIST : CT) : UNASSIGNED;
-			TeamName Losers = (winStatus != WINSTATUS_DRAW) ? (winStatus == WINSTATUS_TERRORISTS ? CT : TERRORIST) : UNASSIGNED;
-
-			this->AddRoundEvent(event, -1, -1, Winner, Losers, 0, -1);
-		}
-
 		if (winStatus == WINSTATUS_TERRORISTS || winStatus == WINSTATUS_CTS)
 		{
 			TeamName Winner = (winStatus == WINSTATUS_TERRORISTS) ? TERRORIST : CT;
+			TeamName Losers = (winStatus != WINSTATUS_TERRORISTS) ? TERRORIST : CT;
 
-			if (event == ROUND_BOMB_DEFUSED)
+			this->AddRoundEvent(eventScenario, -1, -1, Winner, Losers, 0, -1);
+
+			if (eventScenario == ROUND_BOMB_DEFUSED)
 			{
 				if (this->m_RoundBombDefuser != -1)
 				{
@@ -435,7 +436,7 @@ void CStats::RoundEnd(int winStatus, ScenarioEventEndRound event, float tmDelay)
 					}
 				}
 			}
-			else if (event == ROUND_TARGET_BOMB)
+			else if (eventScenario == ROUND_TARGET_BOMB)
 			{
 				if (this->m_RoundBombPlanter != -1)
 				{
@@ -478,7 +479,7 @@ void CStats::RoundEnd(int winStatus, ScenarioEventEndRound event, float tmDelay)
 						{
 							float RoundWinShare = (float)((float)this->m_RoundDamageSelf[TempIndex] / (float)this->m_RoundDamageTeam[Winner]);
 
-							if (event == ROUND_BOMB_DEFUSED || event == ROUND_TARGET_BOMB)
+							if (eventScenario == ROUND_BOMB_DEFUSED || eventScenario == ROUND_TARGET_BOMB)
 							{
 								RoundWinShare = (MANAGER_RWS_MAP_TARGET * RoundWinShare);
 							}
@@ -498,27 +499,40 @@ void CStats::RoundEnd(int winStatus, ScenarioEventEndRound event, float tmDelay)
 
 void CStats::AddRoundEvent(int Type, int KillerIndex, int VictimIndex, int KillerTeam, int VictimTeam, int IsHeadShot, int ItemIndex)
 {
-	P_ROUND_EVENT Event = { 0 };
+	if (gPugMod.IsLive())
+	{
+		P_ROUND_EVENT Event = { 0 };
 
-	Event.Round = gPugMod.GetRound();
+		Event.Round = gPugMod.GetRound();
 
-	Event.RoundTime = g_pGameRules ? CSGameRules()->GetRoundRemainingTimeReal() : 0.0f;
+		Event.RoundTime = 0.0f;
 
-	Event.Type = Type;
+		if (g_pGameRules)
+		{
+			if (CSGameRules()->m_bRoundTerminating)
+			{
+				Event.Round--;
+			}
+			
+			Event.RoundTime = CSGameRules()->GetRoundRemainingTimeReal();
+		}
 
-	Event.Killer = (KillerIndex != -1) ? this->m_Data[KillerIndex].UserIndex : -1;
+		Event.Type = Type;
 
-	Event.Victim = (VictimIndex != -1) ? this->m_Data[VictimIndex].UserIndex : -1;
+		Event.Killer = (KillerIndex != -1) ? this->m_Data[KillerIndex].UserIndex : -1;
 
-	Event.Winner = KillerTeam;
+		Event.Victim = (VictimIndex != -1) ? this->m_Data[VictimIndex].UserIndex : -1;
 
-	Event.Loser = VictimTeam;
+		Event.Winner = KillerTeam;
 
-	Event.IsHeadShot = IsHeadShot;
+		Event.Loser = VictimTeam;
 
-	Event.ItemIndex = ItemIndex;
+		Event.IsHeadShot = IsHeadShot;
 
-	this->m_RoundEvent.push_back(Event);
+		Event.ItemIndex = ItemIndex;
+
+		this->m_RoundEvent.push_back(Event);
+	}
 }
 
 int CStats::GetRoundHits(int AttackerIndex, int TargetIndex)
