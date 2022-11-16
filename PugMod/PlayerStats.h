@@ -79,7 +79,7 @@ class CPlayerStats
 public:
 	void Clear();
 
-	int UserIndex = -1;
+	int UserIndex = -1;											// Ok
 	int Frags = 0;												// Ok
 	int Assists = 0;											// Ok
 	int Deaths = 0;												// Ok

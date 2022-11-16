@@ -140,6 +140,7 @@ void CWebApi::SaveMatchData()
 				{"damage_recv",Stats.DamageReceive},
 				{"join_time",Stats.JoinTime},
 				{"rws",Stats.RoundWinShare},
+				{"userIndex",Stats.UserIndex},
 			};
 			//
 			// Round Stats
@@ -150,6 +151,7 @@ void CWebApi::SaveMatchData()
 				{"lose_tr",Stats.Rounds[ROUND_LOSE_TR]},
 				{"win_ct",Stats.Rounds[ROUND_WIN_CT]},
 				{"lose_ct",Stats.Rounds[ROUND_LOSE_CT]},
+				{"winner", (Stats.Rounds[ROUND_WIN_TR] + Stats.Rounds[ROUND_WIN_CT] >= gPugMod.GetRound() ? 1 : 0)}
 			};
 			//
 			// Bomb Stats
