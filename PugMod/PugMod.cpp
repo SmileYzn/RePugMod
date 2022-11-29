@@ -149,8 +149,6 @@ void CPugMod::SetState(int State)
 				gCvars.GetVoteMap()->value = 1;
 
 				this->NextState(5.0f);
-
-				gWebapi.SaveMatchData();
 				
 				break;
 			}
@@ -459,7 +457,7 @@ void CPugMod::ResetScores()
 
 	memset(this->m_Score, 0, sizeof(this->m_Score));
 
-	gStats.Clear();
+	memset(this->m_PlayerScore, 0, sizeof(this->m_PlayerScore));
 }
 
 TeamName CPugMod::GetWinner()
@@ -615,6 +613,22 @@ void CPugMod::SwapScores()
 	for (int iState = PUG_STATE_FIRST_HALF; iState <= PUG_STATE_OVERTIME; iState++)
 	{
 		std::swap(this->m_Score[iState][TERRORIST], this->m_Score[iState][CT]);
+	}
+
+	CBasePlayer* Players[MAX_CLIENTS] = { NULL };
+
+	auto Num = gPlayer.GetList(Players, false);
+
+	for (int i = 0; i < Num; i++)
+	{
+		auto Player = Players[i];
+
+		if (Player)
+		{
+			this->m_PlayerScore[Player->entindex()][0] = Player->edict()->v.frags;
+
+			this->m_PlayerScore[Player->entindex()][1] = Player->m_iDeaths;
+		}
 	}
 }
 
@@ -855,13 +869,11 @@ void CPugMod::RoundRestart()
 
 							if (Player)
 							{
-								auto Stats = gStats.GetData(Player->entindex());
-
-								if (Stats.Frags || Stats.Deaths)
+								if (this->m_PlayerScore[Player->entindex()][0] || this->m_PlayerScore[Player->entindex()][1])
 								{
-									Player->m_iDeaths = Stats.Deaths;
+									Player->edict()->v.frags = this->m_PlayerScore[Player->entindex()][0];
 
-									Player->edict()->v.frags = Stats.Frags;
+									Player->m_iDeaths = this->m_PlayerScore[Player->entindex()][1];
 
 									Player->AddPoints(0, TRUE);
 								}

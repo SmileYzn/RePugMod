@@ -141,22 +141,22 @@ bool CCommands::ClientCommand(CBasePlayer* Player, const char* pcmd, const char*
 	}
 	else if (Q_stricmp(pcmd, ".hp") == 0)
 	{
-		gStatsCmd.HP(Player);
+		gStats.HP(Player);
 		return true;
 	}
 	else if (Q_stricmp(pcmd, ".dmg") == 0)
 	{
-		gStatsCmd.Damage(Player);
+		gStats.Damage(Player);
 		return true;
 	}
 	else if (Q_stricmp(pcmd, ".rdmg") == 0)
 	{
-		gStatsCmd.Received(Player);
+		gStats.Received(Player);
 		return true;
 	}
 	else if (Q_stricmp(pcmd, ".sum") == 0)
 	{
-	gStatsCmd.Summary(Player);
+		gStats.Summary(Player);
 		return true;
 	}
 

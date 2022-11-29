@@ -123,9 +123,6 @@ void CCvars::Load()
 
 	// Allowed ban times in minutes (0 To ban permanently)
 	this->m_BanTimes = this->Register("pug_ban_times", "0 5 10 15 30 45 60 120");
-
-	// URL to pugmod API (Enable Web api functions)
-	this->m_WebApiUrl = this->Register("pug_web_api", "");
 }
 
 cvar_t* CCvars::Register(const char* Name, const char* Value)
@@ -322,9 +319,4 @@ cvar_t* CCvars::GetHelpFilePlayer()
 cvar_t* CCvars::GetBanTimes()
 {
 	return this->m_BanTimes;
-}
-
-cvar_t* CCvars::GetWebApiUrl()
-{
-	return this->m_WebApiUrl;
 }

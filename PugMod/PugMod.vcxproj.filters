@@ -103,20 +103,8 @@
     <Filter Include="PugMod\Vote\VoteRestart">
       <UniqueIdentifier>{ae504c4e-11ca-441f-a0b3-499fd50041f7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="PugMod\PlayerStats">
-      <UniqueIdentifier>{bc425a46-0eb1-407a-a28f-bf42da624afb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="PugMod\StatsCmd">
-      <UniqueIdentifier>{4539f00d-e16c-4311-8584-feb7413ab4de}</UniqueIdentifier>
-    </Filter>
     <Filter Include="PugMod\Vote\VoteOvertime">
       <UniqueIdentifier>{371bd1bd-df6e-46a7-8aba-cbc64d9eb475}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="LibCurl">
-      <UniqueIdentifier>{453374e0-00a8-45b9-bd15-b8f620a66e92}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="PugMod\WebApi">
-      <UniqueIdentifier>{d7347562-a14e-4466-a637-421e9082a334}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -210,20 +198,8 @@
     <ClInclude Include="VoteRestart.h">
       <Filter>PugMod\Vote\VoteRestart</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerStats.h">
-      <Filter>PugMod\PlayerStats</Filter>
-    </ClInclude>
-    <ClInclude Include="StatsCmd.h">
-      <Filter>PugMod\StatsCmd</Filter>
-    </ClInclude>
     <ClInclude Include="VoteOvertime.h">
       <Filter>PugMod\Vote\VoteOvertime</Filter>
-    </ClInclude>
-    <ClInclude Include="LibCurl.h">
-      <Filter>LibCurl</Filter>
-    </ClInclude>
-    <ClInclude Include="WebApi.h">
-      <Filter>PugMod\WebApi</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -317,20 +293,8 @@
     <ClCompile Include="VoteRestart.cpp">
       <Filter>PugMod\Vote\VoteRestart</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerStats.cpp">
-      <Filter>PugMod\PlayerStats</Filter>
-    </ClCompile>
-    <ClCompile Include="StatsCmd.cpp">
-      <Filter>PugMod\StatsCmd</Filter>
-    </ClCompile>
     <ClCompile Include="VoteOvertime.cpp">
       <Filter>PugMod\Vote\VoteOvertime</Filter>
-    </ClCompile>
-    <ClCompile Include="LibCurl.cpp">
-      <Filter>LibCurl</Filter>
-    </ClCompile>
-    <ClCompile Include="WebApi.cpp">
-      <Filter>PugMod\WebApi</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
