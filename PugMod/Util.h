@@ -21,7 +21,6 @@ class CUtil
 {
 public:
 	char* VarArgs(const char* Format, ...);
-	void ServerPrint(const char* Format, ...);
 	void ServerCommand(const char* Format, ...);
 	void ClientCommand(edict_t* pEntity, const char* Format, ...);
 	void ClientPrint(edict_t* pEntity, int msg_dest, const char* Format, ...);

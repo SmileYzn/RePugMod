@@ -17,29 +17,6 @@ char* CUtil::VarArgs(const char* Format, ...)
 	return VarArgs;
 }
 
-void CUtil::ServerPrint(const char* Format, ...)
-{
-	va_list argList;
-
-	va_start(argList, Format);
-
-	char Buffer[255] = { 0 };
-
-	int Length = vsnprintf(Buffer, sizeof(Buffer), Format, argList);
-
-	va_end(argList);
-
-	if (Length > 254)
-	{
-		Length = 254;
-	}
-
-	Buffer[Length++] = '\n';
-	Buffer[Length] = 0;
-
-	SERVER_PRINT(Buffer);
-}
-
 void CUtil::ServerCommand(const char* Format, ...)
 {
 	va_list argList;
@@ -110,7 +87,7 @@ void CUtil::ClientPrint(edict_t* pEntity, int msg_dest, const char* Format, ...)
 
 		Buffer[Length++] = '\n';
 		Buffer[Length++] = '\n';
-		Buffer[Length]   = 0;
+		Buffer[Length] = 0;
 	}
 
 	static int iMsgTextMsg;
@@ -177,7 +154,7 @@ void CUtil::SayText(edict_t* pEntity, int Sender, const char* Format, ...)
 		{
 			for (int i = 1; i <= gpGlobals->maxClients; ++i)
 			{
-				edict_t *pTempEntity = INDEXENT(i);
+				edict_t* pTempEntity = INDEXENT(i);
 
 				if (!FNullEnt(pTempEntity))
 				{
@@ -214,7 +191,7 @@ hudtextparms_t CUtil::HudParam(int red, int green, int blue, float x, float y, i
 	return hud;
 }
 
-void CUtil::HudMessage(edict_t* pEntity, const hudtextparms_t &textparms, const char *Format, ...)
+void CUtil::HudMessage(edict_t* pEntity, const hudtextparms_t& textparms, const char* Format, ...)
 {
 	va_list argList;
 
@@ -303,7 +280,7 @@ unsigned short CUtil::FixedUnsigned16(float value, float scale)
 	return (unsigned short)output;
 }
 
-void CUtil::ShowMotd(edict_t* pEntity, char *Motd, int MotdLength)
+void CUtil::ShowMotd(edict_t* pEntity, char* Motd, int MotdLength)
 {
 	static int iMsgMOTD;
 
@@ -325,7 +302,7 @@ void CUtil::ShowMotd(edict_t* pEntity, char *Motd, int MotdLength)
 			}
 		}
 
-		char *Buffer = Motd;
+		char* Buffer = Motd;
 
 		char Character = 0;
 
@@ -358,7 +335,7 @@ void CUtil::ShowMotd(edict_t* pEntity, char *Motd, int MotdLength)
 	}
 }
 
-std::vector<std::string> CUtil::LoadMapList(const char * Path, bool AllowCurrentMap)
+std::vector<std::string> CUtil::LoadMapList(const char* Path, bool AllowCurrentMap)
 {
 	std::ifstream File(Path, std::ifstream::in);
 
@@ -437,7 +414,7 @@ void CUtil::SetRoundTime(int Time, bool FreezePeriod)
 	}
 }
 
-void CUtil::ChangelevelDelay(float Delay,const char* MapName)
+void CUtil::ChangelevelDelay(float Delay, const char* MapName)
 {
 	if (MapName)
 	{
@@ -476,4 +453,3 @@ void CUtil::Changelevel(const char* MapName)
 		}
 	}
 }
-
