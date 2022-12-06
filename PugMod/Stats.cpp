@@ -13,17 +13,31 @@ void CStats::TakeDamage(CBasePlayer* Player, entvars_t* pevInflictor, entvars_t*
 {
 	if (g_pGameRules)
 	{
-		auto Attacker = UTIL_PlayerByIndexSafe(ENTINDEX(pevAttacker));
-
-		if (!FNullEnt(Attacker))
+		if (Player->IsPlayer())
 		{
-			if (CSGameRules()->FPlayerCanTakeDamage(Player, Attacker))
+			if (pevAttacker)
 			{
-				if (Player->entindex() != Attacker->entindex())
-				{
-					this->m_Hits[Attacker->entindex()][Player->entindex()]++;
+				auto Attacker = UTIL_PlayerByIndexSafe(ENTINDEX(pevAttacker));
 
-					this->m_Damage[Attacker->entindex()][Player->entindex()] += flDamage;
+				if (!FNullEnt(Attacker))
+				{
+					if (Attacker->IsPlayer())
+					{
+						if (Player->entindex() != Attacker->entindex())
+						{
+							if (CSGameRules()->FPlayerCanTakeDamage(Player, Attacker) && !Player->m_bKilledByBomb)
+							{
+								if (!(bitsDamageType & DMG_BLAST))
+								{
+									auto DamageTaken = (int)(Player->m_iLastClientHealth - clamp(Player->edict()->v.health, 0.0f, Player->edict()->v.health));
+
+									this->m_Hits[Attacker->entindex()][Player->entindex()]++;
+
+									this->m_Damage[Attacker->entindex()][Player->entindex()] += DamageTaken;
+								}
+							}
+						}
+					}
 				}
 			}
 		}
