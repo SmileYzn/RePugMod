@@ -456,8 +456,6 @@ void CPugMod::ResetScores()
 	memset(this->m_Round, 0, sizeof(this->m_Round));
 
 	memset(this->m_Score, 0, sizeof(this->m_Score));
-
-	memset(this->m_PlayerScore, 0, sizeof(this->m_PlayerScore));
 }
 
 TeamName CPugMod::GetWinner()
@@ -613,22 +611,6 @@ void CPugMod::SwapScores()
 	for (int iState = PUG_STATE_FIRST_HALF; iState <= PUG_STATE_OVERTIME; iState++)
 	{
 		std::swap(this->m_Score[iState][TERRORIST], this->m_Score[iState][CT]);
-	}
-
-	CBasePlayer* Players[MAX_CLIENTS] = { NULL };
-
-	auto Num = gPlayer.GetList(Players, false);
-
-	for (int i = 0; i < Num; i++)
-	{
-		auto Player = Players[i];
-
-		if (Player)
-		{
-			this->m_PlayerScore[Player->entindex()][0] = Player->edict()->v.frags;
-
-			this->m_PlayerScore[Player->entindex()][1] = Player->m_iDeaths;
-		}
 	}
 }
 
@@ -841,11 +823,11 @@ void CPugMod::RoundEnd(int winStatus, ScenarioEventEndRound event, float tmDelay
 	}
 }
 
-void CPugMod::RoundRestart()
+void CPugMod::RoundRestart(bool PreRestart)
 {
 	if (g_pGameRules)
 	{
-		if (this->m_State >= PUG_STATE_HALFTIME && this->m_State <= PUG_STATE_END)
+		if (this->m_State >= PUG_STATE_HALFTIME)
 		{
 			if (gCvars.GetShowScoreType()->value > 0)
 			{
@@ -856,7 +838,10 @@ void CPugMod::RoundRestart()
 					CSGameRules()->m_iNumTerroristWins = this->GetScores(TERRORIST);
 
 					CSGameRules()->UpdateTeamScores();
+				}
 
+				if (PreRestart)
+				{
 					if (gCvars.GetShowScoreType()->value == 2)
 					{
 						CBasePlayer* Players[MAX_CLIENTS] = { NULL };
@@ -869,14 +854,32 @@ void CPugMod::RoundRestart()
 
 							if (Player)
 							{
-								if (this->m_PlayerScore[Player->entindex()][0] || this->m_PlayerScore[Player->entindex()][1])
-								{
-									Player->edict()->v.frags = this->m_PlayerScore[Player->entindex()][0];
+								Player->edict()->v.fuser4 = Player->edict()->v.frags;
 
-									Player->m_iDeaths = this->m_PlayerScore[Player->entindex()][1];
+								Player->edict()->v.iuser4 = Player->m_iDeaths;
+							}
+						}
+					}
+				}
+				else
+				{
+					if (gCvars.GetShowScoreType()->value == 2)
+					{
+						CBasePlayer* Players[MAX_CLIENTS] = { NULL };
 
-									Player->AddPoints(0, TRUE);
-								}
+						auto Num = gPlayer.GetList(Players, true);
+
+						for (int i = 0; i < Num; i++)
+						{
+							auto Player = Players[i];
+
+							if (Player)
+							{
+								Player->edict()->v.frags = Player->edict()->v.fuser4;
+
+								Player->m_iDeaths = Player->edict()->v.iuser4;
+
+								Player->AddPoints(0, TRUE);
 							}
 						}
 					}

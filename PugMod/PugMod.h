@@ -90,13 +90,12 @@ public:
 
 	void RoundStart();
 	void RoundEnd(int winStatus, ScenarioEventEndRound event, float tmDelay);
-	void RoundRestart();
+	void RoundRestart(bool PreRestart);
 
 private:
 	int m_State = PUG_STATE_DEAD;
 	int m_Round[PUG_STATE_END + 1] = { 0 };
 	int m_Score[PUG_STATE_END + 1][SPECTATOR + 1] = { 0 };
-	int m_PlayerScore[MAX_CLIENTS + 1][2] = { 0 };
 };
 
 extern CPugMod gPugMod;
