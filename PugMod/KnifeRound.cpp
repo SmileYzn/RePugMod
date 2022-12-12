@@ -41,12 +41,9 @@ bool CKnifeRound::ClientHasRestrictItem(CBasePlayer* Player, ItemID item, ItemRe
 {
 	if (this->m_Running)
 	{
-		if (item != ITEM_KEVLAR && item != ITEM_KNIFE)
+		if (item != ITEM_KEVLAR && item != ITEM_ASSAULT && item != ITEM_KNIFE)
 		{
-			if (type == ITEM_TYPE_BUYING)
-			{
-				gUtil.ClientPrint(Player->edict(), PRINT_CENTER, "#Cstrike_TitlesTXT_Weapon_Not_Available");
-			}
+			gUtil.ClientPrint(Player->edict(), PRINT_CENTER, "#Cstrike_TitlesTXT_Weapon_Not_Available");
 
 			return true;
 		}

@@ -29,7 +29,7 @@ void CVoteTeam::Init()
 
 			for (auto const& Item : this->m_Data)
 			{
-				gMenu[EntityIndex].AddItem(Item.first, Item.second.Name);
+				gMenu[EntityIndex].AddItem(Item.first, Item.second.Name, false);
 			}
 
 			gMenu[EntityIndex].Show(EntityIndex);
@@ -183,22 +183,18 @@ void CVoteTeam::SetMode(int GameMode)
 		case 0: // The Leaders will choose Players.
 		{
 			gCaptain.Init();
-			break;
+			return;
 		}
 		case 1: // Randomize Teams
 		{
 			this->TeamsRandomize();
 
 			gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("Mixing teams now."));
-
-			gPugMod.NextState(3.0f);
 			break;
 		}
 		case 2: // Same Teams
 		{
 			gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("The teams will remain the same."));
-
-			gPugMod.NextState(3.0f);
 			break;
 		}
 		case 3: // Skill Balanced
@@ -206,8 +202,6 @@ void CVoteTeam::SetMode(int GameMode)
 			this->TeamsOptimize();
 
 			gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("Balancing teams by skills."));
-
-			gPugMod.NextState(3.0f);
 			break;
 		}
 		case 4: // Swap Teams
@@ -218,18 +212,19 @@ void CVoteTeam::SetMode(int GameMode)
 			}
 
 			gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("Swaping teams now."));
-
-			gPugMod.NextState(3.0f);
-			break;
-		}
-		case 5: // Knife Round
-		{
-			gKnifeRound.Init();
-
-			gPugMod.NextState(3.0f);
 			break;
 		}
 	}
+
+	// If GameMode is Knife Round, or is set to run Knife Round automatically
+	if (GameMode == 5 || gCvars.GetKnifeRoundPlay()->value)
+	{
+		// Init knife Round
+		gKnifeRound.Init();
+	}
+
+	// Run Next State
+	gPugMod.NextState(3.0f);
 }
 
 void CVoteTeam::TeamsRandomize()

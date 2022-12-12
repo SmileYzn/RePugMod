@@ -57,6 +57,11 @@ void CCaptain::Stop()
 {
 	this->Clear();
 
+	if (gCvars.GetKnifeRoundPlay()->value)
+	{
+		gKnifeRound.Init();
+	}
+
 	gPugMod.NextState(3.0f);
 }
 
