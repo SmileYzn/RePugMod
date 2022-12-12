@@ -94,6 +94,30 @@ bp:"\3%s\1 reiniciou o periodo \4%s\1, esteja pronto!."
 en:"Cannot restart period in \3%s\1 state."
 bp:"Falha ao reiniciar o periodo no estado \3%s\1."
 
+"Pause Match"
+en:"Pause Match"
+bp:"Pausar Partida"
+
+"Match already paused, try on next round."
+en:"Match already paused, try on next round."
+bp:"A partida já está em pausa, tente em em outro round."
+
+"\3%s\1 Paused match, game will pause on next round freezetime."
+en:"ADMIN: \3%s\1 Paused match, game will pause on next round freezetime."
+bp:"ADMIN: \3%s\1 Pausou a partida, o jogo será pausado no início do próximo round."
+
+"Cannot pause match in \3%s\1 state."
+en:"Cannot pause match in \3%s\1 state."
+bp:"Impossível pausar enquanto está no estado \3%s\1."
+
+"MATCH PAUSED\n%s LEFT"
+en:"MATCH PAUSED\n%s LEFT"
+bp:"JOGO PAUSADO\n%s RESTANTE(S)"
+
+"Match paused: Match will continue in \3%s\1."
+en:"Match paused: Match will continue in \3%s\1."
+bp:"Match paused: Match will continue in \3%s\1."
+
 "Status: \4%s\1 (Players %d) (%d Required of %d Allowed)"
 en:"Status: \4%s\1 (Players %d) (%d Required of %d Allowed)"
 bp:"Status: \4%s\1 (Jogadores %d) (%d Requeridos de %d permitidos)"

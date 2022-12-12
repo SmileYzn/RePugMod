@@ -74,7 +74,10 @@ int CPlayer::GetList(CBasePlayer* Players[MAX_CLIENTS], TeamName Team)
 
 int CPlayer::GetNum(bool CountBots, int& InGame, int& NumTerrorist, int& NumCT, int& NumSpectator)
 {
-	InGame, NumTerrorist = NumCT = NumSpectator = 0;
+	InGame = 0;
+	NumTerrorist = 0;
+	NumCT = 0;
+	NumSpectator = 0;
 
 	for (int i = 1; i <= gpGlobals->maxClients; ++i)
 	{
@@ -82,18 +85,13 @@ int CPlayer::GetNum(bool CountBots, int& InGame, int& NumTerrorist, int& NumCT, 
 
 		if (Player)
 		{
-			if (!FNullEnt(Player->edict()) && GETPLAYERUSERID(Player->edict()) > 0)
+			if (!CountBots && Player->IsBot())
 			{
-				if (CountBots == false)
-				{
-					if (Player->IsBot())
-					{
-						continue;
-					}
-				}
+				continue;
+			}
 
-				switch (Player->m_iTeam)
-				{
+			switch (Player->m_iTeam)
+			{
 				case TERRORIST:
 				{
 					NumTerrorist++;
@@ -108,7 +106,6 @@ int CPlayer::GetNum(bool CountBots, int& InGame, int& NumTerrorist, int& NumCT, 
 				{
 					NumSpectator++;
 					break;
-				}
 				}
 			}
 		}

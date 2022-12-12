@@ -63,6 +63,7 @@ public:
 	bool StopMatch(CBasePlayer* Player);
 	bool RestarPeriod(CBasePlayer* Player);
 	bool EndGame(TeamName Winner);
+	bool PauseMatch(CBasePlayer* Player);
 
 	int GetRound();
 	int GetScores(int Team);
@@ -92,10 +93,13 @@ public:
 	void RoundEnd(int winStatus, ScenarioEventEndRound event, float tmDelay);
 	void RoundRestart(bool PreRestart);
 
+	static void PauseTimer();
+
 private:
 	int m_State = PUG_STATE_DEAD;
 	int m_Round[PUG_STATE_END + 1] = { 0 };
 	int m_Score[PUG_STATE_END + 1][SPECTATOR + 1] = { 0 };
+	int m_PauseMatch = false;
 };
 
 extern CPugMod gPugMod;

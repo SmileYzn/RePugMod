@@ -42,6 +42,8 @@ void CPugMod::SetState(int State)
 {
 	this->m_State = State;
 
+	this->m_PauseMatch = false;
+
 	switch (this->m_State)
 	{
 		case PUG_STATE_WARMUP:
@@ -427,6 +429,36 @@ bool CPugMod::EndGame(TeamName Winner)
 	return false;
 }
 
+bool CPugMod::PauseMatch(CBasePlayer* Player)
+{
+	if (this->IsLive())
+	{
+		if (this->m_PauseMatch || gVotePause.GetPauseTeam() != UNASSIGNED)
+		{
+			gUtil.SayText(Player->edict(), Player->entindex(), _T("Match already paused, try on next round."));
+			return false;
+		}
+
+		if (Player)
+		{
+			gUtil.SayText(NULL, Player->entindex(), _T("\3%s\1 Paused match, game will pause on next round freezetime."), STRING(Player->edict()->v.netname), this->GetStateName());
+		}
+
+		this->m_PauseMatch = true;
+
+		return true;
+	}
+	else
+	{
+		if (Player)
+		{
+			gUtil.SayText(Player->edict(), PRINT_TEAM_RED, _T("Cannot pause match in \3%s\1 state."), this->GetStateName());
+		}
+	}
+
+	return false;
+}
+
 int CPugMod::GetRound()
 {
 	int Round = 0;
@@ -616,7 +648,7 @@ void CPugMod::SwapScores()
 
 void CPugMod::ClientConnected(edict_t* pEntity)
 {
-	if (gPlayer.GetNum(true) >= (int)gCvars.GetPlayersMax()->value)
+	if (gPlayer.GetNum(false) >= (int)gCvars.GetPlayersMax()->value)
 	{
 		if (!CVAR_GET_FLOAT("allow_spectators"))
 		{
@@ -827,6 +859,41 @@ void CPugMod::RoundRestart(bool PreRestart)
 {
 	if (g_pGameRules)
 	{
+		if (gPugMod.IsLive())
+		{
+			if (!PreRestart)
+			{
+				if (gCvars.GetPauseCount()->value > 0)
+				{
+					if (this->m_PauseMatch)
+					{
+						this->m_PauseMatch = false;
+
+						gUtil.SetRoundTime((int)gCvars.GetVotePauseTime()->value, true);
+
+						gTask.Create(PUG_TASK_PAUS, 0.5, true, (void*)this->PauseTimer);
+
+						time_t RemainTime = (time_t)((time_t)gCvars.GetPauseCount()->value - (time_t)(gpGlobals->time - CSGameRules()->m_fRoundStartTime));
+
+						if (RemainTime > 0)
+						{
+							struct tm* tm_info = localtime(&RemainTime);
+
+							if (tm_info)
+							{
+								char Time[32] = { 0 };
+
+								if (strftime(Time, sizeof(Time), "%M:%S", tm_info) > 0)
+								{
+									gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("Match paused: Match will continue in \3%s\1."), Time);
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
 		if (this->m_State >= PUG_STATE_HALFTIME)
 		{
 			if (gCvars.GetShowScoreType()->value > 0)
@@ -885,6 +952,35 @@ void CPugMod::RoundRestart(bool PreRestart)
 					}
 				}
 			}
+		}
+	}
+}
+
+void CPugMod::PauseTimer()
+{
+	if (g_pGameRules)
+	{
+		time_t RemainTime = (time_t)((time_t)gCvars.GetPauseCount()->value - (time_t)(gpGlobals->time - CSGameRules()->m_fRoundStartTime));
+
+		if (RemainTime > 0)
+		{
+			struct tm* tm_info = localtime(&RemainTime);
+
+			if (tm_info)
+			{
+				char Time[32] = { 0 };
+
+				if (strftime(Time, sizeof(Time), "%M:%S", tm_info) > 0)
+				{
+					gUtil.HudMessage(NULL, gUtil.HudParam(0, 255, 0, -1.0, 0.2, 0, 0.6, 0.6), _T("MATCH PAUSED\n%s LEFT"), Time);
+				}
+			}
+		}
+		else
+		{
+			gTask.Remove(PUG_TASK_PAUS);
+
+			gUtil.SetRoundTime((int)CVAR_GET_FLOAT("mp_freezetime"), true);
 		}
 	}
 }

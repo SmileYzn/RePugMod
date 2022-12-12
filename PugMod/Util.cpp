@@ -396,10 +396,6 @@ void CUtil::SetRoundTime(int Time, bool FreezePeriod)
 
 			if (Player)
 			{
-				if (Player->pev)
-				{
-
-				}
 				if (!Player->IsDormant())
 				{
 					if (!Player->IsBot())

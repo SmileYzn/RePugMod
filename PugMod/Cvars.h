@@ -17,6 +17,7 @@ public:
 	cvar_t* GetPlayRoundsOvertimeType();
 	cvar_t* GetPlayRoundsOvertimeSwap();
 	cvar_t* GetPlayCheckPlayers();
+	cvar_t* GetPauseCount();
 	cvar_t* GetVoteDelay();
 	cvar_t* GetVoteMap();
 	cvar_t* GetVoteMapType();
@@ -52,6 +53,7 @@ private:
 	cvar_t* m_PlayRoundsOvertimeType;
 	cvar_t* m_PlayRoundsOvertimeSwap;
 	cvar_t* m_PlayCheckPlayers;
+	cvar_t* m_PauseCount;
 	cvar_t* m_VoteDelay;
 	cvar_t* m_VoteMap;
 	cvar_t* m_VoteMapType;

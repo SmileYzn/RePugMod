@@ -200,7 +200,7 @@ void CVotePause::VotePauseTimer()
 {
 	if (g_pGameRules)
 	{
-		time_t RemainTime = (time_t)(gCvars.GetVotePauseTime()->value - (gpGlobals->time - CSGameRules()->m_fRoundStartTime));
+		time_t RemainTime = (time_t)((time_t)gCvars.GetVotePauseTime()->value - (time_t)(gpGlobals->time - CSGameRules()->m_fRoundStartTime));
 
 		if (RemainTime > 0)
 		{

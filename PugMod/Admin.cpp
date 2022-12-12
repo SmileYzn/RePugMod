@@ -452,9 +452,11 @@ void CAdmin::MenuControl(int EntityIndex)
 
 		gMenu[EntityIndex].AddItem(3, _T("Stop Match"), (State == PUG_STATE_DEAD || State == PUG_STATE_WARMUP || State == PUG_STATE_START || State == PUG_STATE_END));
 
-		gMenu[EntityIndex].AddItem(4, _T("Restart Period"), (State != PUG_STATE_FIRST_HALF && State != PUG_STATE_SECOND_HALF && State != PUG_STATE_OVERTIME));
+		gMenu[EntityIndex].AddItem(4, _T("Restart Period"), !gPugMod.IsLive());
 
 		gMenu[EntityIndex].AddItem(5, _T("Toggle Ready System"), (State != PUG_STATE_WARMUP));
+
+		gMenu[EntityIndex].AddItem(6, _T("Pause Match"), !gPugMod.IsLive());
 
 		gMenu[EntityIndex].Show(EntityIndex);
 	}
@@ -497,6 +499,11 @@ void CAdmin::MenuControlHandle(int EntityIndex, P_MENU_ITEM Item)
 			case 5: // Toggle Ready System
 			{
 				gReady.Toggle(Player);
+				break;
+			}
+			case 6: // Pause Match
+			{
+				gPugMod.PauseMatch(Player);
 				break;
 			}
 		}

@@ -55,6 +55,9 @@ void CCvars::Load()
 	// Check players count before start pug and start warmup if is incorrect
 	this->m_PlayCheckPlayers = this->Register("pug_play_check_players", "1");
 
+	// Pause time in seconds if match is paused by an administrator
+	this->m_PauseCount = this->Register("pug_pause_count", "60.0");
+
 	// Delay in vote session
 	this->m_VoteDelay = this->Register("pug_vote_delay", "15.0");
 
@@ -204,6 +207,11 @@ cvar_t* CCvars::GetPlayRoundsOvertimeSwap()
 cvar_t* CCvars::GetPlayCheckPlayers()
 {
 	return this->m_PlayCheckPlayers;
+}
+
+cvar_t* CCvars::GetPauseCount()
+{
+	return this->m_PauseCount;
 }
 
 cvar_t* CCvars::GetVoteDelay()
