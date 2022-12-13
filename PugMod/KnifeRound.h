@@ -23,7 +23,6 @@ public:
 
 private:
 	bool		m_Running = false;
-	TeamName	m_Winner = UNASSIGNED;
 	int			m_Votes[SPECTATOR + 1] = { 0 };
 };
 

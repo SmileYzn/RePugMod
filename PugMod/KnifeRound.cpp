@@ -6,11 +6,9 @@ void CKnifeRound::Init()
 {
 	this->m_Running = true;
 
-	this->m_Winner = UNASSIGNED;
-
 	memset(this->m_Votes, 0, sizeof(this->m_Votes));
 
-	gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("Knife Round Starting: \4Get Ready!!"));
+	gUtil.SayText(nullptr, PRINT_TEAM_DEFAULT, _T("Knife Round Starting: \4Get Ready!!"));
 }
 
 void CKnifeRound::Stop(bool ChangeTeams)
@@ -19,20 +17,35 @@ void CKnifeRound::Stop(bool ChangeTeams)
 
 	if (ChangeTeams)
 	{
-		TeamName Winner = this->GetWinner();
+		if (g_pGameRules)
+		{
+			auto SwapTeams = false;
 
-		if (this->GetVote(Winner) >= (gPlayer.GetNum(false, Winner) / 2))
-		{
-			gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("Teams will remain unchanged."));
-		}
-		else
-		{
-			if (g_pGameRules)
+			if (CSGameRules()->m_iRoundWinStatus == WINSTATUS_CTS) // CT Won Last Round
 			{
-				CSGameRules()->SwapAllPlayers();
+				if (this->GetVote(TERRORIST) > (gPlayer.GetNum(false, CT) / 2))
+				{
+					SwapTeams = true;
+				}
+			}
+			else if (CSGameRules()->m_iRoundWinStatus == WINSTATUS_TERRORISTS) // TERRORIST Won Last Round
+			{
+				if (this->GetVote(CT) > (gPlayer.GetNum(false, TERRORIST) / 2))
+				{
+					SwapTeams = true;
+				}
 			}
 
-			gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("Changing teams automatically."));
+			if (SwapTeams)
+			{
+				CSGameRules()->SwapAllPlayers();
+
+				gUtil.SayText(nullptr, PRINT_TEAM_DEFAULT, _T("Changing teams automatically."));
+			}
+			else
+			{
+				gUtil.SayText(nullptr, PRINT_TEAM_DEFAULT, _T("Teams will remain unchanged."));
+			}
 		}
 	}
 
@@ -63,11 +76,9 @@ void CKnifeRound::StartVote(TeamName Winner)
 	{
 		if (Winner != UNASSIGNED)
 		{
-			this->m_Winner = Winner;
-
 			CBasePlayer* Players[MAX_CLIENTS] = { NULL };
 
-			int Num = gPlayer.GetList(Players, this->m_Winner);
+			int Num = gPlayer.GetList(Players, Winner);
 
 			for (int i = 0; i < Num; i++)
 			{
@@ -81,8 +92,9 @@ void CKnifeRound::StartVote(TeamName Winner)
 
 						gMenu[EntityIndex].Create(_T("Select Starting Side:"), false, (void*)this->MenuHandle);
 
-						gMenu[EntityIndex].AddItem(1, _T("Terrorists"));
-						gMenu[EntityIndex].AddItem(2, _T("Counter-Terrorists"));
+						gMenu[EntityIndex].AddItem(0, _T("Terrorists"), false, 1);
+
+						gMenu[EntityIndex].AddItem(1, _T("Counter-Terrorists"), false, 2);
 
 						gMenu[EntityIndex].Show(EntityIndex);
 					}
@@ -101,7 +113,7 @@ void CKnifeRound::StartVote(TeamName Winner)
 
 			gTask.Create(PUG_TASK_LIST, 0.5f, true, (void*)this->List);
 
-			gUtil.SayText(NULL, (Winner == TERRORIST) ? PRINT_TEAM_RED : PRINT_TEAM_BLUE, _T("\3%s\1 Won: The \3%s\1 team will decide the starting side."), PUG_MOD_TEAM_STR[Winner], PUG_MOD_TEAM_STR[Winner]);
+			gUtil.SayText(nullptr, (Winner == TERRORIST) ? PRINT_TEAM_RED : PRINT_TEAM_BLUE, _T("\3%s\1 Won: The \3%s\1 team will decide the starting side."), PUG_MOD_TEAM_STR[Winner], PUG_MOD_TEAM_STR[Winner]);
 		}
 	}
 }
@@ -122,7 +134,7 @@ void CKnifeRound::RoundEnd(int winStatus, ScenarioEventEndRound event, float tmD
 			}
 			else
 			{
-				gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("Knife Round Failed: \3No clear winner by extermination."));
+				gUtil.SayText(nullptr, PRINT_TEAM_DEFAULT, _T("Knife Round Failed: \3No clear winner by extermination."));
 
 				if (!gCvars.GetKnifeRoundEndType()->value)
 				{
@@ -132,7 +144,7 @@ void CKnifeRound::RoundEnd(int winStatus, ScenarioEventEndRound event, float tmD
 				{
 					this->Init();
 
-					gPugMod.RestarPeriod(NULL);
+					gPugMod.RestarPeriod(nullptr);
 				}
 			}
 		}
@@ -164,11 +176,6 @@ void CKnifeRound::List()
 	gUtil.HudMessage(NULL, gUtil.HudParam(255, 255, 225, 0.23, 0.02, 0, 0.0, 0.53, 0.0, 0.0, 2), "\n%s", VoteList.length() ? VoteList.c_str() : _T("No votes..."));
 }
 
-TeamName CKnifeRound::GetWinner()
-{
-	return this->m_Winner;
-}
-
 int CKnifeRound::AddVote(TeamName Team)
 {
 	this->m_Votes[Team]++;
@@ -187,13 +194,11 @@ void CKnifeRound::MenuHandle(int EntityIndex, P_MENU_ITEM Item)
 
 	if (Player)
 	{
-		gKnifeRound.AddVote((TeamName)Item.Info);
+		gKnifeRound.AddVote((TeamName)Item.Extra);
 
-		gUtil.SayText(NULL, Player->entindex(), _T("\3%s\1 choosed \3%s\1"), STRING(Player->edict()->v.netname), Item.Text.c_str());
+		gUtil.SayText(nullptr, Player->entindex(), _T("\3%s\1 choosed \3%s\1"), STRING(Player->edict()->v.netname), Item.Text.c_str());
 
-		TeamName Winner = gKnifeRound.GetWinner();
-
-		if (gKnifeRound.GetVote(Winner) >= gPlayer.GetNum(false, Winner))
+		if ((gKnifeRound.GetVote(TERRORIST) + gKnifeRound.GetVote(CT)) >= (gPlayer.GetNum(false) / 2))
 		{
 			gKnifeRound.VoteEnd();
 		}
