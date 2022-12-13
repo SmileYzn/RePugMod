@@ -36,7 +36,7 @@ void CVoteTeam::Init()
 		}
 	}
 
-	gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("Select teams started."));
+	gUtil.SayText(nullptr, PRINT_TEAM_DEFAULT, _T("Select teams started."));
 
 	gTask.Create(PUG_TASK_VOTE, gCvars.GetVoteDelay()->value, false, (void*)this->Stop);
 
@@ -68,7 +68,7 @@ void CVoteTeam::MenuHandle(int EntityIndex, P_MENU_ITEM Item)
 	{
 		gVoteTeam.AddVote(Item.Info, 1);
 
-		gUtil.SayText(NULL, Player->entindex(), _T("\3%s\1 choosed \3%s\1"), STRING(Player->edict()->v.netname), Item.Text.c_str());
+		gUtil.SayText(nullptr, Player->entindex(), _T("\3%s\1 choosed \3%s\1"), STRING(Player->edict()->v.netname), Item.Text.c_str());
 
 		if (gVoteTeam.GetCount() >= gPlayer.GetNum(false))
 		{
@@ -112,7 +112,7 @@ void CVoteTeam::Stop()
 	{
 		gPugMod.NextState(3.0);
 
-		gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("The choice of the teams failed: \3No votes."));
+		gUtil.SayText(nullptr, PRINT_TEAM_DEFAULT, _T("The choice of the teams failed: \3No votes."));
 	}
 }
 
@@ -189,19 +189,19 @@ void CVoteTeam::SetMode(int GameMode)
 		{
 			this->TeamsRandomize();
 
-			gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("Mixing teams now."));
+			gUtil.SayText(nullptr, PRINT_TEAM_DEFAULT, _T("Mixing teams now."));
 			break;
 		}
 		case 2: // Same Teams
 		{
-			gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("The teams will remain the same."));
+			gUtil.SayText(nullptr, PRINT_TEAM_DEFAULT, _T("The teams will remain the same."));
 			break;
 		}
 		case 3: // Skill Balanced
 		{
 			this->TeamsOptimize();
 
-			gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("Balancing teams by skills."));
+			gUtil.SayText(nullptr, PRINT_TEAM_DEFAULT, _T("Balancing teams by skills."));
 			break;
 		}
 		case 4: // Swap Teams
@@ -211,7 +211,7 @@ void CVoteTeam::SetMode(int GameMode)
 				CSGameRules()->SwapAllPlayers();
 			}
 
-			gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("Swaping teams now."));
+			gUtil.SayText(nullptr, PRINT_TEAM_DEFAULT, _T("Swaping teams now."));
 			break;
 		}
 	}

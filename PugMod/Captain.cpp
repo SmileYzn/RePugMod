@@ -100,7 +100,7 @@ void CCaptain::SetCaptain(CBasePlayer* Player, TeamName Team)
 			Player->RoundRespawn();
 		}
 
-		gUtil.SayText(NULL, Player->entindex(), _T("\3%s\1 is captain of \3%s\1"), STRING(Player->edict()->v.netname), PUG_MOD_TEAM_STR[Team]);
+		gUtil.SayText(nullptr, Player->entindex(), _T("\3%s\1 is captain of \3%s\1"), STRING(Player->edict()->v.netname), PUG_MOD_TEAM_STR[Team]);
 	}
 }
 
@@ -137,7 +137,7 @@ void CCaptain::GetPlayer(CBasePlayer* Player, CBasePlayer* Target)
 
 			this->List();
 
-			gUtil.SayText(NULL, Player->entindex(), _T("\3%s\1 choosed \3%s\1"), STRING(Player->edict()->v.netname), STRING(Target->edict()->v.netname));
+			gUtil.SayText(nullptr, Player->entindex(), _T("\3%s\1 choosed \3%s\1"), STRING(Player->edict()->v.netname), STRING(Target->edict()->v.netname));
 
 			if (this->CheckPlayerCount())
 			{

@@ -41,7 +41,7 @@ void CVoteOvertime::Init()
 		}
 	}
 
-	gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("Overtime vote started."));
+	gUtil.SayText(nullptr, PRINT_TEAM_DEFAULT, _T("Overtime vote started."));
 
 	gTask.Create(PUG_TASK_LIST, 0.5f, true, (void*)this->List);
 
@@ -73,7 +73,7 @@ void CVoteOvertime::MenuHandle(int EntityIndex, P_MENU_ITEM Item)
 	{
 		gVoteOvertime.AddVote(Item.Info, 1);
 
-		gUtil.SayText(NULL, Player->entindex(), _T("\3%s\1 choosed \3%s\1"), STRING(Player->edict()->v.netname), Item.Text.c_str());
+		gUtil.SayText(nullptr, Player->entindex(), _T("\3%s\1 choosed \3%s\1"), STRING(Player->edict()->v.netname), Item.Text.c_str());
 
 		if (gVoteOvertime.GetCount() >= gPlayer.GetNum(false))
 		{
@@ -120,7 +120,7 @@ void CVoteOvertime::Stop()
 			}
 			case 1:
 			{
-				gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("Match will continue in: \3Sudden Death Round."));
+				gUtil.SayText(nullptr, PRINT_TEAM_DEFAULT, _T("Match will continue in: \3Sudden Death Round."));
 				break;
 			}
 			case 2:
@@ -132,7 +132,7 @@ void CVoteOvertime::Stop()
 	}
 	else
 	{
-		gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("The choice of overtime failed: \3No votes."));
+		gUtil.SayText(nullptr, PRINT_TEAM_DEFAULT, _T("The choice of overtime failed: \3No votes."));
 	}
 }
 

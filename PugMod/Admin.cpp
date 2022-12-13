@@ -189,7 +189,7 @@ void CAdmin::MenuKickHandle(int EntityIndex, P_MENU_ITEM Item)
 
 		if (Target)
 		{
-			gUtil.SayText(NULL, Player->entindex(), _T("\3%s\1 Kicked \3%s\1"), STRING(Player->edict()->v.netname), STRING(Target->edict()->v.netname));
+			gUtil.SayText(nullptr, Player->entindex(), _T("\3%s\1 Kicked \3%s\1"), STRING(Player->edict()->v.netname), STRING(Target->edict()->v.netname));
 
 			gPlayer.DropClient(Target->entindex(), _T("Kicked by %s"), STRING(Player->edict()->v.netname));
 		}
@@ -276,7 +276,7 @@ void CAdmin::MenuBanHandleExtra(int EntityIndex, P_MENU_ITEM Item)
 
 		if (Target)
 		{
-			gUtil.SayText(NULL, Player->entindex(), _T("\3%s\1 Banned \3%s\1: \4%s\1."), STRING(Player->edict()->v.netname), STRING(Target->edict()->v.netname), Item.Text.c_str());
+			gUtil.SayText(nullptr, Player->entindex(), _T("\3%s\1 Banned \3%s\1: \4%s\1."), STRING(Player->edict()->v.netname), STRING(Target->edict()->v.netname), Item.Text.c_str());
 
 			gUtil.ServerCommand("banid %d #%d kick;writeid", Item.Extra, GETPLAYERUSERID(Target->edict()));
 		}
@@ -322,7 +322,7 @@ void CAdmin::MenuSlapHandle(int EntityIndex, P_MENU_ITEM Item)
 		{
 			if (Target->IsAlive())
 			{
-				gUtil.SayText(NULL, EntityIndex, _T("\3%s\1 Killed \3%s\1"), STRING(Player->edict()->v.netname), STRING(Target->edict()->v.netname));
+				gUtil.SayText(nullptr, EntityIndex, _T("\3%s\1 Killed \3%s\1"), STRING(Player->edict()->v.netname), STRING(Target->edict()->v.netname));
 
 				MDLL_ClientKill(Target->edict());
 			}
@@ -407,7 +407,7 @@ void CAdmin::MenuTeamHandleExtra(int EntityIndex, P_MENU_ITEM Item)
 				}
 			}
 
-			gUtil.SayText(NULL, Target->entindex(), _T("\4%s\1 moved \3%s\1 to \3%s\1"), STRING(Player->edict()->v.netname), STRING(Target->edict()->v.netname), Item.Text.c_str());
+			gUtil.SayText(nullptr, Target->entindex(), _T("\4%s\1 moved \3%s\1 to \3%s\1"), STRING(Player->edict()->v.netname), STRING(Target->edict()->v.netname), Item.Text.c_str());
 		}
 	}
 }
@@ -432,7 +432,7 @@ void CAdmin::MenuMapHandle(int EntityIndex, P_MENU_ITEM Item)
 	{
 		gUtil.ChangelevelDelay(5.0f, Item.Text.c_str());
 
-		gUtil.SayText(NULL, EntityIndex, _T("\3%s\1 changed map to \4%s\1"), STRING(Player->edict()->v.netname), Item.Text.c_str());
+		gUtil.SayText(nullptr, EntityIndex, _T("\3%s\1 changed map to \4%s\1"), STRING(Player->edict()->v.netname), Item.Text.c_str());
 	}
 }
 
@@ -520,7 +520,7 @@ void CAdmin::Chat(CBasePlayer* Player, const char* Args)
 
 			Message.erase(std::remove(Message.begin(), Message.end(), '\"'), Message.end());
 
-			gUtil.SayText(NULL, Player->entindex(), _T("\3(%s)\1: %s"), STRING(Player->edict()->v.netname), Message.c_str());
+			gUtil.SayText(nullptr, Player->entindex(), _T("\3(%s)\1: %s"), STRING(Player->edict()->v.netname), Message.c_str());
 		}
 		else
 		{
@@ -563,7 +563,7 @@ void CAdmin::SwapTeams(CBasePlayer* Player)
 				CSGameRules()->RestartRound();
 			}
 
-			gUtil.SayText(NULL, Player->entindex(), _T("\3%s\1 change team sides manually."), STRING(Player->edict()->v.netname));
+			gUtil.SayText(nullptr, Player->entindex(), _T("\3%s\1 change team sides manually."), STRING(Player->edict()->v.netname));
 		}
 		else
 		{

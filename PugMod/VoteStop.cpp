@@ -53,12 +53,12 @@ void CVoteStop::VoteStop(CBasePlayer* Player)
 
 				if (VotesLack)
 				{
-					gUtil.SayText(NULL, PlayerIndex, _T("\3%s\1 voted for surrender: \4%d\1 of \4%d\1 vote(s) to stop the match."), STRING(Player->edict()->v.netname), VoteCount, VotesNeed);
-					gUtil.SayText(NULL, PlayerIndex, _T("Say \3.vote\1 to vote for stop the match."));
+					gUtil.SayText(nullptr, PlayerIndex, _T("\3%s\1 voted for surrender: \4%d\1 of \4%d\1 vote(s) to stop the match."), STRING(Player->edict()->v.netname), VoteCount, VotesNeed);
+					gUtil.SayText(nullptr, PlayerIndex, _T("Say \3.vote\1 to vote for stop the match."));
 				}
 				else
 				{
-					gUtil.SayText(NULL, PlayerIndex, _T("Game Over! The \3%s\1 Surrendered!"), PUG_MOD_TEAM_STR[Player->m_iTeam]);
+					gUtil.SayText(nullptr, PlayerIndex, _T("Game Over! The \3%s\1 Surrendered!"), PUG_MOD_TEAM_STR[Player->m_iTeam]);
 
 					gPugMod.EndGame(Player->m_iTeam == TERRORIST ? CT : TERRORIST);
 				}

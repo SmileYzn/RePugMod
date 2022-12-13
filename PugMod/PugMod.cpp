@@ -50,7 +50,7 @@ void CPugMod::SetState(int State)
 			{
 				gReady.Load();
 
-				gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("%s started, get ready!"), this->GetStateName());
+				gUtil.SayText(nullptr, PRINT_TEAM_DEFAULT, _T("%s started, get ready!"), this->GetStateName());
 				break;
 			}
 		case PUG_STATE_START:
@@ -96,7 +96,7 @@ void CPugMod::SetState(int State)
 				{
 					this->LO3("1");
 
-					gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("%s started: \3Good Luck & Have Fun!"), this->GetStateName());
+					gUtil.SayText(nullptr, PRINT_TEAM_DEFAULT, _T("%s started: \3Good Luck & Have Fun!"), this->GetStateName());
 				}
 				else
 				{
@@ -111,7 +111,7 @@ void CPugMod::SetState(int State)
 			{
 				gTask.Create(PUG_TASK_EXEC, 5.0f, false, (void*)this->SwapTeams);
 
-				gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("%s started, get ready!"), this->GetStateName());
+				gUtil.SayText(nullptr, PRINT_TEAM_DEFAULT, _T("%s started, get ready!"), this->GetStateName());
 
 				if (gPlayer.GetNum() >= (int)gCvars.GetPlayersMin()->value)
 				{
@@ -133,7 +133,7 @@ void CPugMod::SetState(int State)
 				{
 					this->LO3("1");
 
-					gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("%s started: \3Good Luck & Have Fun!"), this->GetStateName());
+					gUtil.SayText(nullptr, PRINT_TEAM_DEFAULT, _T("%s started: \3Good Luck & Have Fun!"), this->GetStateName());
 				}
 				else
 				{
@@ -301,7 +301,7 @@ bool CPugMod::StartVoteMap(CBasePlayer* Player)
 	{
 		gReady.Unload();
 
-		gUtil.SayText(NULL, Player->entindex(), _T("\3%s\1 started Vote Map."),STRING(Player->edict()->v.netname));
+		gUtil.SayText(nullptr, Player->entindex(), _T("\3%s\1 started Vote Map."),STRING(Player->edict()->v.netname));
 
 		gVoteMap.Init();
 
@@ -323,7 +323,7 @@ bool CPugMod::StartVoteTeam(CBasePlayer* Player)
 
 		gCvars.GetVoteTeamType()->value = -1.0f;
 
-		gUtil.SayText(NULL, Player->entindex(), _T("\3%s\1 started Vote Team."), STRING(Player->edict()->v.netname));
+		gUtil.SayText(nullptr, Player->entindex(), _T("\3%s\1 started Vote Team."), STRING(Player->edict()->v.netname));
 
 		this->SetState(PUG_STATE_START);
 
@@ -341,7 +341,7 @@ bool CPugMod::StartMatch(CBasePlayer* Player)
 {
 	if (this->m_State == PUG_STATE_WARMUP || this->m_State == PUG_STATE_HALFTIME)
 	{
-		gUtil.SayText(NULL, Player->entindex(), _T("\3%s\1 started match."), STRING(Player->edict()->v.netname));
+		gUtil.SayText(nullptr, Player->entindex(), _T("\3%s\1 started match."), STRING(Player->edict()->v.netname));
 
 		this->NextState(1.0);
 		
@@ -361,7 +361,7 @@ bool CPugMod::StopMatch(CBasePlayer* Player)
 	{
 		gTask.Remove(PUG_TASK_LO3R);
 
-		gUtil.SayText(NULL, Player->entindex(), _T("\3%s\1 stopped match."), STRING(Player->edict()->v.netname));
+		gUtil.SayText(nullptr, Player->entindex(), _T("\3%s\1 stopped match."), STRING(Player->edict()->v.netname));
 
 		this->SetState(PUG_STATE_END);
 
@@ -381,7 +381,7 @@ bool CPugMod::RestarPeriod(CBasePlayer* Player)
 	{
 		if (Player)
 		{
-			gUtil.SayText(NULL, Player->entindex(), _T("\3%s\1 restarted \4%s\1 period, get ready!."), STRING(Player->edict()->v.netname), this->GetStateName());
+			gUtil.SayText(nullptr, Player->entindex(), _T("\3%s\1 restarted \4%s\1 period, get ready!."), STRING(Player->edict()->v.netname), this->GetStateName());
 		}
 
 		this->m_Round[this->m_State] = 0;
@@ -441,7 +441,7 @@ bool CPugMod::PauseMatch(CBasePlayer* Player)
 
 		if (Player)
 		{
-			gUtil.SayText(NULL, Player->entindex(), _T("\3%s\1 Paused match, game will pause on next round freezetime."), STRING(Player->edict()->v.netname), this->GetStateName());
+			gUtil.SayText(nullptr, Player->entindex(), _T("\3%s\1 Paused match, game will pause on next round freezetime."), STRING(Player->edict()->v.netname), this->GetStateName());
 		}
 
 		this->m_PauseMatch = true;
@@ -635,7 +635,7 @@ void CPugMod::SwapTeams()
 		CSGameRules()->SwapAllPlayers();
 	}
 
-	gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("Changing teams automatically."));
+	gUtil.SayText(nullptr, PRINT_TEAM_DEFAULT, _T("Changing teams automatically."));
 }
 
 void CPugMod::SwapScores()
@@ -801,7 +801,7 @@ void CPugMod::RoundEnd(int winStatus, ScenarioEventEndRound event, float tmDelay
 					}
 					else if (winStatus == WINSTATUS_DRAW)
 					{
-						gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("Round %d draw: No clear winner."), this->GetRound());
+						gUtil.SayText(nullptr, PRINT_TEAM_DEFAULT, _T("Round %d draw: No clear winner."), this->GetRound());
 					}
 				}
 			}
@@ -880,7 +880,7 @@ void CPugMod::RoundRestart(bool PreRestart)
 
 								if (strftime(Time, sizeof(Time), "%M:%S", tm_info) > 0)
 								{
-									gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("Match paused: Match will continue in \3%s\1."), Time);
+									gUtil.SayText(nullptr, PRINT_TEAM_DEFAULT, _T("Match paused: Match will continue in \3%s\1."), Time);
 								}
 							}
 						}

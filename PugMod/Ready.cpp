@@ -14,11 +14,11 @@ void CReady::Load()
 
 	if (gCvars.GetReadyType()->value)
 	{
-		gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("Say \4.ready\1 to continue."));
+		gUtil.SayText(nullptr, PRINT_TEAM_DEFAULT, _T("Say \4.ready\1 to continue."));
 	}
 	else
 	{
-		gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("Match will start when all players join in game."));
+		gUtil.SayText(nullptr, PRINT_TEAM_DEFAULT, _T("Match will start when all players join in game."));
 	}
 }
 
@@ -100,7 +100,7 @@ void CReady::List()
 		{
 			gReady.Unload();
 
-			gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("All playres are ready!"));
+			gUtil.SayText(nullptr, PRINT_TEAM_DEFAULT, _T("All playres are ready!"));
 
 			gPugMod.NextState(0);
 		}
@@ -148,7 +148,7 @@ void CReady::List()
 			{
 				gReady.Unload();
 
-				gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("All players are in teams and ready!"));
+				gUtil.SayText(nullptr, PRINT_TEAM_DEFAULT, _T("All players are in teams and ready!"));
 
 				gPugMod.NextState(0);
 			}
@@ -168,7 +168,7 @@ void CReady::Ready(CBasePlayer* Player)
 			{
 				this->m_Ready[EntityIndex] = 1;
 
-				gUtil.SayText(NULL, EntityIndex, _T("\3%s\1 is ready."), STRING(Player->edict()->v.netname));
+				gUtil.SayText(nullptr, EntityIndex, _T("\3%s\1 is ready."), STRING(Player->edict()->v.netname));
 			}
 		}
 		else
@@ -190,7 +190,7 @@ void CReady::NotReady(CBasePlayer* Player)
 			{
 				this->m_Ready[EntityIndex] = 0;
 
-				gUtil.SayText(NULL, EntityIndex, _T("\3%s\1 is not ready."), STRING(Player->edict()->v.netname));
+				gUtil.SayText(nullptr, EntityIndex, _T("\3%s\1 is not ready."), STRING(Player->edict()->v.netname));
 			}
 		}
 		else

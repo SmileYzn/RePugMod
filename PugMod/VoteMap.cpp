@@ -43,7 +43,7 @@ void CVoteMap::Init()
 		}
 	}
 
-	gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("Starting Vote Map."));
+	gUtil.SayText(nullptr, PRINT_TEAM_DEFAULT, _T("Starting Vote Map."));
 
 	gTask.Create(PUG_TASK_VOTE, gCvars.GetVoteDelay()->value, false, (void*)this->Stop);
 
@@ -75,7 +75,7 @@ void CVoteMap::MenuHandle(int EntityIndex, P_MENU_ITEM Item)
 	{
 		gVoteMap.AddVote(Item.Info, 1);
 
-		gUtil.SayText(NULL, Player->entindex(), _T("\3%s\1 choosed \3%s\1"), STRING(Player->edict()->v.netname), Item.Text.c_str());
+		gUtil.SayText(nullptr, Player->entindex(), _T("\3%s\1 choosed \3%s\1"), STRING(Player->edict()->v.netname), Item.Text.c_str());
 
 		if (gVoteMap.GetCount() >= gPlayer.GetNum(false))
 		{
@@ -113,13 +113,13 @@ void CVoteMap::Stop()
 	{
 		gUtil.ChangelevelDelay(5.0, Winner.Name.c_str());
 
-		gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("Changing map to \4%s\1..."), Winner.Name.c_str());
+		gUtil.SayText(nullptr, PRINT_TEAM_DEFAULT, _T("Changing map to \4%s\1..."), Winner.Name.c_str());
 	}
 	else
 	{
 		gTask.Remove(PUG_TASK_LIST);
 
-		gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("The map choice has failed: \3No votes."));
+		gUtil.SayText(nullptr, PRINT_TEAM_DEFAULT, _T("The map choice has failed: \3No votes."));
 
 		gTask.Create(PUG_TASK_NEXT, 5.0f, false, (void*)gVoteMap.Fail);
 	}
@@ -227,6 +227,6 @@ void CVoteMap::RandomMap()
 
 		gUtil.ChangelevelDelay(5.0f, it->second.Name.c_str());
 
-		gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("Changing map to \4%s\1..."), it->second.Name.c_str());
+		gUtil.SayText(nullptr, PRINT_TEAM_DEFAULT, _T("Changing map to \4%s\1..."), it->second.Name.c_str());
 	}
 }

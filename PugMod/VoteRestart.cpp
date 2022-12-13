@@ -68,8 +68,8 @@ void CVoteRestart::VoteRestart(CBasePlayer* Player)
 				
 				if (VotesLack)
 				{
-					gUtil.SayText(NULL, PlayerIndex, _T("\3%s\1 voted to restart \4%s\1: \4%d\1 of \4%d\1 vote(s) to restart period."), STRING(Player->edict()->v.netname), StateName, VoteCount, VotesNeed);
-					gUtil.SayText(NULL, PlayerIndex, _T("Say \3.vote\1 to vote for restart \3%s\1."), StateName);
+					gUtil.SayText(nullptr, PlayerIndex, _T("\3%s\1 voted to restart \4%s\1: \4%d\1 of \4%d\1 vote(s) to restart period."), STRING(Player->edict()->v.netname), StateName, VoteCount, VotesNeed);
+					gUtil.SayText(nullptr, PlayerIndex, _T("Say \3.vote\1 to vote for restart \3%s\1."), StateName);
 				}
 				else
 				{
@@ -77,7 +77,7 @@ void CVoteRestart::VoteRestart(CBasePlayer* Player)
 					
 					memset(this->m_Votes, false, sizeof(this->m_Votes));
 
-					gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("The \4%s\1 period will be restarted: Get Ready!"), StateName);
+					gUtil.SayText(nullptr, PRINT_TEAM_DEFAULT, _T("The \4%s\1 period will be restarted: Get Ready!"), StateName);
 
 					gPugMod.RestarPeriod(NULL);
 				}

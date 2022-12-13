@@ -103,8 +103,8 @@ void CVotePause::VotePause(CBasePlayer* Player)
 
 								if (VotesLack)
 								{
-									gUtil.SayText(NULL, PlayerIndex, _T("\3%s\1 from voted for a timeout: \4%d\1 of \4%d\1 vote(s) to run timeout."), STRING(Player->edict()->v.netname), VoteCount, VotesNeed);
-									gUtil.SayText(NULL, PlayerIndex, _T("Say \3.vote\1 for a timeout."));
+									gUtil.SayText(nullptr, PlayerIndex, _T("\3%s\1 from voted for a timeout: \4%d\1 of \4%d\1 vote(s) to run timeout."), STRING(Player->edict()->v.netname), VoteCount, VotesNeed);
+									gUtil.SayText(nullptr, PlayerIndex, _T("Say \3.vote\1 for a timeout."));
 								}
 								else
 								{
@@ -114,9 +114,9 @@ void CVotePause::VotePause(CBasePlayer* Player)
 
 									if (!CSGameRules()->IsFreezePeriod())
 									{
-										gUtil.SayText(NULL, PlayerIndex, _T("The \3%s\1 team paused the game."), PUG_MOD_TEAM_STR[Player->m_iTeam]);
+										gUtil.SayText(nullptr, PlayerIndex, _T("The \3%s\1 team paused the game."), PUG_MOD_TEAM_STR[Player->m_iTeam]);
 
-										gUtil.SayText(NULL, PlayerIndex, _T("Match will pause for \4%d\1 seconds on next round."), (int)gCvars.GetVotePauseTime()->value);
+										gUtil.SayText(nullptr, PlayerIndex, _T("Match will pause for \4%d\1 seconds on next round."), (int)gCvars.GetVotePauseTime()->value);
 									}
 									else
 									{
@@ -124,11 +124,11 @@ void CVotePause::VotePause(CBasePlayer* Player)
 
 										if (PauseTeam == Player->m_iTeam)
 										{
-											gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("The \3%s\1 team extended the paused of game."), PUG_MOD_TEAM_STR[Player->m_iTeam]);
+											gUtil.SayText(nullptr, PRINT_TEAM_DEFAULT, _T("The \3%s\1 team extended the paused of game."), PUG_MOD_TEAM_STR[Player->m_iTeam]);
 										}
 										else
 										{
-											gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("The \3%s\1 team paused the game."), PUG_MOD_TEAM_STR[Player->m_iTeam]);
+											gUtil.SayText(nullptr, PRINT_TEAM_DEFAULT, _T("The \3%s\1 team paused the game."), PUG_MOD_TEAM_STR[Player->m_iTeam]);
 										}
 									}
 								}

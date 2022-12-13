@@ -134,12 +134,12 @@ void CVoteKick::VoteKick(CBasePlayer* Player, CBasePlayer* Target)
 				{
 					gPlayer.DropClient(Target->entindex(), _T("Kicked by Vote Kick."));
 
-					gUtil.SayText(NULL, TargetIndex, _T("\3%s\1 Kicked: \4%d\1 votes reached."), STRING(Target->edict()->v.netname), VotesNeed);
+					gUtil.SayText(nullptr, TargetIndex, _T("\3%s\1 Kicked: \4%d\1 votes reached."), STRING(Target->edict()->v.netname), VotesNeed);
 				}
 				else
 				{
-					gUtil.SayText(NULL, PlayerIndex, _T("\3%s\1 voted to kick \3%s\1: \4%d\1 of \4%d\1 votes to kick."), STRING(Player->edict()->v.netname), STRING(Target->edict()->v.netname), VoteCount, VotesNeed);
-					gUtil.SayText(NULL, PlayerIndex, _T("Say \3.vote\1 to open vote kick."));
+					gUtil.SayText(nullptr, PlayerIndex, _T("\3%s\1 voted to kick \3%s\1: \4%d\1 of \4%d\1 votes to kick."), STRING(Player->edict()->v.netname), STRING(Target->edict()->v.netname), VoteCount, VotesNeed);
+					gUtil.SayText(nullptr, PlayerIndex, _T("Say \3.vote\1 to open vote kick."));
 				}
 			}
 			else

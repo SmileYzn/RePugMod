@@ -94,14 +94,14 @@ void CVoteLevel::VoteLevel(CBasePlayer* Player, int MapIndex, bool Disabled)
 
 		if (VotesLack)
 		{
-			gUtil.SayText(NULL, PlayerIndex, _T("\3%s\1 nomitated \4%s\1: \4%d\1 of \4%d\1 votes to change map."), STRING(Player->edict()->v.netname), this->m_Maps[MapIndex].c_str(), VoteCount, VotesLack);
-			gUtil.SayText(NULL, PlayerIndex, _T("Say \3.vote\1 to nominate a map."));
+			gUtil.SayText(nullptr, PlayerIndex, _T("\3%s\1 nomitated \4%s\1: \4%d\1 of \4%d\1 votes to change map."), STRING(Player->edict()->v.netname), this->m_Maps[MapIndex].c_str(), VoteCount, VotesLack);
+			gUtil.SayText(nullptr, PlayerIndex, _T("Say \3.vote\1 to nominate a map."));
 		}
 		else
 		{
 			gUtil.ChangelevelDelay(5.0f, this->m_Maps[MapIndex].c_str());
 
-			gUtil.SayText(NULL, PlayerIndex, _T("Changing map to \4%s\1..."), this->m_Maps[MapIndex].c_str());
+			gUtil.SayText(nullptr, PlayerIndex, _T("Changing map to \4%s\1..."), this->m_Maps[MapIndex].c_str());
 		}
 	}
 	else
