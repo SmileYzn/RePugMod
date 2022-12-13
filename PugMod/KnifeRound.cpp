@@ -21,14 +21,14 @@ void CKnifeRound::Stop(bool ChangeTeams)
 		{
 			auto SwapTeams = false;
 
-			if (CSGameRules()->m_iRoundWinStatus == WINSTATUS_CTS) // CT Won Last Round
+			if (CSGameRules()->m_iRoundWinStatus == WINSTATUS_CTS)
 			{
 				if (this->GetVote(TERRORIST) > (gPlayer.GetNum(false, CT) / 2))
 				{
 					SwapTeams = true;
 				}
 			}
-			else if (CSGameRules()->m_iRoundWinStatus == WINSTATUS_TERRORISTS) // TERRORIST Won Last Round
+			else if (CSGameRules()->m_iRoundWinStatus == WINSTATUS_TERRORISTS)
 			{
 				if (this->GetVote(CT) > (gPlayer.GetNum(false, TERRORIST) / 2))
 				{
