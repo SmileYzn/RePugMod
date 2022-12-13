@@ -683,16 +683,11 @@ bool CPugMod::ClientAddAccount(CBasePlayer* Player, int amount, RewardType type,
 
 bool CPugMod::ClientHasRestrictItem(CBasePlayer* Player, ItemID item, ItemRestType type)
 {
-	if (this->m_State == PUG_STATE_WARMUP || this->m_State == PUG_STATE_START || this->m_State == PUG_STATE_HALFTIME)
+	if (!this->IsLive())
 	{
-		if (type == ITEM_TYPE_BUYING)
+		if (item == ITEM_SHIELDGUN || item == ITEM_HEGRENADE || item == ITEM_SMOKEGRENADE || item == ITEM_FLASHBANG || item == ITEM_DEFUSEKIT)
 		{
-			if (item == ITEM_SHIELDGUN || item == ITEM_HEGRENADE || item == ITEM_FLASHBANG || item == ITEM_SMOKEGRENADE)
-			{
-				gUtil.ClientPrint(Player->edict(), PRINT_CENTER, "#Cstrike_TitlesTXT_Weapon_Not_Available");
-
-				return true;
-			}
+			return true;
 		}
 	}
 

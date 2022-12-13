@@ -19,7 +19,13 @@ void CKnifeRound::Stop(bool ChangeTeams)
 
 	if (ChangeTeams)
 	{
-		if ((this->GetVote(this->GetWinner()) < (gPlayer.GetNum(this->GetWinner()) / 2)))
+		TeamName Winner = this->GetWinner();
+
+		if (this->GetVote(Winner) >= (gPlayer.GetNum(false, Winner) / 2))
+		{
+			gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("Teams will remain unchanged."));
+		}
+		else
 		{
 			if (g_pGameRules)
 			{
@@ -27,10 +33,6 @@ void CKnifeRound::Stop(bool ChangeTeams)
 			}
 
 			gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("Changing teams automatically."));
-		}
-		else
-		{
-			gUtil.SayText(NULL, PRINT_TEAM_DEFAULT, _T("Teams will remain unchanged."));
 		}
 	}
 
@@ -43,8 +45,6 @@ bool CKnifeRound::ClientHasRestrictItem(CBasePlayer* Player, ItemID item, ItemRe
 	{
 		if (item != ITEM_KEVLAR && item != ITEM_ASSAULT && item != ITEM_KNIFE)
 		{
-			gUtil.ClientPrint(Player->edict(), PRINT_CENTER, "#Cstrike_TitlesTXT_Weapon_Not_Available");
-
 			return true;
 		}
 	}
@@ -85,10 +85,6 @@ void CKnifeRound::StartVote(TeamName Winner)
 						gMenu[EntityIndex].AddItem(2, _T("Counter-Terrorists"));
 
 						gMenu[EntityIndex].Show(EntityIndex);
-					}
-					else
-					{
-						this->AddVote((Player->m_iTeam == TERRORIST ? CT : TERRORIST));
 					}
 				}
 			}
@@ -195,7 +191,9 @@ void CKnifeRound::MenuHandle(int EntityIndex, P_MENU_ITEM Item)
 
 		gUtil.SayText(NULL, Player->entindex(), _T("\3%s\1 choosed \3%s\1"), STRING(Player->edict()->v.netname), Item.Text.c_str());
 
-		if ((gKnifeRound.GetVote(TERRORIST) + gKnifeRound.GetVote(CT)) >= gPlayer.GetNum(gKnifeRound.GetWinner()))
+		TeamName Winner = gKnifeRound.GetWinner();
+
+		if (gKnifeRound.GetVote(Winner) >= gPlayer.GetNum(false, Winner))
 		{
 			gKnifeRound.VoteEnd();
 		}

@@ -133,18 +133,18 @@ int CPlayer::GetNum(TeamName Team)
 
 	switch (Team)
 	{
-	case TERRORIST:
-	{
-		return NumTerrorist;
-	}
-	case CT:
-	{
-		return NumCT;
-	}
-	case SPECTATOR:
-	{
-		return NumSpectator;
-	}
+		case TERRORIST:
+		{
+			return NumTerrorist;
+		}
+		case CT:
+		{
+			return NumCT;
+		}
+		case SPECTATOR:
+		{
+			return NumSpectator;
+		}
 	}
 
 	return InGame;
@@ -159,6 +159,31 @@ int CPlayer::GetNum(bool CountBots)
 	return InGame;
 }
 
+int CPlayer::GetNum(bool CountBots, TeamName Team)
+{
+	int InGame, NumTerrorist, NumCT, NumSpectator;
+
+	this->GetNum(CountBots, InGame, NumTerrorist, NumCT, NumSpectator);
+
+	switch (Team)
+	{
+		case TERRORIST:
+		{
+			return NumTerrorist;
+		}
+		case CT:
+		{
+			return NumCT;
+		}
+		case SPECTATOR:
+		{
+			return NumSpectator;
+		}
+	}
+
+	return InGame;
+}
+
 int CPlayer::GetNum(int& NumAliveTerrorists, int& NumAliveCT)
 {
 	NumAliveTerrorists, NumAliveCT = 0;
@@ -169,18 +194,15 @@ int CPlayer::GetNum(int& NumAliveTerrorists, int& NumAliveCT)
 
 		if (Player)
 		{
-			if (!FNullEnt(Player->edict()) && GETPLAYERUSERID(Player->edict()) > 0)
+			if (Player->IsAlive())
 			{
-				if (Player->IsAlive())
+				if (Player->m_iTeam == TERRORIST)
 				{
-					if (Player->m_iTeam == TERRORIST)
-					{
-						NumAliveTerrorists++;
-					}
-					else if (Player->m_iTeam == CT)
-					{
-						NumAliveCT++;
-					}
+					NumAliveTerrorists++;
+				}
+				else if (Player->m_iTeam == CT)
+				{
+					NumAliveCT++;
 				}
 			}
 		}

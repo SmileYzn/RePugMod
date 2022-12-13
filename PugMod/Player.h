@@ -12,6 +12,7 @@ public:
 	int GetNum();
 	int GetNum(TeamName Team);
 	int GetNum(bool CountBots);
+	int GetNum(bool CountBots,TeamName Team);
 	int GetNum(int& NumAliveTerrorists, int& NumAliveCT);
 
 	CBasePlayer* GetRandom(TeamName Team);
