@@ -189,6 +189,9 @@ public:
 	// Server Deactivate
 	void ServerDeactivate();
 
+	// Save Stats
+	void Save();
+
 	// Reset
 	void Reset(bool FullReset);
 

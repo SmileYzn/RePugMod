@@ -44,6 +44,7 @@ public:
 	cvar_t* GetBanTimes();
 	cvar_t* GetApiUrl();
 	cvar_t* GetApiCheckConnect();
+	cvar_t* GetApiStats();
 
 private:
 	cvar_t* m_Config[8];
@@ -83,6 +84,7 @@ private:
 	cvar_t* m_BanTimes;
 	cvar_t* m_ApiUrl;
 	cvar_t* m_ApiCheckConnect;
+	cvar_t* m_ApiStats;
 };
 
 extern CCvars gCvars;

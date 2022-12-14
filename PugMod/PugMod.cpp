@@ -42,7 +42,7 @@ void CPugMod::SetState(int State)
 {
 	this->m_State = State;
 
-	this->m_PauseMatch = false;
+	this->m_Pause = false;
 
 	switch (this->m_State)
 	{
@@ -151,6 +151,8 @@ void CPugMod::SetState(int State)
 				gCvars.GetVoteMap()->value = 1;
 
 				this->NextState(5.0f);
+
+				gStats.Save();
 				
 				break;
 			}
@@ -433,7 +435,7 @@ bool CPugMod::PauseMatch(CBasePlayer* Player)
 {
 	if (this->IsLive())
 	{
-		if (this->m_PauseMatch || gVotePause.GetPauseTeam() != UNASSIGNED)
+		if (this->m_Pause || gVotePause.GetPauseTeam() != UNASSIGNED)
 		{
 			gUtil.SayText(Player->edict(), Player->entindex(), _T("Match already paused, try on next round."));
 			return false;
@@ -444,7 +446,7 @@ bool CPugMod::PauseMatch(CBasePlayer* Player)
 			gUtil.SayText(nullptr, Player->entindex(), _T("\3%s\1 Paused match, game will pause on next round freezetime."), STRING(Player->edict()->v.netname), this->GetStateName());
 		}
 
-		this->m_PauseMatch = true;
+		this->m_Pause = true;
 
 		return true;
 	}
@@ -860,9 +862,9 @@ void CPugMod::RoundRestart(bool PreRestart)
 			{
 				if (gCvars.GetPauseCount()->value > 0)
 				{
-					if (this->m_PauseMatch)
+					if (this->m_Pause)
 					{
-						this->m_PauseMatch = false;
+						this->m_Pause = false;
 
 						gUtil.SetRoundTime((int)gCvars.GetVotePauseTime()->value, true);
 

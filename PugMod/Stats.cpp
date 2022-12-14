@@ -12,6 +12,225 @@ void CStats::ServerDeactivate()
 	this->Reset(true);
 }
 
+void CStats::Save()
+{
+	// Has API URL
+	if (gCvars.GetApiUrl()->string && gCvars.GetApiUrl()->string[0] != '\0')
+	{
+		// Has API Stats flag
+		if (gCvars.GetApiStats()->value)
+		{
+			// JSON data
+			nlohmann::ordered_json StatsData;
+			//
+			// Match Data
+			StatsData["server"] =
+			{
+				{"hostname", CVAR_GET_STRING("hostname")},
+				{"address", CVAR_GET_STRING("net_address")},
+				{"map", STRING(gpGlobals->mapname)},
+				{"start", static_cast<long long>(this->m_StartTime)},
+				{"end", static_cast<long long>(std::time(NULL))},
+				{"round", gPugMod.GetRound()},
+				{"winner", (int)gPugMod.GetWinner()},
+				{"tr", gPugMod.GetScores(TERRORIST)},
+				{"ct", gPugMod.GetScores(CT)},
+			};
+			//
+			// Round Events
+			for (auto& Event : gStats.m_Event)
+			{
+				StatsData["rounds"][std::to_string(Event.Round)].push_back
+				({
+					{"round",Event.Round},
+					{"time",Event.Time},
+					{"type",Event.Type},
+					{"winner",Event.Winner},
+					{"loser",Event.Loser},
+					{"killer",Event.Killer.c_str()},
+					{"killer_origin",{Event.KillerOrigin[0],Event.KillerOrigin[1],Event.KillerOrigin[2]}},
+					{"victim",Event.Victim.c_str()},
+					{"victim_origin",{Event.VictimOrigin[0],Event.VictimOrigin[1],Event.VictimOrigin[2]}},
+					{"isHeadShot",Event.IsHeadShot},
+					{"itemIndex",Event.ItemIndex},
+					});
+			}
+			//
+			// Player data
+			for (auto const& Data : gStats.m_Data)
+			{
+				// Auth ID
+				const char* Auth = Data.first.c_str();
+
+				// If has valid auth id, save data
+				if (Auth && Auth[0] != '\0')
+				{
+					// Player Stats
+					StatsData["players"][Auth]["stats"] =
+					{
+						{"frags",Data.second.Stats[STATS_FRAGS]},
+						{"assists",Data.second.Stats[STATS_ASSISTS]},
+						{"deaths",Data.second.Stats[STATS_DEATHS]},
+						{"hs",Data.second.Stats[STATS_HEADSHOTS]},
+						{"shots",Data.second.Stats[STATS_SHOTS]},
+						{"hits",Data.second.Stats[STATS_HITS]},
+						{"damage",Data.second.Stats[STATS_DMG_DONE]},
+						{"damage_recv",Data.second.Stats[STATS_DMG_RECV]},
+						{"flash_assists",Data.second.Stats[STATS_FLASH_ASSIST]},
+						{"fr_frags",Data.second.Stats[STATS_FR_FRAGS]},
+						{"fr_deaths",Data.second.Stats[STATS_FR_DEATHS]},
+						{"tr_frags",Data.second.Stats[STAST_TR_FRAGS]},
+						{"tr_deaths",Data.second.Stats[STATS_TR_DEATHS]},
+					};
+					//
+					// Match Stats
+					StatsData["players"][Auth]["match"] =
+					{
+						{"rws",Data.second.RoundWinShare},
+						{"flash_time",Data.second.FlashDuration},
+					};
+					//
+					// Round Stats
+					StatsData["players"][Auth]["round"] =
+					{
+						{"play",Data.second.Rounds[ROUND_PLAY]},
+						{"win_tr",Data.second.Rounds[ROUND_WIN_TR]},
+						{"lose_tr",Data.second.Rounds[ROUND_LOSE_TR]},
+						{"win_ct",Data.second.Rounds[ROUND_WIN_CT]},
+						{"lose_ct",Data.second.Rounds[ROUND_LOSE_CT]},
+					};
+					//
+					// Bomb Stats
+					StatsData["players"][Auth]["bomb"] =
+					{
+						{"carrier",Data.second.BombStats[BOMB_CARRIER]},
+						{"dropped",Data.second.BombStats[BOMB_DROPPED]},
+						{"planting",Data.second.BombStats[BOMB_PLANTING]},
+						{"planted",Data.second.BombStats[BOMB_PLANTED]},
+						{"explode",Data.second.BombStats[BOMB_EXPLODED]},
+						{"defusing",Data.second.BombStats[BOMB_DEFUSING]},
+						{"defused",Data.second.BombStats[BOMB_DEFUSED]},
+						{"defusing_kit",Data.second.BombStats[BOMB_DEFUSING_KIT]},
+						{"defused_kit",Data.second.BombStats[BOMB_DEFUSED_KIT]},
+					};
+					//
+					// Hitbox
+					StatsData["players"][Auth]["hitbox"] =
+					{
+						{"generic",Data.second.HitBox[HITGROUP_GENERIC]},
+						{"head",Data.second.HitBox[HITGROUP_HEAD]},
+						{"chest",Data.second.HitBox[HITGROUP_CHEST]},
+						{"stomach",Data.second.HitBox[HITGROUP_STOMACH]},
+						{"leftarm",Data.second.HitBox[HITGROUP_LEFTARM]},
+						{"rightarm",Data.second.HitBox[HITGROUP_RIGHTARM]},
+						{"leftleg",Data.second.HitBox[HITGROUP_LEFTLEG]},
+						{"rightleg",Data.second.HitBox[HITGROUP_RIGHTLEG]},
+						{"dmg_generic",Data.second.HitBoxDamage[HITGROUP_GENERIC]},
+						{"dmg_head",Data.second.HitBoxDamage[HITGROUP_HEAD]},
+						{"dmg_chest",Data.second.HitBoxDamage[HITGROUP_CHEST]},
+						{"dmg_stomach",Data.second.HitBoxDamage[HITGROUP_STOMACH]},
+						{"dmg_leftarm",Data.second.HitBoxDamage[HITGROUP_LEFTARM]},
+						{"dmg_rightarm",Data.second.HitBoxDamage[HITGROUP_RIGHTARM]},
+						{"dmg_leftleg",Data.second.HitBoxDamage[HITGROUP_LEFTLEG]},
+						{"dmg_rightleg",Data.second.HitBoxDamage[HITGROUP_RIGHTLEG]},
+					};
+					//
+					// Streaks And versus
+					StatsData["players"][Auth]["streak"] =
+					{
+						{"k1",Data.second.KillStreak[1]},
+						{"k2",Data.second.KillStreak[2]},
+						{"k3",Data.second.KillStreak[3]},
+						{"k4",Data.second.KillStreak[4]},
+						{"k5",Data.second.KillStreak[5]},
+						{"v1",Data.second.Versus[1]},
+						{"v2",Data.second.Versus[2]},
+						{"v3",Data.second.Versus[3]},
+						{"v4",Data.second.Versus[4]},
+						{"v5",Data.second.Versus[5]},
+					};
+					//
+					// Money
+					StatsData["players"][Auth]["money"] =
+					{
+						{"none",Data.second.Money[RT_NONE]},
+						{"round_bonus",Data.second.Money[RT_ROUND_BONUS]},
+						{"player_reset",Data.second.Money[RT_PLAYER_RESET]},
+						{"player_join",Data.second.Money[RT_PLAYER_JOIN]},
+						{"player_spec_join",Data.second.Money[RT_PLAYER_SPEC_JOIN]},
+						{"player_bought_something",Data.second.Money[RT_PLAYER_BOUGHT_SOMETHING]},
+						{"hostage_took",Data.second.Money[RT_HOSTAGE_TOOK]},
+						{"hostage_rescued",Data.second.Money[RT_HOSTAGE_RESCUED]},
+						{"hostage_damaged",Data.second.Money[RT_HOSTAGE_DAMAGED]},
+						{"hostage_killed",Data.second.Money[RT_HOSTAGE_KILLED]},
+						{"teammates_killed",Data.second.Money[RT_TEAMMATES_KILLED]},
+						{"enemy_killed",Data.second.Money[RT_ENEMY_KILLED]},
+						{"into_game",Data.second.Money[RT_INTO_GAME]},
+						{"vip_killed",Data.second.Money[RT_VIP_KILLED]},
+						{"vip_rescued_myself",Data.second.Money[RT_VIP_RESCUED_MYSELF]},
+					};
+					//
+					// Hack
+					StatsData["players"][Auth]["hack"] =
+					{
+						{"vision",Data.second.HackStats[HACK_VISION]},
+						{"onehit",Data.second.HackStats[HACK_ONEHIT]},
+						{"noscope",Data.second.HackStats[HACK_NOSCOP]},
+					};
+					//
+					// Weapon Stats
+					if (g_ReGameApi)
+					{
+						// Loop all weapons
+						for (int WeaponIndex = WEAPON_P228; WeaponIndex <= WEAPON_P90; WeaponIndex++)
+						{
+							// If has shots or damage
+							if (Data.second.WeaponStats[WeaponIndex][WEAPON_SHOT] && Data.second.WeaponStats[WeaponIndex][WEAPON_DAMAGE])
+							{
+								// Get Weapon Info
+								auto info = g_ReGameApi->GetWeaponInfo(WeaponIndex);
+								//
+								// If has data
+								if (info)
+								{
+									// If has entity name
+									if (info->entityName != nullptr)
+									{
+										StatsData["players"][Auth]["weapon"][info->entityName] =
+										{
+											{"frags",Data.second.WeaponStats[WeaponIndex][WEAPON_KILL]},
+											{"assists",Data.second.WeaponStats[WeaponIndex][WEAPON_ASSISTS]},
+											{"deaths",Data.second.WeaponStats[WeaponIndex][WEAPON_DEATH]},
+											{"hs",Data.second.WeaponStats[WeaponIndex][WEAPON_HEADSHOT]},
+											{"shots",Data.second.WeaponStats[WeaponIndex][WEAPON_SHOT]},
+											{"hits",Data.second.WeaponStats[WeaponIndex][WEAPON_HIT]},
+											{"damage",Data.second.WeaponStats[WeaponIndex][WEAPON_DAMAGE]},
+											{"damage_recv",Data.second.WeaponStats[WeaponIndex][WEAPON_DAMAGE_R]},
+										};
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			//
+			// Send to web server
+			if (StatsData.size())
+			{
+				char Link[256] = { 0 };
+
+				Q_snprintf(Link, sizeof(Link), "%s?stats=true", gCvars.GetApiUrl()->string);
+
+				if (Link[0] && Link[0] != '\0')
+				{
+					gLibCurl.PostJSON(Link, StatsData.dump(), NULL, 0);
+				}
+			}
+		}
+	}
+}
+
 void CStats::Reset(bool FullReset)
 {
 	if (FullReset)

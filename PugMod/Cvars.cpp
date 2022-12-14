@@ -135,6 +135,9 @@ void CCvars::Load()
 
 	// Authenticate from API the players that is connecting to server
 	this->m_ApiCheckConnect = this->Register("pug_api_check_connect", "0");
+
+	// Save Stats in API when match end
+	this->m_ApiStats = this->Register("pug_api_stats", "0");
 }
 
 cvar_t* CCvars::Register(const char* Name, const char* Value)
@@ -351,4 +354,9 @@ cvar_t* CCvars::GetApiUrl()
 cvar_t* CCvars::GetApiCheckConnect()
 {
 	return this->m_ApiCheckConnect;
+}
+
+cvar_t* CCvars::GetApiStats()
+{
+	return this->m_ApiStats;
 }

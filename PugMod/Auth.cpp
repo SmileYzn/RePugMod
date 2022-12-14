@@ -10,19 +10,22 @@ void CAuth::ClientConnected(edict_t* pEdict)
 		{
 			if (!FNullEnt(pEdict))
 			{
-				if (!(pEdict->v.flags & FL_FAKECLIENT) && !(pEdict->v.flags & FL_PROXY))
+				if (!(pEdict->v.flags & FL_FAKECLIENT))
 				{
-					const char* Auth = GETPLAYERAUTHID(pEdict);
-
-					if (Auth && Auth[0] != '\0')
+					if (!(pEdict->v.flags & FL_PROXY))
 					{
-						char Link[512] = { 0 };
+						const char* Auth = GETPLAYERAUTHID(pEdict);
 
-						Q_snprintf(Link, sizeof(Link), "%s?auth=%s", gCvars.GetApiUrl()->string, Auth);
-
-						if (Link[0] && Link[0] != '\0')
+						if (Auth && Auth[0] != '\0')
 						{
-							gLibCurl.Get(Link, (void*)this->RequestCallback, ENTINDEX(pEdict));
+							char Link[512] = { 0 };
+
+							Q_snprintf(Link, sizeof(Link), "%s?auth=%s", gCvars.GetApiUrl()->string, Auth);
+
+							if (Link[0] && Link[0] != '\0')
+							{
+								gLibCurl.Get(Link, (void*)this->RequestCallback, ENTINDEX(pEdict));
+							}
 						}
 					}
 				}

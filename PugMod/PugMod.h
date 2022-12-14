@@ -99,7 +99,7 @@ private:
 	int m_State = PUG_STATE_DEAD;
 	int m_Round[PUG_STATE_END + 1] = { 0 };
 	int m_Score[PUG_STATE_END + 1][SPECTATOR + 1] = { 0 };
-	int m_PauseMatch = false;
+	int m_Pause = false;
 };
 
 extern CPugMod gPugMod;
