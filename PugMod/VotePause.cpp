@@ -171,7 +171,7 @@ TeamName CVotePause::GetPauseTeam()
 }
 
 void CVotePause::RoundRestart()
-{
+{ 
 	if (gPugMod.IsLive())
 	{
 		if (gCvars.GetVotePauseTime()->value > 0)

@@ -129,6 +129,12 @@ void CCvars::Load()
 
 	// Allowed ban times in minutes (0 To ban permanently)
 	this->m_BanTimes = this->Register("pug_ban_times", "0 5 10 15 30 45 60 120");
+
+	// Public API url to autenticate clients, save stats and others
+	this->m_ApiUrl = this->Register("pug_api_url", "");
+
+	// Authenticate from API the players that is connecting to server
+	this->m_ApiCheckConnect = this->Register("pug_api_check_connect", "0");
 }
 
 cvar_t* CCvars::Register(const char* Name, const char* Value)
@@ -335,4 +341,14 @@ cvar_t* CCvars::GetHelpFilePlayer()
 cvar_t* CCvars::GetBanTimes()
 {
 	return this->m_BanTimes;
+}
+
+cvar_t* CCvars::GetApiUrl()
+{
+	return this->m_ApiUrl;
+}
+
+cvar_t* CCvars::GetApiCheckConnect()
+{
+	return this->m_ApiCheckConnect;
 }

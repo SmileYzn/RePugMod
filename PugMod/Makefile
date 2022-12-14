@@ -1,5 +1,6 @@
 CSSDK 	= include/cssdk
 METAMOD = include/metamod
+LIBCURL = include/curl
 
 NAME = pugmod
 
@@ -7,11 +8,11 @@ COMPILER = g++
 
 OBJECTS = *.cpp
 
-LINK = -static-libstdc++
+LINK = -static-libstdc++ -lcurl -lssl -lcrypto -ldl -lm -lz
 
 OPT_FLAGS = -g0 -O3 -s -flto -funroll-loops -fno-stack-protector
 
-INCLUDE = -I. -I$(CSSDK)/common -I$(CSSDK)/dlls -I$(CSSDK)/engine -I$(CSSDK)/game_shared -I$(CSSDK)/pm_shared -I$(CSSDK)/public -I$(METAMOD)
+INCLUDE = -I. -I$(CSSDK)/common -I$(CSSDK)/dlls -I$(CSSDK)/engine -I$(CSSDK)/game_shared -I$(CSSDK)/pm_shared -I$(CSSDK)/public -I$(METAMOD) -I$(LIBCURL)/include
 
 CFLAGS = $(OPT_FLAGS) -g -DNDEBUG -Dlinux -D__linux__ -D__USE_GNU -U_FORTIFY_SOURCE -std=gnu++14 -m32 -msse -msse2 -msse3 -mssse3 -mmmx -shared
 

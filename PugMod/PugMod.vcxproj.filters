@@ -106,6 +106,15 @@
     <Filter Include="PugMod\Vote\VoteOvertime">
       <UniqueIdentifier>{371bd1bd-df6e-46a7-8aba-cbc64d9eb475}</UniqueIdentifier>
     </Filter>
+    <Filter Include="PugMod\StatsCommand">
+      <UniqueIdentifier>{77ea7a3e-0dbb-43d4-8f21-3600d58a8587}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LibCurl">
+      <UniqueIdentifier>{1ddbd5b3-aafc-430f-848b-489d182a53ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PugMod\Auth">
+      <UniqueIdentifier>{c8808c71-232a-42c2-a549-9c886fa0a7ab}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ReGameDLL.h">
@@ -201,6 +210,15 @@
     <ClInclude Include="VoteOvertime.h">
       <Filter>PugMod\Vote\VoteOvertime</Filter>
     </ClInclude>
+    <ClInclude Include="StatsCommand.h">
+      <Filter>PugMod\StatsCommand</Filter>
+    </ClInclude>
+    <ClInclude Include="LibCurl.h">
+      <Filter>LibCurl</Filter>
+    </ClInclude>
+    <ClInclude Include="Auth.h">
+      <Filter>PugMod\Auth</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ReGameDLL.cpp">
@@ -295,6 +313,15 @@
     </ClCompile>
     <ClCompile Include="VoteOvertime.cpp">
       <Filter>PugMod\Vote\VoteOvertime</Filter>
+    </ClCompile>
+    <ClCompile Include="StatsCommand.cpp">
+      <Filter>PugMod\StatsCommand</Filter>
+    </ClCompile>
+    <ClCompile Include="LibCurl.cpp">
+      <Filter>LibCurl</Filter>
+    </ClCompile>
+    <ClCompile Include="Auth.cpp">
+      <Filter>PugMod\Auth</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

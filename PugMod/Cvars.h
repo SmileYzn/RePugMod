@@ -42,6 +42,8 @@ public:
 	cvar_t* GetHelpFileAdmin();
 	cvar_t* GetHelpFilePlayer();
 	cvar_t* GetBanTimes();
+	cvar_t* GetApiUrl();
+	cvar_t* GetApiCheckConnect();
 
 private:
 	cvar_t* m_Config[8];
@@ -79,6 +81,8 @@ private:
 	cvar_t* m_HelpFileAdmin;
 	cvar_t* m_HelpFilePlayer;
 	cvar_t* m_BanTimes;
+	cvar_t* m_ApiUrl;
+	cvar_t* m_ApiCheckConnect;
 };
 
 extern CCvars gCvars;

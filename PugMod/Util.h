@@ -34,6 +34,7 @@ public:
 	void SetRoundTime(int Time, bool FreezePeriod);
 	void ChangelevelDelay(float Delay, const char* MapName);
 	static void Changelevel(const char* MapName);
+	void DropClient(int EntityIndex, const char* Format, ...);
 };
 
 extern CUtil gUtil;

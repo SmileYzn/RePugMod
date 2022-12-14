@@ -439,13 +439,61 @@ void CUtil::Changelevel(const char* MapName)
 {
 	if (MapName)
 	{
-		char Map[64] = { 0 };
-
-		strncpy(Map, MapName, sizeof(Map));
-
-		if (IS_MAP_VALID(Map))
+		if (MapName[0] != '\0')
 		{
-			gUtil.ServerCommand("changelevel %s", Map);
+			char Map[64] = { 0 };
+
+			Q_strncpy(Map, MapName, sizeof(Map));
+
+			if (IS_MAP_VALID(Map))
+			{
+				gUtil.ServerCommand("changelevel %s", Map);
+			}
+		}
+	}
+}
+
+void CUtil::DropClient(int EntityIndex, const char* Format, ...)
+{
+	auto Gameclient = g_RehldsSvs->GetClient(EntityIndex - 1);
+
+	if (Gameclient)
+	{
+		va_list argList;
+
+		va_start(argList, Format);
+
+		char Buffer[255] = { 0 };
+
+		vsnprintf(Buffer, sizeof(Buffer), Format, argList);
+
+		va_end(argList);
+
+		if (g_RehldsFuncs)
+		{
+			g_RehldsFuncs->DropClient(Gameclient, false, "%s", Buffer);
+		}
+		else
+		{
+			auto Player = UTIL_PlayerByIndexSafe(EntityIndex);
+
+			if (Player)
+			{
+				int UserIndex = GETPLAYERUSERID(Player->edict());
+
+				if (!FNullEnt(Player->edict()) && UserIndex > 0)
+				{
+					if (strlen(Buffer) > 0)
+					{
+						this->ServerCommand("kick #%d %s", UserIndex, Buffer);
+					}
+					else
+					{
+						this->ServerCommand("kick #%d", UserIndex);
+					}
+				}
+
+			}
 		}
 	}
 }

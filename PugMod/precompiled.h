@@ -15,6 +15,13 @@
 #define _close						close
 #define _acces						access
 #define _vsnwprintf					vswprintf
+#else
+// cURL Library windows library
+#pragma comment(lib,"ws2_32.lib")
+#pragma comment(lib,"wldap32.lib")
+#pragma comment(lib,"advapi32.lib")
+#pragma comment(lib,"crypt32.lib")
+#pragma comment(lib,"normaliz.lib")
 #endif
 
 // System Includes
@@ -23,6 +30,17 @@
 #include <map>
 #include <array>
 #include <iterator>
+
+// JSON
+#include "include/json.hpp"
+
+// cURL sources
+#ifndef CURL_STATICLIB
+#define CURL_STATICLIB
+#endif
+
+// cURL sources
+#include <curl/curl.h>
 
 // CSSDK
 #include <extdll.h>
@@ -71,3 +89,6 @@
 #include "Captain.h"
 #include "KnifeRound.h"
 #include "Stats.h"
+#include "StatsCommand.h"
+#include "LibCurl.h"
+#include "Auth.h"

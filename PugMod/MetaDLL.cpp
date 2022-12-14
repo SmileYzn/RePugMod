@@ -49,6 +49,8 @@ void DLL_POST_ServerActivate(edict_t* pEdictList, int edictCount, int clientMax)
 
 	gTranslate.Load();
 
+	gStats.ServerActivate();
+
 	RETURN_META(MRES_IGNORED);
 }
 
@@ -59,6 +61,8 @@ void DLL_POST_ServerDeactivate(void)
 	gCaptain.Clear();
 
 	gPugMod.Unload();
+
+	gStats.ServerDeactivate();
 
 	RETURN_META(MRES_IGNORED);
 }
