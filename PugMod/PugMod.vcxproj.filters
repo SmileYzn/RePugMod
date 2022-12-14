@@ -10,9 +10,6 @@
     <Filter Include="MetaMod\MetaDLL">
       <UniqueIdentifier>{c6f5e256-52ad-446d-a74d-31cc1c7bd8ce}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MetaMod\MetaEngine">
-      <UniqueIdentifier>{a6372053-2f5a-49ca-a5f0-2e766fd0236b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ReAPI">
       <UniqueIdentifier>{d4532472-5070-46a8-b5ce-015d958c5545}</UniqueIdentifier>
     </Filter>
@@ -114,6 +111,9 @@
     </Filter>
     <Filter Include="PugMod\Auth">
       <UniqueIdentifier>{c8808c71-232a-42c2-a549-9c886fa0a7ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MetaMod\MetaEngine">
+      <UniqueIdentifier>{a6372053-2f5a-49ca-a5f0-2e766fd0236b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

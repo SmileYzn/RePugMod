@@ -28,6 +28,8 @@ C_DLLEXPORT int GetEntityAPI2_Post(DLL_FUNCTIONS* pFunctionTable, int* interface
 
 	gDLL_FunctionTable_Post.pfnServerDeactivate = DLL_POST_ServerDeactivate;
 
+	gDLL_FunctionTable_Post.pfnStartFrame = DLL_POST_StartFrame;
+
 	memcpy(pFunctionTable, &gDLL_FunctionTable_Post, sizeof(DLL_FUNCTIONS));
 
 	return 1;
@@ -35,6 +37,8 @@ C_DLLEXPORT int GetEntityAPI2_Post(DLL_FUNCTIONS* pFunctionTable, int* interface
 
 void DLL_POST_ServerActivate(edict_t* pEdictList, int edictCount, int clientMax)
 {
+	gLibCurl.Init();
+
 	gTask.Clear();
 
 	gCvars.Load();
@@ -63,6 +67,15 @@ void DLL_POST_ServerDeactivate(void)
 	gPugMod.Unload();
 
 	gStats.ServerDeactivate();
+
+	RETURN_META(MRES_IGNORED);
+}
+
+void DLL_POST_StartFrame(void)
+{
+	gLibCurl.Frame();
+
+	gTask.Think();
 
 	RETURN_META(MRES_IGNORED);
 }

@@ -218,7 +218,7 @@ void CStats::Save()
 			// Send to web server
 			if (StatsData.size())
 			{
-				char Link[256] = { 0 };
+				char Link[512] = { 0 };
 
 				Q_snprintf(Link, sizeof(Link), "%s?stats=true", gCvars.GetApiUrl()->string);
 

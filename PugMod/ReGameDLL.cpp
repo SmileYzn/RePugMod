@@ -283,11 +283,11 @@ bool ReGameDLL_RoundEnd(IReGameHook_RoundEnd* chain, int winStatus, ScenarioEven
 {
 	auto ret = chain->callNext(winStatus, event, tmDelay);
 
+	gStats.RoundEnd(winStatus, event, tmDelay);
+
 	gKnifeRound.RoundEnd(winStatus, event, tmDelay);
 
 	gPugMod.RoundEnd(winStatus, event, tmDelay);
-
-	gStats.RoundEnd(winStatus, event, tmDelay);
 
 	return ret;
 }
