@@ -153,17 +153,17 @@ struct P_STATS
 */
 typedef struct
 {
-	int Round;				// Round Count
-	float Time;				// Round Time Seconds;
-	int Type;				// ROUND_NONE for player events, ScenarioEventEndRound for round events
-	int Winner;				// Winner team of event
-	int Loser;				// Loser team of event
-	std::string Killer;		// Killer
-	std::string Victim;		// Victim
-	Vector KillerOrigin;	// Killer Position
-	Vector VictimOrigin;	// Victim Position
-	int IsHeadShot;			// HeadShot
-	int ItemIndex;			// Weapon
+	int			Round;			// Round Count
+	float		Time;			// Round Time Seconds;
+	int			Type;			// ROUND_NONE for player events, ScenarioEventEndRound for round events
+	int			Winner;			// Winner team of event
+	int			Loser;			// Loser team of event
+	std::string Killer;			// Killer
+	std::string Victim;			// Victim
+	Vector		KillerOrigin;	// Killer Position
+	Vector		VictimOrigin;	// Victim Position
+	int			IsHeadShot;		// HeadShot
+	int			ItemIndex;		// Weapon
 } P_ROUND_EVENT, * LP_ROUND_EVENT;
 
 /**
@@ -210,9 +210,7 @@ public:
 	void RoundRestart();
 	void RoundFreezeEnd();
 	void RoundEnd(int winStatus, ScenarioEventEndRound eventScenario, float tmDelay);
-
-	// Round Events
-	void AddRoundEvent(int Type, CBasePlayer* Killer, CBasePlayer* Victim, int KillerTeam, int VictimTeam, int IsHeadShot, int ItemIndex);
+	void OnEvent(GameEventType event, CBaseEntity* pEntity, class CBaseEntity* pEntityOther);
 
 	// Stats Data
 	std::map<std::string, P_STATS>			m_Data;

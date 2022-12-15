@@ -119,6 +119,8 @@ bool ReGameDLL_Init()
 
 	g_ReGameHookchains->PlayerBlind()->registerHook(ReGameDLL_PlayerBlind);
 
+	g_ReGameHookchains->CBotManager_OnEvent()->registerHook(ReGameDLL_CBotManager_OnEvent);
+
 	return true;
 }
 
@@ -163,6 +165,8 @@ bool ReGameDLL_Stop()
 	g_ReGameHookchains->CGrenade_ExplodeBomb()->unregisterHook(ReGameDLL_CGrenade_ExplodeBomb);
 
 	g_ReGameHookchains->PlayerBlind()->unregisterHook(ReGameDLL_PlayerBlind);
+
+	g_ReGameHookchains->CBotManager_OnEvent()->unregisterHook(ReGameDLL_CBotManager_OnEvent);
 
 	return true;
 }
@@ -296,9 +300,9 @@ int ReGameDLL_CBasePlayer_TakeDamage(IReGameHook_CBasePlayer_TakeDamage *chain, 
 {
 	int ret = chain->callNext(pthis, pevInflictor, pevAttacker, flDamage, bitsDamageType);
 
-	gStatsCommand.TakeDamage(pthis, pevInflictor, pevAttacker, flDamage, bitsDamageType);
-
 	gStats.TakeDamage(pthis, pevInflictor, pevAttacker, flDamage, bitsDamageType);
+
+	gStatsCommand.TakeDamage(pthis, pevInflictor, pevAttacker, flDamage, bitsDamageType);
 
 	return ret;
 }
@@ -384,4 +388,11 @@ void ReGameDLL_PlayerBlind(IReGameHook_PlayerBlind* chain, CBasePlayer* pPlayer,
 	chain->callNext(pPlayer, pevInflictor, pevAttacker, fadeTime, fadeHold, alpha, color);
 
 	gStats.PlayerBlind(pPlayer, pevInflictor, pevAttacker, fadeTime, fadeHold, alpha, color);
+}
+
+void ReGameDLL_CBotManager_OnEvent(IReGameHook_CBotManager_OnEvent* chain, CBotManager* pthis, GameEventType event, CBaseEntity* pEntity, class CBaseEntity* pEntityOther)
+{
+	chain->callNext(pthis, event, pEntity, pEntityOther);
+	
+	gStats.OnEvent(event, pEntity, pEntityOther);
 }

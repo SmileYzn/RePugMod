@@ -489,8 +489,6 @@ void CStats::Killed(CBasePlayer* Player, entvars_t* pevAttacker, int iGib)
 								}
 							}
 						}
-
-						this->AddRoundEvent(ROUND_NONE, Killer, Player, Killer->m_iTeam, Player->m_iTeam, (Player->m_LastHitGroup == HITGROUP_HEAD) ? 1 : 0, ItemIndex);
 					}
 				}
 			}
@@ -721,8 +719,6 @@ void CStats::RoundEnd(int winStatus, ScenarioEventEndRound eventScenario, float 
 		{
 			TeamName Winner = (winStatus == WINSTATUS_TERRORISTS) ? TERRORIST : CT;
 
-			TeamName Losers = (winStatus != WINSTATUS_TERRORISTS) ? TERRORIST : CT;
-
 			CBasePlayer* PlayerTrigger = NULL;
 
 			if (eventScenario == ROUND_BOMB_DEFUSED || eventScenario == ROUND_TARGET_BOMB)
@@ -746,8 +742,6 @@ void CStats::RoundEnd(int winStatus, ScenarioEventEndRound eventScenario, float 
 					}
 				}
 			}
-
-			this->AddRoundEvent(eventScenario, PlayerTrigger, NULL, Winner, Losers, 0, -1);
 
 			for (int i = 1; i <= gpGlobals->maxClients; ++i)
 			{
@@ -820,8 +814,7 @@ void CStats::RoundEnd(int winStatus, ScenarioEventEndRound eventScenario, float 
 	}
 }
 
-void CStats::AddRoundEvent(int Type, CBasePlayer* Killer, CBasePlayer* Victim, int KillerTeam, int VictimTeam, int IsHeadShot, int ItemIndex)
-{
+/*{
 	if (gPugMod.IsLive())
 	{
 		P_ROUND_EVENT Event;
@@ -862,5 +855,84 @@ void CStats::AddRoundEvent(int Type, CBasePlayer* Killer, CBasePlayer* Victim, i
 		Event.ItemIndex = ItemIndex;
 
 		this->m_Event.push_back(Event);
+	}
+}*/
+
+void CStats::OnEvent(GameEventType event, CBaseEntity* pEntity, class CBaseEntity* pEntityOther)
+{
+	switch (event)
+	{
+		case EVENT_PLAYER_DIED: // tell bots the player is killed (argumens: 1 = victim, 2 = killer)
+		{
+			P_ROUND_EVENT Event;
+
+			Event.Round = gPugMod.GetRound();
+
+			if (g_pGameRules)
+			{
+				Event.Time = CSGameRules()->GetRoundRemainingTimeReal();
+			}
+
+			Event.Type = event;
+
+			if (pEntityOther && pEntityOther)
+			{
+				//Event.Killer = GET_AUTH(pEntityOther->edict());
+				//Event.KillerOrigin = pEntityOther->edict()->v.origin;
+
+				//Event.Victim = GET_AUTH(pEntity->edict());
+				//Event.VictimOrigin = pEntity->edict()->v.origin;
+
+				//auto Killer = ((CBasePlayer*)pEntityOther);
+				//auto Victim = ((CBasePlayer*)pEntity);
+
+				//Event.Winner = Killer->m_iTeam;
+
+				//Event.Loser = ((CBasePlayer*)pEntity)->m_iTeam;
+
+				//Event.IsHeadShot = ((CBasePlayer*)pEntity)->m_bHeadshotKilled;
+
+				//Event.ItemIndex = ((CBasePlayer*)pEntity)->m_bKilledByGrenade;
+
+				//this->m_Event.push_back(Event);
+			}
+
+			break;
+		}
+		case EVENT_BOMB_PLANTED: // tell bots the bomb has been planted (argumens: 1 = planter, 2 = NULL)
+		{
+			break;
+		}
+		case EVENT_BOMB_DEFUSED: // tell the bots the bomb is defused (argumens: 1 = defuser, 2 = NULL)
+		{
+			break;
+		}
+		case EVENT_BOMB_EXPLODED: // let the bots hear the bomb exploding (argumens: 1 = NULL, 2 = NULL)
+		{
+			//BOMB_CARRIER = 0,	// Spawns with bomb
+			//BOMB_DROPPED = 1,	// Bomb dropped
+			//BOMB_PLANTING = 2,	// Try to plant
+			//BOMB_PLANTED = 3,	// Bomb plants
+			//BOMB_EXPLODED = 4,	// Bomb explosions
+			//BOMB_DEFUSING = 5,	// Try to defuse
+			//BOMB_DEFUSED = 6,	// Bomb defused
+			//BOMB_DEFUSING_KIT = 7,    // Try to defuse (With defuse kit)
+			//BOMB_DEFUSED_KIT = 8,   // Bomb Defused (With defuse kit)
+			//BOMB_LAST = 7,	// Unused
+
+			break;
+		}
+		case EVENT_TERRORISTS_WIN: // tell bots the terrorists won the round (argumens: 1 = NULL, 2 = NULL)
+		{
+			break;
+		}
+		case EVENT_CTS_WIN: // tell bots the CTs won the round (argumens: 1 = NULL, 2 = NULL)
+		{
+			break;
+		}
+		case EVENT_ROUND_START: // tell bots the round was started(when freeze period is expired) (argumens : 1 = NULL, 2 = NULL)
+		{
+			break;
+		}
 	}
 }
