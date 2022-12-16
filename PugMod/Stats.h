@@ -34,16 +34,16 @@ enum Stats
 */
 enum Bomb
 {
-	BOMB_CARRIER = 0,	// Spawns with bomb
-	BOMB_DROPPED = 1,	// Bomb dropped
-	BOMB_PLANTING = 2,	// Try to plant
-	BOMB_PLANTED = 3,	// Bomb plants
-	BOMB_EXPLODED = 4,	// Bomb explosions
-	BOMB_DEFUSING = 5,	// Try to defuse
-	BOMB_DEFUSED = 6,	// Bomb defused
-	BOMB_DEFUSING_KIT = 7,    // Try to defuse (With defuse kit)
+	BOMB_CARRIER = 0,		// Spawns with bomb
+	BOMB_DROPPED = 1,		// Bomb dropped
+	BOMB_PLANTING = 2,		// Try to plant
+	BOMB_PLANTED = 3,		// Bomb plants
+	BOMB_EXPLODED = 4,		// Bomb explosions
+	BOMB_DEFUSING = 5,		// Try to defuse
+	BOMB_DEFUSED = 6,		// Bomb defused
+	BOMB_DEFUSING_KIT = 7,	// Try to defuse (With defuse kit)
 	BOMB_DEFUSED_KIT = 8,   // Bomb Defused (With defuse kit)
-	BOMB_LAST = 7,	// Unused
+	BOMB_LAST = 9,			// Unused
 };
 
 /**
@@ -171,13 +171,11 @@ typedef struct
 */
 typedef struct
 {
-	float Damage[MAX_CLIENTS + 1];
-	float DamageSum;
-	int Frags;
-	int Versus;
+	float		Damage[MAX_CLIENTS + 1];
+	float		DamageSum;
+	int			Frags;
+	int			Versus;
 	std::string Flasher;
-	int BombPlanter;
-	int BombDefuser;
 } P_ROUND_DATA, * LP_ROUND_DATA;
 
 class CStats
@@ -216,8 +214,8 @@ public:
 	std::map<std::string, P_STATS>			m_Data;
 	std::vector<P_ROUND_EVENT>				m_Event;
 	std::map<std::string, P_ROUND_DATA>		m_Round;
-	float									m_RoundDamage[SPECTATOR + 1];
-	time_t									m_StartTime;
+	float									m_RoundDamage[SPECTATOR + 1] = { 0.0f };
+	time_t									m_StartTime = 0;
 };
 
 extern CStats gStats;
