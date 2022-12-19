@@ -119,10 +119,6 @@ bool ReGameDLL_Init()
 
 	g_ReGameHookchains->PlayerBlind()->registerHook(ReGameDLL_PlayerBlind);
 
-	g_ReGameHookchains->CBotManager_OnEvent()->registerHook(ReGameDLL_CBotManager_OnEvent);
-
-	g_ReGameHookchains->CSGameRules_CheckMapConditions()->registerHook(ReGameDLL_CSGameRules_CheckMapConditions);
-
 	return true;
 }
 
@@ -167,10 +163,6 @@ bool ReGameDLL_Stop()
 	g_ReGameHookchains->CGrenade_ExplodeBomb()->unregisterHook(ReGameDLL_CGrenade_ExplodeBomb);
 
 	g_ReGameHookchains->PlayerBlind()->unregisterHook(ReGameDLL_PlayerBlind);
-
-	g_ReGameHookchains->CBotManager_OnEvent()->unregisterHook(ReGameDLL_CBotManager_OnEvent);
-
-	g_ReGameHookchains->CSGameRules_CheckMapConditions()->unregisterHook(ReGameDLL_CSGameRules_CheckMapConditions);
 
 	return true;
 }
@@ -392,18 +384,4 @@ void ReGameDLL_PlayerBlind(IReGameHook_PlayerBlind* chain, CBasePlayer* pPlayer,
 	chain->callNext(pPlayer, pevInflictor, pevAttacker, fadeTime, fadeHold, alpha, color);
 
 	gStats.PlayerBlind(pPlayer, pevInflictor, pevAttacker, fadeTime, fadeHold, alpha, color);
-}
-
-void ReGameDLL_CBotManager_OnEvent(IReGameHook_CBotManager_OnEvent* chain, CBotManager* pthis, GameEventType event, CBaseEntity* pEntity, class CBaseEntity* pEntityOther)
-{
-	chain->callNext(pthis, event, pEntity, pEntityOther);
-	
-	gStats.OnEvent(event, pEntity, pEntityOther);
-}
-
-void ReGameDLL_CSGameRules_CheckMapConditions(IReGameHook_CSGameRules_CheckMapConditions* chain)
-{
-	chain->callNext();
-
-	gStats.CheckMapConditions();
 }

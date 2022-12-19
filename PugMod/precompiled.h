@@ -55,6 +55,7 @@
 
 // ReGameDLL Api
 #include <regamedll_api.h>
+#include <GameEvent.h>
 
 // Plugin Includes
 #include "MetaMod.h"

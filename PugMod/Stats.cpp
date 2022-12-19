@@ -251,14 +251,11 @@ void CStats::AddAccount(CBasePlayer* Player, int amount, RewardType type, bool b
 {
 	if (gPugMod.IsLive())
 	{
-		if (Player->IsPlayer())
-		{
-			auto Auth = GET_AUTH(Player->edict());
+		auto Auth = GET_AUTH(Player->edict());
 
-			if (Auth && Auth[0] != '\0')
-			{
-				this->m_Data[Auth].Money[type] += amount;
-			}
+		if (Auth && Auth[0] != '\0')
+		{
+			this->m_Data[Auth].Money[type] += amount;
 		}
 	}
 }
@@ -488,6 +485,8 @@ void CStats::Killed(CBasePlayer* Player, entvars_t* pevAttacker, int iGib)
 									}
 								}
 							}
+
+							this->OnEvent(EVENT_PLAYER_DIED, Player, Killer);
 						}
 					}
 				}
@@ -500,22 +499,19 @@ void CStats::SetAnimation(CBasePlayer* Player, PLAYER_ANIM playerAnim)
 {
 	if (gPugMod.IsLive())
 	{
-		if (Player->IsPlayer())
+		if ((playerAnim == PLAYER_ATTACK1) || (playerAnim == PLAYER_ATTACK2))
 		{
-			if ((playerAnim == PLAYER_ATTACK1) || (playerAnim == PLAYER_ATTACK2))
+			if (Player->m_pActiveItem)
 			{
-				if (Player->m_pActiveItem)
+				if (Player->m_pActiveItem->m_iId && Player->m_pActiveItem->IsWeapon())
 				{
-					if (Player->m_pActiveItem->m_iId && Player->m_pActiveItem->IsWeapon())
+					auto Auth = GET_AUTH(Player->edict());
+
+					if (Auth && Auth[0] != '\0')
 					{
-						auto Auth = GET_AUTH(Player->edict());
+						this->m_Data[Auth].Stats[STATS_SHOTS]++;
 
-						if (Auth && Auth[0] != '\0')
-						{
-							this->m_Data[Auth].Stats[STATS_SHOTS]++;
-
-							this->m_Data[Auth].WeaponStats[Player->m_pActiveItem->m_iId][WEAPON_SHOT]++;
-						}
+						this->m_Data[Auth].WeaponStats[Player->m_pActiveItem->m_iId][WEAPON_SHOT]++;
 					}
 				}
 			}
@@ -527,16 +523,13 @@ void CStats::MakeBomber(CBasePlayer* Player)
 {
 	if (gPugMod.IsLive())
 	{
-		if (Player->IsPlayer())
+		if (Player->m_bHasC4)
 		{
-			if (Player->m_bHasC4)
-			{
-				auto Auth = GET_AUTH(Player->edict());
+			auto Auth = GET_AUTH(Player->edict());
 
-				if (Auth && Auth[0] != '\0')
-				{
-					this->m_Data[Auth].BombStats[BOMB_CARRIER]++;
-				}
+			if (Auth && Auth[0] != '\0')
+			{
+				this->m_Data[Auth].BombStats[BOMB_CARRIER]++;
 			}
 		}
 	}
@@ -546,7 +539,7 @@ void CStats::DropBomb(CBasePlayer* Player)
 {
 	if (gPugMod.IsLive())
 	{
-		if (Player->IsPlayer() && !Player->IsAlive())
+		if (!Player->IsAlive())
 		{
 			auto Auth = GET_AUTH(Player->edict());
 
@@ -566,22 +559,21 @@ void CStats::PlantBomb(entvars_t* pevOwner, bool Planted)
 
 		if (Player)
 		{
-			if (Player->IsPlayer())
-			{
-				auto Auth = GET_AUTH(Player->edict());
+			auto Auth = GET_AUTH(Player->edict());
 
-				if (Auth && Auth[0] != '\0')
+			if (Auth && Auth[0] != '\0')
+			{
+				if (Planted)
 				{
-					if (Planted)
-					{
-						this->m_Data[Auth].BombStats[BOMB_PLANTED]++;
-					}
-					else
-					{
-						this->m_Data[Auth].BombStats[BOMB_PLANTING]++;
-					}
+					this->m_Data[Auth].BombStats[BOMB_PLANTED]++;
+				}
+				else
+				{
+					this->m_Data[Auth].BombStats[BOMB_PLANTING]++;
 				}
 			}
+
+			this->OnEvent(EVENT_BOMB_PLANTED, Player, nullptr);
 		}
 	}
 }
@@ -590,20 +582,17 @@ void CStats::DefuseBombStart(CBasePlayer* Player)
 {
 	if (gPugMod.IsLive())
 	{
-		if (Player->IsPlayer())
-		{
-			auto Auth = GET_AUTH(Player->edict());
+		auto Auth = GET_AUTH(Player->edict());
 
-			if (Auth && Auth[0] != '\0')
+		if (Auth && Auth[0] != '\0')
+		{
+			if (Player->m_bHasDefuser)
 			{
-				if (Player->m_bHasDefuser)
-				{
-					this->m_Data[Auth].BombStats[BOMB_DEFUSING_KIT]++;
-				}
-				else
-				{
-					this->m_Data[Auth].BombStats[BOMB_DEFUSING]++;
-				}
+				this->m_Data[Auth].BombStats[BOMB_DEFUSING_KIT]++;
+			}
+			else
+			{
+				this->m_Data[Auth].BombStats[BOMB_DEFUSING]++;
 			}
 		}
 	}
@@ -613,29 +602,28 @@ void CStats::DefuseBombEnd(CBasePlayer* Player, bool Defused)
 {
 	if (gPugMod.IsLive())
 	{
-		if (Player->IsPlayer())
+		if (Defused)
 		{
-			if (Defused)
+			auto Auth = GET_AUTH(Player->edict());
+
+			if (Auth && Auth[0] != '\0')
 			{
-				auto Auth = GET_AUTH(Player->edict());
-
-				if (Auth && Auth[0] != '\0')
+				if (Player->m_bHasDefuser)
 				{
-					if (Player->m_bHasDefuser)
-					{
-						this->m_Data[Auth].BombStats[BOMB_DEFUSED_KIT]++;
-					}
-					else
-					{
-						this->m_Data[Auth].BombStats[BOMB_DEFUSED]++;
-					}
-
-					this->m_Data[Auth].RoundWinShare += MANAGER_RWS_C4_DEFUSED;
-
-					auto mp_give_c4_frags = CVAR_GET_POINTER("mp_give_c4_frags");
-
-					this->m_Data[Auth].Stats[STATS_FRAGS] += mp_give_c4_frags ? (int)mp_give_c4_frags->value : 3;
+					this->m_Data[Auth].BombStats[BOMB_DEFUSED_KIT]++;
 				}
+				else
+				{
+					this->m_Data[Auth].BombStats[BOMB_DEFUSED]++;
+				}
+
+				this->m_Data[Auth].RoundWinShare += MANAGER_RWS_C4_DEFUSED;
+
+				auto mp_give_c4_frags = CVAR_GET_POINTER("mp_give_c4_frags");
+
+				this->m_Data[Auth].Stats[STATS_FRAGS] += mp_give_c4_frags ? (int)mp_give_c4_frags->value : 3;
+
+				this->OnEvent(EVENT_BOMB_DEFUSED, Player, nullptr);
 			}
 		}
 	}
@@ -664,6 +652,8 @@ void CStats::ExplodeBomb(CGrenade* pThis, TraceResult* ptr, int bitsDamageType)
 						auto mp_give_c4_frags = CVAR_GET_POINTER("mp_give_c4_frags");
 
 						this->m_Data[Auth].Stats[STATS_FRAGS] += mp_give_c4_frags ? (int)mp_give_c4_frags->value : 3;
+
+						this->OnEvent(EVENT_BOMB_EXPLODED, Player, nullptr);
 					}
 				}
 			}
@@ -804,207 +794,182 @@ void CStats::RoundEnd(int winStatus, ScenarioEventEndRound eventScenario, float 
 					}
 				}
 			}
+
+			this->OnEvent(winStatus == WINSTATUS_TERRORISTS ? EVENT_TERRORISTS_WIN : EVENT_CTS_WIN, nullptr, nullptr);
 		}
 	}
 }
 
 void CStats::OnEvent(GameEventType event, CBaseEntity* pEntity, class CBaseEntity* pEntityOther)
 {
-	if (event == EVENT_PLAYER_DIED || event == EVENT_BOMB_PLANTED || event == EVENT_BOMB_DEFUSED || event == EVENT_BOMB_EXPLODED || event == EVENT_TERRORISTS_WIN || event == EVENT_CTS_WIN)
+	P_ROUND_EVENT Event = { 0 };
+
+	Event.Round = gPugMod.GetRound();
+
+	if (g_pGameRules)
 	{
-		if (gPugMod.IsLive())
+		Event.Time = CSGameRules()->GetRoundRemainingTimeReal();
+	}
+
+	Event.Type = event;
+
+	switch (event)
+	{
+		case EVENT_PLAYER_DIED: // tell bots the player is killed (argumens: 1 = victim, 2 = killer)
 		{
-			P_ROUND_EVENT Event = { 0 };
-
-			Event.Round = gPugMod.GetRound();
-
-			if (g_pGameRules)
+			if (pEntity && pEntityOther)
 			{
-				Event.Time = CSGameRules()->GetRoundRemainingTimeReal();
-			}
+				auto Victim = UTIL_PlayerByIndexSafe(pEntity->entindex());
 
-			Event.Type = event;
+				auto Killer = UTIL_PlayerByIndexSafe(pEntityOther->entindex());
 
-			switch (event)
-			{
-				case EVENT_PLAYER_DIED: // tell bots the player is killed (argumens: 1 = victim, 2 = killer)
+				if (Victim && Killer)
 				{
-					if (pEntity && pEntityOther)
-					{
-						auto Victim = UTIL_PlayerByIndexSafe(pEntity->entindex());
+					Event.Killer = GET_AUTH(Killer->edict());
+					Event.KillerOrigin = Killer->edict()->v.origin;
 
-						auto Killer = UTIL_PlayerByIndexSafe(pEntityOther->entindex());
+					Event.Victim = GET_AUTH(Victim->edict());
+					Event.VictimOrigin = Victim->edict()->v.origin;
 
-						if (Victim && Killer)
-						{
-							Event.Killer = GET_AUTH(Killer->edict());
-							Event.KillerOrigin = Killer->edict()->v.origin;
+					Event.Winner = Killer->m_iTeam;
 
-							Event.Victim = GET_AUTH(Victim->edict());
-							Event.VictimOrigin = Victim->edict()->v.origin;
+					Event.Loser = Victim->m_iTeam;
 
-							Event.Winner = Killer->m_iTeam;
+					Event.IsHeadShot = Victim->m_bHeadshotKilled;
 
-							Event.Loser = Victim->m_iTeam;
-
-							Event.IsHeadShot = Victim->m_bHeadshotKilled;
-
-							Event.ItemIndex = (Victim->m_bKilledByGrenade) ? WEAPON_HEGRENADE : ((Killer->m_pActiveItem) ? Killer->m_pActiveItem->m_iId : WEAPON_NONE);
-						}
-					}
-
-					break;
-				}
-				case EVENT_BOMB_PLANTED: // tell bots the bomb has been planted (argumens: 1 = planter, 2 = NULL)
-				{
-					auto Planter = UTIL_PlayerByIndexSafe(pEntity->entindex());
-
-					if (Planter)
-					{
-						Event.Killer = GET_AUTH(Planter->edict());
-
-						Event.KillerOrigin = Planter->edict()->v.origin;
-					}
-
-					Event.Winner = TERRORIST;
-
-					Event.Loser = CT;
-
-					Event.IsHeadShot = 0;
-
-					Event.ItemIndex = WEAPON_C4;
-
-					break;
-				}
-				case EVENT_BOMB_DEFUSED: // tell the bots the bomb is defused (argumens: 1 = defuser, 2 = NULL)
-				{
-					auto Defuser = UTIL_PlayerByIndexSafe(pEntity->entindex());
-
-					if(Defuser)
-					{
-						Event.Killer = GET_AUTH(Defuser->edict());
-
-						Event.KillerOrigin = Defuser->edict()->v.origin;
-
-						Event.IsHeadShot = Defuser->m_bHasDefuser ? 1 : 0;
-					}
-
-					Event.Winner = CT;
-
-					Event.Loser = TERRORIST;
-
-					Event.ItemIndex = WEAPON_NONE;
-
-					break;
-				}
-				case EVENT_BOMB_EXPLODED: // let the bots hear the bomb exploding (argumens: 1 = NULL, 2 = NULL)
-				{
-					Event.Winner = TERRORIST;
-
-					Event.Loser = CT;
-
-					Event.IsHeadShot = false;
-
-					Event.ItemIndex = WEAPON_C4;
-
-					break;
-				}
-				case EVENT_TERRORISTS_WIN: // tell bots the terrorists won the round (argumens: 1 = NULL, 2 = NULL)
-				{
-					Event.Winner = TERRORIST;
-
-					Event.Loser = CT;
-
-					Event.IsHeadShot = false;
-
-					Event.ItemIndex = WEAPON_NONE;
-
-					break;
-				}
-				case EVENT_CTS_WIN: // tell bots the CTs won the round (argumens: 1 = NULL, 2 = NULL)
-				{
-					Event.Winner = CT;
-
-					Event.Loser = TERRORIST;
-
-					Event.IsHeadShot = false;
-
-					Event.ItemIndex = WEAPON_NONE;
-
-					break;
+					Event.ItemIndex = (Victim->m_bKilledByGrenade) ? WEAPON_HEGRENADE : ((Killer->m_pActiveItem) ? Killer->m_pActiveItem->m_iId : WEAPON_NONE);
 				}
 			}
 
-			this->m_Event.push_back(Event);
+			break;
+		}
+		case EVENT_BOMB_PLANTED: // tell bots the bomb has been planted (argumens: 1 = planter, 2 = NULL)
+		{
+			auto Planter = UTIL_PlayerByIndexSafe(pEntity->entindex());
+
+			if (Planter)
+			{
+				Event.Killer = GET_AUTH(Planter->edict());
+
+				Event.KillerOrigin = Planter->edict()->v.origin;
+			}
+
+			Event.Winner = TERRORIST;
+
+			Event.Loser = CT;
+
+			Event.IsHeadShot = 0;
+
+			Event.ItemIndex = WEAPON_C4;
+
+			break;
+		}
+		case EVENT_BOMB_DEFUSED: // tell the bots the bomb is defused (argumens: 1 = defuser, 2 = NULL)
+		{
+			auto Defuser = UTIL_PlayerByIndexSafe(pEntity->entindex());
+
+			if(Defuser)
+			{
+				Event.Killer = GET_AUTH(Defuser->edict());
+
+				Event.KillerOrigin = Defuser->edict()->v.origin;
+
+				Event.IsHeadShot = Defuser->m_bHasDefuser ? 1 : 0;
+			}
+
+			Event.Winner = CT;
+
+			Event.Loser = TERRORIST;
+
+			Event.ItemIndex = WEAPON_NONE;
+
+			break;
+		}
+		case EVENT_BOMB_EXPLODED: // let the bots hear the bomb exploding (argumens: 1 = NULL, 2 = NULL)
+		{
+			auto Planter = UTIL_PlayerByIndexSafe(pEntity->entindex());
+
+			if (Planter)
+			{
+				Event.Killer = GET_AUTH(Planter->edict());
+
+				Event.KillerOrigin = Planter->edict()->v.origin;
+			}
+
+			Event.Winner = TERRORIST;
+
+			Event.Loser = CT;
+
+			Event.IsHeadShot = 0;
+
+			Event.ItemIndex = WEAPON_C4;
+
+			break;
+		}
+		case EVENT_TERRORISTS_WIN: // tell bots the terrorists won the round (argumens: 1 = NULL, 2 = NULL)
+		{
+			Event.Winner = TERRORIST;
+
+			Event.Loser = CT;
+
+			Event.IsHeadShot = false;
+
+			Event.ItemIndex = WEAPON_NONE;
+
+			break;
+		}
+		case EVENT_CTS_WIN: // tell bots the CTs won the round (argumens: 1 = NULL, 2 = NULL)
+		{
+			Event.Winner = CT;
+
+			Event.Loser = TERRORIST;
+
+			Event.IsHeadShot = false;
+
+			Event.ItemIndex = WEAPON_NONE;
+
+			break;
 		}
 	}
 
-	if (event == EVENT_ROUND_START || event == EVENT_BUY_TIME_START)
-	{
-		if (g_pGameRules)
-		{
-			LOG_CONSOLE(PLID, "[%s] CSGameRules()->m_bMapHasBuyZone: %d", __func__, CSGameRules()->m_bMapHasBuyZone);
-			if (CSGameRules()->m_bMapHasBuyZone)
-			{
-				edict_t* BuyZone = nullptr;
-
-				while ((BuyZone = FIND_ENTITY_BY_CLASSNAME(BuyZone, "func_buyzone")) != nullptr)
-				{
-					LOG_CONSOLE
-					(
-						PLID,
-						"[%s] (%s) (%d)",
-						__func__,
-						STRING(BuyZone->v.classname),
-						ENTINDEX(BuyZone)
-					);
-				}
-			}
-		}
-	}
+	this->m_Event.push_back(Event);
 }
 
 void CStats::CheckMapConditions()
 {
-	//if (g_pGameRules)
-	//{
-	//	if (g_ReGameFuncs)
-	//	{
-	//		if (CSGameRules()->m_bMapHasBombTarget)
-	//		{
-	//			char bomb_target[3][20] =
-	//			{
-	//				"func_bomb_target",
-	//				"info_bomb_target",
-	//			};
+	if (g_pGameRules)
+	{
+		if (g_ReGameFuncs)
+		{
+			if (CSGameRules()->m_bMapHasBombTarget)
+			{
+				CBaseEntity* PlayerStart = g_ReGameFuncs->UTIL_FindEntityByString(nullptr, "classname", "info_player_start");
 
-	//			CBaseEntity* BombTarget = nullptr;
+				if (PlayerStart != nullptr)
+				{
+					std::vector<std::string> ClassNames = {"func_bomb_target", "info_bomb_target"};
 
-	//			for (int i = 0; i < sizeof(bomb_target); i++)
-	//			{
-	//				while ((BombTarget = g_ReGameFuncs->UTIL_FindEntityByString(BombTarget, "classname", bomb_target[i])) != nullptr)
-	//				{
-	//					CBaseEntity* PlayerStart = nullptr;
+					CBaseEntity* BombTarget = nullptr;
 
-	//					while ((PlayerStart = g_ReGameFuncs->UTIL_FindEntityByString(PlayerStart, "classname", "info_player_start")) != nullptr)
-	//					{
-	//						LOG_CONSOLE
-	//						(
-	//							PLID,
-	//							"[%s] (%s)(%d) -> (%s) (%d) Distance: %f",
-	//							__func__,
-	//							STRING(PlayerStart->pev->classname),
-	//							PlayerStart->entindex(),
-	//							STRING(BombTarget->pev->classname),
-	//							BombTarget->entindex(),
-	//							(PlayerStart->Center() - BombTarget->Center()).Length()
-	//						);
-	//						//
-	//						break;
-	//					}
-	//				}
-	//			}
-	//		}
-	//	}
-	//}
+					for (auto& ClassName : ClassNames)
+					{
+						while ((BombTarget = g_ReGameFuncs->UTIL_FindEntityByString(BombTarget, "classname", ClassName.c_str())) != nullptr)
+						{
+							LOG_CONSOLE
+							(
+								PLID,
+								"[%s] (%s)(%d) -> (%s) (%d) Distance: %f",
+								__func__,
+								STRING(PlayerStart->pev->classname),
+								PlayerStart->entindex(),
+								STRING(BombTarget->pev->classname),
+								BombTarget->entindex(),
+								(PlayerStart->Center() - BombTarget->Center()).Length()
+							);
+						}
+					}
+				}
+			}
+		}
+	}
 }
