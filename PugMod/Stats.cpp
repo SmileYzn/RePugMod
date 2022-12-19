@@ -53,7 +53,7 @@ void CStats::Save()
 					{"victim_origin",{Event.VictimOrigin[0],Event.VictimOrigin[1],Event.VictimOrigin[2]}},
 					{"isHeadShot",Event.IsHeadShot},
 					{"itemIndex",Event.ItemIndex},
-					});
+				});
 			}
 			//
 			// Player data
@@ -546,7 +546,7 @@ void CStats::DropBomb(CBasePlayer* Player)
 {
 	if (gPugMod.IsLive())
 	{
-		if (Player->IsPlayer())
+		if (Player->IsPlayer() && !Player->IsAlive())
 		{
 			auto Auth = GET_AUTH(Player->edict());
 
@@ -631,6 +631,10 @@ void CStats::DefuseBombEnd(CBasePlayer* Player, bool Defused)
 					}
 
 					this->m_Data[Auth].RoundWinShare += MANAGER_RWS_C4_DEFUSED;
+
+					auto mp_give_c4_frags = CVAR_GET_POINTER("mp_give_c4_frags");
+
+					this->m_Data[Auth].Stats[STATS_FRAGS] += mp_give_c4_frags ? (int)mp_give_c4_frags->value : 3;
 				}
 			}
 		}
@@ -657,15 +661,9 @@ void CStats::ExplodeBomb(CGrenade* pThis, TraceResult* ptr, int bitsDamageType)
 
 						this->m_Data[Auth].RoundWinShare += MANAGER_RWS_C4_EXPLODE;
 
-						if (pThis->m_pentCurBombTarget)
-						{
-							auto BombTarget = CBaseEntity::Instance(pThis->m_pentCurBombTarget);
+						auto mp_give_c4_frags = CVAR_GET_POINTER("mp_give_c4_frags");
 
-							if (BombTarget)
-							{
-								LOG_CONSOLE(PLID, "[%s] %s", STRING(BombTarget->edict()->v.classname));
-							}
-						}
+						this->m_Data[Auth].Stats[STATS_FRAGS] += mp_give_c4_frags ? (int)mp_give_c4_frags->value : 3;
 					}
 				}
 			}
@@ -812,7 +810,7 @@ void CStats::RoundEnd(int winStatus, ScenarioEventEndRound eventScenario, float 
 
 void CStats::OnEvent(GameEventType event, CBaseEntity* pEntity, class CBaseEntity* pEntityOther)
 {
-	if (event == EVENT_PLAYER_DIED || event == EVENT_BOMB_PLANTED || event == EVENT_BOMB_DEFUSED || event == BOMB_EXPLODED || event == EVENT_TERRORISTS_WIN || event == EVENT_CTS_WIN)
+	if (event == EVENT_PLAYER_DIED || event == EVENT_BOMB_PLANTED || event == EVENT_BOMB_DEFUSED || event == EVENT_BOMB_EXPLODED || event == EVENT_TERRORISTS_WIN || event == EVENT_CTS_WIN)
 	{
 		if (gPugMod.IsLive())
 		{
@@ -901,19 +899,13 @@ void CStats::OnEvent(GameEventType event, CBaseEntity* pEntity, class CBaseEntit
 				}
 				case EVENT_BOMB_EXPLODED: // let the bots hear the bomb exploding (argumens: 1 = NULL, 2 = NULL)
 				{
-					if (g_pGameRules)
-					{
-						if (CSGameRules()->m_bTargetBombed)
-						{
-							Event.Winner = TERRORIST;
+					Event.Winner = TERRORIST;
 
-							Event.Loser = CT;
+					Event.Loser = CT;
 
-							Event.IsHeadShot = false;
+					Event.IsHeadShot = false;
 
-							Event.ItemIndex = WEAPON_C4;
-						}
-					}
+					Event.ItemIndex = WEAPON_C4;
 
 					break;
 				}
@@ -946,4 +938,73 @@ void CStats::OnEvent(GameEventType event, CBaseEntity* pEntity, class CBaseEntit
 			this->m_Event.push_back(Event);
 		}
 	}
+
+	if (event == EVENT_ROUND_START || event == EVENT_BUY_TIME_START)
+	{
+		if (g_pGameRules)
+		{
+			LOG_CONSOLE(PLID, "[%s] CSGameRules()->m_bMapHasBuyZone: %d", __func__, CSGameRules()->m_bMapHasBuyZone);
+			if (CSGameRules()->m_bMapHasBuyZone)
+			{
+				edict_t* BuyZone = nullptr;
+
+				while ((BuyZone = FIND_ENTITY_BY_CLASSNAME(BuyZone, "func_buyzone")) != nullptr)
+				{
+					LOG_CONSOLE
+					(
+						PLID,
+						"[%s] (%s) (%d)",
+						__func__,
+						STRING(BuyZone->v.classname),
+						ENTINDEX(BuyZone)
+					);
+				}
+			}
+		}
+	}
+}
+
+void CStats::CheckMapConditions()
+{
+	//if (g_pGameRules)
+	//{
+	//	if (g_ReGameFuncs)
+	//	{
+	//		if (CSGameRules()->m_bMapHasBombTarget)
+	//		{
+	//			char bomb_target[3][20] =
+	//			{
+	//				"func_bomb_target",
+	//				"info_bomb_target",
+	//			};
+
+	//			CBaseEntity* BombTarget = nullptr;
+
+	//			for (int i = 0; i < sizeof(bomb_target); i++)
+	//			{
+	//				while ((BombTarget = g_ReGameFuncs->UTIL_FindEntityByString(BombTarget, "classname", bomb_target[i])) != nullptr)
+	//				{
+	//					CBaseEntity* PlayerStart = nullptr;
+
+	//					while ((PlayerStart = g_ReGameFuncs->UTIL_FindEntityByString(PlayerStart, "classname", "info_player_start")) != nullptr)
+	//					{
+	//						LOG_CONSOLE
+	//						(
+	//							PLID,
+	//							"[%s] (%s)(%d) -> (%s) (%d) Distance: %f",
+	//							__func__,
+	//							STRING(PlayerStart->pev->classname),
+	//							PlayerStart->entindex(),
+	//							STRING(BombTarget->pev->classname),
+	//							BombTarget->entindex(),
+	//							(PlayerStart->Center() - BombTarget->Center()).Length()
+	//						);
+	//						//
+	//						break;
+	//					}
+	//				}
+	//			}
+	//		}
+	//	}
+	//}
 }

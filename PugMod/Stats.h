@@ -209,6 +209,7 @@ public:
 	void RoundFreezeEnd();
 	void RoundEnd(int winStatus, ScenarioEventEndRound eventScenario, float tmDelay);
 	void OnEvent(GameEventType event, CBaseEntity* pEntity, class CBaseEntity* pEntityOther);
+	void CheckMapConditions();
 
 	// Stats Data
 	std::map<std::string, P_STATS>			m_Data;

@@ -29,3 +29,4 @@ extern void ReGameDLL_CGrenade_DefuseBombEnd(IReGameHook_CGrenade_DefuseBombEnd*
 extern void ReGameDLL_CGrenade_ExplodeBomb(IReGameHook_CGrenade_ExplodeBomb* chain, CGrenade* pthis, TraceResult* ptr, int bitsDamageType);
 extern void ReGameDLL_PlayerBlind(IReGameHook_PlayerBlind* chain, CBasePlayer* pPlayer, entvars_t* pevInflictor, entvars_t* pevAttacker, float fadeTime, float fadeHold, int alpha, Vector& color);
 extern void ReGameDLL_CBotManager_OnEvent(IReGameHook_CBotManager_OnEvent* chain, CBotManager* pthis, GameEventType event, CBaseEntity* pEntity, class CBaseEntity* pEntityOther);
+extern void ReGameDLL_CSGameRules_CheckMapConditions(IReGameHook_CSGameRules_CheckMapConditions* chain);
