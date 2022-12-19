@@ -333,162 +333,156 @@ void CStats::TakeDamage(CBasePlayer* Player, entvars_t* pevInflictor, entvars_t*
 	}
 }
 
-void CStats::Killed(CBasePlayer* Player, entvars_t* pevAttacker, int iGib)
+void CStats::PlayerKilled(CBasePlayer* pVictim, entvars_t* pevKiller, entvars_t* pevInflictor)
 {
 	if (gPugMod.IsLive())
 	{
-		if (Player->IsPlayer())
+		auto Killer = UTIL_PlayerByIndexSafe(ENTINDEX(pevKiller));
+
+		if (Killer)
 		{
-			if (!Player->m_bKilledByBomb)
+			if (Killer->IsPlayer())
 			{
-				auto Killer = UTIL_PlayerByIndexSafe(ENTINDEX(pevAttacker));
+				auto VictimIndex = pVictim->entindex();
 
-				if (Killer)
+				auto KillerIndex = Killer->entindex();
+
+				auto ItemIndex = (pVictim->m_bKilledByGrenade) ? WEAPON_HEGRENADE : ((Killer->m_pActiveItem) ? Killer->m_pActiveItem->m_iId : WEAPON_NONE);
+
+				if (VictimIndex != KillerIndex)
 				{
-					if (Killer->IsPlayer())
+					auto VictimAuth = GET_AUTH(pVictim->edict());
+
+					auto KillerAuth = GET_AUTH(Killer->edict());
+
+					this->m_Data[KillerAuth].Stats[STATS_FRAGS]++;
+
+					this->m_Round[KillerAuth].Frags++;
+
+					if (pVictim->m_LastHitGroup == HITGROUP_HEAD)
 					{
-						auto VictimIndex = Player->entindex();
+						this->m_Data[KillerAuth].Stats[STATS_HEADSHOTS]++;
+					}
 
-						auto KillerIndex = Killer->entindex();
+					this->m_Data[VictimAuth].Stats[STATS_DEATHS]++;
 
-						auto ItemIndex = (Player->m_bKilledByGrenade) ? WEAPON_HEGRENADE : ((Killer->m_pActiveItem) ? Killer->m_pActiveItem->m_iId : WEAPON_NONE);
-
-						if (VictimIndex != KillerIndex)
+					if (pVictim->IsBlind())
+					{
+						if (!this->m_Round[VictimAuth].Flasher.empty())
 						{
-							auto VictimAuth = GET_AUTH(Player->edict());
-
-							auto KillerAuth = GET_AUTH(Killer->edict());
-
-							this->m_Data[KillerAuth].Stats[STATS_FRAGS]++;
-
-							this->m_Round[KillerAuth].Frags++;
-
-							if (Player->m_LastHitGroup == HITGROUP_HEAD)
+							if (this->m_Round[VictimAuth].Flasher.compare(KillerAuth) != 0)
 							{
-								this->m_Data[KillerAuth].Stats[STATS_HEADSHOTS]++;
+								this->m_Data[this->m_Round[VictimAuth].Flasher].Stats[STATS_FLASH_ASSIST]++;
 							}
+						}
+					}
 
-							this->m_Data[VictimAuth].Stats[STATS_DEATHS]++;
+					int NumAliveTR = 0, NumAliveCT = 0, NumDeadTR = 0, NumDeadCT = 0;
 
-							if (Player->IsBlind())
+					if (g_pGameRules)
+					{
+						CSGameRules()->InitializePlayerCounts(NumAliveTR, NumAliveCT, NumDeadTR, NumDeadCT);
+					}
+
+					if (!NumDeadTR && !NumDeadCT)
+					{
+						this->m_Data[KillerAuth].Stats[STATS_FR_FRAGS]++;
+
+						this->m_Data[VictimAuth].Stats[STATS_FR_DEATHS]++;
+					}
+
+					if (ItemIndex != WEAPON_NONE)
+					{
+						this->m_Data[KillerAuth].WeaponStats[ItemIndex][WEAPON_KILL]++;
+
+						this->m_Data[VictimAuth].WeaponStats[ItemIndex][WEAPON_DEATH]++;
+
+						if (pVictim->m_bHeadshotKilled)
+						{
+							this->m_Data[KillerAuth].WeaponStats[ItemIndex][WEAPON_HEADSHOT]++;
+						}
+
+						if (ItemIndex != WEAPON_AWP)
+						{
+							if (pVictim->m_iLastClientHealth >= 100)
 							{
-								if (!this->m_Round[VictimAuth].Flasher.empty())
+								if (pVictim->m_lastDamageAmount >= 100)
 								{
-									if (this->m_Round[VictimAuth].Flasher.compare(KillerAuth) != 0)
-									{
-										this->m_Data[this->m_Round[VictimAuth].Flasher].Stats[STATS_FLASH_ASSIST]++;
-									}
+									this->m_Data[KillerAuth].HackStats[HACK_ONEHIT]++;
 								}
 							}
+						}
 
-							int NumAliveTR = 0, NumAliveCT = 0, NumDeadTR = 0, NumDeadCT = 0;
-
-							if (g_pGameRules)
+						if (ItemIndex == WEAPON_AWP || ItemIndex == WEAPON_SCOUT || ItemIndex == WEAPON_G3SG1 || ItemIndex == WEAPON_SG550)
+						{
+							if (Killer->m_iClientFOV == DEFAULT_FOV)
 							{
-								CSGameRules()->InitializePlayerCounts(NumAliveTR, NumAliveCT, NumDeadTR, NumDeadCT);
+								this->m_Data[KillerAuth].HackStats[HACK_NOSCOP]++;
 							}
+						}
 
-							if (!NumDeadTR && !NumDeadCT)
+						if (ItemIndex != WEAPON_HEGRENADE)
+						{
+							if (!Killer->m_izSBarState[SBAR_ID_TARGETTYPE])
 							{
-								this->m_Data[KillerAuth].Stats[STATS_FR_FRAGS]++;
-
-								this->m_Data[VictimAuth].Stats[STATS_FR_DEATHS]++;
-							}
-
-							if (ItemIndex != WEAPON_NONE)
-							{
-								this->m_Data[KillerAuth].WeaponStats[ItemIndex][WEAPON_KILL]++;
-
-								this->m_Data[VictimAuth].WeaponStats[ItemIndex][WEAPON_DEATH]++;
-
-								if (Player->m_LastHitGroup == HITGROUP_HEAD)
+								if (!Killer->IsObserver())
 								{
-									this->m_Data[KillerAuth].WeaponStats[ItemIndex][WEAPON_HEADSHOT]++;
+									this->m_Data[KillerAuth].HackStats[HACK_VISION]++;
 								}
+							}
+						}
+					}
 
-								if (ItemIndex != WEAPON_AWP)
+					for (int i = 1; i <= gpGlobals->maxClients; ++i)
+					{
+						auto Temp = UTIL_PlayerByIndexSafe(i);
+
+						if (Temp)
+						{
+							if (Temp->m_iTeam == TERRORIST || Temp->m_iTeam == CT)
+							{
+								auto TempIndex = Temp->entindex();
+
+								if (TempIndex != Killer->entindex())
 								{
-									if (Player->m_iLastClientHealth >= 100)
+									auto TempAuth = GET_AUTH(Temp->edict());
+
+									if (TempAuth && TempAuth[0] != '\0')
 									{
-										if (Player->m_lastDamageAmount >= 100)
+										if (this->m_Round[TempAuth].Damage[VictimIndex] >= MANAGER_ASSISTANCE_DMG)
 										{
-											this->m_Data[KillerAuth].HackStats[HACK_ONEHIT]++;
-										}
-									}
-								}
+											this->m_Data[TempAuth].Stats[STATS_ASSISTS]++;
 
-								if (ItemIndex == WEAPON_AWP || ItemIndex == WEAPON_SCOUT || ItemIndex == WEAPON_G3SG1 || ItemIndex == WEAPON_SG550)
-								{
-									if (Killer->m_iClientFOV == DEFAULT_FOV)
-									{
-										this->m_Data[KillerAuth].HackStats[HACK_NOSCOP]++;
-									}
-								}
-
-								if (ItemIndex != WEAPON_HEGRENADE)
-								{
-									if (!Killer->m_izSBarState[SBAR_ID_TARGETTYPE])
-									{
-										if (!Killer->IsObserver())
-										{
-											this->m_Data[KillerAuth].HackStats[HACK_VISION]++;
-										}
-									}
-								}
-							}
-
-							for (int i = 1; i <= gpGlobals->maxClients; ++i)
-							{
-								auto Temp = UTIL_PlayerByIndexSafe(i);
-
-								if (Temp)
-								{
-									if (Temp->m_iTeam == TERRORIST || Temp->m_iTeam == CT)
-									{
-										auto TempIndex = Temp->entindex();
-
-										if (TempIndex != Killer->entindex())
-										{
-											auto TempAuth = GET_AUTH(Temp->edict());
-
-											if (TempAuth && TempAuth[0] != '\0')
+											if (ItemIndex != WEAPON_NONE)
 											{
-												if (this->m_Round[TempAuth].Damage[VictimIndex] >= MANAGER_ASSISTANCE_DMG)
-												{
-													this->m_Data[TempAuth].Stats[STATS_ASSISTS]++;
+												this->m_Data[TempAuth].WeaponStats[ItemIndex][WEAPON_ASSISTS]++;
+											}
+										}
 
-													if (ItemIndex != WEAPON_NONE)
-													{
-														this->m_Data[TempAuth].WeaponStats[ItemIndex][WEAPON_ASSISTS]++;
-													}
+										if (!this->m_Round[TempAuth].Versus)
+										{
+											if (Temp->m_iTeam == TERRORIST)
+											{
+												if (NumAliveTR == 1)
+												{
+													this->m_Round[TempAuth].Versus = NumAliveCT;
 												}
-
-												if (!this->m_Round[TempAuth].Versus)
+											}
+											else if (Temp->m_iTeam == CT)
+											{
+												if (NumAliveCT == 1)
 												{
-													if (Temp->m_iTeam == TERRORIST)
-													{
-														if (NumAliveTR == 1)
-														{
-															this->m_Round[TempAuth].Versus = NumAliveCT;
-														}
-													}
-													else if (Temp->m_iTeam == CT)
-													{
-														if (NumAliveCT == 1)
-														{
-															this->m_Round[TempAuth].Versus = NumAliveTR;
-														}
-													}
+													this->m_Round[TempAuth].Versus = NumAliveTR;
 												}
 											}
 										}
 									}
 								}
 							}
-
-							this->OnEvent(EVENT_PLAYER_DIED, Player, Killer);
 						}
 					}
+
+					this->OnEvent(EVENT_PLAYER_DIED, pVictim, Killer);
 				}
 			}
 		}
@@ -566,14 +560,14 @@ void CStats::PlantBomb(entvars_t* pevOwner, bool Planted)
 				if (Planted)
 				{
 					this->m_Data[Auth].BombStats[BOMB_PLANTED]++;
+
+					this->OnEvent(EVENT_BOMB_PLANTED, Player, nullptr);
 				}
 				else
 				{
 					this->m_Data[Auth].BombStats[BOMB_PLANTING]++;
 				}
 			}
-
-			this->OnEvent(EVENT_BOMB_PLANTED, Player, nullptr);
 		}
 	}
 }
@@ -733,69 +727,66 @@ void CStats::RoundEnd(int winStatus, ScenarioEventEndRound eventScenario, float 
 
 				if (Player)
 				{
-					if (Player->IsPlayer())
+					auto Auth = GET_AUTH(Player->edict());
+
+					if (Auth && Auth[0] != '\0')
 					{
-						auto Auth = GET_AUTH(Player->edict());
+						this->m_Data[Auth].Rounds[ROUND_PLAY]++;
 
-						if (Auth && Auth[0] != '\0')
+						if (this->m_Round[Auth].Frags > 0)
 						{
-							this->m_Data[Auth].Rounds[ROUND_PLAY]++;
+							this->m_Data[Auth].KillStreak[this->m_Round[Auth].Frags]++;
+						}
 
-							if (this->m_Round[Auth].Frags > 0)
+						if (Player->m_iTeam == Winner)
+						{
+							if (Player->m_iTeam == TERRORIST)
 							{
-								this->m_Data[Auth].KillStreak[this->m_Round[Auth].Frags]++;
-							}
-
-							if (Player->m_iTeam == Winner)
-							{
-								if (Player->m_iTeam == TERRORIST)
-								{
-									this->m_Data[Auth].Rounds[ROUND_WIN_TR]++;
-								}
-								else
-								{
-									this->m_Data[Auth].Rounds[ROUND_WIN_CT]++;
-								}
-
-								if (this->m_Round[Auth].Versus > 0)
-								{
-									this->m_Data[Auth].Versus[this->m_Round[Auth].Versus]++;
-								}
-
-								if (this->m_Round[Auth].DamageSum)
-								{
-									float RoundWinShare = this->m_Round[Auth].DamageSum;
-
-									if (this->m_RoundDamage[Winner] > 0.0f)
-									{
-										RoundWinShare = (RoundWinShare / this->m_RoundDamage[Winner]);
-									}
-
-									if (CSGameRules()->m_bBombDefused || CSGameRules()->m_bTargetBombed)
-									{
-										RoundWinShare = (MANAGER_RWS_MAP_TARGET * RoundWinShare);
-									}
-
-									this->m_Data[Auth].RoundWinShare += RoundWinShare;
-								}
+								this->m_Data[Auth].Rounds[ROUND_WIN_TR]++;
 							}
 							else
 							{
-								if (Player->m_iTeam == TERRORIST)
+								this->m_Data[Auth].Rounds[ROUND_WIN_CT]++;
+							}
+
+							if (this->m_Round[Auth].Versus > 0)
+							{
+								this->m_Data[Auth].Versus[this->m_Round[Auth].Versus]++;
+							}
+
+							if (this->m_Round[Auth].DamageSum)
+							{
+								float RoundWinShare = this->m_Round[Auth].DamageSum;
+
+								if (this->m_RoundDamage[Winner] > 0.0f)
 								{
-									this->m_Data[Auth].Rounds[ROUND_LOSE_TR]++;
+									RoundWinShare = (RoundWinShare / this->m_RoundDamage[Winner]);
 								}
-								else
+
+								if (CSGameRules()->m_bBombDefused || CSGameRules()->m_bTargetBombed)
 								{
-									this->m_Data[Auth].Rounds[ROUND_LOSE_CT]++;
+									RoundWinShare = (MANAGER_RWS_MAP_TARGET * RoundWinShare);
 								}
+
+								this->m_Data[Auth].RoundWinShare += RoundWinShare;
+							}
+						}
+						else
+						{
+							if (Player->m_iTeam == TERRORIST)
+							{
+								this->m_Data[Auth].Rounds[ROUND_LOSE_TR]++;
+							}
+							else
+							{
+								this->m_Data[Auth].Rounds[ROUND_LOSE_CT]++;
 							}
 						}
 					}
 				}
 			}
 
-			this->OnEvent(winStatus == WINSTATUS_TERRORISTS ? EVENT_TERRORISTS_WIN : EVENT_CTS_WIN, nullptr, nullptr);
+			this->OnEvent(Winner == TeamName::TERRORIST ? GameEventType::EVENT_TERRORISTS_WIN : GameEventType::EVENT_CTS_WIN, nullptr, nullptr);
 		}
 	}
 }
@@ -817,28 +808,25 @@ void CStats::OnEvent(GameEventType event, CBaseEntity* pEntity, class CBaseEntit
 	{
 		case EVENT_PLAYER_DIED: // tell bots the player is killed (argumens: 1 = victim, 2 = killer)
 		{
-			if (pEntity && pEntityOther)
+			auto Victim = UTIL_PlayerByIndexSafe(pEntity->entindex());
+
+			auto Killer = UTIL_PlayerByIndexSafe(pEntityOther->entindex());
+
+			if (Victim && Killer)
 			{
-				auto Victim = UTIL_PlayerByIndexSafe(pEntity->entindex());
+				Event.Killer = GET_AUTH(Killer->edict());
+				Event.KillerOrigin = Killer->edict()->v.origin;
 
-				auto Killer = UTIL_PlayerByIndexSafe(pEntityOther->entindex());
+				Event.Victim = GET_AUTH(Victim->edict());
+				Event.VictimOrigin = Victim->edict()->v.origin;
 
-				if (Victim && Killer)
-				{
-					Event.Killer = GET_AUTH(Killer->edict());
-					Event.KillerOrigin = Killer->edict()->v.origin;
+				Event.Winner = Killer->m_iTeam;
 
-					Event.Victim = GET_AUTH(Victim->edict());
-					Event.VictimOrigin = Victim->edict()->v.origin;
+				Event.Loser = Victim->m_iTeam;
 
-					Event.Winner = Killer->m_iTeam;
+				Event.IsHeadShot = Victim->m_bHeadshotKilled ? 1 : 0;
 
-					Event.Loser = Victim->m_iTeam;
-
-					Event.IsHeadShot = Victim->m_bHeadshotKilled;
-
-					Event.ItemIndex = (Victim->m_bKilledByGrenade) ? WEAPON_HEGRENADE : ((Killer->m_pActiveItem) ? Killer->m_pActiveItem->m_iId : WEAPON_NONE);
-				}
+				Event.ItemIndex = (Victim->m_bKilledByGrenade) ? WEAPON_HEGRENADE : ((Killer->m_pActiveItem) ? Killer->m_pActiveItem->m_iId : WEAPON_NONE);
 			}
 
 			break;

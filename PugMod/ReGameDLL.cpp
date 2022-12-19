@@ -95,15 +95,15 @@ bool ReGameDLL_Init()
 
 	g_ReGameHookchains->CSGameRules_OnRoundFreezeEnd()->registerHook(ReGameDLL_CSGameRules_OnRoundFreezeEnd);
 
-	g_ReGameHookchains->RoundEnd()->registerHook(ReGameDLL_RoundEnd);
-
 	g_ReGameHookchains->CBasePlayer_TakeDamage()->registerHook(ReGameDLL_CBasePlayer_TakeDamage);
 
-	g_ReGameHookchains->CBasePlayer_Killed()->registerHook(ReGameDLL_CBasePlayer_Killed);
+	g_ReGameHookchains->CSGameRules_PlayerKilled()->registerHook(ReGameDLL_CSGameRules_PlayerKilled);
 
 	g_ReGameHookchains->CBasePlayer_SetAnimation()->registerHook(ReGameDLL_CBasePlayer_SetAnimation);
 
 	g_ReGameHookchains->CSGameRules_RestartRound()->registerHook(ReGameDLL_CSGameRules_RestartRound);
+
+	g_ReGameHookchains->RoundEnd()->registerHook(ReGameDLL_RoundEnd);
 
 	g_ReGameHookchains->CBasePlayer_MakeBomber()->registerHook(ReGameDLL_CBasePlayer_MakeBomber);
 
@@ -140,15 +140,15 @@ bool ReGameDLL_Stop()
 
 	g_ReGameHookchains->CSGameRules_OnRoundFreezeEnd()->unregisterHook(ReGameDLL_CSGameRules_OnRoundFreezeEnd);
 
-	g_ReGameHookchains->RoundEnd()->unregisterHook(ReGameDLL_RoundEnd);
-
 	g_ReGameHookchains->CBasePlayer_TakeDamage()->unregisterHook(ReGameDLL_CBasePlayer_TakeDamage);
 
-	g_ReGameHookchains->CBasePlayer_Killed()->unregisterHook(ReGameDLL_CBasePlayer_Killed);
+	g_ReGameHookchains->CSGameRules_PlayerKilled()->unregisterHook(ReGameDLL_CSGameRules_PlayerKilled);
 
 	g_ReGameHookchains->CBasePlayer_SetAnimation()->unregisterHook(ReGameDLL_CBasePlayer_SetAnimation);
 
 	g_ReGameHookchains->CSGameRules_RestartRound()->unregisterHook(ReGameDLL_CSGameRules_RestartRound);
+
+	g_ReGameHookchains->RoundEnd()->unregisterHook(ReGameDLL_RoundEnd);
 
 	g_ReGameHookchains->CBasePlayer_MakeBomber()->unregisterHook(ReGameDLL_CBasePlayer_MakeBomber);
 
@@ -234,11 +234,11 @@ void ReGameDLL_CBasePlayer_AddAccount(IReGameHook_CBasePlayer_AddAccount *chain,
 	chain->callNext(pthis, amount, type, bTrackChange);
 }
 
-void ReGameDLL_CBasePlayer_Killed(IReGameHook_CBasePlayer_Killed* chain, CBasePlayer* pthis, entvars_t* pevAttacker, int iGib)
+void ReGameDLL_CSGameRules_PlayerKilled(IReGameHook_CSGameRules_PlayerKilled* chain, CBasePlayer* pVictim, entvars_t* pevKiller, entvars_t* pevInflictor)
 {
-	gStats.Killed(pthis, pevAttacker, iGib);
+	chain->callNext(pVictim, pevKiller, pevInflictor);
 
-	chain->callNext(pthis, pevAttacker, iGib);
+	gStats.PlayerKilled(pVictim, pevKiller, pevInflictor);
 }
 
 bool ReGameDLL_CBasePlayer_HasRestrictItem(IReGameHook_CBasePlayer_HasRestrictItem *chain, CBasePlayer* pthis, ItemID item, ItemRestType type)

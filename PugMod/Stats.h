@@ -196,7 +196,7 @@ public:
 	// Events
 	void AddAccount(CBasePlayer* Player, int amount, RewardType type, bool bTrackChange);
 	void TakeDamage(CBasePlayer* Player, entvars_t* pevInflictor, entvars_t* pevAttacker, float& flDamage, int bitsDamageType);
-	void Killed(CBasePlayer* Player, entvars_t* pevAttacker, int iGib);
+	void PlayerKilled(CBasePlayer* pVictim, entvars_t* pevKiller, entvars_t* pevInflictor);
 	void SetAnimation(CBasePlayer* Player, PLAYER_ANIM playerAnim);
 	void MakeBomber(CBasePlayer* Player);
 	void DropBomb(CBasePlayer* Player);
