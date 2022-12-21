@@ -136,10 +136,10 @@ void CUtil::SayText(edict_t* pEntity, int Sender, const char* Format, ...)
 		}
 		else if (Sender < PRINT_TEAM_DEFAULT)
 		{
-			Sender = abs(Sender) + 32;
+			Sender = abs(Sender) + MAX_CLIENTS;
 		}
 
-		if (pEntity && !FNullEnt(pEntity))
+		if (!FNullEnt(pEntity))
 		{
 			if (!(pEntity->v.flags & FL_FAKECLIENT))
 			{
