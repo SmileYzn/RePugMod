@@ -181,19 +181,12 @@ typedef struct
 class CStats
 {
 public:
-	// Server Activate
-	void ServerActivate();
-
-	// Server Deactivate
-	void ServerDeactivate();
-
-	// Save Stats
 	void Save();
 
-	// Reset
 	void Reset(bool FullReset);
 
-	// Events
+	void ServerActivate();
+	void ServerDeactivate();
 	void AddAccount(CBasePlayer* Player, int amount, RewardType type, bool bTrackChange);
 	void TakeDamage(CBasePlayer* Player, entvars_t* pevInflictor, entvars_t* pevAttacker, float& flDamage, int bitsDamageType);
 	void PlayerKilled(CBasePlayer* pVictim, entvars_t* pevKiller, entvars_t* pevInflictor);
@@ -209,9 +202,7 @@ public:
 	void RoundFreezeEnd();
 	void RoundEnd(int winStatus, ScenarioEventEndRound eventScenario, float tmDelay);
 	void OnEvent(GameEventType event, CBaseEntity* pEntity, class CBaseEntity* pEntityOther);
-	void CheckMapConditions();
 
-	// Stats Data
 	std::map<std::string, P_STATS>			m_Data;
 	std::vector<P_ROUND_EVENT>				m_Event;
 	std::map<std::string, P_ROUND_DATA>		m_Round;

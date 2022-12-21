@@ -2,16 +2,6 @@
 
 CStats gStats;
 
-void CStats::ServerActivate()
-{
-	this->Reset(true);
-}
-
-void CStats::ServerDeactivate()
-{
-	this->Reset(true);
-}
-
 void CStats::Save()
 {
 	// Has API URL
@@ -245,6 +235,16 @@ void CStats::Reset(bool FullReset)
 	this->m_Round.clear();
 
 	memset(m_RoundDamage, 0.0f, sizeof(m_RoundDamage));
+}
+
+void CStats::ServerActivate()
+{
+	this->Reset(true);
+}
+
+void CStats::ServerDeactivate()
+{
+	this->Reset(true);
 }
 
 void CStats::AddAccount(CBasePlayer* Player, int amount, RewardType type, bool bTrackChange)
@@ -786,7 +786,7 @@ void CStats::RoundEnd(int winStatus, ScenarioEventEndRound eventScenario, float 
 				}
 			}
 
-			this->OnEvent(Winner == TeamName::TERRORIST ? GameEventType::EVENT_TERRORISTS_WIN : GameEventType::EVENT_CTS_WIN, nullptr, nullptr);
+			this->OnEvent(Winner == TERRORIST ? EVENT_TERRORISTS_WIN : EVENT_CTS_WIN, nullptr, nullptr);
 		}
 	}
 }
@@ -921,43 +921,4 @@ void CStats::OnEvent(GameEventType event, CBaseEntity* pEntity, class CBaseEntit
 	}
 
 	this->m_Event.push_back(Event);
-}
-
-void CStats::CheckMapConditions()
-{
-	if (g_pGameRules)
-	{
-		if (g_ReGameFuncs)
-		{
-			if (CSGameRules()->m_bMapHasBombTarget)
-			{
-				CBaseEntity* PlayerStart = g_ReGameFuncs->UTIL_FindEntityByString(nullptr, "classname", "info_player_start");
-
-				if (PlayerStart != nullptr)
-				{
-					std::vector<std::string> ClassNames = {"func_bomb_target", "info_bomb_target"};
-
-					CBaseEntity* BombTarget = nullptr;
-
-					for (auto& ClassName : ClassNames)
-					{
-						while ((BombTarget = g_ReGameFuncs->UTIL_FindEntityByString(BombTarget, "classname", ClassName.c_str())) != nullptr)
-						{
-							LOG_CONSOLE
-							(
-								PLID,
-								"[%s] (%s)(%d) -> (%s) (%d) Distance: %f",
-								__func__,
-								STRING(PlayerStart->pev->classname),
-								PlayerStart->entindex(),
-								STRING(BombTarget->pev->classname),
-								BombTarget->entindex(),
-								(PlayerStart->Center() - BombTarget->Center()).Length()
-							);
-						}
-					}
-				}
-			}
-		}
-	}
 }
