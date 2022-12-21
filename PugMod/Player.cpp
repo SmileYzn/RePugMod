@@ -27,7 +27,7 @@ int CPlayer::GetList(CBasePlayer* Players[MAX_CLIENTS], bool InGameOnly)
 
 		if (Player)
 		{
-			if (!FNullEnt(Player->edict()) && GETPLAYERUSERID(Player->edict()) > 0)
+			if (!Player->IsDormant())
 			{
 				if (InGameOnly)
 				{
@@ -59,7 +59,7 @@ int CPlayer::GetList(CBasePlayer* Players[MAX_CLIENTS], TeamName Team)
 
 		if (Player)
 		{
-			if (!FNullEnt(Player->edict()) && GETPLAYERUSERID(Player->edict()) > 0)
+			if (!Player->IsDormant())
 			{
 				if (Player->m_iTeam == Team)
 				{
@@ -85,27 +85,30 @@ int CPlayer::GetNum(bool CountBots, int& InGame, int& NumTerrorist, int& NumCT, 
 
 		if (Player)
 		{
-			if (!CountBots && Player->IsBot())
+			if (!Player->IsDormant())
 			{
-				continue;
-			}
+				if (!CountBots && Player->IsBot())
+				{
+					continue;
+				}
 
-			switch (Player->m_iTeam)
-			{
-				case TERRORIST:
+				switch (Player->m_iTeam)
 				{
-					NumTerrorist++;
-					break;
-				}
-				case CT:
-				{
-					NumCT++;
-					break;
-				}
-				case SPECTATOR:
-				{
-					NumSpectator++;
-					break;
+					case TERRORIST:
+					{
+						NumTerrorist++;
+						break;
+					}
+					case CT:
+					{
+						NumCT++;
+						break;
+					}
+					case SPECTATOR:
+					{
+						NumSpectator++;
+						break;
+					}
 				}
 			}
 		}
@@ -194,15 +197,18 @@ int CPlayer::GetNum(int& NumAliveTerrorists, int& NumAliveCT)
 
 		if (Player)
 		{
-			if (Player->IsAlive())
+			if (!Player->IsDormant())
 			{
-				if (Player->m_iTeam == TERRORIST)
+				if (Player->IsAlive())
 				{
-					NumAliveTerrorists++;
-				}
-				else if (Player->m_iTeam == CT)
-				{
-					NumAliveCT++;
+					if (Player->m_iTeam == TERRORIST)
+					{
+						NumAliveTerrorists++;
+					}
+					else if (Player->m_iTeam == CT)
+					{
+						NumAliveCT++;
+					}
 				}
 			}
 		}

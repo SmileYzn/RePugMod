@@ -79,3 +79,4 @@ void DLL_POST_StartFrame(void)
 
 	RETURN_META(MRES_IGNORED);
 }
+#pragma endregion
