@@ -19,24 +19,12 @@ void CKnifeRound::Stop(bool ChangeTeams)
 	{
 		if (g_pGameRules)
 		{
-			auto SwapTeams = false;
+			auto WinnerTeam = (CSGameRules()->m_iRoundWinStatus == WINSTATUS_CTS) ? CT : TERRORIST;
+			auto WinnerVote = (CSGameRules()->m_iRoundWinStatus == WINSTATUS_CTS) ? TERRORIST : CT;
+			
+			auto PlayerCount = gPlayer.GetNum(true, WinnerTeam); 
 
-			if (CSGameRules()->m_iRoundWinStatus == WINSTATUS_CTS)
-			{
-				if (this->GetVote(TERRORIST) > (gPlayer.GetNum(false, CT) / 2))
-				{
-					SwapTeams = true;
-				}
-			}
-			else if (CSGameRules()->m_iRoundWinStatus == WINSTATUS_TERRORISTS)
-			{
-				if (this->GetVote(CT) > (gPlayer.GetNum(false, TERRORIST) / 2))
-				{
-					SwapTeams = true;
-				}
-			}
-
-			if (SwapTeams)
+			if (this->GetVote(WinnerVote) > (PlayerCount / 2))
 			{
 				CSGameRules()->SwapAllPlayers();
 
@@ -76,6 +64,8 @@ void CKnifeRound::StartVote(TeamName Winner)
 	{
 		if (Winner != UNASSIGNED)
 		{
+			memset(this->m_Votes, 0, sizeof(m_Votes));
+			
 			CBasePlayer* Players[MAX_CLIENTS] = { NULL };
 
 			int Num = gPlayer.GetList(Players, Winner);
