@@ -69,6 +69,7 @@ public:
 	int GetScores(int Team);
 
 	void ResetScores();
+	void ResetStateScores();
 
 	TeamName GetWinner();
 	bool GetOvertimeWinner();
