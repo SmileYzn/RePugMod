@@ -496,7 +496,10 @@ void CPugMod::ResetStateScores()
 {
 	this->m_Round[this->m_State] = 0;
 	
-	this->m_Score[this->m_State] = {0, 0, 0, 0}; 
+	for (int i = UNASSIGNED; i <= SPECTATOR; i++)
+	{
+		this->m_Score[this->m_State][i] = 0;
+	}
 }
 
 TeamName CPugMod::GetWinner()
