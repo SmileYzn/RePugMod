@@ -492,6 +492,13 @@ void CPugMod::ResetScores()
 	memset(this->m_Score, 0, sizeof(this->m_Score));
 }
 
+void CPugMod::ResetStateScores()
+{
+	this->m_Round[this->m_State] = 0;
+	
+	this->m_Score[this->m_State] = {0, 0, 0, 0}; 
+}
+
 TeamName CPugMod::GetWinner()
 {
 	if (this->GetScores(TERRORIST) != this->GetScores(CT))
