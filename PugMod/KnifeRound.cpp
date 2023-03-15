@@ -21,10 +21,8 @@ void CKnifeRound::Stop(bool ChangeTeams)
 		{
 			auto WinnerTeam = (CSGameRules()->m_iRoundWinStatus == WINSTATUS_CTS) ? CT : TERRORIST;
 			auto WinnerVote = (CSGameRules()->m_iRoundWinStatus == WINSTATUS_CTS) ? TERRORIST : CT;
-			
-			auto PlayerCount = gPlayer.GetNum(true, WinnerTeam); 
 
-			if (this->GetVote(WinnerVote) > (PlayerCount / 2))
+			if (this->GetVote(WinnerVote) > this->GetVote(WinnerTeam))
 			{
 				CSGameRules()->SwapAllPlayers();
 
