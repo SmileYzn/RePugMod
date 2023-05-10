@@ -51,8 +51,6 @@ void CVoteTeam::AddVote(int Item, int Vote)
 	{
 		it->second.Votes += Vote;
 	}
-
-	this->List();
 }
 
 auto CVoteTeam::GetVote()
@@ -153,27 +151,24 @@ int CVoteTeam::GetCount()
 
 P_VOTE_TEAM_ITEM CVoteTeam::GetWinner()
 {
-	int Winner = 0;
-	int WinnerVotes = 0;
+	auto Winner = this->m_Data[0];
 
 	for (auto const& Item : this->m_Data)
 	{
-		if (Item.second.Votes > WinnerVotes)
+		if (Item.second.Votes > Winner.Votes)
 		{
-			Winner = Item.first;
-			WinnerVotes = Item.second.Votes;
+			Winner = Item.second;
 		}
-		else if (Item.second.Votes == WinnerVotes)
+		else if (Item.second.Votes == Winner.Votes)
 		{
 			if (RANDOM_LONG(0, 1))
 			{
-				Winner = Item.first;
-				WinnerVotes = Item.second.Votes;
+				Winner = Item.second;
 			}
 		}
 	}
 
-	return this->m_Data.at(Winner);
+	return Winner;
 }
 
 void CVoteTeam::SetMode(int GameMode)
