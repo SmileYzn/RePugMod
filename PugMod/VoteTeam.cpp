@@ -151,7 +151,7 @@ int CVoteTeam::GetCount()
 
 P_VOTE_TEAM_ITEM CVoteTeam::GetWinner()
 {
-	auto Winner = this->m_Data[0];
+	auto Winner = this->m_Data.at(0);
 
 	for (auto const& Item : this->m_Data)
 	{
