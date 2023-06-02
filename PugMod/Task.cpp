@@ -95,7 +95,7 @@ void CTask::Think()
 			}
 			else
 			{
-				it = this->m_Data.erase(it);
+				it = this->m_Data.erase(it++);
 			}
 
 			if (Task.FunctionCallback)
