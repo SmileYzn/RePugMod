@@ -14,6 +14,7 @@ typedef struct
 	float Time;
 	float EndTime;
 	bool  Loop;
+	bool Remove;
 	void* FunctionCallback;
 	char  FunctionParameter[128];
 } P_TASK_INFO, * LP_TASK_INFO;
