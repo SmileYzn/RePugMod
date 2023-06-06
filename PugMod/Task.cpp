@@ -29,6 +29,7 @@ void CTask::Create(int Index, float Time, bool Loop, void* FunctionCallback, con
 			Task.Time = Time;
 			Task.EndTime = gpGlobals->time + Time;
 			Task.Loop = Loop;
+			Task.Remove = false;
 			Task.FunctionCallback = FunctionCallback;
 
 			if (FunctionParameter)
@@ -50,7 +51,10 @@ bool CTask::Exists(int Index)
 
 void CTask::Remove(int Index)
 {
-	this->m_Data.erase(Index);
+	if(this->m_Data.find(Index) != this->m_Data.end())
+	{
+		this->m_Data[Index].Remove = true;
+	}
 }
 
 float CTask::Timeleft(int Index)
@@ -79,33 +83,38 @@ P_TASK_INFO CTask::GetInfo(int Index)
 
 void CTask::Think()
 {
-	P_TASK_INFO Task = { 0 };
-
 	for (std::map<int, P_TASK_INFO>::iterator it = this->m_Data.begin();it != this->m_Data.end();)
 	{
-		if (gpGlobals->time >= it->second.EndTime)
+		if(it->second.Remove)
 		{
-			Task = it->second;
-
-			if (it->second.Loop)
-			{
-				it->second.EndTime += it->second.Time;
-
-				it++;
-			}
-			else
-			{
-				it = this->m_Data.erase(it++);
-			}
-
-			if (Task.FunctionCallback)
-			{
-				((void(*)(const char*))Task.FunctionCallback)(Task.FunctionParameter);
-			}
+			this->m_Data.erase(it++);
 		}
 		else
 		{
-			it++;
+			if (gpGlobals->time >= it->second.EndTime)
+			{
+				P_TASK_INFO Task = it->second;
+
+				if (it->second.Loop)
+				{
+					it->second.EndTime += it->second.Time;
+
+					it++;
+				}
+				else
+				{
+					this->m_Data.erase(it++);
+				}
+
+				if (Task.FunctionCallback)
+				{
+					((void(*)(const char*))Task.FunctionCallback)(Task.FunctionParameter);
+				}
+			}
+			else
+			{
+				it++;
+			}
 		}
 	}
 }
