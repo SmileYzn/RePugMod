@@ -83,38 +83,32 @@ P_TASK_INFO CTask::GetInfo(int Index)
 
 void CTask::Think()
 {
-	for (std::map<int, P_TASK_INFO>::iterator it = this->m_Data.begin();it != this->m_Data.end();)
+	for (std::map<int, P_TASK_INFO>::iterator it = this->m_Data.begin(); it != this->m_Data.end();)
 	{
-		if(it->second.Remove)
+		if (gpGlobals->time >= it->second.EndTime)
+		{
+			if (it->second.Loop)
+			{
+				it->second.EndTime += it->second.Time;
+			}
+			else
+			{
+				it->second.Remove = true;
+			}
+
+			if (it->second.FunctionCallback)
+			{
+				((void(*)(int))it->second.FunctionCallback)(it->second.FunctionParameter);
+			}
+		}
+
+		if (it->second.Remove)
 		{
 			this->m_Data.erase(it++);
 		}
 		else
 		{
-			if (gpGlobals->time >= it->second.EndTime)
-			{
-				P_TASK_INFO Task = it->second;
-
-				if (it->second.Loop)
-				{
-					it->second.EndTime += it->second.Time;
-
-					it++;
-				}
-				else
-				{
-					this->m_Data.erase(it++);
-				}
-
-				if (Task.FunctionCallback)
-				{
-					((void(*)(const char*))Task.FunctionCallback)(Task.FunctionParameter);
-				}
-			}
-			else
-			{
-				it++;
-			}
+			it++;
 		}
 	}
 }
