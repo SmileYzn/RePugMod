@@ -98,7 +98,7 @@ void CTask::Think()
 
 			if (it->second.FunctionCallback)
 			{
-				((void(*)(int))it->second.FunctionCallback)(it->second.FunctionParameter);
+				((void(*)(const char*))it->second.FunctionCallback)(it->second.FunctionParameter);
 			}
 		}
 
