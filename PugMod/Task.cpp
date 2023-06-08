@@ -95,7 +95,7 @@ void CTask::Think()
 					this->m_Data[it->first].Remove = true;
 				}
 				
-				(this->m_Data[it->first].FunctionCallback)
+				if (this->m_Data[it->first].FunctionCallback)
 				{
 					((void(*)(const char*))this->m_Data[it->first].FunctionCallback)(this->m_Data[it->first].FunctionParameter);
 				}
