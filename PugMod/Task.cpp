@@ -21,24 +21,21 @@ void CTask::Create(int Index, float Time, bool Loop, void* FunctionCallback, con
 {
 	if (FunctionCallback)
 	{
-		if (!this->Exists(Index))
+		P_TASK_INFO Task = { 0 };
+
+		Task.Index = Index;
+		Task.Time = Time;
+		Task.EndTime = gpGlobals->time + Time;
+		Task.Loop = Loop;
+		Task.Remove = false;
+		Task.FunctionCallback = FunctionCallback;
+
+		if (FunctionParameter)
 		{
-			P_TASK_INFO Task = { 0 };
-
-			Task.Index = Index;
-			Task.Time = Time;
-			Task.EndTime = gpGlobals->time + Time;
-			Task.Loop = Loop;
-			Task.Remove = false;
-			Task.FunctionCallback = FunctionCallback;
-
-			if (FunctionParameter)
-			{
-				memcpy(Task.FunctionParameter, FunctionParameter, sizeof(Task.FunctionParameter));
-			}
-
-			this->m_Data.insert(std::make_pair(Task.Index, Task));
+			memcpy(Task.FunctionParameter, FunctionParameter, sizeof(Task.FunctionParameter));
 		}
+
+		this->m_Data.insert(std::make_pair(Task.Index, Task));
 	}
 }
 
@@ -83,32 +80,30 @@ P_TASK_INFO CTask::GetInfo(int Index)
 
 void CTask::Think()
 {
-	for (std::map<int, P_TASK_INFO>::iterator it = this->m_Data.begin(); it != this->m_Data.end();)
+	for (auto it = this->m_Data.cbegin(); it != this->m_Data.cend(); ++it)
 	{
 		if (gpGlobals->time >= it->second.EndTime)
 		{
-			if (it->second.Loop)
+			if (!it->second.Remove)
 			{
-				it->second.EndTime += it->second.Time;
+				if (it->second.Loop)
+				{
+					this->m_Data[it->first].EndTime = (gpGlobals->time + it->second.Time);
+				}
+				else
+				{
+					this->m_Data[it->first].Remove = true;
+				}
+				
+				(this->m_Data[it->first].FunctionCallback)
+				{
+					((void(*)(const char*))this->m_Data[it->first].FunctionCallback)(this->m_Data[it->first].FunctionParameter);
+				}
 			}
 			else
 			{
-				it->second.Remove = true;
+				this->m_Data.erase(it->first);
 			}
-
-			if (it->second.FunctionCallback)
-			{
-				((void(*)(const char*))it->second.FunctionCallback)(it->second.FunctionParameter);
-			}
-		}
-
-		if (it->second.Remove)
-		{
-			this->m_Data.erase(it++);
-		}
-		else
-		{
-			it++;
 		}
 	}
 }
