@@ -40,7 +40,7 @@ bool CTask::Exists(int Index)
 
 	if (it != this->m_Data.end())
 	{
-		return it->Remove ? false : true;
+		return it->second.Remove ? false : true;
 	}
 
 	return false;
