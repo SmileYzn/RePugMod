@@ -22,8 +22,6 @@ typedef struct
 class CTask
 {
 public:
-	CTask();
-
 	void Clear();
 	void Create(int Index, float Time, bool Loop, void* FunctionCallback);
 	void Create(int Index, float Time, bool Loop, void* FunctionCallback, const char* FunctionParameter);
