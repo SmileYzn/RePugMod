@@ -8,6 +8,9 @@
 </p>
 
 
+<h3>DEPRECATED *</h3>
+<p>This mod is deprecated, please use MatchBot instead which is a rewrite of this mod: <a href="https://github.com/SmileYzn/MatchBot">MatchBot</a></p>
+
 <h3>Description</h3>
 <p>
 This mod allows the server to run a full match without any admin to control the server.<br>
